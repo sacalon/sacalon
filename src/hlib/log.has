@@ -1,0 +1,3 @@
+function log(s:string){
+    print(s);
+}

@@ -1,0 +1,4 @@
+function RandomNumber(min:int,max:int):int {
+    var rnd = RandomNumber(unpredictableSeed);
+    return uniform(min,max, rnd);
+}
