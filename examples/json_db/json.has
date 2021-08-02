@@ -1,0 +1,7 @@
+var json_file = File("db.json","r"); # open json file
+
+var myjson = ReadFromFile(json_file);
+
+var j : JSONValue ;
+j = parseJSON(myjson);
+print(j["name"].str);

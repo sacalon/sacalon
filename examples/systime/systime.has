@@ -1,0 +1,6 @@
+print(GetYear());
+print(GetMonth());
+print(GetDay());
+print(GetHour());
+print(GetMinute());
+print(GetSecond());

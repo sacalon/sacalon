@@ -1,0 +1,13 @@
+# fib.has
+function fib(n:int): int{
+    if n <= 2 { 
+        return 1;
+    }
+    else { 
+        return fib(n-1) + fib(n-2);
+    }
+}
+
+var nn = 1000;
+
+print(fib(nn)); # output : 3

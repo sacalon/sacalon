@@ -1,0 +1,12 @@
+print("---Heads or Tails Game in Hascal---");
+print("--> Heads or Tails ?<h/t>");
+var input = ReadStr();
+
+var rand = RandomNumber(1,10);
+if rand <= 5 and input == "h" {
+    print("Win!");
+}else if rand <= 10 and rand > 5 and input == "t" {
+    print("Win!");
+}else {
+    print("Lose!");
+}
