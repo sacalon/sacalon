@@ -1,7 +1,7 @@
 # Hascal Documentation
 
 ## Learn Hascal in 15 minutes
-```swift
+```ruby
 # import physics library from stdlib
 use physics;
 
