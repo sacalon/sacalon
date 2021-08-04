@@ -9,15 +9,6 @@ This is the official repository for Hascal, a **simple**, **fast**, **powerful**
 
 > Visit [Hascal's Official Website](https://hascal.github.io)
 
-![draw](https://img.shields.io/github/last-commit/hascal/hascal)
-![draw](https://img.shields.io/github/license/hascal/hascal)
-[![Gitter chat](https://badges.gitter.im/hascal/community.png)](https://gitter.im/hascal/community)
-
-![draw](https://badgen.net/github/tag/hascal/hascal)
-![draw](https://badgen.net/github/stars/hascal/hascal)
-![draw](https://badgen.net/github/contributors/hascal/hascal)
-[![Github all releases](https://img.shields.io/github/downloads/hascal/hascal/total.svg)](https://GitHub.com/hascal/hascal/releases/)
-
 ## Hascal Features:
 - [x] Cross Platform (Linux, Windows and MacOS Soon) 
 - [x] Fast & Powerful
