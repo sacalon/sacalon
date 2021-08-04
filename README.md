@@ -10,7 +10,7 @@ This is the official repository for Hascal, a **simple**, **fast**, **powerful**
 > Visit [Hascal's Official Website](https://hascal.github.io)
 
 ## Hascal Features:
-- [x] Cross Platform (Linux, Windows and MacOS Soon) 
+- [x] Cross Platform (Linux, Windows, MacOS, BSD Soon) 
 - [x] Fast & Powerful
 - [x] C-Family Syntax, inspired by C, C#, Swift, TypeScript, JavaScript, Pascal
 - [x] Can be use in web development(can compiles to javascript) **WIP**
