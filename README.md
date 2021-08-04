@@ -29,11 +29,11 @@ print("what is your name ?");
 var name = ReadStr();
 print("Hello ,",name);
 ```
-You can see more Hascal examples [here](https://github.com/hascal/hascal/tree/main/examples).
+> You can see more Hascal examples [here](https://github.com/hascal/hascal/tree/main/examples).
 
 ## Syntax
 
-You can see Hascal syntax example [here](https://github.com/hascal/hascal/blob/main/syntax.md).
+> You can see Hascal syntax example [here](https://github.com/hascal/hascal/blob/main/syntax.md).
 
 ## Todo
 - [ ] Change Back-End to C++
