@@ -23,6 +23,9 @@ This is the official repository for Hascal, a **simple**, **fast**, **powerful**
 ## Documentation
 > You can find documentations on installation and using Hascal [here](https://github.com/hascal/hascal/tree/main/docs)
 
+## Build from source
+> See Build Help Page, [Here](BUILD.md)
+
 ## Example
 ```dart
 print("what is your name ?");
