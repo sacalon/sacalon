@@ -1,27 +1,18 @@
 # Hascal Documentation
 
-Simple Documentation:
-- [Installation](Installation.md)
-- [Getting Started](GettingStarted.md)
-- [Compile](Compile.md)
-- [Input & Output](Input&output.md)
-- [Variables&Constants](Variables&Constants.md)
+## Learn Hascal in 15 minutes
+```swift
+# import physics library from stdlib
+use physics;
 
-Advanced Documentation:
-- [Data Types](DataTypes.md)
-- [Arrays](Arrays.md)
-- [Conditional Statements](cond_stmt.md)
-- [Functions](functions.md)
-- [Importing](import.md)
-- [Structs](structs.md)
-- [Internet](Internet.md)
-- [Filesytem](Filesytem.md)
-- [Bootstrapping](Bootstrapping.md)
+# DataTypes :
+# - char
+# - string
+# - int 
+# - float 
+# - double 
+# - bool 
 
-Hascal Standard Library(HSL) Documentation:
-- [Standard Functions](stdfuncs.md)
-- [Standard Structs](stdstructs.md)
-
-HLM Documentation:
-- [Introduction to HLM](HLM.md)
-- [Library Structure](LibraryStructure.md)
+# declare a variable
+var x : int = 1;
+```
