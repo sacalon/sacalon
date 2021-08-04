@@ -6,14 +6,14 @@
 > **NOTE:** Hascal is currently under development
 # The Hascal Programming Language
 
-This is the official repository for Hascal, a **simple**, **fast**, **powerful** and **compiled** programming language. 
+This is the official repository for Hascal, a **simple**, **fast**, **powerful** and **compiled** programming language. It's designed to be an alternative to C\C++.
 
 > Visit [Hascal's Official Website](https://hascal.github.io)
 
 ## Hascal Features:
 - [x] Cross Platform (Linux, Windows, MacOS, BSD Soon) 
 - [x] Fast & Powerful
-- [x] C-Family Syntax, inspired by C, C#, Swift, TypeScript, JavaScript, Pascal
+- [x] C-Family Syntax, inspired by Swift, TypeScript
 - [x] Can be use in web development(can compiles to javascript) **WIP**
 - [x] Dlang on Back-End
 - [x] Native binaries with no dependency
