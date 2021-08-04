@@ -20,11 +20,7 @@ This is the official repository for Hascal, a **simple**, **fast**, **powerful**
 - [x] Garbage Collection
 
 
-## Documentation
-> You can find documentations on installation and using Hascal [here](https://github.com/hascal/hascal/tree/main/docs)
 
-## Build from source
-> See Build Help Page, [Here](BUILD.md)
 
 ## Example
 ```dart
@@ -33,6 +29,12 @@ var name = ReadStr();
 print("Hello ,",name);
 ```
 > You can see more Hascal examples [here](https://github.com/hascal/hascal/tree/main/examples).
+
+## Documentation
+> You can find documentations on installation and using Hascal [here](https://github.com/hascal/hascal/tree/main/docs)
+
+## Build from source
+> See Build Help Page, [Here](BUILD.md)
 
 ## Syntax
 
