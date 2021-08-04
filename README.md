@@ -19,12 +19,6 @@ This is the official repository for Hascal, a **simple**, **fast**, **powerful**
 - [x] Native binaries with no dependency
 - [x] Garbage Collection
 
-## Why use Hascal ?
-
-Hascal is so powerful and we listed its important features above.
-you can see that Hascal is perfect in front of many, many other well-known programming languages.
-Also, We have tested many programming languages for Hascal's Back-End, including: C, C++, Assembly, GoLang, Rust, Pascal, and DLang.
-DLang was the best and as you can see, we have used it for our purpose.
 
 ## Documentation
 > You can find documentations on installation and using Hascal [here](https://github.com/hascal/hascal/tree/main/docs)
@@ -40,6 +34,10 @@ You can see more Hascal examples [here](https://github.com/hascal/hascal/tree/ma
 ## Syntax
 
 You can see Hascal syntax example [here](https://github.com/hascal/hascal/blob/main/syntax.md).
+
+## Todo
+- [ ] Change Back-End to C++
+- [ ] Fix Language Bugs
 
 ## Thanks
 This project exists thanks to all the people who contribute. 
