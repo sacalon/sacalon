@@ -8,7 +8,7 @@
 
 This is the official repository for Hascal, a **simple**, **fast**, **powerful** and **compiled** programming language. It's designed to be an alternative to C\C++.
 
-> Visit [Hascal's Official Website](https://hascal.github.io)
+<!-- > Visit [Hascal's Official Website](https://hascal.github.io) -->
 
 ## Hascal Features:
 - [x] Cross Platform (Linux, Windows, MacOS, BSD Soon) 
