@@ -42,7 +42,7 @@ print("Hello ,",name);
 
 ## Todo
 - [ ] Change Back-End to C++
-- [ ] Fix Language Bugs
+- [ ] Fix Language Bugs[**WIP**]
 
 ## Thanks
 This project exists thanks to all the people who contribute. 
