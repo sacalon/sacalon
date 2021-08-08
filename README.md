@@ -5,8 +5,7 @@
 
 > **NOTE:** Hascal is currently under development.
 # The Hascal Programming Language
-
-This is the official repository for Hascal, a **simple**, **fast**, **powerful** and **compiled** programming language. It's designed to be an alternative to C\C++.
+Hascal is a **simple**, **fast**, **powerful** and **compiled** programming language. It's designed to be an alternative to C\C++.
 
 <!-- > Visit [Hascal's Official Website](https://hascal.github.io) -->
 
