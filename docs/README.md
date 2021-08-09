@@ -15,4 +15,7 @@ use physics;
 
 # declare a variable
 var x : int = 1;
+
+# declare a const
+const xx : int = 1;
 ```
