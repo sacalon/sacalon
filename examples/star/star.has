@@ -1,7 +1,0 @@
-var star = "*";
-
-var index = 0 ;
-for index = 1 to 10 {
-    print(star);
-    star = star ~ "*";
-}

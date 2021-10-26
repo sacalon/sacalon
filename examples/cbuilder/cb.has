@@ -1,2 +1,0 @@
-ExcuteCommand("gcc test.c -o test");
-ExcuteCommand("gcc -std=c11 nqueen.c -o nqueen");

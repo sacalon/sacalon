@@ -22,7 +22,7 @@ class Lexer(Lexer):
                 LBC,RBC,
                 LBRCK,RBRCK,
                 TRUE,FALSE,
-                VAR,CONST,LET,
+                VAR,CONST,
                 SEM,
                 USE,LOCAL,
                 FUNCTION,
@@ -60,7 +60,6 @@ class Lexer(Lexer):
         
         NAME["var"] = VAR
         NAME["const"] = CONST
-        NAME["let"] = LET
         
         NAME["use"] = USE
         NAME["local"] = LOCAL

@@ -1,3 +1,0 @@
-print("what is your name ?");
-var name = ReadStr();
-print("Hello ,",name);

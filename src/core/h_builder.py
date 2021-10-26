@@ -44,7 +44,7 @@ class HascalCompiler(object):
                 sys.exit()
             elif self.argv[1] == "-v" or self.argv[1] == "--version":
                 # show version
-                print(f"Hascal {HASCAL_COMPILER_VERSION} {sys.platform}")
+                print(f"Hascal {HASCAL_COMPILER_VERSION} --- {sys.platform}")
             else :
                 # check file extension
                 if not self.argv[1].endswith(".has"):
@@ -55,7 +55,7 @@ class HascalCompiler(object):
                         with open(argv[1]) as fin:
                             self.code = fin.read()
                         self.compile()
-                    except FileNotFoundError :
+                    except FileNotFoundError as e :
                         HascalException(f"Error : File '{argv[1]}' not found")
         else:
             output_message = [f"Hascal Compiler {HASCAL_COMPILER_VERSION} {sys.platform}",
@@ -77,31 +77,24 @@ class HascalCompiler(object):
         output = self.generator.generate(tree)
 
         tmp0 = self.argv[1]
-        excutable_outname = self.argv[2] if len(self.argv) > 2 else tmp0[:-4]
-        outname = "out.d"
+        outname = self.argv[2] if len(self.argv) > 2 else tmp0[:-4]
 
         # write output js code in a file
-        with open(outname, 'w') as fout:
+        with open(outname+".d", 'w') as fout:
             fout.write(output)
 
         # set output excutable file
         tmp0 = self.argv[1]
-        tmp = '-of=' + excutable_outname
+        tmp = '-of=' + outname
 
         # compile with dmd compiler
         try :
-            check_call(['dmd',"out.d", tmp],stdout=DEVNULL,stderr=STDOUT)
+            check_call(['dmd',outname, tmp],stdout=DEVNULL,stderr=STDOUT)
             # os.system('dmd '+'out.d '+tmp)
-            os.remove("out.d")
+            try :
+                os.remove(outname+".d")
+                os.remove(outname+".obj")
+            except :
+                ...
         except :
-            output_messages = [
-                "Error : Your code have error(s)",
-                "Check these items :",
-                "\t1-incompatible types",
-                "\t2-functions arguements and types and length of arguments",
-                "\t3-modify consts",
-                "\tand more..."
-                f"\nif you could not troubleshooting your code , create an issue in hascal github repository({HASCAL_GITHUB_REPO}) ,we helps you "
-            ]
-            for msg in output_messages:
-                print(Fore.RED+msg)
+            print("Error in compile file")

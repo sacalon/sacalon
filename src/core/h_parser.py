@@ -1,7 +1,7 @@
-# h_parser.py
-#
+# The Hascal Parser
+# 
 # The Hascal Programming Language
-# Copyright 2019-2021 Hascal Development Team,
+# Copyright 2019-2022 Hascal Development Team,
 # all rights reserved.
 
 from .sly import Parser
@@ -16,7 +16,7 @@ class Parser(Parser):
             )
 
       def __init__(self):
-            self.names = {}
+            ...
 
       @_('')
       def block(self, p):
@@ -24,13 +24,13 @@ class Parser(Parser):
       @_('statement block')
       def block(self, p):
             return ('block', p.statement, *p.block[1:])
-      #----------------------------------
+      
       @_('')
-      def block_func(self, p):
-            return ('block_func', )
-      @_('statement block_func')
-      def block_func(self, p):
-            return ('block_func', p.statement, *p.block_func[1:])
+      def in_block(self, p):
+            return ('in_block', )
+      @_('in_statement in_block')
+      def in_block(self, p):
+            return ('in_block', p.in_statement, *p.in_block[1:])
       #----------------------------------
       @_('')
       def block_struct(self, p):
@@ -39,101 +39,198 @@ class Parser(Parser):
       def block_struct(self, p):
             return ('block_struct', p.struct_declare, *p.block_struct[1:])
 
-      @_('VAR NAME ASSIGN expr SEM')
+      @_('VAR NAME ASSIGN expr')
       def struct_declare(self, p):
             return ('declare','equal1','auto', p.NAME, p.expr)
-      @_('CONST NAME ASSIGN expr SEM')
+      @_('CONST NAME ASSIGN expr')
       def struct_declare(self, p):
             return ('declare','const', p.NAME, p.expr)
             
-      @_('VAR NAME COLON return_type SEM')
+      @_('VAR NAME COLON return_type')
       def struct_declare(self, p):
             return ('declare','no_equal',p.return_type, p.NAME) 
-      @_('VAR NAME COLON return_type ASSIGN expr SEM')
+      @_('VAR NAME COLON return_type ASSIGN expr')
       def struct_declare(self, p):
             return ('declare','equal2',p.return_type, p.NAME,p.expr) 
             
-      @_('VAR NAME COLON LBRCK return_type RBRCK SEM')
+      @_('VAR NAME COLON LBRCK return_type RBRCK')
       def struct_declare(self, p):
             return ('declare_array','no_equal',p.return_type, p.NAME) 
             
-      @_('VAR NAME COLON LBRCK return_type RBRCK ASSIGN expr SEM')
+      @_('VAR NAME COLON LBRCK return_type RBRCK ASSIGN expr')
       def struct_declare(self, p):
             return ('declare_array','equal2',p.return_type, p.NAME,p.expr)
       #-----------------------------------
-      @_('USE name SEM')
+      # use <name>
+      @_('USE name')
       def statement(self, p):
             return ('use', p.name)
-      @_('LOCAL USE name SEM')
+      
+      # local use <name>
+      @_('LOCAL USE name')
       def statement(self, p):
             return ('use_local', p.name)
       #-----------------------------------
-      @_('ENUM NAME LBC names RBC')
+      @_('enum_stmt')
       def statement(self, p):
+            return p.enum_stmt
+      @_('enum_stmt')
+      def in_statement(self, p):
+            return p.enum_stmt
+      # enum <name> {
+      #     <names>     
+      # }
+      @_('ENUM NAME LBC names RBC')
+      def enum_stmt(self, p):
             return ('enum', p.NAME,p.names)
       #----------------------------------
-      @_('VAR NAME ASSIGN expr SEM')
+      # statement : 
+      @_('var_declare')
       def statement(self, p):
-            return ('declare','equal1','auto', p.NAME, p.expr)
-      @_('CONST NAME ASSIGN expr SEM')
-      def statement(self, p):
-            return ('declare','const', p.NAME, p.expr)
-      @_('LET NAME ASSIGN expr SEM')
-      def statement(self, p):
-            return ('declare','const', p.NAME, p.expr)
-            
-      @_('VAR NAME COLON return_type SEM')
-      def statement(self, p):
+            return p.var_declare
+
+      # var <name> : <return_type>
+      @_('VAR NAME COLON return_type')
+      def var_declare(self, p):
             return ('declare','no_equal',p.return_type, p.NAME) 
-      @_('VAR NAME COLON return_type ASSIGN expr SEM')
-      def statement(self, p):
+
+      # var <name> : [<return_type>]
+      @_('VAR NAME COLON LBRCK return_type RBRCK')
+      def var_declare(self, p):
+            return ('declare_array','no_equal',p.return_type, p.NAME) 
+
+      # var <name> = <expr>
+      @_('VAR NAME ASSIGN expr')
+      def var_declare(self, p):
+            return ('declare','equal1','auto', p.NAME, p.expr)
+
+      # var <name> : <return_type> = <expr>
+      @_('VAR NAME COLON return_type ASSIGN expr')
+      def var_declare(self, p):
             return ('declare','equal2',p.return_type, p.NAME,p.expr) 
             
-      @_('VAR NAME COLON LBRCK return_type RBRCK SEM')
-      def statement(self, p):
-            return ('declare_array','no_equal',p.return_type, p.NAME) 
-            
-      @_('VAR NAME COLON LBRCK return_type RBRCK ASSIGN expr SEM')
-      def statement(self, p):
+      # var <name> : [<return_type>] = <expr>
+      @_('VAR NAME COLON LBRCK return_type RBRCK ASSIGN expr')
+      def var_declare(self, p):
             return ('declare_array','equal2',p.return_type, p.NAME,p.expr) 
+
+      # const <name> = <expr>
+      @_('CONST NAME ASSIGN expr')
+      def var_declare(self, p):
+            return ('declare','const', p.NAME, p.expr)
+      
+      # const <name> : <return_type> = <expr>
+      @_('CONST NAME COLON return_type ASSIGN expr')
+      def var_declare(self, p):
+            return ('declare','const_type',p.return_type, p.NAME, p.expr)
+
+      # in_statement : 
+      @_('in_var_declare')
+      def in_statement(self, p):
+            return p.in_var_declare
+
+      # in : var <name> : <return_type>
+      @_('VAR NAME COLON return_type')
+      def in_var_declare(self, p):
+            return ('in_declare','no_equal',p.return_type, p.NAME) 
+
+      # in : var <name> : [<return_type>]
+      @_('VAR NAME COLON LBRCK return_type RBRCK')
+      def in_var_declare(self, p):
+            return ('in_declare_array','no_equal',p.return_type, p.NAME) 
+
+      # in : var <name> = <expr>
+      @_('VAR NAME ASSIGN expr')
+      def in_var_declare(self, p):
+            return ('in_declare','equal1','auto', p.NAME, p.expr)
+
+      # in : var <name> : <return_type> = <expr>
+      @_('VAR NAME COLON return_type ASSIGN expr')
+      def in_var_declare(self, p):
+            return ('in_declare','equal2',p.return_type, p.NAME,p.expr) 
+            
+      # in : var <name> : [<return_type>] = <expr>
+      @_('VAR NAME COLON LBRCK return_type RBRCK ASSIGN expr')
+      def in_var_declare(self, p):
+            return ('in_declare_array','equal2',p.return_type, p.NAME,p.expr) 
+
+      # in : const <name> = <expr>
+      @_('CONST NAME ASSIGN expr')
+      def in_var_declare(self, p):
+            return ('in_declare','const', p.NAME, p.expr)
+      
+      # in : const <name> : <return_type> = <expr>
+      @_('CONST NAME COLON return_type ASSIGN expr')
+      def in_var_declare(self, p):
+            return ('in_declare','const_type',p.return_type, p.NAME, p.expr)
       #-----------------------------------
-      @_('name ASSIGN expr SEM')
-      def statement(self, p):
+      # <name> = <expr>
+      @_('name ASSIGN expr')
+      def in_statement(self, p):
             return ('assign', p.name, p.expr)
-      @_('name LBRCK expr RBRCK ASSIGN expr SEM')
-      def statement(self, p):
+      
+      # <name>[<expr>] = <expr>
+      @_('name LBRCK expr RBRCK ASSIGN expr')
+      def in_statement(self, p):
             return ('assign_var_index', p.name,p.expr0,p.expr1)
       #-----------------------------------
       @_('if_stmt')
-      def statement(self, p):
+      def in_statement(self, p):
             return p.if_stmt
+
+      # if <condition> {
+      #      <block>
+      # }
       @_('IF condition LBC block RBC')
       def if_stmt(self, p):
             return ('if', p.condition,p.block)
+
+      # if <condition> {
+      #      <block>
+      # } else {
+      #      <block>
+      # }
       @_('IF condition LBC block RBC ELSE LBC block RBC')
       def if_stmt(self, p):
             return ('if_else', p.condition,p.block0,p.block1)
+      
+      # if <condition> {
+      #      <block>
+      # } else <condition> {
+      #      <block>
+      # }
       @_('IF condition LBC block RBC ELSE if_stmt')
       def if_stmt(self, p):
             return ('if_else2', p.condition,p.block,p.if_stmt)
       #-----------------------------------
-      @_('RETURN expr SEM')
-      def statement(self, p):
+      # return <expr>
+      @_('RETURN expr')
+      def in_statement(self, p):
             return ('return', p.expr)
       #-----------------------------------
       @_('for_stmt')
-      def statement(self, p):
+      def in_statement(self, p):
             return p.for_stmt
+      # for <name> = <expr> to <expr> {
+      #      <block>
+      # }
       @_('FOR NAME ASSIGN expr TO expr LBC block RBC')
       def for_stmt(self, p):
             return ('for', p.NAME,p.expr0,p.expr1,p.block)
+
+      # for <name> = <expr> downto <expr> {
+      #      <block>
+      # }
       @_('FOR NAME ASSIGN expr DOWNTO expr LBC block RBC')
       def for_stmt(self, p):
             return ('for_down', p.NAME,p.expr0,p.expr1,p.block)
       #-----------------------------------
       @_('while_stmt')
-      def statement(self, p):
+      def in_statement(self, p):
             return p.while_stmt
+      # while <condition> {
+      #      <block>
+      # }
       @_('WHILE condition LBC block RBC')
       def while_stmt(self, p):
             return ('while',p.condition,p.block)
@@ -141,52 +238,89 @@ class Parser(Parser):
       @_('struct_stmt')
       def statement(self, p):
             return p.struct_stmt
+      # struct <name> {
+      #     <block_struct>
+      # }
       @_('STRUCT NAME LBC block_struct RBC')
       def struct_stmt(self, p):
             return ('struct',p.NAME,p.block_struct)
       #-----------------------------------
-      @_('BREAK SEM')
-      def statement(self, p):
+      # break
+      @_('BREAK')
+      def in_statement(self, p):
             return ('break')
-      @_('CONTINUE SEM')
-      def statement(self, p):
+      
+      # continue
+      @_('CONTINUE')
+      def in_statement(self, p):
             return ('continue')
       #-----------------------------------
-      @_('FUNCTION NAME LPAREN params RPAREN LBC block_func RBC')
+      # function <name> {
+      #      <in_block>
+      # }
+      @_('FUNCTION NAME LBC in_block RBC')
       def statement(self, p):
-            return ('function','void', p.NAME, p.params, p.block_func)
-      @_('FUNCTION NAME LPAREN  RPAREN LBC block_func RBC')
+            return ('function','void', p.NAME, "", p.in_block)
+
+      # function <name>() {
+      #      <in_block>
+      # }
+      @_('FUNCTION NAME LPAREN RPAREN LBC in_block RBC')
       def statement(self, p):
-            return ('function','void', p.NAME,"", p.block_func)
-      @_('FUNCTION NAME LBC block_func RBC')
+            return ('function','void', p.NAME,"", p.in_block)
+
+      # function <name>(<params>) {
+      #      <in_block>
+      # }
+      @_('FUNCTION NAME LPAREN params RPAREN LBC in_block RBC')
       def statement(self, p):
-            return ('function','void', p.NAME, "", p.block_func)
-            
-      @_('FUNCTION NAME COLON return_type LBC block_func RBC')
+            return ('function','void', p.NAME, p.params, p.in_block)
+ 
+      # function <name> : <return_type> {
+      #      <in_block>
+      # }   
+      @_('FUNCTION NAME COLON return_type LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type, p.NAME, "", p.block_func)
-      @_('FUNCTION NAME LPAREN  RPAREN COLON return_type LBC block_func RBC')
+            return ('function',p.return_type, p.NAME, "", p.in_block)
+
+      # function <name>() : <return_type> {
+      #      <in_block>
+      # } 
+      @_('FUNCTION NAME LPAREN RPAREN COLON return_type LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type, p.NAME, "", p.block_func)  
-      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type LBC block_func RBC')
+            return ('function',p.return_type, p.NAME, "", p.in_block) 
+
+      # function <name>(<params>) : <return_type> {
+      #      <in_block>
+      # }  
+      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type, p.NAME, p.params, p.block_func)
-      @_('FUNCTION NAME LPAREN COLON return_type RPAREN LBC block_func RBC')
+            return ('function',p.return_type, p.NAME, p.params, p.in_block)
+      
+      # function <name> : [<return_type>] {
+      #      <in_block>
+      # }
+      @_('FUNCTION NAME COLON return_type2 LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type, p.NAME,"", p.block_func)
-            
-      @_('FUNCTION NAME COLON return_type2 LBC block_func RBC')
+            return ('function',p.return_type2, p.NAME, "", p.in_block)
+      
+      
+      # function <name>() : [<return_type>] {
+      #      <in_block>
+      # }
+      @_('FUNCTION NAME LPAREN COLON return_type2 RPAREN LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type2, p.NAME, "", p.block_func)
-      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type2 LBC block_func RBC')
+            return ('function',p.return_type2, p.NAME,"", p.in_block)
+
+      # function <name>(<params>) : [<return_type>] {
+      #      <in_block>
+      # }
+      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type2 LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type2, p.NAME, p.params, p.block_func)
-      @_('FUNCTION NAME LPAREN COLON return_type2 RPAREN LBC block_func RBC')
-      def statement(self, p):
-            return ('function',p.return_type2, p.NAME,"", p.block_func)
+            return ('function',p.return_type2, p.NAME, p.params, p.in_block)    
       #------------------------------------
-      @_('expr SEM')
-      def statement(self, p):
+      @_('expr')
+      def in_statement(self, p):
             return ('expr', p.expr)
       
       @_('expr')

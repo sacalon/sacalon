@@ -1,2 +1,0 @@
-var commands = "type show_your_code.has";
-ShellCommand(commands);
