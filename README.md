@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img style="text-align:center" src="https://raw.githubusercontent.com/hascal/hascal/main/hascal-logo.png" height="127px" width="128px">
+  <img style="text-align:center" src="hascal-logo.png" height="128px" width="128px">
 </p>
 
 > **NOTE:** Hascal is currently under development.
