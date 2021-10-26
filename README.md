@@ -40,11 +40,8 @@ print("Hello ,",name);
 > You can see Hascal syntax example [here](https://github.com/hascal/hascal/blob/main/syntax.md).
 
 ## Todo
-- [ ] Change Back-End to C++
+- [ ] Change Back-End to C
 - [ ] Fix Language Bugs[**WIP**]
-
-## Thanks
-This project exists thanks to all the people who contribute. 
 
 ## License
 The compiler and the standard libraries are licensed under the **"GNU general public license"**,
