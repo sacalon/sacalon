@@ -9,7 +9,7 @@ Hascal is a **simple**, **fast**, **powerful** and **compiled** programming lang
 
 <!-- > Visit [Hascal's Official Website](https://hascal.github.io) -->
 
-## Hascal Features:
+## Features
 - [x] Cross Platform (Linux, Windows, MacOS, BSD Soon) 
 - [x] Fast & Powerful
 - [x] C-Family Syntax, inspired by Swift, TypeScript
@@ -26,14 +26,10 @@ print("Hello ,",name);
 > You can see more Hascal examples [here](https://github.com/hascal/hascal/tree/main/examples).
 
 ## Documentation
-> You can find documentations on installation and using Hascal [here](https://github.com/hascal/hascal/tree/main/docs)
+> You can find documentations on installation and using Hascal, [Here](https://github.com/hascal/hascal/tree/main/docs)
 
 ## Build from source
 > See Build Help Page, [Here](BUILD.md)
-
-## Syntax
-
-> You can see Hascal syntax example [here](https://github.com/hascal/hascal/blob/main/syntax.md).
 
 ## Todo
 - [ ] Change Back-End to C
