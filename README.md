@@ -18,10 +18,11 @@ Hascal is a **simple**, **fast**, **powerful** and **compiled** programming lang
 - [x] Garbage Collection
 
 ## Example
-```dart
-print("what is your name ?");
-var name = ReadStr();
-print("Hello ,",name);
+```typescript
+function main : int {
+    print("Hello World!")
+    return 0
+}
 ```
 > You can see more Hascal examples [here](https://github.com/hascal/hascal/tree/main/examples).
 
