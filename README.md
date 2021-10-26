@@ -13,13 +13,9 @@ Hascal is a **simple**, **fast**, **powerful** and **compiled** programming lang
 - [x] Cross Platform (Linux, Windows, MacOS, BSD Soon) 
 - [x] Fast & Powerful
 - [x] C-Family Syntax, inspired by Swift, TypeScript
-- [x] Can be use in web development(can compiles to javascript) **WIP**
 - [x] Dlang on Back-End
 - [x] Native binaries with no dependency
 - [x] Garbage Collection
-
-
-
 
 ## Example
 ```dart
