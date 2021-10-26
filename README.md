@@ -32,12 +32,8 @@ function main : int {
 ## Build from source
 > See Build Help Page, [Here](BUILD.md)
 
-## Todo
-- [ ] Change Back-End to C
-- [ ] Fix Language Bugs[**WIP**]
-
 ## License
-The compiler and the standard libraries are licensed under the **"GNU general public license"**,
+The compiler and the standard libraries are licensed under the **"GNU general public license v3"**,
 Read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more details.
 
 ## About
