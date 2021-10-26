@@ -24,7 +24,7 @@ function main : int {
     return 0
 }
 ```
-> You can see more Hascal examples [here](https://github.com/hascal/hascal/tree/main/examples).
+> You can see more Hascal examples in [examples folder](https://github.com/hascal/hascal/tree/main/examples).
 
 ## Documentation
 > You can find documentations on installation and using Hascal, [Here](https://github.com/hascal/hascal/tree/main/docs)
