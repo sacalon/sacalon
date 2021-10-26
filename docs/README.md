@@ -1,9 +1,9 @@
 # Hascal Documentation
 
 ## Learn Hascal in 15 minutes
-```ruby
+```swift
 # import physics library from stdlib
-use physics;
+use physics
 
 # DataTypes :
 # - char
@@ -14,8 +14,13 @@ use physics;
 # - bool 
 
 # declare a variable
-var x : int = 1;
+var x : int = 1
 
 # declare a const
-const xx : int = 1;
+const xx : int = 1
+
+function main() : int {
+    print("Hi!")
+    return 0
+}
 ```
