@@ -18,9 +18,24 @@ Hascal is a **simple**, **fast**, **powerful** and **compiled systems** programm
 - [x] Garbage Collection
 
 ## Example
+Hello World :
 ```typescript
 function main : int {
     print("Hello World!")
+    return 0
+}
+```
+Read from stdin :
+```typescript
+use core.std
+
+function ReadStr() : void
+
+function main : int{
+    print("Enter your name :")
+    var x : string
+    x = ReadStr()
+    print("Hi,",x)
     return 0
 }
 ```
