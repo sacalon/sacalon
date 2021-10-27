@@ -30,7 +30,7 @@ function main : int {
 > You can find documentations on installation and using Hascal, [Here](https://github.com/hascal/hascal/tree/main/docs)
 
 ## Build from source
-> See Build Help Page, [Here](BUILD.md)
+> See build help page, [here](BUILD.md)
 
 ## License
 The compiler and the standard libraries are licensed under the **"GNU general public license v3"**,
