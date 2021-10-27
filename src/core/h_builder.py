@@ -1,4 +1,4 @@
-# h_builder.py
+# The Hascal Compiler CLI
 #
 # The Hascal Programming Language
 # Copyright 2019-2021 Hascal Development Team,
@@ -10,7 +10,6 @@ from .h_compiler import Generator # hascal to d compiler
 from .h_error import HascalException # hascal excpetion handling
 from .h_help import * # hascal compiler information
 
-from .colorama import init,Fore # colorama library for coloring console output
 
 from os.path import isfile 
 from subprocess import DEVNULL, STDOUT, check_call
@@ -19,8 +18,6 @@ import os
 
 class HascalCompiler(object):
     def __init__(self,argv):
-        init() # init colorama
-
         self.code = ""
         self.lexer = Lexer()
         self.parser = Parser()

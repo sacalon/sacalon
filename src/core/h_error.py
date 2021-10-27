@@ -1,4 +1,4 @@
-# h_error.py
+# The Hascal Compiler Error Manager
 #
 # The Hascal Programming Language
 # Copyright 2019-2021 Hascal Development Team,

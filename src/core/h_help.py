@@ -1,4 +1,4 @@
-# h_help.py
+# The Hascal Help Information
 #
 # The Hascal Programming Language
 # Copyright 2019-2021 Hascal Development Team,

@@ -318,6 +318,15 @@ class Parser(Parser):
       @_('FUNCTION NAME LPAREN params RPAREN COLON return_type2 LBC in_block RBC')
       def statement(self, p):
             return ('function',p.return_type2, p.NAME, p.params, p.in_block)    
+
+      # function <name>(<params>) : <return_type>
+      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type')
+      def statement(self, p):
+            return ('inline_function',p.return_type, p.NAME, p.params)  
+      # function <name>() : <return_type>
+      @_('FUNCTION NAME LPAREN RPAREN COLON return_type')
+      def statement(self, p):
+            return ('inline_function',p.return_type, p.NAME)  
       #------------------------------------
       @_('expr')
       def in_statement(self, p):
