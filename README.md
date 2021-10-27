@@ -29,13 +29,13 @@ Read from stdin :
 ```typescript
 use core.std
 
-function ReadStr() : void
+function ReadStr() : string
 
 function main : int{
     print("Enter your name :")
-    var x : string
+    var name: string
     x = ReadStr()
-    print("Hi,",x)
+    print("Hi,",name)
     return 0
 }
 ```
