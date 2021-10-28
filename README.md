@@ -20,7 +20,7 @@
 - [x] Native binaries with no dependency
 - [x] Garbage Collection and Manual Memory Allocation
 
-## Example
+## Examples
 Hello World :
 ```typescript
 function main() : int {
