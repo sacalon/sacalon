@@ -34,8 +34,7 @@ use core.std
 
 function main(argv:[string]) : int{
     print("Enter your name :")
-    var name: string
-    x = ReadStr()
+    var name: string = ReadStr()
     print("Hi,",name)
     return 0
 }
