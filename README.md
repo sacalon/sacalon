@@ -1,14 +1,16 @@
 
-<p align="center">
+<div align="center">
   <img style="text-align:center" src="hascal-logo.png" height="128px" width="128px">
-</p>
 
-> **NOTE:** Hascal is currently under development.
-# The Hascal Programming Language
+
+  # The Hascal Programming Language
+</div>
+
+
 Hascal is a **simple**, **fast**, **powerful** and **compiled systems** programming language. It's designed to be an alternative to C\C++ with a easy syntax.
 
 <!-- > Visit [Hascal's Official Website](https://hascal.github.io) -->
-
+> **NOTE:** Hascal is currently under development.
 ## Features
 - [x] Cross Platform (Linux, Windows, MacOS, BSD) 
 - [x] Fast & Powerful
