@@ -23,7 +23,7 @@
 ## Example
 Hello World :
 ```typescript
-function main : int {
+function main(argv:[string]) : int {
     print("Hello World!")
     return 0
 }
@@ -32,9 +32,7 @@ Read from stdin :
 ```typescript
 use core.std
 
-function ReadStr() : string
-
-function main : int{
+function main(argv:[string]) : int{
     print("Enter your name :")
     var name: string
     x = ReadStr()
