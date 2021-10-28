@@ -26,3 +26,9 @@ function add(a:int,b:int) : int {
     return a + b
 }
 ```
+- lambdas :
+```
+var mythread = thread(@(1000,true){
+    print("hi")
+})
+```
