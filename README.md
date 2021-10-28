@@ -7,7 +7,7 @@
 </div>
 
 
-Hascal is a **simple**, **fast**, **powerful** and **compiled systems** programming language. It's designed to be an alternative to C\C++ with a easy syntax.
+**Hascal** is a **simple**, **fast**, **powerful** and **compiled systems** programming language. It's designed to be an alternative to C\C++ with a easy syntax.
 
 <!-- > Visit [Hascal's Official Website](https://hascal.github.io) -->
 > **NOTE:** Hascal is currently under development.
