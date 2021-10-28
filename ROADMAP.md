@@ -32,3 +32,10 @@ var mythread = thread(@(1000,true){
     print("hi")
 })
 ```
+- dictionaries :
+```
+var names_age = dict(string,{
+   "john" : 25,
+   "nickolas" : 38
+})
+```
