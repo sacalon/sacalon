@@ -38,6 +38,12 @@ var names_age = dict(string,{
    "john" : 25,
    "nickolas" : 38
 })
+
+# or ;
+var foo : dict = (string,{
+   "X" : 1,
+   "Y" : 2
+})
 ```
 - optional function's argument
 ```
