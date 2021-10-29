@@ -39,3 +39,10 @@ var names_age = dict(string,{
    "nickolas" : 38
 })
 ```
+- optional function's argument
+```
+function foo(x:int,y:int,z:int=1){
+    print(x*y*z)
+}
+foo(1,2)
+```
