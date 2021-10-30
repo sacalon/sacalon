@@ -16,7 +16,7 @@
 - [x] Fast & Powerful
 - [x] Easy to learn
 - [x] C-Family syntax, inspired by Swift, TypeScript
-- [x] Compiles to llvm with [ldc](https://github.com/ldc-developers/ldc)
+- [x] Compiles to binary with [dmd](https://github.com/dlang/dmd)
 - [x] Native binaries with no dependency
 - [x] Garbage Collection and Manual Memory Allocation
 
