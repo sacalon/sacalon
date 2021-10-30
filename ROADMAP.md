@@ -1,4 +1,4 @@
-# Hascal's Roadmap for v1.3.0
+# Hascal's Roadmap for v1.3.x
 - multi library import :
 ```
 use (
@@ -39,7 +39,7 @@ var names_age = dict(string,{
    "nickolas" : 38
 })
 
-# or ;
+# or :
 var foo : dict = (string,{
    "X" : 1,
    "Y" : 2
