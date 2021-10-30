@@ -42,7 +42,20 @@ function main() : int {
 You can extern c\c++\obj-c in d and use it in hascal.
 
 `foo.d` :
-```
+```d
 extern(C) {
    // put your c code here
 }
+
+extern(C++) {
+   // put your c code here
+}
+
+extern (Objective-C)
+{
+    // put your objective c code here
+}
+
+```
+
+For other information see dlang documentation, [here](https://dlang.org/spec/spec.html)
