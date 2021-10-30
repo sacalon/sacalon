@@ -80,18 +80,13 @@ class HascalCompiler(object):
         with open(outname+".d", 'w') as fout:
             fout.write(output)
 
-        # set output excutable file
-        tmp0 = self.argv[1]
-        tmp = '-of=' + outname
-
         # compile with dmd compiler
         try :
-            check_call(['dmd',outname, tmp],stdout=DEVNULL,stderr=STDOUT)
-            # os.system('dmd '+'out.d '+tmp)
-            try :
-                os.remove(outname+".d")
-                os.remove(outname+".obj")
-            except :
-                ...
+            check_call(['dmd', outname, '-O', '-mcpu=native'], stdout=DEVNULL, stderr=STDOUT)
+            # uncomment it for development(and comment top line)
+            # os.system('dmd '+ outname)
+            
+            os.remove(outname+".d")
+            os.remove(outname+".obj")
         except :
-            print("Error in compile file")
+            print("Error : unknown error in compile file")
