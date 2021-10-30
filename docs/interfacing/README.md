@@ -14,7 +14,7 @@ For use `abs()` function we should import it from d stdlib, for this purpose imp
 import math : abs ;
 ```
 Now can import this code in hascal, write this code in root folder of your project:
-```
+```typescript
 local use d.absprint
 function absprint(a:int) : int
 
@@ -24,7 +24,7 @@ function main() : int {
 ```
 You can write inline function,structs,... defines, in an external hascal file and import it in main file :
 `absprint.has` :
-```
+```typescript
 local use d.absprint
 
 function absprint(a:int) : int
@@ -37,3 +37,12 @@ function main() : int {
    absprint(-68) # output : 68
 }
 ```
+
+## Use other languages in hascal
+You can extern c\c++\obj-c in d and use it in hascal.
+
+`foo.d` :
+```
+extern(C) {
+   // put your c code here
+}
