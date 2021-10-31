@@ -614,28 +614,12 @@ class Generator(object):
             # }
             if node[0] == 'function':
                   current_vars = self.vars
-                  self.funcs.append(node[2])
-
-                  params = node[3].split(',')
-                  param_vars = []
-                  if len(params) != 1:
-                        for p in params:
-                              p2 = p.split(' ')
-                              param_vars.append(p2[1])
-                        for p in param_vars:
-                              self.vars.append(p)
-                  elif len(params) == 0 : 
-                        pass
-                  else :
-                        if params[0] == '' or params[0] == None :
-                              pass
-                        else :
-                              params2 = params[0].split(' ')
-                              self.vars.append(params2[1])
-                  res = self.walk(node[4])
-
-                  self.src_pre_main += "%s %s(%s) {\n%s\n}\n" % (node[1],node[2], node[3],res) 
+                  self.vars.append(node[4])
+                  res = self.walk(node[3])
                   self.vars = current_vars
+
+                  self.src_pre_main += "%s %s(%s) {\n%s\n}\n" % (node[1],node[2], ','.join(node[4]),res)
+                  self.funcs.append(node[2])
             #-------------------------------------
             if node[0] == "inline_function" :
                   self.funcs.append(node[2])
@@ -753,28 +737,8 @@ class Generator(object):
 
             # ---------------conditions---------------------
             # <expr> == <expr>
-            if node[0] == 'equals':
-                  return "%s == %s" % (self.walk(node[1]), self.walk(node[2]))
-
-            # <expr> != <expr>
-            if node[0] == 'not_equals':
-                  return "%s != %s" % (self.walk(node[1]), self.walk(node[2]))
-
-            # <expr> >= <expr>
-            if node[0] == 'greater_equals':
-                  return "%s >= %s" % (self.walk(node[1]), self.walk(node[2]))
-
-            # <expr> <= <expr>
-            if node[0] == 'less_equals':
-                  return "%s <= %s" % (self.walk(node[1]), self.walk(node[2]))
-            
-            # <expr> > <expr>
-            if node[0] == 'greater':
-                  return "%s > %s" % (self.walk(node[1]), self.walk(node[2]))
-
-            # <expr> < <expr>
-            if node[0] == 'less':
-                  return "%s < %s" % (self.walk(node[1]), self.walk(node[2]))
+            if node[0] in ['==', '!=', '>=', '<=', '>', '<']:
+                  return "%s %s %s" % (self.walk(node[1]), node[0], self.walk(node[2]))
 
             # not <expr>
             if node[0] == 'not_cond':

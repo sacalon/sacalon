@@ -308,16 +308,16 @@ class Parser(Parser):
       # function <name>() : [<return_type>] {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LPAREN COLON return_type2 RPAREN LBC in_block RBC')
+      @_('FUNCTION NAME LPAREN RPAREN COLON return_type2 LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type2, p.NAME,"", p.in_block)
+            return ('function',p.return_type2, p.NAME, p.in_block, [])
 
       # function <name>(<params>) : [<return_type>] {
       #      <in_block>
       # }
       @_('FUNCTION NAME LPAREN params RPAREN COLON return_type2 LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type2, p.NAME, p.params, p.in_block)    
+            return ('function',p.return_type2, p.NAME, p.in_block, p.params)    
 
       # function <name>(<params>) : <return_type>
       @_('FUNCTION NAME LPAREN params RPAREN COLON return_type')
@@ -430,24 +430,14 @@ class Parser(Parser):
       def names(self, p):
             return p.NAME
       #------------------------------------------
-      @_('expr EQEQ expr')
+      @_('expr EQEQ expr',
+         'expr NOTEQ expr',
+         'expr GREATEREQ expr',
+         'expr LESSEQ expr',
+         'expr GREATER expr',
+         'expr LESS expr')
       def condition(self, p):
-            return ('equals', p.expr0, p.expr1)
-      @_('expr NOTEQ expr')
-      def condition(self, p):
-            return ('not_equals', p.expr0, p.expr1)
-      @_('expr GREATEREQ expr')
-      def condition(self, p):
-            return ('greater_equals', p.expr0, p.expr1)
-      @_('expr LESSEQ expr')
-      def condition(self, p):
-            return ('less_equals', p.expr0, p.expr1)
-      @_('expr GREATER expr')
-      def condition(self, p):
-            return ('greater', p.expr0, p.expr1)
-      @_('expr LESS expr')
-      def condition(self, p):
-            return ('less', p.expr0, p.expr1)
+            return (p[1], p.expr0, p.expr1)
       
       @_('NOT condition')
       def condition(self, p):
@@ -488,41 +478,20 @@ class Parser(Parser):
       def arg(self, p):
             return p.expr
       #------------------------------------------
-      @_('INTVAR')
+      @_('INTVAR',
+         'STRINGVAR',
+         'CHARVAR',
+         'BOOLVAR',
+         'FLOATVAR',
+         'NAME')
       def return_type(self, p):
-            return 'int'
-      @_('STRINGVAR')
-      def return_type(self, p):
-            return 'string'
-      @_('CHARVAR')
-      def return_type(self, p):
-            return 'char'
-      @_('BOOLVAR')
-      def return_type(self, p):
-            return 'bool'
-      @_('FLOATVAR')
-      def return_type(self, p):
-            return 'float'
-      @_('NAME')
-      def return_type(self, p):
-            return str(p.NAME)
+            return p[1]
             
-      @_('LBRCK INTVAR RBRCK')
+      @_('LBRCK INTVAR RBRCK',
+         'LBRCK STRINGVAR RBRCK',
+         'LBRCK CHARVAR RBRCK',
+         'LBRCK BOOLVAR RBRCK',
+         'LBRCK FLOATVAR RBRCK',
+         'LBRCK NAME RBRCK')
       def return_type2(self, p):
-            return 'int[]'
-      @_('LBRCK STRINGVAR RBRCK')
-      def return_type2(self, p):
-            return 'string[]'
-      @_('LBRCK CHARVAR RBRCK')
-      def return_type2(self, p):
-            return 'char[]'
-      @_('LBRCK BOOLVAR RBRCK')
-      def return_type2(self, p):
-            return 'bool[]'
-      @_('LBRCK FLOATVAR RBRCK')
-      def return_type2(self, p):
-            return 'float[]'
-      @_('LBRCK NAME RBRCK')
-      def return_type2(self, p):
-            return "{0}[]".format(p.NAME)
-      #------------------------------------------
+            return p[1] + '[]'
