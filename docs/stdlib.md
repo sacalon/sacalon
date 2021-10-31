@@ -1,10 +1,10 @@
 # Hascal Standard Library
 
-- [Built-in Functions]()
-- [`file`]()
-- [`os`]()
-- [`time`]()
-- [`math`]()
+- [Built-in Functions](#built-in-functions)
+- [`file`](#file)
+- [`os`](#os)
+- [`time`](#time)
+- [`math`](#math)
 
 ## Built-in functions 
 
