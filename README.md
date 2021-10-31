@@ -30,8 +30,6 @@ function main() : int {
 ```
 Read from stdin :
 ```typescript
-use core.std
-
 function main() : int{
     print("Enter your name :")
     var name = ReadStr()
