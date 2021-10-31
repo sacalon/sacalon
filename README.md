@@ -4,7 +4,7 @@
 
 
   # The Hascal Programming Language
-  [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/hascal/community)
+  [![Gitter chat](https://img.shields.io/gitter/room/hascal/commuinty?logo=gitter&style=for-the-badge)](https://gitter.im/hascal/community)
   [![linked in](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/company/hascal-lang)
 </div>
 
