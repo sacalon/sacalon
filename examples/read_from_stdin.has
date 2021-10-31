@@ -1,7 +1,3 @@
-use core.std
-
-function ReadStr() : void
-
 function main(){
     print("Enter your name :")
     var x : string
