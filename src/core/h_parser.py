@@ -350,28 +350,17 @@ class Parser(Parser):
       def expr(self, p):
             return ('list', p.exprs)
             
-      @_('expr PLUS expr')
+      @_('expr PLUS expr',
+         'expr TIMES expr',
+         'expr MINUS expr',
+         'expr DIVIDE expr',
+         'expr POW expr',
+         'expr ALPHA expr')
       def expr(self, p):
-            return ('add', p.expr0, p.expr1)
-      
-      @_('expr TIMES expr')
-      def expr(self, p):
-            return ('mul', p.expr0, p.expr1)
-      @_('expr MINUS expr')
-      def expr(self, p):
-            return ('sub', p.expr0, p.expr1)
-      @_('expr DIVIDE expr')
-      def expr(self, p):
-            return ('div', p.expr0, p.expr1)
-      @_('expr POW expr')
-      def expr(self, p):
-            return ('pow', p.expr0, p.expr1)
+            return (p[1], p.expr0, p.expr1)
       @_('MINUS expr %prec UMINUS')
       def expr(self, p):
             return ('sub', ('number', 0), p.expr)
-      @_('expr ALPHA expr')
-      def expr(self, p):
-            return ('add_cont', p.expr0, p.expr1)
       @_('LPAREN expr RPAREN')
       def expr(self, p):
             return ('paren_expr',p.expr)

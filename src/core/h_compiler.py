@@ -59,13 +59,7 @@ class Generator(object):
                   sys.exit(1)
       
       def exists(self,name):
-            if name in self.funcs:
-                  return True
-            elif name in self.types :
-                  return True
-            elif name in self.vars :
-                  return True
-            return False
+            return name in self.funcs or name in self.types or name in self.vars
       def add_to_output(self,d_code,dh_code):
             self.src_includes += '\n' + dh_code + '\n'
             self.src_pre_main += '\n' + d_code + '\n'
@@ -339,7 +333,7 @@ class Generator(object):
                   if len(node[1]) == 1:
                         name = node[1][0]
                         if name in self.vars:
-                               return "%s = %s;\n" % (name, self.walk(node[2]))
+                              return "%s = %s;\n" % (name, self.walk(node[2]))
                         elif name in self.types:
                               HascalException(f"Error : '{name}'is a type ,cannot change it")
                               sys.exit(1)
@@ -740,18 +734,8 @@ class Generator(object):
                         HascalException(f"Error : function '{node[1]}' not defined")
                         sys.exit(1)
             # --------------operators-----------------
-            if node[0] == 'add':
-                  return "%s + %s" % (self.walk(node[1]), self.walk(node[2]))
-            if node[0] == 'add_cont':
-                  return "%s ~ %s" % (self.walk(node[1]), self.walk(node[2]))
-            if node[0] == 'sub':
-                  return "%s - %s" % (self.walk(node[1]), self.walk(node[2]))
-            if node[0] == 'mul':
-                  return "%s * %s" % (self.walk(node[1]), self.walk(node[2]))
-            if node[0] == 'div':
-                  return "%s / %s" % (self.walk(node[1]), self.walk(node[2]))
-            if node[0] == 'pow':
-                  return "%s ^ %s" % (self.walk(node[1]), self.walk(node[2]))
+            if node[0] in '+-*/~^':
+                  return "%s %s %s" % (self.walk(node[1]), node[0], self.walk(node[2]))
             if node[0] == 'paren_expr':
                   return "(%s)" % (self.walk(node[1]))
             if node[0] == 'cond':
