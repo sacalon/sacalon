@@ -59,13 +59,7 @@ class Generator(object):
                   sys.exit(1)
       
       def exists(self,name):
-            if name in self.funcs:
-                  return True
-            elif name in self.types :
-                  return True
-            elif name in self.vars :
-                  return True
-            return False
+            return name in self.funcs or name in self.types or name in self.vars
       def add_to_output(self,d_code,dh_code):
             self.src_includes += '\n' + dh_code + '\n'
             self.src_pre_main += '\n' + d_code + '\n'
@@ -339,7 +333,7 @@ class Generator(object):
                   if len(node[1]) == 1:
                         name = node[1][0]
                         if name in self.vars:
-                               return "%s = %s;\n" % (name, self.walk(node[2]))
+                              return "%s = %s;\n" % (name, self.walk(node[2]))
                         elif name in self.types:
                               HascalException(f"Error : '{name}'is a type ,cannot change it")
                               sys.exit(1)
@@ -620,28 +614,12 @@ class Generator(object):
             # }
             if node[0] == 'function':
                   current_vars = self.vars
-                  self.funcs.append(node[2])
-
-                  params = node[3].split(',')
-                  param_vars = []
-                  if len(params) != 1:
-                        for p in params:
-                              p2 = p.split(' ')
-                              param_vars.append(p2[1])
-                        for p in param_vars:
-                              self.vars.append(p)
-                  elif len(params) == 0 : 
-                        pass
-                  else :
-                        if params[0] == '' or params[0] == None :
-                              pass
-                        else :
-                              params2 = params[0].split(' ')
-                              self.vars.append(params2[1])
-                  res = self.walk(node[4])
-
-                  self.src_pre_main += "%s %s(%s) {\n%s\n}\n" % (node[1],node[2], node[3],res) 
+                  self.vars.append(node[4])
+                  res = self.walk(node[3])
                   self.vars = current_vars
+
+                  self.src_pre_main += "%s %s(%s) {\n%s\n}\n" % (node[1],node[2], ','.join(node[4]),res)
+                  self.funcs.append(node[2])
             #-------------------------------------
             if node[0] == "inline_function" :
                   self.funcs.append(node[2])
@@ -740,18 +718,8 @@ class Generator(object):
                         HascalException(f"Error : function '{node[1]}' not defined")
                         sys.exit(1)
             # --------------operators-----------------
-            if node[0] == 'add':
-                  return "%s + %s" % (self.walk(node[1]), self.walk(node[2]))
-            if node[0] == 'add_cont':
-                  return "%s ~ %s" % (self.walk(node[1]), self.walk(node[2]))
-            if node[0] == 'sub':
-                  return "%s - %s" % (self.walk(node[1]), self.walk(node[2]))
-            if node[0] == 'mul':
-                  return "%s * %s" % (self.walk(node[1]), self.walk(node[2]))
-            if node[0] == 'div':
-                  return "%s / %s" % (self.walk(node[1]), self.walk(node[2]))
-            if node[0] == 'pow':
-                  return "%s ^ %s" % (self.walk(node[1]), self.walk(node[2]))
+            if node[0] in '+-*/~^':
+                  return "%s %s %s" % (self.walk(node[1]), node[0], self.walk(node[2]))
             if node[0] == 'paren_expr':
                   return "(%s)" % (self.walk(node[1]))
             if node[0] == 'cond':
@@ -769,28 +737,8 @@ class Generator(object):
 
             # ---------------conditions---------------------
             # <expr> == <expr>
-            if node[0] == 'equals':
-                  return "%s == %s" % (self.walk(node[1]), self.walk(node[2]))
-
-            # <expr> != <expr>
-            if node[0] == 'not_equals':
-                  return "%s != %s" % (self.walk(node[1]), self.walk(node[2]))
-
-            # <expr> >= <expr>
-            if node[0] == 'greater_equals':
-                  return "%s >= %s" % (self.walk(node[1]), self.walk(node[2]))
-
-            # <expr> <= <expr>
-            if node[0] == 'less_equals':
-                  return "%s <= %s" % (self.walk(node[1]), self.walk(node[2]))
-            
-            # <expr> > <expr>
-            if node[0] == 'greater':
-                  return "%s > %s" % (self.walk(node[1]), self.walk(node[2]))
-
-            # <expr> < <expr>
-            if node[0] == 'less':
-                  return "%s < %s" % (self.walk(node[1]), self.walk(node[2]))
+            if node[0] in ['==', '!=', '>=', '<=', '>', '<']:
+                  return "%s %s %s" % (self.walk(node[1]), node[0], self.walk(node[2]))
 
             # not <expr>
             if node[0] == 'not_cond':
