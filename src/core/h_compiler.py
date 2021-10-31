@@ -551,49 +551,49 @@ class Generator(object):
                               
                   elif sys.platform.startswith('linux'):
                         name = '.'.join(name for name in node[1])
-                              if name.startswith("d."):
-                                    path = name.split('.')
-                                    final_path = ""
+                        if name.startswith("d."):
+                              path = name.split('.')
+                              final_path = ""
 
-                                    ends_of_path = path[-1]
-                                    for x in path[:-1]:
-                                          final_path += x + "/"
-                                    final_path_h = final_path + ends_of_path + ".h"
-                                    final_path += ends_of_path + ".d"
+                              ends_of_path = path[-1]
+                              for x in path[:-1]:
+                                    final_path += x + "/"
+                              final_path_h = final_path + ends_of_path + ".h"
+                              final_path += ends_of_path + ".d"
 
-                                    try:
-                                          with open(final_path, 'r') as fd:
-                                                d_code = fd.read()
-                                                with open(final_path_h,'r') as fh :
-                                                      dh_code = fh.read()
-                                                      self.imported.append(name)
-                                                      self.add_to_output(d_code,dh_code)
-                                    except FileNotFoundError:
-                                          HascalException(f"Error : cannot found '{name}' library. Are you missing a library ?")
-
-                              else :
-                                    tmp = '.'.join(name for name in node[1])
-                                    path = tmp.split('.')
-                                    final_path = ""
-
-                                    ends_of_path = path[-1]
-                                    for x in path[:-1]:
-                                          final_path += x + "/"
-                                    final_path += ends_of_path + ".has"
-
-                                    try:
-                                          with open(final_path, 'r') as f:
-                                                parser = Parser()
-                                                tree = parser.parse(Lexer().tokenize(f.read()))
-                                                generator = Generator()
-                                                output_d = generator.generate(tree,True)
-
+                              try:
+                                    with open(final_path, 'r') as fd:
+                                          d_code = fd.read()
+                                          with open(final_path_h,'r') as fh :
+                                                dh_code = fh.read()
                                                 self.imported.append(name)
-                                                self.imported += generator.imported
-                                                self.add_to_output(output_d, generator.src_includes)
-                                                self.funcs += generator.funcs
-                                    except FileNotFoundError:
-                                          HascalException(f"Error : cannot found '{name}' library. Are you missing a library ?")
+                                                self.add_to_output(d_code,dh_code)
+                              except FileNotFoundError:
+                                    HascalException(f"Error : cannot found '{name}' library. Are you missing a library ?")
+
+                        else :
+                              tmp = '.'.join(name for name in node[1])
+                              path = tmp.split('.')
+                              final_path = ""
+
+                              ends_of_path = path[-1]
+                              for x in path[:-1]:
+                                    final_path += x + "/"
+                              final_path += ends_of_path + ".has"
+
+                              try:
+                                    with open(final_path, 'r') as f:
+                                          parser = Parser()
+                                          tree = parser.parse(Lexer().tokenize(f.read()))
+                                          generator = Generator()
+                                          output_d = generator.generate(tree,True)
+
+                                          self.imported.append(name)
+                                          self.imported += generator.imported
+                                          self.add_to_output(output_d, generator.src_includes)
+                                          self.funcs += generator.funcs
+                              except FileNotFoundError:
+                                    HascalException(f"Error : cannot found '{name}' library. Are you missing a library ?")
             #-----------------------------------------
             # function <name> {
             #     <block>

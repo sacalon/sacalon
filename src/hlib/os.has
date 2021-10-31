@@ -1,0 +1,3 @@
+use d.os
+function os_name() : string
+function system(com:string)

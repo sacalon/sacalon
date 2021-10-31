@@ -327,6 +327,14 @@ class Parser(Parser):
       @_('FUNCTION NAME LPAREN RPAREN COLON return_type')
       def statement(self, p):
             return ('inline_function',p.return_type, p.NAME)  
+      # function <name>(<params>)
+      @_('FUNCTION NAME LPAREN params RPAREN')
+      def statement(self, p):
+            return ('inline_function','void', p.NAME, p.params)  
+      # function <name>()
+      @_('FUNCTION NAME LPAREN RPAREN')
+      def statement(self, p):
+            return ('inline_function','void', p.NAME)  
       #------------------------------------
       @_('expr')
       def in_statement(self, p):
