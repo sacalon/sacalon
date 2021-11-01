@@ -14,7 +14,7 @@
 <!-- > Visit [Hascal's Official Website](https://hascal.github.io) -->
 > **NOTE:** Hascal is currently under development.
 ## Features
-- [x] Cross Platform (Linux, Windows, MacOS, BSD، Android & iOS, Embedded Systems) 
+- [x] Cross Platform (Linux, Windows, MacOS, BSD) 
 - [x] Fast & Powerful
 - [x] Easy to learn
 - [x] C-Family syntax, inspired by Swift, TypeScript
