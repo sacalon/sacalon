@@ -49,7 +49,7 @@ function main() : int{
 
 ## Contributions
 Any contribution is welcome :)
-
+![graph](https://contrib.rocks/image?repo=hascal/hascal)
 ## License
 The compiler and the standard libraries are licensed under the **"GNU general public license v3"**,
 Read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more details.
