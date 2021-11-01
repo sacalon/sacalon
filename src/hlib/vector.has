@@ -1,10 +1,10 @@
 struct Vector2D {
-    var x : float;
-    var y : float;
+    var x : float
+    var y : float
 }
 
 struct Vector3D {
-    var x : float;
-    var y : float;
-    var z : float;
+    var x : float
+    var y : float
+    var z : float
 }
