@@ -1,5 +1,6 @@
 # a small library for create a tokenizer
 struct Token {
-    var type : string;
-    var value : string;
+    var type : string
+    var value : string
 }
+# soon
