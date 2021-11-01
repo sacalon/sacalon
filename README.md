@@ -8,8 +8,7 @@
   [![linked in](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/company/hascal-lang)
 </div>
 
-
-**Hascal** is a **simple**, **fast**, **powerful** and **compiled systems** programming language. It's designed to be an alternative to C\C++ with a easy syntax.
+**Hascal** is a general-purpose open source programming language that makes it easy to build simple,optimal, reliable, and efficient software.
 
 <!-- > Visit [Hascal's Official Website](https://hascal.github.io) -->
 > **NOTE:** Hascal is currently under development.
