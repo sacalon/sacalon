@@ -255,69 +255,13 @@ class Parser(Parser):
       def in_statement(self, p):
             return ('continue')
       #-----------------------------------
-      # function <name> {
+      # function <name>(<params>) : <combined_return_type> {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LBC in_block RBC')
+      @_('FUNCTION NAME optional_params LBC in_block RBC',
+         'FUNCTION NAME optional_params COLON combined_return_type LBC in_block RBC')
       def statement(self, p):
-            return ('function','void', p.NAME, "", p.in_block)
-
-      # function <name>() {
-      #      <in_block>
-      # }
-      @_('FUNCTION NAME LPAREN RPAREN LBC in_block RBC')
-      def statement(self, p):
-            return ('function','void', p.NAME,"", p.in_block)
-
-      # function <name>(<params>) {
-      #      <in_block>
-      # }
-      @_('FUNCTION NAME LPAREN params RPAREN LBC in_block RBC')
-      def statement(self, p):
-            return ('function','void', p.NAME, p.params, p.in_block)
- 
-      # function <name> : <return_type> {
-      #      <in_block>
-      # }   
-      @_('FUNCTION NAME COLON return_type LBC in_block RBC')
-      def statement(self, p):
-            return ('function',p.return_type, p.NAME, "", p.in_block)
-
-      # function <name>() : <return_type> {
-      #      <in_block>
-      # } 
-      @_('FUNCTION NAME LPAREN RPAREN COLON return_type LBC in_block RBC')
-      def statement(self, p):
-            return ('function',p.return_type, p.NAME, "", p.in_block) 
-
-      # function <name>(<params>) : <return_type> {
-      #      <in_block>
-      # }  
-      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type LBC in_block RBC')
-      def statement(self, p):
-            return ('function',p.return_type, p.NAME, p.params, p.in_block)
-      
-      # function <name> : [<return_type>] {
-      #      <in_block>
-      # }
-      @_('FUNCTION NAME COLON return_type2 LBC in_block RBC')
-      def statement(self, p):
-            return ('function',p.return_type2, p.NAME, "", p.in_block)
-      
-      
-      # function <name>() : [<return_type>] {
-      #      <in_block>
-      # }
-      @_('FUNCTION NAME LPAREN RPAREN COLON return_type2 LBC in_block RBC')
-      def statement(self, p):
-            return ('function',p.return_type2, p.NAME, p.in_block, [])
-
-      # function <name>(<params>) : [<return_type>] {
-      #      <in_block>
-      # }
-      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type2 LBC in_block RBC')
-      def statement(self, p):
-            return ('function',p.return_type2, p.NAME, p.in_block, p.params)    
+            return ('function',p.combined_return_type or 'void', p.NAME, p.in_block, p.optional_params)    
 
       # function <name>(<params>) : <return_type>
       @_('FUNCTION NAME LPAREN params RPAREN COLON return_type')
@@ -403,7 +347,7 @@ class Parser(Parser):
             return ('.2', p.expr0,p.name,p.expr1)
       @_('NUMBER DOT NUMBER')
       def float(self, p):
-            return "{0}.{1}".format(p.NUMBER0,p.NUMBER1)
+            return p.NUMBER0 + '.' + p.NUMBER1
       @_('name_t')
       def name(self, p):
             return [p.name_t]
@@ -415,12 +359,9 @@ class Parser(Parser):
       def name_t(self, p):
             return p.NAME
             
-      @_('TRUE')
+      @_('TRUE', 'FALSE')
       def boolean(self, p):
-            return 'true'
-      @_('FALSE')
-      def boolean(self, p):
-            return 'false'
+            return p[0]
             
       #------------------------------------------
       @_('names COMMA NAME')
@@ -453,12 +394,17 @@ class Parser(Parser):
       def condition(self, p):
             return ('or', p.condition0,p.condition1)
       #-----------------------------------------
+      @_('LPAREN params RPAREN',
+         'LPAREN RPAREN',
+         '')
+      def optional_params(self, p):
+            return p.params or []
       @_('param_t')
       def params(self, p):
-            return str(p.param_t)
+            return (p.param_t)
       @_('params COMMA param_t')
       def params(self, p):
-            return str(p.params + "," + p.param_t)
+            return (*p.params, p.param_t)
 
       @_('NAME COLON return_type')
       def param_t(self, p):
@@ -495,3 +441,7 @@ class Parser(Parser):
          'LBRCK NAME RBRCK')
       def return_type2(self, p):
             return p[1] + '[]'
+      
+      @_('return_type', 'return_type2')
+      def combined_return_type(self, p):
+            return p[0]
