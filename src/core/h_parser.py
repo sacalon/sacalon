@@ -394,11 +394,13 @@ class Parser(Parser):
       def condition(self, p):
             return ('or', p.condition0,p.condition1)
       #-----------------------------------------
-      @_('LPAREN params RPAREN',
-         'LPAREN RPAREN',
-         '')
+      @_('LPAREN params RPAREN')
       def optional_params(self, p):
             return p.params or []
+      @_('LPAREN RPAREN',
+         '')
+      def optional_params(self, p):
+            return []
       @_('param_t')
       def params(self, p):
             return (p.param_t)
@@ -431,7 +433,7 @@ class Parser(Parser):
          'FLOATVAR',
          'NAME')
       def return_type(self, p):
-            return p[1]
+            return p[0]
             
       @_('LBRCK INTVAR RBRCK',
          'LBRCK STRINGVAR RBRCK',
