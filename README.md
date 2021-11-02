@@ -39,6 +39,16 @@ function main() : int{
     return 0
 }
 ```
+
+HTTP Response :
+```typescript
+use http
+
+function main(): int {
+    print(get("google.com"))
+    return 0
+}
+```
 > You can see more Hascal examples in [examples folder](https://github.com/hascal/hascal/tree/main/examples).
 
 ## Documentation
