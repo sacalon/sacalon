@@ -1,2 +1,2 @@
 use d.http
-function get(url:string) : string
+function get() : void
