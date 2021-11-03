@@ -17,13 +17,16 @@ $ cd hascal
 $ make deps
 ```
 
-- Build with pyinstaller :
-```
-$ make
-```
+- Build hascal excutable file :
 
-Now put `src/hlib` folder in `src/dist`, and excutable files exists in `src/dist` folder.
-
+  - On POSIX(linux,macOS,BSDs) :
+  ```
+  $ make
+  ```
+  - On Windows :
+  ```
+  $ make windows
+  ```
 
 ## Set `HASCAL_ROOT`
 Hascal for find its standrad libraries, must use `HASCAL_ROOT` environment variable. You should set hascal's compiler folder to `HASCAL_ROOT` environment variable.
@@ -37,3 +40,6 @@ Windows :
 ```
 $ set HASCAL_ROOT = /path/to/your/hascal/compiler/
 ```
+or you can set `HASCAL_ROOT` in windows with windows control panel.
+
+***Now your Hascal compiler is ready to use!!!***
