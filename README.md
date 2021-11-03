@@ -69,6 +69,7 @@ function main() : int {
 
 ## Contributions
 Any contribution is welcome :)
+
 ![graph](https://contrib.rocks/image?repo=hascal/hascal)
 
 ## License
