@@ -1,0 +1,8 @@
+use d.math
+
+function sin(x:float): float
+function cos(x:float): float
+function tan(x:float): float
+function max(a:float,b:float): float
+function min(a:float,b:float): float
+function abs(a:float): float
