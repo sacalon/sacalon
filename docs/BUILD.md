@@ -7,36 +7,26 @@ Prequistes :
 - a build of [dmd](https://dlang.org/) compiler
 
 <hr>
-
-## Install Pyinstaller
-
->Enter the following command in your terminal
+- At first clone hascal repo :
 ```
-pip install pyinstaller
+$ git clone https://github.com/hascal/hascal
+$ cd hascal
 ```
-
-if use Linux :
+- Install prequistes(if you already installed prequistes, skip this part) :
 ```
-pip3 install pyinstaller
+$ make deps
 ```
 
-## DMD Compiler
-Hascal for generate binary code use dmd you should put a version of dmd compiler in the folder of Hascal compiler.
-
-## Build
-For build Hascal enter following command in terminal :
-```sh
-pyinstaller hascal.py --onefile
+- Build with pyinstaller :
 ```
-or
-```sh
-pyinstaller --noconfirm --onefile --console --name "hascal"  "hascal.py"
+$ make
 ```
 
+Now put `src/hlib` folder in `src/dist`, and excutable files exists in `src/dist` folder.
 
-Excutable file compiled in src/dist folder.
 
 ## Set `HASCAL_ROOT`
-Now set `HASCAL_ROOT` environment variable to hascal root folder.
-
-If you want information about setting it up on your maching, visit this bog on dev.to - https://dev.to/pranavbaburaj/introducing-hascal-part-1-5h1f
+Hascal for find its standrad libraries, must use `HASCAL_ROOT` environment variable. You should set hascal's compiler folder to `HASCAL_ROOT` environment variable:
+```
+$ set HASCAL_ROOT = /path/to/your/hascal/compiler/
+```
