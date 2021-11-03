@@ -65,7 +65,7 @@ function main() : int {
 > You can find documentations on installation and using Hascal, [Here](https://github.com/hascal/hascal/tree/main/docs)
 
 ## Build from source
-> See [build help page](BUILD.md)
+> See [build help page](docs/BUILD.md)
 
 ## Contributions
 Any contribution is welcome :)
