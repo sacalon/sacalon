@@ -1,0 +1,8 @@
+use d.time
+
+function GetYear():int
+function GetMonth():int
+function GetDay():int
+function GetHour():int
+function GetMinute():int
+function GetSecond():int
