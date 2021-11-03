@@ -26,7 +26,14 @@ Now put `src/hlib` folder in `src/dist`, and excutable files exists in `src/dist
 
 
 ## Set `HASCAL_ROOT`
-Hascal for find its standrad libraries, must use `HASCAL_ROOT` environment variable. You should set hascal's compiler folder to `HASCAL_ROOT` environment variable:
+Hascal for find its standrad libraries, must use `HASCAL_ROOT` environment variable. You should set hascal's compiler folder to `HASCAL_ROOT` environment variable.
+
+POSIX :
+```
+$ export HASCAL_ROOT = /path/to/your/hascal/compiler/
+```
+
+Windows :
 ```
 $ set HASCAL_ROOT = /path/to/your/hascal/compiler/
 ```
