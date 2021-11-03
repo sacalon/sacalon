@@ -7,6 +7,7 @@ Prequistes :
 - a build of [dmd](https://dlang.org/) compiler
 
 <hr>
+
 - At first clone hascal repo :
 ```
 $ git clone https://github.com/hascal/hascal
