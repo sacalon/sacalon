@@ -34,12 +34,14 @@ jobs:
     - name: Running Tests (windows)
       if: startsWith(matrix.os, 'windows')
       run: |
-        make windows
+        python -m pyinstaller --noconfirm --onefile --console --name "hascal"  "src/hascal.py"
+        make wintest
         dist\hascal.exe dist\examples\hello_world.has
     - name: Running Tests
       if: false == startsWith(matrix.os, 'windows')
       run: |
-        make
+        pyinstaller --noconfirm --onefile --console --name "hascal"  "src/hascal.py"
+        make buildtest
         ./dist/hascal.exe ./dist/examples/hello_world.has
 
     name: ${{ matrix.os }} Python ${{ matrix.python }}
