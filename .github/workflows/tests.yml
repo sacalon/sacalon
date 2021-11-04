@@ -34,6 +34,6 @@ jobs:
       if: false == startsWith(matrix.os, 'windows')
       run: |
         sh build.sh
-        ./dist/hascal.exe ./dist/examples/hello_world.has
+        ./dist/hascal ./dist/examples/hello_world.has
 
     name: ${{ matrix.os }} Python ${{ matrix.python }}
