@@ -12,7 +12,6 @@ import pathlib
 import os
 if __name__ == "__main__":  
       BASE_DIR = str(pathlib.Path(__file__).parent.resolve())
-      print(BASE_DIR)
       HascalCompiler(argv,BASE_DIR)
             
 

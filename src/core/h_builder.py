@@ -46,15 +46,14 @@ class HascalCompiler(object):
                 # check file extension
                 if not self.argv[1].endswith(".has"):
                     # show file extension error 
-                    HascalException(f"Error : The specified file is not a hascal(.has) file")
+                    HascalException(f"The specified file is not a hascal(.has) file")
                 else :
-                    with open(argv[1]) as fin:
-                            self.code = fin.read()
-                    self.compile()
                     try:
-                        ...
-                    except FileNotFoundError as e :
-                        HascalException(f"Error : File '{argv[1]}' not found")
+                        with open(argv[1]) as fin:
+                            self.code = fin.read()
+                        self.compile()
+                    except FileNotFoundError :
+                        HascalException(f"File '{argv[1]}' not found")
         else:
             output_message = [f"Hascal Compiler {HASCAL_COMPILER_VERSION} {sys.platform}",
                                 "Copyright (c) 2019-2022 Hascal Development Team,",
@@ -87,7 +86,7 @@ class HascalCompiler(object):
             # uncomment it for development(and comment top line)
             # os.system('dmd '+ outname)
         except :
-            print("Error : unknown error in compile file")
+            HascalException("unknown error in compile file")
 
         try :
             os.remove(outname+".d")

@@ -48,7 +48,7 @@ class Generator(object):
             try :
                   for statement in tree[1:]:
                         if has_node(statement, 'function'):
-                              HascalException("Error : You can't declere functions under another block")
+                              HascalException("You can't declere functions under another block")
                               return False
                   return True
             except :
@@ -94,105 +94,105 @@ class Generator(object):
             # var <name> : <return_type> ;
             if node[0] == 'declare' and node[1] == "no_equal":
                   if node[3] in self.vars :
-                        HascalException(f"Error : '{node[3]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[3] in self.types :
-                        HascalException(f"Error : '{node[3]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         if node[2] in self.types :
                               self.vars.append(node[3])
                               self.src_pre_main += "%s %s ;\n" % (node[2],node[3])
                         else :
-                              HascalException(f"Error : type '{node[2]}' not defined")
+                              HascalException(f"type '{node[2]}' not defined")
                               sys.exit(1)
             # var <name> : <return_type> = <expr> ;
             if node[0] == 'declare' and node[1] == "equal2":
                   if node[3] in self.vars :
-                        HascalException(f"Error : '{node[3]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[3] in self.types :
-                        HascalException(f"Error : '{node[3]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         if node[2] in self.types :
                               self.vars.append(node[3])
                               self.src_pre_main += "%s %s = %s;\n" % (node[2],node[3],self.walk(node[4]))
                         else :
-                              HascalException(f"Error : type '{node[2]}' not defined")
+                              HascalException(f"type '{node[2]}' not defined")
                               sys.exit(1)
 
             # var <name> = <expr> ;
             if node[0] == 'declare' and node[1] == "equal1":
                   if node[3] in self.vars :
-                        HascalException(f"Error : '{node[3]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[3] in self.types :
-                        HascalException(f"Error : '{node[3]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         if node[2] in self.types :
                               self.vars.append(node[3])
                               self.src_pre_main += "auto %s = %s ;\n" % (node[3],self.walk(node[4]))
                         else :
-                              HascalException(f"Error : type '{node[2]}' not defined")
+                              HascalException(f"type '{node[2]}' not defined")
                               sys.exit(1)
             
             # var <name> : [<return_type>] ;
             if node[0] == 'declare_array' and node[1] == "no_equal":
                   if node[3] in self.vars :
-                        HascalException(f"Error : '{node[3]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[3] in self.types :
-                        HascalException(f"Error : '{node[3]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         if node[2] in self.types :
                               self.vars.append(node[3])
                               self.src_pre_main += "%s[] %s ;\n" % (node[2],node[3])
                         else :
-                              HascalException(f"Error : type '{node[2]}' not defined")
+                              HascalException(f"type '{node[2]}' not defined")
                               sys.exit(1)
             
             # var <name> = <expr> ;
             if node[0] == 'declare_array' and node[1] == "equal1":
                   if node[3] in self.vars :
-                        HascalException(f"Error : '{node[3]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[3] in self.types :
-                        HascalException(f"Error : '{node[3]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         if node[2] in self.types :
                               self.vars.append(node[3])
                               self.src_pre_main += "auto %s = %s ;\n" % (node[3],self.walk(node[4]))
                         else :
-                              HascalException(f"Error : type '{node[2]}' not defined")
+                              HascalException(f"type '{node[2]}' not defined")
                               sys.exit(1)
 
             # var <name> : [<return_type>] = <expr>;
             if node[0] == 'declare_array' and node[1] == "equal2":
                   if node[3] in self.vars :
-                        HascalException(f"Error : '{node[3]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[3] in self.types :
-                        HascalException(f"Error : '{node[3]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         if node[2] in self.types :
                               self.vars.append(node[3])
                               self.src_pre_main += "%s[] %s = %s ;\n" % (node[2],node[3],self.walk(node[4]))
                         else :
-                              HascalException(f"Error : type '{node[2]}' not defined")
+                              HascalException(f"type '{node[2]}' not defined")
                               sys.exit(1)
                               
             # const <name> = <expr> ;
             if node[0] == 'declare' and node[1] == "const":
                   if node[2] in self.vars :
-                        HascalException(f"Error : '{node[2]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[2]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[2] in self.types :
-                        HascalException(f"Error : '{node[2]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[2]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         self.vars.append(node[2])
@@ -201,10 +201,10 @@ class Generator(object):
             # const <name> : <return_type> = <expr> ;
             if node[0] == 'declare' and node[1] == "const_type":
                   if node[3] in self.vars :
-                        HascalException(f"Error : '{node[3]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[3] in self.types :
-                        HascalException(f"Error : '{node[3]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         self.vars.append(node[3])
@@ -215,105 +215,105 @@ class Generator(object):
             # in : var <name> : <return_type> ;
             if node[0] == 'in_declare' and node[1] == "no_equal":
                   if node[3] in self.vars :
-                        HascalException(f"Error : '{node[3]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[3] in self.types :
-                        HascalException(f"Error : '{node[3]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         if node[2] in self.types :
                               self.vars.append(node[3])
                               return "%s %s ;\n" % (node[2],node[3])
                         else :
-                              HascalException(f"Error : type '{node[2]}' not defined")
+                              HascalException(f"type '{node[2]}' not defined")
                               sys.exit(1)
             # in : var <name> : <return_type> = <expr> ;
             if node[0] == 'in_declare' and node[1] == "equal2":
                   if node[3] in self.vars :
-                        HascalException(f"Error : '{node[3]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[3] in self.types :
-                        HascalException(f"Error : '{node[3]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         if node[2] in self.types :
                               self.vars.append(node[3])
                               return "%s %s = %s;\n" % (node[2],node[3],self.walk(node[4]))
                         else :
-                              HascalException(f"Error : type '{node[2]}' not defined")
+                              HascalException(f"type '{node[2]}' not defined")
                               sys.exit(1)
 
             # in : var <name> = <expr> ;
             if node[0] == 'in_declare' and node[1] == "equal1":
                   if node[3] in self.vars :
-                        HascalException(f"Error : '{node[3]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[3] in self.types :
-                        HascalException(f"Error : '{node[3]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         if node[2] in self.types :
                               self.vars.append(node[3])
                               return "auto %s = %s ;\n" % (node[3],self.walk(node[4]))
                         else :
-                              HascalException(f"Error : type '{node[2]}' not defined")
+                              HascalException(f"type '{node[2]}' not defined")
                               sys.exit(1)
             
             # in : var <name> : [<return_type>] ;
             if node[0] == 'in_declare_array' and node[1] == "no_equal":
                   if node[3] in self.vars :
-                        HascalException(f"Error : '{node[3]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[3] in self.types :
-                        HascalException(f"Error : '{node[3]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         if node[2] in self.types :
                               self.vars.append(node[3])
                               return "%s[] %s ;\n" % (node[2],node[3])
                         else :
-                              HascalException(f"Error : type '{node[2]}' not defined")
+                              HascalException(f"type '{node[2]}' not defined")
                               sys.exit(1)
             
             # in : var <name> = <expr> ;
             if node[0] == 'in_declare_array' and node[1] == "equal1":
                   if node[3] in self.vars :
-                        HascalException(f"Error : '{node[3]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[3] in self.types :
-                        HascalException(f"Error : '{node[3]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         if node[2] in self.types :
                               self.vars.append(node[3])
                               return "auto %s = %s ;\n" % (node[3],self.walk(node[4]))
                         else :
-                              HascalException(f"Error : type '{node[2]}' not defined")
+                              HascalException(f"type '{node[2]}' not defined")
                               sys.exit(1)
 
             # in : var <name> : [<return_type>] = <expr>;
             if node[0] == 'in_declare_array' and node[1] == "equal2":
                   if node[3] in self.vars :
-                        HascalException(f"Error : '{node[3]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[3] in self.types :
-                        HascalException(f"Error : '{node[3]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         if node[2] in self.types :
                               self.vars.append(node[3])
                               return "%s[] %s = %s ;\n" % (node[2],node[3],self.walk(node[4]))
                         else :
-                              HascalException(f"Error : type '{node[2]}' not defined")
+                              HascalException(f"type '{node[2]}' not defined")
                               sys.exit(1)
                               
             # in : const <name> = <expr> ;
             if node[0] == 'in_declare' and node[1] == "const":
                   if node[2] in self.vars :
-                        HascalException(f"Error : '{node[2]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[2]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[2] in self.types :
-                        HascalException(f"Error : '{node[2]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[2]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         self.vars.append(node[2])
@@ -321,10 +321,10 @@ class Generator(object):
             # in : const <name> : <return_type> = <expr> ;
             if node[0] == 'in_declare' and node[1] == "const_type":
                   if node[3] in self.vars :
-                        HascalException(f"Error : '{node[3]}' exists ,cannot redefine it")
+                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
                         sys.exit(1)
                   elif node[3] in self.types :
-                        HascalException(f"Error : '{node[3]}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
                         sys.exit(1)
                   else:
                         self.vars.append(node[3])
@@ -337,10 +337,10 @@ class Generator(object):
                         if name in self.vars:
                                return "%s = %s;\n" % (name, self.walk(node[2]))
                         elif name in self.types:
-                              HascalException(f"Error : '{name}'is a type ,cannot change it")
+                              HascalException(f"'{name}'is a type ,cannot change it")
                               sys.exit(1)
                         else :
-                              HascalException(f"Error : variable '{name}' not defined")
+                              HascalException(f"variable '{name}' not defined")
                               sys.exit(1) 
                   else :
                         name = node[1][0]
@@ -349,10 +349,10 @@ class Generator(object):
                               
                               return "%s = %s;\n" % (all_names, self.walk(node[2]))
                         elif name in self.types:
-                              HascalException(f"Error : '{name}'is a type ,cannot change it")
+                              HascalException(f"'{name}'is a type ,cannot change it")
                               sys.exit(1) 
                         else :
-                              HascalException(f"Error : variable '{name}' not defined")
+                              HascalException(f"variable '{name}' not defined")
                               sys.exit(1) 
                   sys.exit(1)
 
@@ -363,10 +363,10 @@ class Generator(object):
                         if name in self.vars:
                                return "%s[%s] = %s;\n" % (name,self.walk(node[2]), self.walk(node[3]))
                         elif name in self.types:
-                              HascalException(f"Error : '{name}'is a type ,cannot change it")
+                              HascalException(f"'{name}'is a type ,cannot change it")
                               sys.exit(1)
                         else :
-                              HascalException(f"Error : variable '{name}' not defined")
+                              HascalException(f"variable '{name}' not defined")
                               sys.exit(1) 
                   else :
                         name = node[1][0]
@@ -375,10 +375,10 @@ class Generator(object):
                               
                               return "%s[%s] = %s;\n" % (all_names,self.walk(node[2]), self.walk(node[3]))
                         elif name in self.types:
-                              HascalException(f"Error : '{name}'is a type ,cannot change it")
+                              HascalException(f"'{name}'is a type ,cannot change it")
                               sys.exit(1) 
                         else :
-                              HascalException(f"Error : variable '{name}' not defined")
+                              HascalException(f"variable '{name}' not defined")
                               sys.exit(1) 
                   sys.exit(1)
             #-----------------------------------------
@@ -418,7 +418,7 @@ class Generator(object):
                                                       self.imported.append(name)
                                                       self.add_to_output(d_code,dh_code)
                                     except FileNotFoundError:
-                                          HascalException(f"Error : cannot found '{name}' library. Are you missing a library ?")
+                                          HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                                           sys.exit(1)
                               else :
                                     path = node[1]
@@ -442,7 +442,7 @@ class Generator(object):
                                                 self.funcs += generator.funcs
                                                 self.types += generator.types
                                     except FileNotFoundError:
-                                          HascalException(f"Error : cannot found '{name}' library. Are you missing a library ?")
+                                          HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                                           sys.exit(1)
 
                   else :
@@ -467,7 +467,7 @@ class Generator(object):
                                                       self.imported.append(name)
                                                       self.add_to_output(d_code,dh_code)
                                     except FileNotFoundError:
-                                          HascalException(f"Error : cannot found '{name}' library. Are you missing a library ?")
+                                          HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                                           sys.exit(1)
                               else :
                                     path = node[1]
@@ -491,7 +491,7 @@ class Generator(object):
                                                 self.funcs += generator.funcs
                                                 self.types += generator.types
                                     except FileNotFoundError:
-                                          HascalException(f"Error : cannot found '{name}' library. Are you missing a library ?")
+                                          HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                                           sys.exit(1)
             
             # local use <lib_name> ;
@@ -519,7 +519,7 @@ class Generator(object):
                                                       self.imported.append(name)
                                                       self.add_to_output(d_code,dh_code)
                                     except FileNotFoundError:
-                                          HascalException(f"Error : cannot found '{name}' library. Are you missing a library ?")
+                                          HascalException(f"cannot found '{name}' library. Are you missing a library ?")
 
                               else :
                                     tmp = '.'.join(name for name in node[1])
@@ -543,7 +543,7 @@ class Generator(object):
                                                 self.add_to_output(output_d, generator.src_includes)
                                                 self.funcs += generator.funcs
                                     except FileNotFoundError:
-                                          HascalException(f"Error : cannot found '{name}' library. Are you missing a library ?")
+                                          HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                               
                   elif sys.platform.startswith('linux'):
                         name = '.'.join(name for name in node[1])
@@ -565,7 +565,7 @@ class Generator(object):
                                                 self.imported.append(name)
                                                 self.add_to_output(d_code,dh_code)
                               except FileNotFoundError:
-                                    HascalException(f"Error : cannot found '{name}' library. Are you missing a library ?")
+                                    HascalException(f"cannot found '{name}' library. Are you missing a library ?")
 
                         else :
                               tmp = '.'.join(name for name in node[1])
@@ -589,7 +589,7 @@ class Generator(object):
                                           self.add_to_output(output_d, generator.src_includes)
                                           self.funcs += generator.funcs
                               except FileNotFoundError:
-                                    HascalException(f"Error : cannot found '{name}' library. Are you missing a library ?")
+                                    HascalException(f"cannot found '{name}' library. Are you missing a library ?")
             #-----------------------------------------
             # function <name> {
             #     <block>
@@ -733,7 +733,7 @@ class Generator(object):
                         else :
                               return "%s(%s)" % (node[1], ', '.join(self.walk(arg) for arg in node[2]))
                   else :
-                        HascalException(f"Error : function '{node[1]}' not defined")
+                        HascalException(f"function '{node[1]}' not defined")
                         sys.exit(1)
             # --------------operators-----------------
             if node[0] == 'add':
@@ -803,7 +803,7 @@ class Generator(object):
                         if self.exists(name):
                                return "%s" % (name)
                         else :
-                              HascalException(f"Error : variable '{name}' not defined")
+                              HascalException(f"variable '{name}' not defined")
                               sys.exit(1) 
                   else :
                         name = node[1][0]
@@ -811,7 +811,7 @@ class Generator(object):
                               all_names = '.'.join(arg for arg in node[1])
                               return "%s" % (all_names)
                         else :
-                              HascalException(f"Error : variable '{name}' not defined")
+                              HascalException(f"variable '{name}' not defined")
                               sys.exit(1) 
                   sys.exit(1)
             
@@ -823,7 +823,7 @@ class Generator(object):
                                return "%s[%s]" % (name,self.walk(node[2]))
 
                         else :
-                              HascalException(f"Error : variable '{name}' not defined")
+                              HascalException(f"variable '{name}' not defined")
                               sys.exit(1) 
                   else :
                         name = node[1][0]
@@ -831,7 +831,7 @@ class Generator(object):
                               all_names = '.'.join(arg for arg in node[1])
                               return "%s[%s]" % (all_names,self.walk(node[2]))
                         else :
-                              HascalException(f"Error : variable '{name}' not defined")
+                              HascalException(f"variable '{name}' not defined")
                               sys.exit(1) 
                   sys.exit(1)
             #-------------------------------------------
