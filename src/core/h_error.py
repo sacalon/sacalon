@@ -3,8 +3,6 @@
 # The Hascal Programming Language
 # Copyright 2019-2022 Hascal Development Team,
 # all rights reserved.
-
-# this module is written by @pranavbaburaj
 import sys
 import colorama
 class HascalException():
