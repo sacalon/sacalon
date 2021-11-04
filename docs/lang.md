@@ -27,7 +27,29 @@ function add(x:int,y:int) : int {
 
 # main function
 function main(argv:[string]) : int {
-    print("Hi!")
+    # print values
+    print("Hi!",1,2)
+
+    # if statement
+    if x == 1 {
+        print(1)
+    }else if x == 1 {
+        print(2)
+    }else {
+        print(3)
+    }
+
+    # for statement
+    for x = 1 to 10 {
+        print(x)
+    }
+
+    # while statement
+    while x < 100 {
+        x = x + 1
+        print(x)
+    }
+
     # call a function
     my_func("arg 1",1)
     return 0
