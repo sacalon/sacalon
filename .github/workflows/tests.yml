@@ -39,7 +39,7 @@ jobs:
     - name: Running Tests
       if: false == startsWith(matrix.os, 'windows')
       run: |
-        make windows
+        make
         ./dist/hascal.exe ./dist/examples/hello_world.has
 
     name: ${{ matrix.os }} Python ${{ matrix.python }}
