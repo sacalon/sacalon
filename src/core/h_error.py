@@ -1,7 +1,7 @@
 # The Hascal Compiler Error Manager
 #
 # The Hascal Programming Language
-# Copyright 2019-2021 Hascal Development Team,
+# Copyright 2019-2022 Hascal Development Team,
 # all rights reserved.
 
 # this module is written by @pranavbaburaj

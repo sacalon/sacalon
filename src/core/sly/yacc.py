@@ -7,21 +7,8 @@ __all__        = [ 'Parser' ]
 class YaccError(Exception):
     pass
 
-#-----------------------------------------------------------------------------
-#                     === User configurable parameters ===
-#
-# Change these to modify the default behavior of yacc (if you wish).  
-# Move these parameters to the Yacc class itself.
-#-----------------------------------------------------------------------------
-
-ERROR_COUNT = 3                # Number of symbols that must be shifted to leave recovery mode
+ERROR_COUNT = 3
 MAXINT = sys.maxsize
-
-# This object is a stand-in for a logging object created by the
-# logging module.   SLY will use this by default to create things
-# such as the parser.out file.  If a user wants more detailed
-# information, they can create their own logging object and pass
-# it into SLY.
 
 class SlyLogger(object):
     def __init__(self, f):
@@ -113,7 +100,7 @@ class Production(object):
         self.line     = line
         self.prec     = precedence
         
-        self.len  = len(self.prod)   # Length of the production
+        self.len  = len(self.prod)
 
         self.usyms = []
         symmap = defaultdict(list)
@@ -280,7 +267,6 @@ class Grammar(object):
         if prodname == 'error':
             raise GrammarError(f'{file}:{line}: Illegal rule name {prodname!r}. error is a reserved word')
 
-        # Look for literal tokens
         for n, s in enumerate(syms):
             if s[0] in "'\"" and s[0] == s[-1]:
                 c = s[1:-1]
@@ -506,10 +492,8 @@ class Grammar(object):
         while True:
             didadd = False
             for p in self.Productions[1:]:
-                # Here is the production set
                 for i, B in enumerate(p.prod):
                     if B in self.Nonterminals:
-                        # Okay. We got a non-terminal in a production
                         fst = self._first(p.prod[i+1:])
                         hasempty = False
                         for f in fst:
@@ -519,7 +503,6 @@ class Grammar(object):
                             if f == '<empty>':
                                 hasempty = True
                         if hasempty or i == (len(p.prod)-1):
-                            # Add elements of follow(a) to follow(b)
                             for f in self.Follow[p.name]:
                                 if f not in self.Follow[B]:
                                     self.Follow[B].append(f)
@@ -632,7 +615,7 @@ class LRTable(object):
         self.state_descriptions = OrderedDict()
         self.sr_conflict   = 0
         self.rr_conflict   = 0
-        self.conflicts     = []        # List of conflicts
+        self.conflicts     = []
 
         self.sr_conflicts  = []
         self.rr_conflicts  = []
@@ -659,7 +642,6 @@ class LRTable(object):
                 for x in j.lr_after:
                     if getattr(x, 'lr0_added', 0) == self._add_count:
                         continue
-                    # Add B --> .G to J
                     J.append(x.lr_next)
                     x.lr0_added = self._add_count
                     didadd = True
@@ -813,15 +795,15 @@ class LRTable(object):
                         li = lr_index + 1
                         while li < p.len:
                             if p.prod[li] in self.grammar.Terminals:
-                                break      # No forget it
+                                break
                             if p.prod[li] not in nullable:
                                 break
                             li = li + 1
                         else:
                             includes.append((j, t))
 
-                    g = self.lr0_goto(C[j], t)               # Go to next set
-                    j = self.lr0_cidhash.get(id(g), -1)      # Go to next state
+                    g = self.lr0_goto(C[j], t)
+                    j = self.lr0_cidhash.get(id(g), -1)
 
                 for r in C[j]:
                     if r.name != p.name:
@@ -857,7 +839,6 @@ class LRTable(object):
 
     def add_lookaheads(self, lookbacks, followset):
         for trans, lb in lookbacks.items():
-            # Loop over productions in lookback
             for state, p in lb:
                 if state not in p.lookaheads:
                     p.lookaheads[state] = []
@@ -1275,7 +1256,6 @@ class Parser(metaclass=ParserMeta):
 
         grammar = Grammar(cls.tokens)
 
-        # Set the precedence level for terminals
         for term, assoc, level in cls.__preclist:
             try:
                 grammar.set_precedence(term, assoc, level)

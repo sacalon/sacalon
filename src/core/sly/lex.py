@@ -107,12 +107,10 @@ class LexerMeta(type):
         del attributes['_']
         del attributes['before']
 
-        # Create attributes for use in the actual class body
         cls_attributes = { str(key): str(val) if isinstance(val, TokenStr) else val
                            for key, val in attributes.items() }
         cls = super().__new__(meta, clsname, bases, cls_attributes)
 
-        # Attach various metadata to the class
         cls._attributes = dict(attributes)
         cls._remap = attributes.remap
         cls._before = attributes.before
@@ -121,7 +119,6 @@ class LexerMeta(type):
         return cls
 
 class Lexer(metaclass=LexerMeta):
-    # These attributes may be defined in subclasses
     tokens = set()
     literals = set()
     ignore = ''
@@ -135,35 +132,17 @@ class Lexer(metaclass=LexerMeta):
     _delete = {}
     _remap = {}
 
-    # Internal attributes
     __state_stack = None
     __set_state = None
 
     @classmethod
     def _collect_rules(cls):
-        # Collect all of the rules from class definitions that look like token
-        # information.   There are a few things that govern this:
-        #
-        # 1.  Any definition of the form NAME = str is a token if NAME is
-        #     is defined in the tokens set.
-        #
-        # 2.  Any definition of the form ignore_NAME = str is a rule for an ignored
-        #     token.
-        #
-        # 3.  Any function defined with a 'pattern' attribute is treated as a rule.
-        #     Such functions can be created with the @_ decorator or by defining
-        #     function with the same name as a previously defined string.
-        #
-        # This function is responsible for keeping rules in order. 
-
-        # Collect all previous rules from base classes
         rules = []
 
         for base in cls.__bases__:
             if isinstance(base, LexerMeta):
                 rules.extend(base._rules)
                 
-        # Dictionary of previous rules
         existing = dict(rules)
 
         for key, value in cls._attributes.items():
@@ -172,8 +151,6 @@ class Lexer(metaclass=LexerMeta):
                     raise LexerBuildError(f"function {value} doesn't have a regex pattern")
                 
                 if key in existing:
-                    # The definition matches something that already existed in the base class.
-                    # We replace it, but keep the original ordering
                     n = rules.index((key, existing[key]))
                     rules[n] = (key, value)
                     existing[key] = value
@@ -181,11 +158,9 @@ class Lexer(metaclass=LexerMeta):
                 elif isinstance(value, TokenStr) and key in cls._before:
                     before = cls._before[key]
                     if before in existing:
-                        # Position the token before another specified token
                         n = rules.index((before, existing[before]))
                         rules.insert(n, (key, value))
                     else:
-                        # Put at the end of the rule list
                         rules.append((key, value))
                     existing[key] = value
                 else:
@@ -195,7 +170,6 @@ class Lexer(metaclass=LexerMeta):
             elif isinstance(value, str) and not key.startswith('_') and key not in {'ignore', 'literals'}:
                 raise LexerBuildError(f'{key} does not match a name in tokens')
 
-        # Apply deletion rules
         rules = [ (key, value) for key, value in rules if key not in cls._delete ]
         cls._rules = rules
 

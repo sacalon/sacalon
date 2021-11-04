@@ -1,18 +1,17 @@
 # The Hascal Compiler
 #
 # The Hascal Programming Language
-# Copyright 2019-2021 Hascal Development Team,
+# Copyright 2019-2022 Hascal Development Team,
 # all rights reserved.
 
 from .h_error import HascalException
 from .h_lexer import Lexer
 from .h_parser import Parser
-from os import getenv
 import sys
-from os.path import isfile
 
 class Generator(object):
-      def __init__(self, env=None):
+      def __init__(self,BASE_DIR):
+            self.BASE_DIR = BASE_DIR
             self.src_includes = ""
             self.src_pre_main = ""
             #init standard types
@@ -34,13 +33,10 @@ class Generator(object):
                   if use :
                         return f"\n{self.src_pre_main}\n"
                   else :
-                        if getenv('HASCAL_ROOT') != None :
-                              runtime = open(getenv('HASCAL_ROOT')+"/hlib/d/std.d").read()
-                              runtime_h = open(getenv('HASCAL_ROOT')+"/hlib/d/std.h").read()
-                              return f"{runtime_h}\n{runtime}\n{self.src_includes}\n{self.src_pre_main}\n{result}\n"
-                        else :
-                              HascalException("Error : 'HASCAL_ROOT' enviroment variable not found,set Hascal compiler path to 'HASCAL_ROOT'")
-                              exit(1)
+                        runtime = open(self.BASE_DIR+"/hlib/d/std.d").read()
+                        runtime_h = open(self.BASE_DIR+"/hlib/d/std.h").read()
+                        return f"{runtime_h}\n{runtime}\n{self.src_includes}\n{self.src_pre_main}\n{result}\n"
+
 
       def test(self, tree):
             def has_node(t, node_name):
@@ -407,7 +403,7 @@ class Generator(object):
                               name = '.'.join(name for name in node[1])
                               if name.startswith("d.") :
                                     path = node[1]
-                                    final_path = str(getenv('HASCAL_ROOT') + "\\hlib\\")
+                                    final_path = str(self.BASE_DIR+"\\hlib\\")
 
                                     ends_of_path = path[-1]
                                     for x in path[:-1]:
@@ -426,7 +422,7 @@ class Generator(object):
                                           sys.exit(1)
                               else :
                                     path = node[1]
-                                    final_path = str(getenv('HASCAL_ROOT') + "\\hlib\\")
+                                    final_path = str(self.BASE_DIR+"\\hlib\\")
 
                                     ends_of_path = path[-1]
                                     for x in path[:-1]:
@@ -456,7 +452,7 @@ class Generator(object):
                               name = '.'.join(name for name in node[1])
                               if name.startswith("d.") :
                                     path = node[1]
-                                    final_path = str(getenv('HASCAL_ROOT') + "/hlib/")
+                                    final_path = str(self.BASE_DIR+"/hlib/")
 
                                     ends_of_path = path[-1]
                                     for x in path[:-1]:
@@ -475,7 +471,7 @@ class Generator(object):
                                           sys.exit(1)
                               else :
                                     path = node[1]
-                                    final_path = str(getenv('HASCAL_ROOT') + "/hlib/" + "")
+                                    final_path = str(self.BASE_DIR+"/hlib/")
 
                                     ends_of_path = path[-1]
                                     for x in path[:-1]:

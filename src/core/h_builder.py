@@ -1,7 +1,7 @@
 # The Hascal Compiler CLI
 #
 # The Hascal Programming Language
-# Copyright 2019-2021 Hascal Development Team,
+# Copyright 2019-2022 Hascal Development Team,
 # all rights reserved.
 
 from .h_lexer import Lexer # hascal lexer
@@ -17,19 +17,19 @@ import sys
 import os
 
 class HascalCompiler(object):
-    def __init__(self,argv):
+    def __init__(self,argv,BASE_DIR):
+        self.BASE_DIR = BASE_DIR
         self.code = ""
         self.lexer = Lexer()
         self.parser = Parser()
-        self.generator = Generator()
+        self.generator = Generator(self.BASE_DIR)
         self.argv = argv
-        
         # arguments checking
         if len(self.argv) > 1 :
             if self.argv[1] == "-h" or self.argv[1] == "--help":
                 # show help
                 output_message = [f"Hascal Compiler {HASCAL_COMPILER_VERSION} {sys.platform}",
-                                    "Copyright (c) 2019-2021 Hascal Development Team,",
+                                    "Copyright (c) 2019-2022 Hascal Development Team,",
                                     "All rights reserved.",
                                     "\nEnter following command for compile a Hascal program :",
                                     "hascal <inputfile.has> [output file name]",
@@ -48,15 +48,16 @@ class HascalCompiler(object):
                     # show file extension error 
                     HascalException(f"Error : The specified file is not a hascal(.has) file")
                 else :
-                    try:
-                        with open(argv[1]) as fin:
+                    with open(argv[1]) as fin:
                             self.code = fin.read()
-                        self.compile()
+                    self.compile()
+                    try:
+                        ...
                     except FileNotFoundError as e :
                         HascalException(f"Error : File '{argv[1]}' not found")
         else:
             output_message = [f"Hascal Compiler {HASCAL_COMPILER_VERSION} {sys.platform}",
-                                "Copyright (c) 2019-2021 Hascal Development Team,",
+                                "Copyright (c) 2019-2022 Hascal Development Team,",
                                 "All rights reserved.",
                                 "\nEnter following command for compile a Hascal program :",
                                 "hascal <inputfile.has>",
@@ -85,8 +86,11 @@ class HascalCompiler(object):
             check_call(['dmd', outname, '-O', '-mcpu=native'], stdout=DEVNULL, stderr=STDOUT)
             # uncomment it for development(and comment top line)
             # os.system('dmd '+ outname)
-            
+        except :
+            print("Error : unknown error in compile file")
+
+        try :
             os.remove(outname+".d")
             os.remove(outname+".obj")
         except :
-            print("Error : unknown error in compile file")
+            ...
