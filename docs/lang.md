@@ -1,7 +1,7 @@
 # Learn Hascal in 15 minutes
 ```nim
-# import physics library from stdlib
-use physics
+# import math library from stdlib
+use math
 
 # DataTypes :
 # - char
@@ -18,9 +18,18 @@ var names : [string] = ["ali","mohammad"]
 
 # declare a const
 const xx : int = 1
+const pi = 3.14
 
-function main() : int {
+# define a function
+function add(x:int,y:int) : int {
+    return x + y
+}
+
+# main function
+function main(argv:[string]) : int {
     print("Hi!")
+    # call a function
+    my_func("arg 1",1)
     return 0
 }
 
