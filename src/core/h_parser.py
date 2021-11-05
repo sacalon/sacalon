@@ -39,9 +39,6 @@ class Parser(Parser):
       def block_struct(self, p):
             return ('block_struct', p.struct_declare, *p.block_struct[1:])
 
-      @_('VAR NAME ASSIGN expr')
-      def struct_declare(self, p):
-            return ('declare','equal1','auto', p.NAME, p.expr)
       @_('CONST NAME ASSIGN expr')
       def struct_declare(self, p):
             return ('declare','const', p.NAME, p.expr)
@@ -100,9 +97,9 @@ class Parser(Parser):
             return ('declare_array','no_equal',p.return_type, p.NAME) 
 
       # var <name> = <expr>
-      @_('VAR NAME ASSIGN expr')
-      def var_declare(self, p):
-            return ('declare','equal1','auto', p.NAME, p.expr)
+      #@_('VAR NAME ASSIGN expr')
+      #def var_declare(self, p):
+      #      return ('declare','equal1','auto', p.NAME, p.expr)
 
       # var <name> : <return_type> = <expr>
       @_('VAR NAME COLON return_type ASSIGN expr')
@@ -115,14 +112,14 @@ class Parser(Parser):
             return ('declare_array','equal2',p.return_type, p.NAME,p.expr) 
 
       # const <name> = <expr>
-      @_('CONST NAME ASSIGN expr')
-      def var_declare(self, p):
-            return ('declare','const', p.NAME, p.expr)
+      #@_('CONST NAME ASSIGN expr')
+      #def var_declare(self, p):
+      #      return ('declare','const', p.NAME, p.expr)
       
       # const <name> : <return_type> = <expr>
       @_('CONST NAME COLON return_type ASSIGN expr')
       def var_declare(self, p):
-            return ('declare','const_type',p.return_type, p.NAME, p.expr)
+            return ('declare','const',p.return_type, p.NAME, p.expr)
 
       # in_statement : 
       @_('in_var_declare')
@@ -140,9 +137,9 @@ class Parser(Parser):
             return ('in_declare_array','no_equal',p.return_type, p.NAME) 
 
       # in : var <name> = <expr>
-      @_('VAR NAME ASSIGN expr')
-      def in_var_declare(self, p):
-            return ('in_declare','equal1','auto', p.NAME, p.expr)
+      #@_('VAR NAME ASSIGN expr')
+      #def in_var_declare(self, p):
+      #      return ('in_declare','equal1','auto', p.NAME, p.expr)
 
       # in : var <name> : <return_type> = <expr>
       @_('VAR NAME COLON return_type ASSIGN expr')
@@ -155,14 +152,14 @@ class Parser(Parser):
             return ('in_declare_array','equal2',p.return_type, p.NAME,p.expr) 
 
       # in : const <name> = <expr>
-      @_('CONST NAME ASSIGN expr')
-      def in_var_declare(self, p):
-            return ('in_declare','const', p.NAME, p.expr)
+      #@_('CONST NAME ASSIGN expr')
+      #def in_var_declare(self, p):
+      #      return ('in_declare','const', p.NAME, p.expr)
       
       # in : const <name> : <return_type> = <expr>
       @_('CONST NAME COLON return_type ASSIGN expr')
       def in_var_declare(self, p):
-            return ('in_declare','const_type',p.return_type, p.NAME, p.expr)
+            return ('in_declare','const',p.return_type, p.NAME, p.expr)
       #-----------------------------------
       # <name> = <expr>
       @_('name ASSIGN expr')
