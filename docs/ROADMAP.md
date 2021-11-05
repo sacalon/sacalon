@@ -59,5 +59,9 @@ function foo(x:int,y:int,z:int=1){
 foo(1,2)
 ```
 
+- immutable variables
+```
+var imut x : int = 1
+```
 ## Standard Library
 - `json` library
