@@ -1,6 +1,0 @@
-function main() : int {
-var y : int
-
-	print("Hello World!")
-	return 0
-}
