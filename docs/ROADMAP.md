@@ -1,17 +1,20 @@
-# Hascal's Roadmap for v1.3.x
+# Hascal's Roadmap for v1.3.
+
+## Base
+- C++ in back-end
+- garbage collection and rust-like memory management
+
+## Language
 - multi library import :
 ```
-use (
-   http, 
-   random
-)
-
+use http, random
 ```
 
 - inline assembly
 ```
 asm("mov e1, bx")
 ```
+
 - multi line string
 ``` 
 var str = """line1
@@ -21,7 +24,8 @@ line2
 
 - function decorators :
 ```
-@no_gc # or : @static
+@no_gc
+@static
 function add(a:int,b:int) : int {
     return a + b
 }
@@ -32,6 +36,7 @@ var mythread = thread(@(1000,true){
     print("hi")
 })
 ```
+
 - dictionaries :
 ```
 var names_age = dict(string,{
@@ -45,6 +50,7 @@ var foo : dict = (string,{
    "Y" : 2
 })
 ```
+
 - optional function's argument
 ```
 function foo(x:int,y:int,z:int=1){
@@ -52,3 +58,6 @@ function foo(x:int,y:int,z:int=1){
 }
 foo(1,2)
 ```
+
+## Standard Library
+- `json` library
