@@ -63,5 +63,13 @@ foo(1,2)
 ```
 var imut x : int = 1
 ```
+
+- builtin string formation method
+```
+var x = 1
+var y = 2
+print(format("x is {}, y is {},x,y))
+```
+
 ## Standard Library
 - `json` library
