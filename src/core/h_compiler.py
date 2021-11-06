@@ -1006,30 +1006,23 @@ class Generator(object):
             if node[0] == 'and':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
+                  _line = node[3]
 
-                  if _expr0['type'] != _expr1['type'] :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        sys.exit(1)
-                  else :
-                        expr = {
-                              'expr' : '%s && %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : _expr0['type'] # or : _expr1['type']
-                        }
-                        return expr
+                  expr = {
+                        'expr' : '%s && %s' % (_expr0['expr'],_expr1['expr']),
+                        'type' : _expr0['type'] # or : _expr1['type']
+                  }
+                  return expr
 
             if node[0] == 'or':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
-
-                  if _expr0['type'] != _expr1['type'] :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        sys.exit(1)
-                  else :
-                        expr = {
-                              'expr' : '%s || %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : _expr0['type'] # or : _expr1['type']
-                        }
-                        return expr
+                  _line = node[3]
+                  expr = {
+                        'expr' : '%s || %s' % (_expr0['expr'],_expr1['expr']),
+                        'type' : _expr0['type'] # or : _expr1['type']
+                  }
+                  return expr
             # --------------end of operators-----------------  
 
             # ---------------conditions---------------------
@@ -1138,6 +1131,26 @@ class Generator(object):
                   expr = {
                         'expr' : '%s' % (node[1]),
                         'type' : 'bool',
+                  }
+                  return expr
+            
+            # <expr>
+            if node[0] == 'expr_cond':
+                  _expr = self.walk(node[1])
+
+                  expr = {
+                        'expr' : '!%s' % (_expr['expr']), # may have bug
+                        'type' : _expr['type'] 
+                  }
+                  return expr
+            
+            # <expr>
+            if node[0] == 'paren_cond':
+                  _expr = self.walk(node[1])
+
+                  expr = {
+                        'expr' : '(%s)' % (_expr['expr']), # may have bug
+                        'type' : _expr['type'] 
                   }
                   return expr
             # ---------------end of conditions---------------------     

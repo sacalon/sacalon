@@ -5,6 +5,8 @@
 # all rights reserved.
 
 from .sly import Lexer
+from .h_error import HascalException
+from sys import exit
 
 class Lexer(Lexer):
         tokens = {
@@ -106,4 +108,5 @@ class Lexer(Lexer):
                 self.lineno += t.value.count('\n')
 
         def error(self, t):
-                print("Illegal character '%s'" % t.value[0])
+                HascalException("Illegal character '%s'" % t.value[0])
+                exit(1)

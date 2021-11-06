@@ -1,6 +1,7 @@
 import sys
 import inspect
 from collections import OrderedDict, defaultdict, Counter
+import colorama
 
 __all__        = [ 'Parser' ]
 
@@ -1367,13 +1368,20 @@ class Parser(metaclass=ParserMeta):
             cls.log.info('Parser debugging for %s written to %s', cls.__qualname__, cls.debugfile)
 
     def error(self, token):
+        colorama.init()
         if token:
             lineno = getattr(token, 'lineno', 0)
             if lineno:
-                sys.stderr.write(f'Error : Syntax error at line {lineno}, token={token.type}\n')
+                sys.stderr.write(colorama.Fore.RED+"Error : ")
+                sys.stderr.write(colorama.Style.RESET_ALL)
+                sys.stderr.write(f'Syntax error at line {lineno}, token={token.type}\n')
             else:
+                sys.stderr.write(colorama.Fore.RED+"Error : ")
+                sys.stderr.write(colorama.Style.RESET_ALL)
                 sys.stderr.write(f'Error  : Syntax error, token={token.type}')
         else:
+            sys.stderr.write(colorama.Fore.RED+"Error : ")
+            sys.stderr.write(colorama.Style.RESET_ALL)
             sys.stderr.write('Error : Parse error in input. EOF\n')
  
     def errok(self):

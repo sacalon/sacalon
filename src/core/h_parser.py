@@ -399,7 +399,7 @@ class Parser(Parser):
             return ('char', p.CHAR,p.CHAR.lineno)
       @_('boolean')
       def expr(self, p):
-            return ('bool', p.boolean,p.boolean.lineno)
+            return ('bool', p.boolean[0],p.boolean[1])
       @_('float')
       def expr(self, p):
             return ('float', p.float[0],p.float[1])
@@ -425,10 +425,10 @@ class Parser(Parser):
             
       @_('TRUE')
       def boolean(self, p):
-            return 'true'
+            return ('true',p.lineno)
       @_('FALSE')
       def boolean(self, p):
-            return 'false'
+            return ('false',p.lineno)
             
       #------------------------------------------
       @_('names COMMA NAME')
@@ -456,13 +456,19 @@ class Parser(Parser):
       @_('expr LESS expr')
       def condition(self, p):
             return ('less', p.expr0, p.expr1,p.lineno)
-      
+      @_('expr')
+      def condition(self, p):
+            return ('expr_cond',p.expr) # todo : return line number
+
       @_('NOT condition')
       def condition(self, p):
             return ('not_cond', p.condition,p.lineno)
       @_('boolean')
       def condition(self, p):
-            return ('bool_cond', p.boolean,p.lineno)
+            return ('bool_cond', p.boolean[0],p.lineno)
+      @_('LPAREN condition RPAREN')
+      def condition(self, p):
+            return ('paren_cond', p.condition,p.lineno)
 
       @_('condition AND condition')
       def condition(self, p):
