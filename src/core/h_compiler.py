@@ -29,7 +29,11 @@ class Generator(object):
             self.imported = []
 
       def generate(self, tree,use=False):
-            result = self.walk(tree)
+            _expr = self.walk(tree)
+            result = ""
+            for e in _expr :
+                  result += e['expr']
+
             if use :
                   return f"\n{self.src_pre_main}\n"
             else :
@@ -57,20 +61,20 @@ class Generator(object):
             #     <statements>
             # }
             if node[0] == 'block':
-                  result = ""
+                  result = [ ] # list of exprs and statements
                   for statement in node[1:]:
-                        result += self.walk(statement) or ""
+                        result.append(self.walk(statement))
                   return result
             if node[0] == 'in_block':
-                  result = ""
+                  result = [ ] # list of exprs and statements
                   for statement in node[1:]:
-                        result += self.walk(statement) or ""
+                        result.append(self.walk(statement))
                   return result
             if node[0] == 'block_struct':
                   current_vars = self.vars
-                  result = ""
+                  result = [ ] # list of exprs and statements
                   for statement in node[1:]:
-                        result += self.walk(statement) or ""
+                        result.append(self.walk(statement))
                   self.vars = current_vars
                   return result
             #-------------------------------------
@@ -80,87 +84,130 @@ class Generator(object):
             if node[0] == 'declare' and node[1] == "no_equal":
                   _name = node[3]
                   _type = node[2]
-                  if _name in self.vars :
-                        HascalException(f"'{_name}' exists ,cannot redefine it")
+                  _line = node[4]
+
+                  if _name in self.vars or _name in self.consts :
+                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                         sys.exit(1)
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                        sys.exit(1)
+                  elif not _type in self.types :
+                        HascalException(f"Type '{_type}' not defined:{_line}")
                         sys.exit(1)
                   else:
-                        if _type in self.types :
-                              self.vars[_name] = Var(_name,_type)
-                              self.src_pre_main += "%s %s ;\n" % (_type,node[3])
-                        else :
-                              HascalException(f"type '{_type}' not defined")
-                              sys.exit(1)
+                        self.vars[_name] = Var(_name,_type)
+
+                        expr = {
+                              'expr' : "%s %s ;\n" % (_type,_name),
+                              'type' : _type,
+                        }
+                        return expr
 
             # var <name> : <return_type> = <expr>
             if node[0] == 'declare' and node[1] == "equal2":
                   _name = node[3]
                   _type = node[2]
-                  if _name in self.vars :
-                        HascalException(f"'{_name}' exists ,cannot redefine it")
+                  _expr = self.walk(node[4])
+                  _line = node[4]
+
+                  if _name in self.vars or _name in self.consts  :
+                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                         sys.exit(1)
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                        sys.exit(1)
+                  elif _type != _expr['type'] :
+                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
+                        sys.exit(1)
+                  elif not _type in self.types :
+                        HascalException(f"Type '{_type}' not defined:{_line}")
                         sys.exit(1)
                   else:
-                        if _type in self.types :
-                              self.vars[_name] = Var(_name,_type)
-                              self.src_pre_main += "%s %s = %s;\n" % (_type,node[3],self.walk(node[4]))
-                        else :
-                              HascalException(f"type '{_type}' not defined")
-                              sys.exit(1)
+                        self.vars[_name] = Var(_name,_type)
+                        expr = {
+                              'expr' : "%s %s = %s;\n" % (_type,_name,_expr['expr']),
+                              'type' : _type,
+                        }
+                        return expr
+                        
             
             # var <name> : [<return_type>]
             if node[0] == 'declare_array' and node[1] == "no_equal":
                   _name = node[3]
                   _type = node[2]
-                  if _name in self.vars :
-                        HascalException(f"'{_name}' exists ,cannot redefine it")
+                  _line = node[4]
+
+                  if _name in self.vars or _name in self.consts :
+                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                         sys.exit(1)
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                        sys.exit(1)
+                  elif not _type in self.types :
+                        HascalException(f"Type '{_type}' not defined:{_line}")
                         sys.exit(1)
                   else:
-                        if _type in self.types :
-                              self.vars[_name] = Var(_name,_type)
-                              self.src_pre_main += "%s[] %s ;\n" % (_type,_name)
-                        else :
-                              HascalException(f"Type '{_type}' not defined")
-                              sys.exit(1)
+                        self.vars[_name] = Var(_name,_type,is_array=True)
+                        expr = {
+                              'expr' : "%s[] %s ;\n" % (_type,_name),
+                              'type' : _type,
+                        }
+                        return expr
 
             # var <name> : [<return_type>] = <expr>
             if node[0] == 'declare_array' and node[1] == "equal2":
                   _name = node[3]
                   _type = node[2]
-                  if _name in self.vars :
-                        HascalException(f"'{_name}' exists ,cannot redefine it")
+                  _expr = self.walk(node[4])
+                  _line = node[5]
+
+                  if _name in self.vars or _name in self.consts :
+                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                         sys.exit(1)
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                        sys.exit(1)
+                  elif _type != _expr['type'] :
+                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
+                        sys.exit(1)
+                  elif not _type in self.types :
+                        HascalException(f"Type '{_type}' not defined:{_line}")
                         sys.exit(1)
                   else:
-                        if _type in self.types :
-                              self.vars.append(_name)
-                              self.src_pre_main += "%s[] %s = %s ;\n" % (_type,_name,self.walk(node[4]))
-                        else :
-                              HascalException(f"Type '{_type}' not defined")
-                              sys.exit(1)
+                        self.vars[_name] = Var(_name,_type,is_array=True)
+                        expr = {
+                              'expr' : "%s[] %s = %s ;\n" % (_type,_name,_expr['expr']),
+                              'type' : _type,
+                        }
+                        return expr
                               
             # const <name> : <return_type> = <expr> ;
             if node[0] == 'declare' and node[1] == "const":
                   _name = node[3]
                   _type = node[2]
-                  if node[3] in self.vars :
-                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
+                  _expr = self.walk(node[4])
+                  _line = node[5]
+
+                  if _name in self.vars or _name in self.consts :
+                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                         sys.exit(1)
-                  elif node[3] in self.types :
-                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
+                  elif _name in self.types :
+                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a constant:{_line}")
+                        sys.exit(1)
+                  elif _type != _expr['type'] :
+                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
+                        sys.exit(1)
+                  elif not _type in self.types :
+                        HascalException(f"Type '{_type}' not defined:{_line}")
                         sys.exit(1)
                   else:
-                        self.vars.append(node[3])
-                        self.src_pre_main += "const %s %s = %s ;\n" % (node[2],node[3],self.walk(node[4]))
+                        self.consts[_name] = Const(_name,_type,is_array=True)
+                        expr = {
+                              'expr' : "const %s %s = %s ;\n" % (node[2],node[3],_expr['expr']),
+                              'type' : _type,
+                        }
+                        return expr
             #-------------------------------------
             # in_statement declares :
             
@@ -168,161 +215,247 @@ class Generator(object):
             if node[0] == 'in_declare' and node[1] == "no_equal":
                   _name = node[3]
                   _type = node[2]
-                  if _name in self.vars :
-                        HascalException(f"'{_name}' exists ,cannot redefine it")
+                  _line = node[4]
+
+                  if _name in self.vars or _name in self.consts :
+                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                         sys.exit(1)
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                        sys.exit(1)
+                  elif not _type in self.types :
+                        HascalException(f"Type '{_type}' not defined:{_line}")
                         sys.exit(1)
                   else:
-                        if _type in self.types :
-                              self.vars[_name] = Var(_name,_type)
-                              return  "%s %s ;\n" % (_type,node[3])
-                        else :
-                              HascalException(f"type '{_type}' not defined")
-                              sys.exit(1)
+                        self.vars[_name] = Var(_name,_type)
+                        expr = {
+                              'expr' : "%s %s ;\n" % (_type,_name),
+                              'type' : _type,
+                        }
+                        return  expr
 
             # in : var <name> : <return_type> = <expr>
             if node[0] == 'in_declare' and node[1] == "equal2":
                   _name = node[3]
                   _type = node[2]
-                  if _name in self.vars :
-                        HascalException(f"'{_name}' exists ,cannot redefine it")
+                  _expr = self.walk(node[4])
+                  _line = node[5]
+
+                  if _name in self.vars or _name in self.consts :
+                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                         sys.exit(1)
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                        sys.exit(1)
+                  elif _type != _expr['type'] :
+                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
+                        sys.exit(1)
+                  elif not _type in self.types :
+                        HascalException(f"Type '{_type}' not defined:{_line}")
                         sys.exit(1)
                   else:
-                        if _type in self.types :
-                              self.vars[_name] = Var(_name,_type)
-                              return  "%s %s = %s;\n" % (_type,node[3],self.walk(node[4]))
-                        else :
-                              HascalException(f"type '{_type}' not defined")
-                              sys.exit(1)
+                        self.vars[_name] = Var(_name,_type)
+                        expr = {
+                              'expr' : "%s %s = %s;\n" % (_type,node[3],_expr['expr']),
+                              'type' : _type,
+                        }
+                        return  expr
             
             # in : var <name> : [<return_type>]
             if node[0] == 'in_declare_array' and node[1] == "no_equal":
                   _name = node[3]
                   _type = node[2]
-                  if _name in self.vars :
-                        HascalException(f"'{_name}' exists ,cannot redefine it")
+                  _line = node[5]
+
+                  if _name in self.vars or _name in self.consts :
+                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                         sys.exit(1)
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                        sys.exit(1)
+                  elif not _type in self.types :
+                        HascalException(f"Type '{_type}' not defined:{_line}")
                         sys.exit(1)
                   else:
-                        if _type in self.types :
-                              self.vars[_name] = Var(_name,_type)
-                              return  "%s[] %s ;\n" % (_type,_name)
-                        else :
-                              HascalException(f"Type '{_type}' not defined")
-                              sys.exit(1)
+                        self.vars[_name] = Var(_name,_type,is_array=True)
+                        expr = {
+                              'expr' : "%s[] %s ;\n" % (_type,_name),
+                              'type' : _type,
+                        }
+                        return  expr
 
             # in : var <name> : [<return_type>] = <expr>
             if node[0] == 'in_declare_array' and node[1] == "equal2":
                   _name = node[3]
                   _type = node[2]
-                  if _name in self.vars :
-                        HascalException(f"'{_name}' exists ,cannot redefine it")
+                  _expr = self.walk(node[4])
+                  _line = node[5]
+                  if _name in self.vars or _name in self.consts :
+                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                         sys.exit(1)
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable")
+                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                        sys.exit(1)
+                  elif _type != _expr['type'] :
+                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
+                        sys.exit(1)
+                  elif not _type in self.types :
+                        HascalException(f"Type '{_type}' not defined:{_line}")
                         sys.exit(1)
                   else:
-                        if _type in self.types :
-                              self.vars.append(_name)
-                              return  "%s[] %s = %s ;\n" % (_type,_name,self.walk(node[4]))
-                        else :
-                              HascalException(f"Type '{_type}' not defined")
-                              sys.exit(1)
+                        self.vars[_name] = Var(_name,_type,is_array=True)
+                        expr = {
+                              'expr' : "%s[] %s = %s ;\n" % (_type,_name,_expr['expr']),
+                              'type' : _type,
+                        }
+                        return  expr 
                               
             # in : const <name> : <return_type> = <expr> ;
             if node[0] == 'in_declare' and node[1] == "const":
                   _name = node[3]
                   _type = node[2]
-                  if node[3] in self.vars :
-                        HascalException(f"'{node[3]}' exists ,cannot redefine it")
+                  _expr = self.walk(node[4])
+                  _line = node[5]
+
+                  if _name in self.vars or _name in self.consts :
+                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                         sys.exit(1)
-                  elif node[3] in self.types :
-                        HascalException(f"'{node[3]}' defined as a type ,cannot redefine it as a variable")
+                  elif _name in self.types :
+                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a constant:{_line}")
+                        sys.exit(1)
+                  elif _type != _expr['type'] :
+                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
+                        sys.exit(1)
+                  elif not _type in self.types :
+                        HascalException(f"Type '{_type}' not defined:{_line}")
                         sys.exit(1)
                   else:
                         self.vars.append(node[3])
-                        return  "const %s %s = %s ;\n" % (node[2],node[3],self.walk(node[4]))
+                        expr = {
+                              'expr' : "const %s %s = %s ;\n" % (node[2],node[3],self.walk(node[4])),
+                              'type' : _type,
+                        }
+                        return expr
             #-------------------------------------
             # <name> = <expr> ;         
             if node[0] == 'assign':
+                  _name = node[1][0]
+                  _expr = self.walk(node[2])
+                  _line = node[3]
+
                   if len(node[1]) == 1:
-                        name = node[1][0]
-                        if name in self.vars:
-                               return "%s = %s;\n" % (name, self.walk(node[2]))
-                        elif name in self.types:
-                              HascalException(f"'{name}'is a type, cannot change it")
+                        if _name in self.consts :
+                              HascalException(f"'{_name}'is a constant, cannot change it")
                               sys.exit(1)
-                        elif name in self.const:
-                              HascalException(f"'{name}'is a constant, cannot change it")
+                        elif _name in self.types:
+                              HascalException(f"'{_name}'is a type, cannot assign it")
+                              sys.exit(1)
+                        elif not _name in self.vars :
+                              HascalException(f"Variable '{_name}' not defined")
+                              sys.exit(1) 
+                        elif _name in self.vars and (self.vars[_name].type != _expr['type']):
+                              HascalException(f"Mismatched type {self.vars[_name].type} and {_expr['type']}:{_line}")
                               sys.exit(1)
                         else :
-                              HascalException(f"variable '{name}' not defined")
-                              sys.exit(1) 
+                              expr = {
+                                    'expr' :  "%s = %s;\n" % (_name,_expr['expr']),
+                                    'type' : self.vars[_name].type,
+                              }
+                              return expr
                   else :
-                        name = node[1][0]
-                        if name in self.vars :     
-                              name = '.'.join(arg for arg in node[1])
-                              return "%s = %s;\n" % (name, self.walk(node[2]))
-                        elif name in self.types:
-                              HascalException(f"'{name}'is a type, cannot change it")
+                        _full_name = '.'.join(arg for arg in node[1])
+                        if _name in self.consts :
+                              HascalException(f"'{_name}'is a constant, cannot change it")
                               sys.exit(1)
-                        elif name in self.const:
-                              HascalException(f"'{name}'is a constant, cannot change it")
+                        elif _name in self.types:
+                              HascalException(f"'{_name}'is a type, cannot assign it")
+                              sys.exit(1)
+                        elif not _name in self.vars :
+                              HascalException(f"Variable '{_name}' not defined")
+                              sys.exit(1) 
+                        # this code have bug. because search name in struct members
+                        elif _full_name in self.vars and (self.vars[_name].type != _expr['type']):
+                              HascalException(f"Mismatched type {self.vars[_name].type} and {_expr['type']}:{_line}")
                               sys.exit(1)
                         else :
-                              HascalException(f"variable '{name}' not defined")
-                              sys.exit(1) 
-                  sys.exit(1)
+                              expr = {
+                                    'expr' : "%s = %s;\n" % (_full_name,_expr['expr']),
+                                    'type' : self.vars[_name].type,
+                              }
+                              return expr
 
             # <name>[<expr>] = <expr>;
             if node[0] == 'assign_var_index':
+                  _name = node[1][0]
+                  _expr_index = self.walk(node[2])
+                  _expr = self.walk(node[3])
+                  _line = node[3]
+
                   if len(node[1]) == 1:
-                        name = node[1][0]
-                        if name in self.vars:
-                               return "%s[%s] = %s;\n" % (name,self.walk(node[2]), self.walk(node[3]))
-                        elif name in self.types:
-                              HascalException(f"'{name}'is a type, cannot change it")
+                        if _name in self.consts :
+                              HascalException(f"'{_name}'is a constant, cannot change it")
                               sys.exit(1)
-                        elif name in self.const:
-                              HascalException(f"'{name}'is a constant, cannot change it")
+                        elif _name in self.types:
+                              HascalException(f"'{_name}'is a type, cannot assign it")
                               sys.exit(1)
-                        else :
-                              HascalException(f"variable '{name}' not defined")
+                        elif not _name in self.vars :
+                              HascalException(f"Variable '{_name}' not defined")
                               sys.exit(1) 
-                  else :
-                        name = node[1][0]
-                        if name in self.vars :     
-                              name = '.'.join(arg for arg in node[1]) 
-                              return "%s[%s] = %s;\n" % (name,self.walk(node[2]), self.walk(node[3]))
-                        elif name in self.types:
-                              HascalException(f"'{name}'is a type, cannot change it")
-                              sys.exit(1)
-                        elif name in self.const:
-                              HascalException(f"'{name}'is a constant, cannot change it")
+                        elif _name in self.vars and (self.vars[_name].type != _expr['type']):
+                              HascalException(f"Mismatched type {self.vars[_name].type} and {_expr['type']}:{_line}")
                               sys.exit(1)
                         else :
-                              HascalException(f"variable '{name}' not defined")
-                              sys.exit(1)  
-                  sys.exit(1)
+                              expr = {
+                                    'expr' : "%s[%s] = %s;\n" % (_name,_expr_index['expr'],_expr['expr']),
+                                    'type' : self.vars[_name].type,
+                              }
+                              return expr
+                  else :
+                        _full_name = '.'.join(arg for arg in node[1])
+                        if _name in self.consts :
+                              HascalException(f"'{_name}'is a constant, cannot change it")
+                              sys.exit(1)
+                        elif _name in self.types:
+                              HascalException(f"'{_name}'is a type, cannot assign it")
+                              sys.exit(1)
+                        elif not _name in self.vars :
+                              HascalException(f"Variable '{_name}' not defined")
+                              sys.exit(1) 
+                        # this code have bug. because search name in struct members
+                        elif _full_name in self.vars and (self.vars[_name].type != _expr['type']):
+                              HascalException(f"Mismatched type {self.vars[_name].type} and {_expr['type']}:{_line}")
+                              sys.exit(1)
+                        else :     
+                              expr = {
+                                    'expr' : "%s[%s] = %s;\n" % (_full_name,_expr_index['expr'],_expr['expr']),
+                                    'type' : self.vars[_name].type,
+                              }
+                              return expr
             #-----------------------------------------
-            # return <expr> ;
+            # return <expr>
             if node[0] == 'return':
-                  return "return %s;\n" % self.walk(node[1])
+                  _expr = self.walk(node[1])
+                  expr = {
+                        'expr' : "return %s;\n" %  _expr['expr'],
+                        'type' : _expr['type']
+                  }
+                  return expr 
             #-----------------------------------------
-            # break  ;
+            # break
             if node[0] == 'break':
-                  return "break;\n"
+                  expr = {
+                        'expr' : 'break;\n',
+                        'type' : 'void', # todo
+                  }
+                  return expr
             
-            # continue  ;
+            # continue
             if node[0] == 'continue':
-                  return "continue;\n"
+                  expr = {
+                        'expr' : 'continue;\n',
+                        'type' : 'void', # todo
+                  }
+                  return expr
             #-----------------------------------------
             # use <lib_name> ;
             if node[0] == 'use':
@@ -555,17 +688,29 @@ class Generator(object):
                         for p in params:
                               param = p.split(' ')
                               _params[param[1]] = param[0]
-                              self.vars[param[1]] = Var(param[1],param[0])
+                              if param[0].endswith(']'): self.vars[param[1]] = Var(param[1],param[0],is_array=True)
+                              else : self.vars[param[1]] = Var(param[1],param[0])
                   elif len(params) == 1 and params[0] != '' and params[0] != None: 
                         param = params[0].split(' ')
                         _params[param[1]] = param[0]
                         self.vars[param[1]] = Var(param[1],param[0])
 
                   self.funcs[_name] = Function(_name,_params,_return_type)
-                  res = self.walk(node[4])
-
-                  self.src_pre_main += "%s %s(%s) {\n%s\n}\n" % (node[1],node[2], node[3],res) 
+                  _name = node[2]
+                  _type = node[1]
+                  _compiled_params = node[3]
+                  _expr = self.walk(node[4])
+                  res = ""
+                  for e in _expr :
+                        res += e['expr']
+                  res =  "%s %s(%s) {\n%s\n}\n" % (_type,_name,_compiled_params,res) 
                   self.vars = current_vars
+                  
+                  expr = {
+                        'expr' : res,
+                        'type' : _type,
+                  }
+                  return expr
             #-------------------------------------
             if node[0] == "inline_function" :
                   _name = node[2]
@@ -591,16 +736,24 @@ class Generator(object):
                   _body = self.walk(node[2])
                   _members = { } # todo
                   self.types[_name] = Struct(_name,_members)
-                  self.src_pre_main += "struct %s{\n%s\n}\n" % (name,body)
+                  expr = {
+                        'expr' : 'struct %s{\n%s\n}\n' % (name,body),
+                        'type' : _name,
+                  } 
+                  return expr
             #-------------------------------------
             # enum <name> {
             #     <enum_names>
             # }
             if node[0] == 'enum':
-                  name = node[1]
-                  names = node[2]
-                  self.types.append(name)
-                  self.src_pre_main += "enum %s{\n%s\n}\n" % (name,names)
+                  _name = node[1]
+                  _members = node[2]
+                  self.types[_name] = Enum(_name,_members)
+                  expr = {
+                        'expr' : 'enum %s{\n%s\n}\n' % (_name,_members),
+                        'type' : _name,
+                  } 
+                  return expr
             #-------------------------------------
             # if <condition> {
             #     <block>
@@ -624,16 +777,43 @@ class Generator(object):
             if node[0] == 'if':
                   cond = self.walk(node[1])
                   body = self.walk(node[2])
-                  return "if(%s){\n%s\n}\n" % (cond,body)
+
+                  res = ""
+                  for e in body :
+                        res += e['expr']
+
+                  expr = {
+                        'expr' : 'if(%s){\n%s\n}\n' % (cond['expr'],res),
+                        'type' : '',
+                  }
+                  return expr
             if node[0] == 'if_else':
                   cond = self.walk(node[1])
                   body = self.walk(node[2])
                   body2 = self.walk(node[3])
-                  return "if(%s){\n%s\n}else {\n%s\n}\n" % (cond,body,body2)
+                  res = ""
+                  for e in body :
+                        res += e['expr']
+                  res2 = ""
+                  for e in body2 :
+                        res += e['expr']
+                  expr = {
+                        'expr' : 'if(%s){\n%s\n}else {\n%s\n}\n' % (cond['expr'],res,res2),
+                        'type' : '',
+                  }
+                  return expr
             if node[0] == 'if_else2':
                   cond = self.walk(node[1])
                   body = self.walk(node[2])
-                  return "if(%s){\n%s\n}else %s\n" % (cond,body,self.walk(node[3]))
+                  body2 = self.walk(node[3])
+                  res = ""
+                  for e in body :
+                        res += e['expr']
+                  expr = {
+                        'expr' : 'if(%s){\n%s\n}else %s\n' % (cond['expr'],res,body2['expr']),
+                        'type' : '',
+                  }
+                  return expr
             #------------------------------------
             # for <name> to <expr> {
             #     <block>
@@ -643,7 +823,14 @@ class Generator(object):
                   expr0 = self.walk(node[2])
                   expr1 = self.walk(node[3])
                   body = self.walk(node[4])
-                  return "for(%s=%s;%s<=%s;%s++){\n%s\n}\n" % (name,expr0,name,expr1,name,body)
+                  res = ""
+                  for e in body :
+                        res += e['expr']
+                  expr = {
+                        'expr' : 'for(%s=%s;%s<=%s;%s++){\n%s\n}\n' % (name,expr0['expr'],name,expr1['expr'],name,res),
+                        'type' : '',
+                  }
+                  return expr
             
             # for <name> downto <expr> {
             #     <block>
@@ -653,7 +840,14 @@ class Generator(object):
                   expr0 = self.walk(node[2])
                   expr1 = self.walk(node[3])
                   body = self.walk(node[4])
-                  return "for(%s=%s;%s>=%s;%s--){\n%s\n}\n" % (name,expr0,name,expr1,name,body)
+                  res = ""
+                  for e in body :
+                        res += e['expr']
+                  expr = {
+                        'expr' :  'for(%s=%s;%s>=%s;%s--){\n%s\n}\n' % (name,expr0['expr'],name,expr1['expr'],name,res),
+                        'type' : '',
+                  }
+                  return expr
             #--------------------------------------
             # while <condition> {
             #     <block>
@@ -661,151 +855,478 @@ class Generator(object):
             if node[0] == 'while':      
                   cond = self.walk(node[1])
                   body = self.walk(node[2])
-                  return "while(%s){\n%s\n}\n" % (cond,body)
+                  res = ""
+                  for e in body :
+                        res += e['expr']
+                  expr = {
+                        'expr' : 'while(%s){\n%s\n}\n' % (cond['expr'],res),
+                        'type' : '',
+                  }
+                  return expr
             #---------------------------------------
             # <expr> ;                    
             if node[0] == 'expr':
-                  return "%s;\n" % self.walk(node[1])
+                  _expr = self.walk(node[1])
+                  expr = {
+                        'expr' : "%s;\n" % (_expr['expr']),
+                        'type' : _expr['type'],
+                  }
+                  return expr
             #---------------------------------------
             # <expr>(<params>);
             if node[0] == 'call':
                   _name = node[1]
                   if self.exists(_name):
                         if _name == "print":
-                              return "writeln(%s)" % (', '.join(self.walk(arg) for arg in node[2]))
+                              expr = {
+                                    'expr' : 'writeln(%s)' % (', '.join(self.walk(arg)['expr'] for arg in node[2])),
+                                    'type' : self.funcs['print'].return_type,
+                              }
+                              return expr
                         else :
-                              return "%s(%s)" % (_name, ', '.join(self.walk(arg) for arg in node[2]))
+                              expr = {
+                                    'expr' : "%s(%s)" % (_name, ', '.join(self.walk(arg)['expr'] for arg in node[2])),
+                                    'type' : self.funcs[_name].return_type,
+                              }
+                              return expr
                   else :
                         HascalException(f"Function '{_name}' not defined")
                         sys.exit(1)
             # --------------operators-----------------
             if node[0] == 'add':
-                  return "%s + %s" % (self.walk(node[1]), self.walk(node[2]))
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[2])
+
+                  if _expr0['type'] != _expr1['type'] :
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        sys.exit(1)
+                  else :
+                        expr = {
+                              'expr' : '%s + %s' % (_expr0['expr'],_expr1['expr']),
+                              'type' : _expr0['type'] # or : _expr1['type']
+                        }
+                        return expr
+
             if node[0] == 'add_cont':
-                  return "%s ~ %s" % (self.walk(node[1]), self.walk(node[2]))
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[2])
+
+                  if _expr0['type'] != _expr1['type'] :
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        sys.exit(1)
+                  else :
+                        expr = {
+                              'expr' : '%s ~ %s' % (_expr0['expr'],_expr1['expr']),
+                              'type' : _expr0['type'] # or : _expr1['type']
+                        }
+                        return expr
+
             if node[0] == 'sub':
-                  return "%s - %s" % (self.walk(node[1]), self.walk(node[2]))
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[2])
+
+                  if _expr0['type'] != _expr1['type'] :
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        sys.exit(1)
+                  else :
+                        expr = {
+                              'expr' : '%s - %s' % (_expr0['expr'],_expr1['expr']),
+                              'type' : _expr0['type'] # or : _expr1['type']
+                        }
+                        return expr
+
             if node[0] == 'mul':
-                  return "%s * %s" % (self.walk(node[1]), self.walk(node[2]))
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[2])
+
+                  if _expr0['type'] != _expr1['type'] :
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        sys.exit(1)
+                  else :
+                        expr = {
+                              'expr' : '%s * %s' % (_expr0['expr'],_expr1['expr']),
+                              'type' : _expr0['type'] # or : _expr1['type']
+                        }
+                        return expr
+
             if node[0] == 'div':
-                  return "%s / %s" % (self.walk(node[1]), self.walk(node[2]))
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[2])
+
+                  if _expr0['type'] != _expr1['type'] :
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        sys.exit(1)
+                  else :
+                        expr = {
+                              'expr' : '%s / %s' % (_expr0['expr'],_expr1['expr']),
+                              'type' : _expr0['type'] # or : _expr1['type']
+                        }
+                        return expr
+
             if node[0] == 'pow':
-                  return "%s ^ %s" % (self.walk(node[1]), self.walk(node[2]))
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[2])
+
+                  if _expr0['type'] != _expr1['type'] :
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        sys.exit(1)
+                  else :
+                        expr = {
+                              'expr' : '%s ^ %s' % (_expr0['expr'],_expr1['expr']),
+                              'type' : _expr0['type'] # or : _expr1['type']
+                        }
+                        return expr
+
             if node[0] == 'paren_expr':
-                  return "(%s)" % (self.walk(node[1]))
+                  _expr0 = self.walk(node[1])
+
+                  expr = {
+                        'expr' : '(%s)' % (_expr0['expr']),
+                        'type' : _expr0['type'] 
+                  }
+                  return expr
             if node[0] == 'cond':
-                  return "%s" % (self.walk(node[1]))
+                  _expr0 = self.walk(node[1])
+
+                  expr = {
+                        'expr' : '%s' % (_expr0['expr']),
+                        'type' : _expr0['type'] 
+                  }
+                  return expr
 
             if node[0] == 'not':
-                  return "!%s" % (self.walk(node[1]))
+                  _expr0 = self.walk(node[1])
+
+                  expr = {
+                        'expr' : '!%s' % (_expr0['expr']), # may have bug
+                        'type' : _expr0['type'] 
+                  }
+                  return expr
 
             if node[0] == 'and':
-                  return "%s && %s" % (self.walk(node[1]),self.walk(node[2]))
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[2])
+
+                  if _expr0['type'] != _expr1['type'] :
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        sys.exit(1)
+                  else :
+                        expr = {
+                              'expr' : '%s && %s' % (_expr0['expr'],_expr1['expr']),
+                              'type' : _expr0['type'] # or : _expr1['type']
+                        }
+                        return expr
 
             if node[0] == 'or':
-                  return "%s || %s" % (self.walk(node[1]),self.walk(node[2]))
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[2])
+
+                  if _expr0['type'] != _expr1['type'] :
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        sys.exit(1)
+                  else :
+                        expr = {
+                              'expr' : '%s || %s' % (_expr0['expr'],_expr1['expr']),
+                              'type' : _expr0['type'] # or : _expr1['type']
+                        }
+                        return expr
             # --------------end of operators-----------------  
 
             # ---------------conditions---------------------
             # <expr> == <expr>
             if node[0] == 'equals':
-                  return "%s == %s" % (self.walk(node[1]), self.walk(node[2]))
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[2])
+
+                  if _expr0['type'] != _expr1['type'] :
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        sys.exit(1)
+                  else :
+                        expr = {
+                              'expr' : '%s == %s' % (_expr0['expr'],_expr1['expr']),
+                              'type' : _expr0['type'] # or : _expr1['type']
+                        }
+                        return expr
 
             # <expr> != <expr>
             if node[0] == 'not_equals':
-                  return "%s != %s" % (self.walk(node[1]), self.walk(node[2]))
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[2])
+
+                  if _expr0['type'] != _expr1['type'] :
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        sys.exit(1)
+                  else :
+                        expr = {
+                              'expr' : '%s != %s' % (_expr0['expr'],_expr1['expr']),
+                              'type' : _expr0['type'] # or : _expr1['type']
+                        }
+                        return expr
 
             # <expr> >= <expr>
             if node[0] == 'greater_equals':
-                  return "%s >= %s" % (self.walk(node[1]), self.walk(node[2]))
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[2])
+
+                  if _expr0['type'] != _expr1['type'] :
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        sys.exit(1)
+                  else :
+                        expr = {
+                              'expr' : '%s >= %s' % (_expr0['expr'],_expr1['expr']),
+                              'type' : _expr0['type'] # or : _expr1['type']
+                        }
+                        return expr
 
             # <expr> <= <expr>
             if node[0] == 'less_equals':
-                  return "%s <= %s" % (self.walk(node[1]), self.walk(node[2]))
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[2])
+
+                  if _expr0['type'] != _expr1['type'] :
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        sys.exit(1)
+                  else :
+                        expr = {
+                              'expr' : '%s <= %s' % (_expr0['expr'],_expr1['expr']),
+                              'type' : _expr0['type'] # or : _expr1['type']
+                        }
+                        return expr
             
             # <expr> > <expr>
             if node[0] == 'greater':
-                  return "%s > %s" % (self.walk(node[1]), self.walk(node[2]))
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[2])
+
+                  if _expr0['type'] != _expr1['type'] :
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        sys.exit(1)
+                  else :
+                        expr = {
+                              'expr' : '%s > %s' % (_expr0['expr'],_expr1['expr']),
+                              'type' : _expr0['type'] # or : _expr1['type']
+                        }
+                        return expr
 
             # <expr> < <expr>
             if node[0] == 'less':
-                  return "%s < %s" % (self.walk(node[1]), self.walk(node[2]))
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[2])
+
+                  if _expr0['type'] != _expr1['type'] :
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        sys.exit(1)
+                  else :
+                        expr = {
+                              'expr' : '%s < %s' % (_expr0['expr'],_expr1['expr']),
+                              'type' : _expr0['type'] # or : _expr1['type']
+                        }
+                        return expr
 
             # not <expr>
             if node[0] == 'not_cond':
-                  return "!%s" % (self.walk(node[1]))
+                  _expr0 = self.walk(node[1])
+
+                  expr = {
+                        'expr' : '!%s' % (_expr0['expr']), # may have bug
+                        'type' : _expr0['type'] 
+                  }
+                  return expr
 
             # true / false
             if node[0] == 'bool_cond':
-                  return "%s" % (node[1])
+                  expr = {
+                        'expr' : '%s' % (node[1]),
+                        'type' : 'bool',
+                  }
+                  return expr
             # ---------------end of conditions---------------------     
             # <name>
             if node[0] == 'var':
+                  _name = node[1][0]
+                  _line = node[2]
                   if len(node[1]) == 1:
-                        name = node[1][0]
-                        if self.exists(name):
-                               return "%s" % (name)
+                        
+                        if _name in self.vars:
+                              expr = {
+                                    'expr' : "%s" % (_name),
+                                    'type' : self.vars[_name].type,
+                              }
+                              return expr
+                        elif _name in self.consts :
+                              expr = {
+                                    'expr' : "%s" % (_name),
+                                    'type' : self.consts[_name].type,
+                              }
+                              return expr
+                        elif _name in self.types :
+                              expr = {
+                                    'expr' : "%s" % (_name),
+                                    'type' : self.types[_name],
+                              }
+                              return expr
+                        # todo : pass function name
                         else :
-                              HascalException(f"variable '{name}' not defined")
-                              sys.exit(1) 
+                              HascalException(f"'{_name}' was not declared in this scope:{_line}")
+                              sys.exit(1)
+                        
                   else :
-                        name = node[1][0]
-                        if self.exists(name) :     
-                              all_names = '.'.join(arg for arg in node[1])
-                              return "%s" % (all_names)
+                        _full_name = '.'.join(arg for arg in node[1])
+                        # todo : should return member's type not struct
+                        if _name in self.vars:
+                              expr = {
+                                    'expr' : "%s" % (_full_name),
+                                    'type' : self.vars[_name].type,
+                              }
+                              return expr
+                        elif _name in self.consts :
+                              expr = {
+                                    'expr' : "%s" % (_full_name),
+                                    'type' : self.consts[_name].type,
+                              }
+                              return expr
+                        elif _name in self.types :
+                              expr = {
+                                    'expr' : "%s" % (_full_name),
+                                    'type' : self.types[_name],
+                              }
+                              return expr
+                        # todo : pass function name
                         else :
-                              HascalException(f"variable '{name}' not defined")
-                              sys.exit(1) 
-                  sys.exit(1)
+                              HascalException(f"'{_name}' was not declared in this scope:{_line}")
+                              sys.exit(1)
             
             # <name>[<expr>]
             if node[0] == 'var_index':
+                  _name = node[1][0]
+                  _expr = self.walk(node[2])
+                  _line = node[3]
                   if len(node[1]) == 1:
-                        name = node[1][0]
-                        if name in self.vars:
-                               return "%s[%s]" % (name,self.walk(node[2]))
-
+                        
+                        if _name in self.vars:
+                              expr = {
+                                    'expr' : "%s" % (_name,_expr['expr']),
+                                    'type' : self.vars[_name].type,
+                              }
+                              return expr
+                        elif _name in self.consts :
+                              expr = {
+                                    'expr' : "%s" % (_name,_expr['expr']),
+                                    'type' : self.consts[_name].type,
+                              }
+                              return expr
+                        elif _name in self.types :
+                              expr = {
+                                    'expr' : "%s" % (_name,_expr['expr']),
+                                    'type' : self.types[_name],
+                              }
+                              return expr
+                        # todo : pass function name
                         else :
-                              HascalException(f"variable '{name}' not defined")
-                              sys.exit(1) 
+                              HascalException(f"'{_name}' was not declared in this scope:{_line}")
+                              sys.exit(1)
+                        
                   else :
-                        name = node[1][0]
-                        if name in self.vars :     
-                              all_names = '.'.join(arg for arg in node[1])
-                              return "%s[%s]" % (all_names,self.walk(node[2]))
+                        # todo : type checker between expr and name type
+
+                        _full_name = '.'.join(arg for arg in node[1])
+                        # todo : should return member's type not struct
+                        if _name in self.vars:
+                              expr = {
+                                    'expr' : "%s" % (_full_name,_expr['expr']),
+                                    'type' : self.vars[_name].type,
+                              }
+                              return expr
+                        elif _name in self.consts :
+                              expr = {
+                                    'expr' : "%s" % (_full_name,_expr['expr']),
+                                    'type' : self.consts[_name].type,
+                              }
+                              return expr
+                        elif _name in self.types :
+                              expr = {
+                                    'expr' : "%s" % (_full_name,_expr['expr']),
+                                    'type' : self.types[_name],
+                              }
+                              return expr
                         else :
-                              HascalException(f"variable '{name}' not defined")
-                              sys.exit(1) 
-                  sys.exit(1)
+                              HascalException(f"'{_name}' was not declared in this scope:{_line}")
+                              sys.exit(1)
+
             #-------------------------------------------
             # <expr> , <expr>
             if node[0] == 'exprs':
-                  return '%s,%s' % (self.walk(node[1]),self.walk(node[2]))
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[2])
+
+                  if _expr0['type'] != _expr1['type']:
+                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
+                        sys.exit(1)
+                  else :
+                        expr = {
+                              'expr' : '%s,%s' % (_expr0['expr'],_expr1['expr']),
+                              'type' : _expr0['type'] # or : _expr1['type']
+                        }
+                        return expr
+
             # [<expr>]
             if node[0] == 'list':
-                  return '[%s]' % (self.walk(node[1]))
+                  _expr = self.walk(node[1])
+                  expr = {
+                        'expr' : '[%s]' % (_expr['expr']),
+                        'type' : _expr['type'],
+                  }
+                  return expr
             #-------------------------------------------
             # <expr>.<name>
             if node[0] == '.':
-                  return '%s.%s' % (self.walk(node[1]),node[2])
+                  _expr = self.walk(node[1])
+                  _name = node[2]
+
+                  expr = {
+                        'expr' : '%s.%s' % (_expr['expr'],_name),
+                        'type' : _expr['type'],
+                  }
+                  return expr
             # <expr>.<name>
             if node[0] == '.2':
-                  return '%s.%s[%s]' % (self.walk(node[1]),node[2],self.walk(node[3]))
+                  # todo : name type and index type check
+                  _expr0 = self.walk(node[1])
+                  _expr1 = self.walk(node[3])
+                  _name = node[2]
+
+                  expr = {
+                        'expr' : '%s.%s[%s]' % (_expr0['expr'],_name,_expr1['expr']),
+                        'type' : _expr['type'],
+                  }
+                  return expr
             #--------------------------------------------
             if node[0] == 'string':
-                  return '"%s".dup' % node[1]
-            if node[0] == 'bool':
-                  return '%s' % node[1]
-            if node[0] == 'float':
-                  return '%s' % node[1]
+                  expr = {
+                        'expr' : '"%s".dup' % node[1],
+                        'type' : node[0],
+                  }
+                  return expr
+
+            if node[0] == 'bool' or node[0] == 'float' or node[0] == 'int':
+                  expr = {
+                        'expr' : '%s' % node[1],
+                        'type' : node[0],
+                  }
+                  return expr
+
             if node[0] == 'char':
-                  return '\'%s\'' % node[1]
-            if node[0] == 'number':
-                  return '%s' % node[1]
+                  expr = {
+                        'expr' : '\'%s\'' % node[1],
+                        'type' : node[0],
+                  }
+                  return expr
+
 class Var(object):
-      def __init__(self,name,type):
+      def __init__(self,name,type,is_array=False):
             self.name = name
             self.type = type
+            self.is_array = is_array
 
 class Const(Var):
       ...
@@ -822,4 +1343,45 @@ class Struct(object):
             self.members = members
 
 class Enum(Struct):
+      ...
+
+class Type(object):
+      def __init__(self,type_name,is_array,indexes=None):
+            self.type_name = type_name
+            self.is_array = is_array
+            self.indexes = indexes
+      def __str__(self):
+            if self.is_array == True and self.indexes != None :
+                  return "%s[%s]" % (self.type_name,self.indexes)
+            else :
+                  return "%s" % (self.type_name)
+
+class Int(Type):
+      ...
+
+class IntVector(Type):
+      ...
+
+class Float(Type):
+      ...
+
+class FloatVector(Type):
+      ...
+
+class String(Type):
+      ...
+
+class StringVector(Type):
+      ...
+
+class Bool(Type):
+      ...
+
+class BoolVector(Type):
+      ...
+
+class Char(Type):
+      ...
+
+class CharVector(Type):
       ...

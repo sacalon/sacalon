@@ -82,9 +82,9 @@ class HascalCompiler(object):
 
         # compile with dmd compiler
         try :
-            #check_call(['dmd', outname, '-O', '-mcpu=native'], stdout=DEVNULL, stderr=STDOUT)
+            check_call(['dmd', outname, '-O', '-mcpu=native'], stdout=DEVNULL, stderr=STDOUT)
             # uncomment it for development(and comment top line)
-            os.system('dmd '+ outname)
+            # os.system('dmd '+ outname)
         except :
             HascalException("unknown error in compile file")
 
