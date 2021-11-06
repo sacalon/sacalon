@@ -15,7 +15,14 @@ class Generator(object):
             self.src_includes = ""
             self.src_pre_main = ""
             #init standard types
-            self.types = ['int','float','bool','char','string','auto','File']
+            self.types = {
+                  'int' : Type('int',True),
+                  'float' : Type('float',True),
+                  'bool' : Type('bool',True),
+                  'char' : Type('char',True),
+                  'string' : Type('string',True),
+                  'File' : Type('File',True),
+            }
 
             self.vars = { } # global vars
             self.consts = { } # global consts
@@ -72,6 +79,7 @@ class Generator(object):
                   return result
             if node[0] == 'block_struct':
                   current_vars = self.vars
+                  self.vars = { }
                   result = [ ] # list of exprs and statements
                   for statement in node[1:]:
                         result.append(self.walk(statement))
@@ -85,7 +93,6 @@ class Generator(object):
                   _name = node[3]
                   _type = node[2]
                   _line = node[4]
-
                   if _name in self.vars or _name in self.consts :
                         HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                         sys.exit(1)
@@ -97,10 +104,13 @@ class Generator(object):
                         sys.exit(1)
                   else:
                         self.vars[_name] = Var(_name,_type)
-
+                        res = ""
+                        if not self.types[_type].stdtype : res = "%s %s = {} ;\n" % (_type,_name)
+                        else : res = "%s %s;\n" % (_type,_name)
                         expr = {
-                              'expr' : "%s %s ;\n" % (_type,_name),
+                              'expr' : res,
                               'type' : _type,
+                              'name' : _name,
                         }
                         return expr
 
@@ -128,6 +138,7 @@ class Generator(object):
                         expr = {
                               'expr' : "%s %s = %s;\n" % (_type,_name,_expr['expr']),
                               'type' : _type,
+                              'name' : _name,
                         }
                         return expr
                         
@@ -149,9 +160,13 @@ class Generator(object):
                         sys.exit(1)
                   else:
                         self.vars[_name] = Var(_name,_type,is_array=True)
+                        res = ""
+                        if self.types[_type].stdtype : res = "%s[] %s = {} ;\n" % (_type,_name)
+                        else : res = "%s[] %s;\n" % (_type,_name)
                         expr = {
-                              'expr' : "%s[] %s ;\n" % (_type,_name),
+                              'expr' : res,
                               'type' : _type,
+                              'name' : _name,
                         }
                         return expr
 
@@ -179,6 +194,7 @@ class Generator(object):
                         expr = {
                               'expr' : "%s[] %s = %s ;\n" % (_type,_name,_expr['expr']),
                               'type' : _type,
+                              'name' : _name,
                         }
                         return expr
                               
@@ -206,134 +222,7 @@ class Generator(object):
                         expr = {
                               'expr' : "const %s %s = %s ;\n" % (node[2],node[3],_expr['expr']),
                               'type' : _type,
-                        }
-                        return expr
-            #-------------------------------------
-            # in_statement declares :
-            
-            # in : var <name> : <return_type>
-            if node[0] == 'in_declare' and node[1] == "no_equal":
-                  _name = node[3]
-                  _type = node[2]
-                  _line = node[4]
-
-                  if _name in self.vars or _name in self.consts :
-                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
-                        sys.exit(1)
-                  elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
-                        sys.exit(1)
-                  elif not _type in self.types :
-                        HascalException(f"Type '{_type}' not defined:{_line}")
-                        sys.exit(1)
-                  else:
-                        self.vars[_name] = Var(_name,_type)
-                        expr = {
-                              'expr' : "%s %s ;\n" % (_type,_name),
-                              'type' : _type,
-                        }
-                        return  expr
-
-            # in : var <name> : <return_type> = <expr>
-            if node[0] == 'in_declare' and node[1] == "equal2":
-                  _name = node[3]
-                  _type = node[2]
-                  _expr = self.walk(node[4])
-                  _line = node[5]
-
-                  if _name in self.vars or _name in self.consts :
-                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
-                        sys.exit(1)
-                  elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
-                        sys.exit(1)
-                  elif _type != _expr['type'] :
-                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
-                        sys.exit(1)
-                  elif not _type in self.types :
-                        HascalException(f"Type '{_type}' not defined:{_line}")
-                        sys.exit(1)
-                  else:
-                        self.vars[_name] = Var(_name,_type)
-                        expr = {
-                              'expr' : "%s %s = %s;\n" % (_type,node[3],_expr['expr']),
-                              'type' : _type,
-                        }
-                        return  expr
-            
-            # in : var <name> : [<return_type>]
-            if node[0] == 'in_declare_array' and node[1] == "no_equal":
-                  _name = node[3]
-                  _type = node[2]
-                  _line = node[5]
-
-                  if _name in self.vars or _name in self.consts :
-                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
-                        sys.exit(1)
-                  elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
-                        sys.exit(1)
-                  elif not _type in self.types :
-                        HascalException(f"Type '{_type}' not defined:{_line}")
-                        sys.exit(1)
-                  else:
-                        self.vars[_name] = Var(_name,_type,is_array=True)
-                        expr = {
-                              'expr' : "%s[] %s ;\n" % (_type,_name),
-                              'type' : _type,
-                        }
-                        return  expr
-
-            # in : var <name> : [<return_type>] = <expr>
-            if node[0] == 'in_declare_array' and node[1] == "equal2":
-                  _name = node[3]
-                  _type = node[2]
-                  _expr = self.walk(node[4])
-                  _line = node[5]
-                  if _name in self.vars or _name in self.consts :
-                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
-                        sys.exit(1)
-                  elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
-                        sys.exit(1)
-                  elif _type != _expr['type'] :
-                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
-                        sys.exit(1)
-                  elif not _type in self.types :
-                        HascalException(f"Type '{_type}' not defined:{_line}")
-                        sys.exit(1)
-                  else:
-                        self.vars[_name] = Var(_name,_type,is_array=True)
-                        expr = {
-                              'expr' : "%s[] %s = %s ;\n" % (_type,_name,_expr['expr']),
-                              'type' : _type,
-                        }
-                        return  expr 
-                              
-            # in : const <name> : <return_type> = <expr> ;
-            if node[0] == 'in_declare' and node[1] == "const":
-                  _name = node[3]
-                  _type = node[2]
-                  _expr = self.walk(node[4])
-                  _line = node[5]
-
-                  if _name in self.vars or _name in self.consts :
-                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
-                        sys.exit(1)
-                  elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a constant:{_line}")
-                        sys.exit(1)
-                  elif _type != _expr['type'] :
-                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
-                        sys.exit(1)
-                  elif not _type in self.types :
-                        HascalException(f"Type '{_type}' not defined:{_line}")
-                        sys.exit(1)
-                  else:
-                        self.vars.append(node[3])
-                        expr = {
-                              'expr' : "const %s %s = %s ;\n" % (node[2],node[3],self.walk(node[4])),
-                              'type' : _type,
+                              'name' : _name,
                         }
                         return expr
             #-------------------------------------
@@ -729,15 +618,20 @@ class Generator(object):
                   self.funcs[_name] = Function(_name,_params,_return_type)
             #-------------------------------------
             # struct <name> {
-            #     <struct_declare>
+            #     <struct_declares>
             # }
             if node[0] == 'struct':
                   _name = node[1]
                   _body = self.walk(node[2])
                   _members = { } # todo
+                  # generate output code and member
+                  res = ""
+                  for e in _body :
+                        res += e['expr']
+                        _members[e['name']] = self.types[e['type']]
                   self.types[_name] = Struct(_name,_members)
                   expr = {
-                        'expr' : 'struct %s{\n%s\n}\n' % (name,body),
+                        'expr' : 'struct %s{\n%s\n}\n' % (_name,res),
                         'type' : _name,
                   } 
                   return expr
@@ -1354,47 +1248,14 @@ class Struct(object):
       def __init__(self,name,members):
             self.name = name
             self.members = members
+            self.stdtype = False
 
 class Enum(Struct):
       ...
 
 class Type(object):
-      def __init__(self,type_name,is_array,indexes=None):
+      def __init__(self,type_name,stdtype):
             self.type_name = type_name
-            self.is_array = is_array
-            self.indexes = indexes
+            self.stdtype = stdtype
       def __str__(self):
-            if self.is_array == True and self.indexes != None :
-                  return "%s[%s]" % (self.type_name,self.indexes)
-            else :
-                  return "%s" % (self.type_name)
-
-class Int(Type):
-      ...
-
-class IntVector(Type):
-      ...
-
-class Float(Type):
-      ...
-
-class FloatVector(Type):
-      ...
-
-class String(Type):
-      ...
-
-class StringVector(Type):
-      ...
-
-class Bool(Type):
-      ...
-
-class BoolVector(Type):
-      ...
-
-class Char(Type):
-      ...
-
-class CharVector(Type):
-      ...
+            return "%s" % (self.type_name)

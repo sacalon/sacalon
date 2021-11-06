@@ -38,25 +38,10 @@ class Parser(Parser):
       @_('struct_declare block_struct')
       def block_struct(self, p):
             return ('block_struct', p.struct_declare, *p.block_struct[1:])
-
-      @_('CONST NAME ASSIGN expr')
-      def struct_declare(self, p):
-            return ('declare','const', p.NAME, p.expr)
             
-      @_('VAR NAME COLON return_type')
+      @_('var_declare')
       def struct_declare(self, p):
-            return ('declare','no_equal',p.return_type, p.NAME) 
-      @_('VAR NAME COLON return_type ASSIGN expr')
-      def struct_declare(self, p):
-            return ('declare','equal2',p.return_type, p.NAME,p.expr) 
-            
-      @_('VAR NAME COLON LBRCK return_type RBRCK')
-      def struct_declare(self, p):
-            return ('declare_array','no_equal',p.return_type, p.NAME) 
-            
-      @_('VAR NAME COLON LBRCK return_type RBRCK ASSIGN expr')
-      def struct_declare(self, p):
-            return ('declare_array','equal2',p.return_type, p.NAME,p.expr)
+            return p.var_declare
       #-----------------------------------
       # use <name>
       @_('USE name')
@@ -122,44 +107,9 @@ class Parser(Parser):
             return ('declare','const',p.return_type, p.NAME, p.expr,p.lineno)
 
       # in_statement : 
-      @_('in_var_declare')
+      @_('var_declare')
       def in_statement(self, p):
-            return p.in_var_declare
-
-      # in : var <name> : <return_type>
-      @_('VAR NAME COLON return_type')
-      def in_var_declare(self, p):
-            return ('in_declare','no_equal',p.return_type, p.NAME,p.lineno) 
-
-      # in : var <name> : [<return_type>]
-      @_('VAR NAME COLON LBRCK return_type RBRCK')
-      def in_var_declare(self, p):
-            return ('in_declare_array','no_equal',p.return_type, p.NAME,p.lineno) 
-
-      # in : var <name> = <expr>
-      #@_('VAR NAME ASSIGN expr')
-      #def in_var_declare(self, p):
-      #      return ('in_declare','equal1','auto', p.NAME, p.expr,p.lineno)
-
-      # in : var <name> : <return_type> = <expr>
-      @_('VAR NAME COLON return_type ASSIGN expr')
-      def in_var_declare(self, p):
-            return ('in_declare','equal2',p.return_type, p.NAME,p.expr,p.lineno) 
-            
-      # in : var <name> : [<return_type>] = <expr>
-      @_('VAR NAME COLON LBRCK return_type RBRCK ASSIGN expr')
-      def in_var_declare(self, p):
-            return ('in_declare_array','equal2',p.return_type, p.NAME,p.expr,p.lineno) 
-
-      # in : const <name> = <expr>
-      #@_('CONST NAME ASSIGN expr')
-      #def in_var_declare(self, p):
-      #      return ('in_declare','const', p.NAME, p.expr,p.lineno)
-      
-      # in : const <name> : <return_type> = <expr>
-      @_('CONST NAME COLON return_type ASSIGN expr')
-      def in_var_declare(self, p):
-            return ('in_declare','const',p.return_type, p.NAME, p.expr,p.lineno)
+            return p.var_declare
       #-----------------------------------
       # <name> = <expr>
       @_('name ASSIGN expr')
@@ -417,7 +367,7 @@ class Parser(Parser):
             return ([p.name_t[0]],p.name_t[1])
       @_('name DOT name_t')
       def name(self, p):
-            return (p.name + [p.name_t[0]],p.name_t[1])
+            return (p.name[0] + [p.name_t[0]],p.name_t[1])
     
       @_('NAME')
       def name_t(self, p):
