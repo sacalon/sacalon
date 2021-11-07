@@ -4,6 +4,9 @@ var h : bool = true
 var z : [int] = [1,2]
 const pi : float = 3.14
 
+struct MyStruct {
+	var y : int
+}
 function main(argv:[string]) : int {
 	# test function
 	print("Hello World!")
@@ -35,7 +38,9 @@ function main(argv:[string]) : int {
 		print(x)
 		x = x + 1
 	}
-	
+	var a : MyStruct
+	a.y = 1
+	print(a)
 	
 	z[1] = 3
 	return 0
