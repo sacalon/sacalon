@@ -25,6 +25,12 @@ function add(x:int,y:int) : int {
     return x + y
 }
 
+# define a struct
+struct Student {
+    var name : string
+    var age : int
+}
+
 # main function
 function main(argv:[string]) : int {
     # print values
