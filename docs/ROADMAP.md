@@ -1,4 +1,4 @@
-# Hascal's Roadmap for v1.3.
+# Hascal's Roadmap for v1.3.x
 
 ## Base
 - C++ in back-end
