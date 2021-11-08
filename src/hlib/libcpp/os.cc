@@ -15,4 +15,4 @@ string os_name()
     #else
     return "unknown";
     #endif
-}    
+}
