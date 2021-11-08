@@ -39,29 +39,21 @@ var mythread = thread(@(1000,true){
 
 - dictionaries :
 ```
-var names_age = dict(string,{
+var names_age = dict(string,int,{
    "john" : 25,
    "nickolas" : 38
 })
 
 # or :
-var foo : dict = (string,{
+var foo = {
    "X" : 1,
    "Y" : 2
-})
-```
-
-- optional function's argument
-```
-function foo(x:int,y:int,z:int=1){
-    print(x*y*z)
 }
-foo(1,2)
 ```
 
 - immutable variables
 ```
-var imut x : int = 1
+let x : int = 1
 ```
 
 - builtin string formation method
