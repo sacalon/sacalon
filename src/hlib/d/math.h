@@ -1,1 +1,1 @@
-import std.math : sin,cos,tan,PI,fmax,fmin,abs;
+import std.math : sin,cos,tan,PI,max,min,fmax,fmin,abs;

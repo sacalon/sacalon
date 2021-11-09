@@ -1,8 +1,24 @@
+# The Hascal Standard Library
+# Math Library
+#
+# The Hascal Programming Language
+# Copyright 2019-2022 Hascal Development Team,
+# all rights reserved.
+
 use d.math
 
 function sin(x:float): float
 function cos(x:float): float
 function tan(x:float): float
+function fmax(a:float,b:float): float 
 function max(a:float,b:float): float
+function fmin(a:float,b:float): float 
 function min(a:float,b:float): float
 function abs(a:float): float
+
+# function sqrt(a:float): float
+# function round(a:float): int
+# function log(a:float): float
+# function exp(a:float): float
+# function floor(a:float): float
+# function pow(a:float,b:float): float

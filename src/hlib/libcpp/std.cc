@@ -1,5 +1,9 @@
 typedef string string;
 
+void error(string err_msg){
+	std::cerr << err_msg << std::endl ;
+}
+
 int to_int(string s){
 	return std::stoi(s);
 }
@@ -133,3 +137,33 @@ float ReadFloat(string p){
 	return res;
 }
 
+std::vector<std::string> split(std::string str,std::string sep){
+    char* cstr=const_cast<char*>(str.c_str());
+    char* current;
+    std::vector<std::string> arr;
+    current=strtok(cstr,sep.c_str());
+    while(current!=NULL){
+        arr.push_back(current);
+        current=strtok(NULL,sep.c_str());
+    }
+    return arr;
+}
+
+
+// format function -> e.g : format("Hi, {}",name)
+template <typename T, typename ... ARGS>
+string format(T text,ARGS... args){
+	string res;
+
+	std::vector<string> fmt_list = { args... };
+  	std::vector<string> points = split(text,"{}");
+
+  	int fmt_size = fmt_list.size();
+  	int points_size = points.size();
+
+  	for(int i,j=0;i<=points_size-1 && j<=fmt_size;j++,i++){
+		res += points[i] + fmt_list[j];
+  	} 
+	return res;
+}
+// exit()
