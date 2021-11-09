@@ -39,7 +39,7 @@ function main(argv:[string]) : int {
     # if statement
     if x == 1 {
         print(1)
-    }else if x == 1 {
+    }else if x == 2{
         print(2)
     }else {
         print(3)
@@ -58,6 +58,13 @@ function main(argv:[string]) : int {
 
     # call a function
     my_func("arg 1",1)
+
+    # access to struct members
+    var john : Student
+    john.name = "John"
+    john.age = 23
+    
+
     return 0
 }
 
