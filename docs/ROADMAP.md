@@ -2,7 +2,7 @@
 
 ## Base
 - C++ in back-end
-- garbage collection and rust-like memory management
+- garbage collection and Rust-like memory management
 
 ## Language
 - multi library import :
