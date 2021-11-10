@@ -22,7 +22,7 @@
 - [x] C++ On Back-End
 - [x] Native binaries with no dependency
 <!-- - [x] Garbage Collection and Manual Memory Allocation -->
-- [x] Compatible with D\C\C++\Objective C
+- [x] Compatible with C\C++
 
 ## Examples
 Hello World :
