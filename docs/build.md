@@ -4,7 +4,7 @@ Prequistes :
 
 - python v3.8 or higher
 - pyinstaller 
-- a build of [dmd](https://dlang.org/) compiler
+- GCC/G++ on your `$PATH`
 
 <hr>
 
