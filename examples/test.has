@@ -40,7 +40,7 @@ function main(argv:[string]) : int {
 	}
 	var a : MyStruct
 	a.y = 1
-	print(a)
+	print(a.y)
 	
 	z[1] = 3
 	return 0

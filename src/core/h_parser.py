@@ -473,20 +473,20 @@ class Parser(Parser):
             
       @_('LBRCK INTVAR RBRCK')
       def return_type2(self, p):
-            return 'int[]'
+            return 'std::vector<int>'
       @_('LBRCK STRINGVAR RBRCK')
       def return_type2(self, p):
-            return 'string[]'
+            return 'std::vector<string>'
       @_('LBRCK CHARVAR RBRCK')
       def return_type2(self, p):
-            return 'char[]'
+            return 'std::vector<char>'
       @_('LBRCK BOOLVAR RBRCK')
       def return_type2(self, p):
-            return 'bool[]'
+            return 'std::vector<bool>'
       @_('LBRCK FLOATVAR RBRCK')
       def return_type2(self, p):
-            return 'float[]'
+            return 'std::vector<float>'
       @_('LBRCK NAME RBRCK')
       def return_type2(self, p):
-            return "{0}[]".format(p.NAME)
+            return "std::vector<{0}>".format(p.NAME)
       #------------------------------------------

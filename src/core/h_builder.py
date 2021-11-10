@@ -48,10 +48,11 @@ class HascalCompiler(object):
                     # show file extension error 
                     HascalException(f"The specified file is not a hascal(.has) file")
                 else :
-                    try:
-                        with open(argv[1]) as fin:
+                    with open(argv[1]) as fin:
                             self.code = fin.read()
-                        self.compile()
+                    self.compile()
+                    try:
+                        ...
                     except FileNotFoundError :
                         HascalException(f"File '{argv[1]}' not found")
         else:
@@ -67,7 +68,7 @@ class HascalCompiler(object):
                 print(msg)
             sys.exit()
 
-    # hascal to d compiler function
+    # hascal to c++ compiler function
     def compile(self):
         tokens = self.lexer.tokenize(self.code)
         tree = self.parser.parse(tokens)
@@ -76,20 +77,26 @@ class HascalCompiler(object):
         tmp0 = self.argv[1]
         outname = self.argv[2] if len(self.argv) > 2 else tmp0[:-4]
 
-        # write output js code in a file
-        with open(outname+".d", 'w') as fout:
+        # write output c++ code in a file
+        with open(outname+".cc", 'w') as fout:
             fout.write(output)
 
-        # compile with dmd compiler
+        # check if gcc installed
         try :
-            check_call(['dmd', outname, '-O', '-mcpu=native'], stdout=DEVNULL, stderr=STDOUT)
+            check_call(['g++','--version'], stdout=DEVNULL, stderr=STDOUT)
+        except :
+            HascalException("GCC/G++ is not installed")
+            sys.exit(1)
+
+        # compile with g++ compiler
+        try :
+            check_call(['g++', outname+".cc",'-o',outname,'-O3'], stdout=DEVNULL, stderr=STDOUT)
             # uncomment it for development(and comment top line)
-            # os.system('dmd '+ outname)
+            # os.system('g++ '+ outname+".cc")
         except :
             HascalException("unknown error in compile file")
 
         try :
-            os.remove(outname+".d")
-            os.remove(outname+".obj")
+            os.remove(outname+".cc")
         except :
             ...

@@ -44,8 +44,8 @@ class Generator(object):
             if use :
                   return f"\n{self.src_pre_main}\n"
             else :
-                  runtime = open(self.BASE_DIR+"/hlib/d/std.d").read()
-                  runtime_h = open(self.BASE_DIR+"/hlib/d/std.h").read()
+                  runtime = open(self.BASE_DIR+"/hlib/libcpp/std.cc").read()
+                  runtime_h = open(self.BASE_DIR+"/hlib/libcpp/std.hpp").read()
                   return f"{runtime_h}\n{runtime}\n{self.src_includes}\n{self.src_pre_main}\n{result}\n"
       
       def exists(self,name):
@@ -59,9 +59,9 @@ class Generator(object):
                   return True
             return False
 
-      def add_to_output(self,d_code,dh_code):
-            self.src_includes += '\n' + dh_code + '\n'
-            self.src_pre_main += '\n' + d_code + '\n'
+      def add_to_output(self,cpp_code,hpp_code):
+            self.src_includes += '\n' + hpp_code + '\n'
+            self.src_pre_main += '\n' + cpp_code + '\n'
 
       def walk(self, node):
             # {
@@ -142,7 +142,6 @@ class Generator(object):
                         }
                         return expr
                         
-            
             # var <name> : [<return_type>]
             if node[0] == 'declare_array' and node[1] == "no_equal":
                   _name = node[3]
@@ -160,11 +159,8 @@ class Generator(object):
                         sys.exit(1)
                   else:
                         self.vars[_name] = Var(_name,_type,is_array=True)
-                        res = ""
-                        if self.types[_type].stdtype : res = "%s[] %s = {} ;\n" % (_type,_name)
-                        else : res = "%s[] %s;\n" % (_type,_name)
                         expr = {
-                              'expr' : res,
+                              'expr' : "std::vecotr<%s> %s;\n" % (_type,_name),
                               'type' : _type,
                               'name' : _name,
                         }
@@ -192,7 +188,7 @@ class Generator(object):
                   else:
                         self.vars[_name] = Var(_name,_type,is_array=True)
                         expr = {
-                              'expr' : "%s[] %s = %s ;\n" % (_type,_name,_expr['expr']),
+                              'expr' : "std::vector<%s> %s = %s ;\n" % (_type,_name,_expr['expr']),
                               'type' : _type,
                               'name' : _name,
                         }
@@ -353,22 +349,22 @@ class Generator(object):
                               ...
                         else :
                               name = '.'.join(name for name in node[1])
-                              if name.startswith("d.") :
+                              if name.startswith("libcpp.") :
                                     path = node[1]
                                     final_path = str(self.BASE_DIR+"\\hlib\\")
 
                                     ends_of_path = path[-1]
                                     for x in path[:-1]:
                                           final_path += x + "\\"
-                                    final_path_h = final_path + ends_of_path + ".h"
-                                    final_path += ends_of_path + ".d"
+                                    final_path_h = final_path + ends_of_path + ".hpp"
+                                    final_path += ends_of_path + ".cc"
                                     try:
                                           with open(final_path, 'r') as fd:
-                                                d_code = fd.read()
+                                                cpp_code = fd.read()
                                                 with open(final_path_h,'r') as fh :
-                                                      dh_code = fh.read()
+                                                      hpp_code = fh.read()
                                                       self.imported.append(name)
-                                                      self.add_to_output(d_code,dh_code)
+                                                      self.add_to_output(cpp_code,hpp_code)
                                     except FileNotFoundError:
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                                           sys.exit(1)
@@ -386,11 +382,11 @@ class Generator(object):
                                                 parser = Parser()
                                                 tree = parser.parse(Lexer().tokenize(f.read()))
                                                 generator = Generator()
-                                                output_d = generator.generate(tree,True)
+                                                output_cpp = generator.generate(tree,True)
 
                                                 self.imported.append(name)
                                                 self.imported += generator.imported
-                                                self.add_to_output(output_d,generator.src_includes)
+                                                self.add_to_output(output_cpp,generator.src_includes)
                                                 self.funcs += generator.funcs
                                                 self.types += generator.types
                                     except FileNotFoundError:
@@ -402,22 +398,22 @@ class Generator(object):
                               ...
                         else :
                               name = '.'.join(name for name in node[1])
-                              if name.startswith("d.") :
+                              if name.startswith("libcpp.") :
                                     path = node[1]
                                     final_path = str(self.BASE_DIR+"/hlib/")
 
                                     ends_of_path = path[-1]
                                     for x in path[:-1]:
                                           final_path += x + "/"
-                                    final_path_h = final_path + ends_of_path + ".h"
-                                    final_path += ends_of_path + ".d"
+                                    final_path_h = final_path + ends_of_path + ".hpp"
+                                    final_path += ends_of_path + ".cc"
                                     try:
                                           with open(final_path, 'r') as fd:
-                                                d_code = fd.read()
+                                                cpp_code = fd.read()
                                                 with open(final_path_h,'r') as fh :
-                                                      dh_code = fh.read()
+                                                      hpp_code = fh.read()
                                                       self.imported.append(name)
-                                                      self.add_to_output(d_code,dh_code)
+                                                      self.add_to_output(cpp_code,hpp_code)
                                     except FileNotFoundError:
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                                           sys.exit(1)
@@ -435,11 +431,11 @@ class Generator(object):
                                                 parser = Parser()
                                                 tree = parser.parse(Lexer().tokenize(f.read()))
                                                 generator = Generator()
-                                                output_d = generator.generate(tree,True)
+                                                output_cpp = generator.generate(tree,True)
 
                                                 self.imported.append(name)
                                                 self.imported += generator.imported
-                                                self.add_to_output(output_d,generator.src_includes)
+                                                self.add_to_output(output_cpp,generator.src_includes)
                                                 self.funcs += generator.funcs
                                                 self.types += generator.types
                                     except FileNotFoundError:
@@ -453,23 +449,23 @@ class Generator(object):
                               ...
                         else :
                               name = '.'.join(name for name in node[1])
-                              if name.startswith("d."):
+                              if name.startswith("cpp."):
                                     path = name.split('.')
                                     final_path = ""
 
                                     ends_of_path = path[-1]
                                     for x in path[:-1]:
                                           final_path += x + "\\"
-                                    final_path_h = final_path + ends_of_path + ".h"
-                                    final_path += ends_of_path + ".d"
+                                    final_path_h = final_path + ends_of_path + ".hpp"
+                                    final_path += ends_of_path + ".cc"
 
                                     try:
                                           with open(final_path, 'r') as fd:
-                                                d_code = fd.read()
+                                                cpp_code = fd.read()
                                                 with open(final_path_h,'r') as fh :
-                                                      dh_code = fh.read()
+                                                      hpp_code = fh.read()
                                                       self.imported.append(name)
-                                                      self.add_to_output(d_code,dh_code)
+                                                      self.add_to_output(cpp_code,hpp_code)
                                     except FileNotFoundError:
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
 
@@ -488,34 +484,34 @@ class Generator(object):
                                                 parser = Parser()
                                                 tree = parser.parse(Lexer().tokenize(f.read()))
                                                 generator = Generator()
-                                                output_d = generator.generate(tree,True)
+                                                output_cpp = generator.generate(tree,True)
 
                                                 self.imported.append(name)
                                                 self.imported += generator.imported
-                                                self.add_to_output(output_d, generator.src_includes)
+                                                self.add_to_output(output_cpp, generator.src_includes)
                                                 self.funcs += generator.funcs
                                     except FileNotFoundError:
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                               
                   elif sys.platform.startswith('linux'):
                         name = '.'.join(name for name in node[1])
-                        if name.startswith("d."):
+                        if name.startswith("cpp."):
                               path = name.split('.')
                               final_path = ""
 
                               ends_of_path = path[-1]
                               for x in path[:-1]:
                                     final_path += x + "/"
-                              final_path_h = final_path + ends_of_path + ".h"
-                              final_path += ends_of_path + ".d"
+                              final_path_h = final_path + ends_of_path + ".hpp"
+                              final_path += ends_of_path + ".cc"
 
                               try:
                                     with open(final_path, 'r') as fd:
-                                          d_code = fd.read()
+                                          cpp_code = fd.read()
                                           with open(final_path_h,'r') as fh :
-                                                dh_code = fh.read()
+                                                hpp_code = fh.read()
                                                 self.imported.append(name)
-                                                self.add_to_output(d_code,dh_code)
+                                                self.add_to_output(cpp_code,hpp_code)
                               except FileNotFoundError:
                                     HascalException(f"cannot found '{name}' library. Are you missing a library ?")
 
@@ -534,11 +530,11 @@ class Generator(object):
                                           parser = Parser()
                                           tree = parser.parse(Lexer().tokenize(f.read()))
                                           generator = Generator()
-                                          output_d = generator.generate(tree,True)
+                                          output_cpp = generator.generate(tree,True)
 
                                           self.imported.append(name)
                                           self.imported += generator.imported
-                                          self.add_to_output(output_d, generator.src_includes)
+                                          self.add_to_output(output_cpp, generator.src_includes)
                                           self.funcs += generator.funcs
                               except FileNotFoundError:
                                     HascalException(f"cannot found '{name}' library. Are you missing a library ?")
@@ -589,10 +585,20 @@ class Generator(object):
                   _type = node[1]
                   _compiled_params = node[3]
                   _expr = self.walk(node[4])
-                  res = ""
+                  _res = ""
                   for e in _expr :
-                        res += e['expr']
-                  res =  "%s %s(%s) {\n%s\n}\n" % (_type,_name,_compiled_params,res) 
+                        _res += e['expr']
+                  res = "%s %s(%s) {\n%s\n}\n" % (_type,_name,_compiled_params,_res) 
+
+                  # program arguments 
+                  _params_keys = list(_params.keys())
+                  if not _compiled_params in ['',None] and (_name == "main" and _params[_params_keys[0]] == "std::vector<string>"):
+                        res = "%s %s(int argc,char** args) {\nstd::vector<std::string> argv;\nif (argc > 1) {argv.assign(args + 1, args + argc);}\nelse {argv = { args[0] };}\n%s\n}\n" % (_type,_name,_res) 
+                        expr = {
+                              'expr' : res,
+                              'type' : _type,
+                        }
+                        return expr
                   self.vars = current_vars
                   
                   expr = {
@@ -631,7 +637,7 @@ class Generator(object):
                         _members[e['name']] = self.types[e['type']]
                   self.types[_name] = Struct(_name,_members)
                   expr = {
-                        'expr' : 'struct %s{\n%s\n}\n' % (_name,res),
+                        'expr' : 'struct %s{\n%s\n};\n' % (_name,res),
                         'type' : _name,
                   } 
                   return expr
@@ -773,7 +779,7 @@ class Generator(object):
                   if self.exists(_name):
                         if _name == "print":
                               expr = {
-                                    'expr' : 'writeln(%s)' % (', '.join(self.walk(arg)['expr'] for arg in node[2])),
+                                    'expr' : 'std::cout << %s' % ('<< '.join(self.walk(arg)['expr'] for arg in node[2])),
                                     'type' : self.funcs['print'].return_type,
                               }
                               return expr
@@ -1180,7 +1186,7 @@ class Generator(object):
             if node[0] == 'list':
                   _expr = self.walk(node[1])
                   expr = {
-                        'expr' : '[%s]' % (_expr['expr']),
+                        'expr' : '{%s}' % (_expr['expr']),
                         'type' : _expr['type'],
                   }
                   return expr
@@ -1210,7 +1216,7 @@ class Generator(object):
             #--------------------------------------------
             if node[0] == 'string':
                   expr = {
-                        'expr' : '"%s".dup' % node[1],
+                        'expr' : '"%s"' % node[1],
                         'type' : node[0],
                   }
                   return expr

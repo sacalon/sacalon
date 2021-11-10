@@ -1,4 +1,4 @@
-typedef string string;
+typedef std::string string;
 
 void error(string err_msg){
 	std::cerr << err_msg << std::endl ;
