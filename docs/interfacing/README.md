@@ -1,21 +1,21 @@
-# Interfacing to D\C\C++\Obj-C
-You can use d, c, c++ and objective c in hascal.
-For example, we want to write a function for print abs of a value in d and use it in hascal, first create a folder with `d` name and create `absprint.d` and `absprint.h` in created folder.
+# Interfacing to C\C++
+You can use C and C++ in Hascal.
+For example, we want to write a function for print abs of a value in c++ and use it in hascal, first create a folder with `libcpp` name and create `absprint.cc` and `absprint.hpp` in created folder.
 
-`absprint.d` :
-```d
-int absprint(int a){
-   return writeln(abs(a));
+`absprint.cc` :
+```c++
+void absprint(int a){
+   std::cout << abs(a);
 }
 ```
-For use `abs()` function we should import it from d stdlib, for this purpose import it in `absprint.h` :
-`absprint.h`
-```h
-import math : abs ;
+For use `abs()` function we should import it from c++ stdlib, for this purpose import it in `absprint.hpp` :
+`absprint.hpp`
+```c++
+#include <cmath>
 ```
 Now can import this code in hascal, write this code in root folder of your project:
 ```typescript
-local use d.absprint
+local use libcpp.absprint
 function absprint(a:int) : int
 
 function main() : int {
@@ -25,7 +25,7 @@ function main() : int {
 You can write inline function,structs,... defines, in an external hascal file and import it in main file :
 `absprint.has` :
 ```typescript
-local use d.absprint
+local use libcpp.absprint
 
 function absprint(a:int) : int
 ```
@@ -37,25 +37,3 @@ function main() : int {
    absprint(-68) # output : 68
 }
 ```
-
-## Use other languages in hascal
-You can extern c\c++\obj-c in d and use it in hascal.
-
-`foo.d` :
-```d
-extern(C) {
-   // put your c code here
-}
-
-extern(C++) {
-   // put your c code here
-}
-
-extern (Objective-C)
-{
-    // put your objective c code here
-}
-
-```
-
-For other information see dlang documentation, [here](https://dlang.org/spec/spec.html)
