@@ -19,7 +19,7 @@
 - [x] Fast & Powerful
 - [x] Easy to learn
 - [x] C-Family syntax, inspired by Swift, TypeScript
-- [x] Compiles to binary with [dmd](https://github.com/dlang/dmd)
+- [x] C++ On Back-End
 - [x] Native binaries with no dependency
 - [x] Garbage Collection and Manual Memory Allocation
 - [x] Compatible with D\C\C++\Objective C
