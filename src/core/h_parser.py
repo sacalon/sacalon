@@ -86,11 +86,6 @@ class Parser(Parser):
       def var_declare(self, p):
             return ('declare_array','no_equal',p.return_type, p.NAME,p.lineno) 
 
-      # var <name> = <expr>
-      #@_('VAR NAME ASSIGN expr')
-      #def var_declare(self, p):
-      #      return ('declare','equal1','auto', p.NAME, p.expr,p.lineno)
-
       # var <name> : <return_type> = <expr>
       @_('VAR NAME COLON return_type ASSIGN expr')
       def var_declare(self, p):
@@ -102,9 +97,9 @@ class Parser(Parser):
             return ('declare_array','equal2',p.return_type, p.NAME,p.expr,p.lineno) 
 
       # const <name> = <expr>
-      #@_('CONST NAME ASSIGN expr')
-      #def var_declare(self, p):
-      #      return ('declare','const', p.NAME, p.expr,p.lineno)
+      @_('CONST NAME ASSIGN expr')
+      def var_declare(self, p):
+           return ('declare','const_no_type', p.NAME, p.expr,p.lineno)
       
       # const <name> : <return_type> = <expr>
       @_('CONST NAME COLON return_type ASSIGN expr')

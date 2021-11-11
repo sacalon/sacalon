@@ -254,9 +254,31 @@ class Generator(object):
                         HascalException(f"Type '{_type}' not defined:{_line}")
                         sys.exit(1)
                   else:
-                        self.consts[_name] = Const(_name,_type,is_array=True)
+                        self.consts[_name] = Const(_name,_type)
                         expr = {
-                              'expr' : "const %s %s = %s ;\n" % (node[2],node[3],_expr['expr']),
+                              'expr' : "const %s %s = %s ;\n" % (_type,_name,_expr['expr']),
+                              'type' : _type,
+                              'name' : _name,
+                        }
+                        return expr
+
+            # const <name> = <expr> ;
+            if node[0] == 'declare' and node[1] == "const":
+                  _name = node[2]
+                  _expr = self.walk(node[3])
+                  _type = _expr['type']
+                  _line = node[4]
+
+                  if _name in self.vars or _name in self.consts :
+                        HascalException(f"'{_name}' exists, cannot redefine it:{_line}")
+                        sys.exit(1)
+                  elif _name in self.types :
+                        HascalException(f"'{_name}' defined as a type, cannot redefine it as a constant:{_line}")
+                        sys.exit(1)
+                  else:
+                        self.consts[_name] = Const(_name,_type)
+                        expr = {
+                              'expr' : "const auto %s = %s ;\n" % (_name,_expr['expr']),
                               'type' : _type,
                               'name' : _name,
                         }
