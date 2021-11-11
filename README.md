@@ -21,8 +21,8 @@
 - [x] C-Family syntax, inspired by Swift, TypeScript
 - [x] C++ On Back-End
 - [x] Native binaries with no dependency
-<!-- - [x] Garbage Collection and Manual Memory Allocation -->
 - [x] Compatible with C\C++
+<!-- - [x] Garbage Collection and Manual Memory Allocation -->
 
 ## Examples
 Hello World :
