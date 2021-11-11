@@ -16,7 +16,7 @@ class Lexer(Lexer):
                 INTVAR, STRINGVAR, CHARVAR,BOOLVAR,FLOATVAR,
                 NUMBER, STRING,CHAR,
                 GREATER, LESS, EQEQ, NOTEQ, GREATEREQ, LESSEQ,NOT,AND,OR,
-                PLUS, TIMES, MINUS, DIVIDE,ALPHA,POW,
+                PLUS, TIMES, MINUS, DIVIDE,POW,
                 DOT,
                 ASSIGN,
                 COMMA, COLON,
@@ -37,7 +37,6 @@ class Lexer(Lexer):
         NUMBER = r'\d+'
 
         PLUS   = r'\+'
-        ALPHA = r'~'
         EQEQ   = r'=='
         MINUS  = r'-'
         TIMES  = r'\*'

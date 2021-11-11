@@ -21,7 +21,7 @@ class Generator(object):
                   'bool' : Type('bool',True),
                   'char' : Type('char',True),
                   'string' : Type('string',True),
-                  'File' : Type('File',True),
+                  'void' : Type('void',True),
             }
 
             self.vars = { } # global vars
@@ -103,7 +103,9 @@ class Generator(object):
                         HascalException(f"Type '{_type}' not defined:{_line}")
                         sys.exit(1)
                   else:
-                        self.vars[_name] = Var(_name,_type)
+                        members = {}
+                        if isinstance(self.types[_type],Struct) : members = self.types[_type].members
+                        self.vars[_name] = Var(_name,_type,members=members)
                         res = ""
                         if not self.types[_type].stdtype : res = "%s %s = {} ;\n" % (_type,_name)
                         else : res = "%s %s;\n" % (_type,_name)
@@ -134,7 +136,9 @@ class Generator(object):
                         HascalException(f"Type '{_type}' not defined:{_line}")
                         sys.exit(1)
                   else:
-                        self.vars[_name] = Var(_name,_type)
+                        members = {}
+                        if isinstance(self.types[_type],Struct) : members = self.types[_type].members
+                        self.vars[_name] = Var(_name,_type,members=members)
                         expr = {
                               'expr' : "%s %s = %s;\n" % (_type,_name,_expr['expr']),
                               'type' : _type,
@@ -158,7 +162,9 @@ class Generator(object):
                         HascalException(f"Type '{_type}' not defined:{_line}")
                         sys.exit(1)
                   else:
-                        self.vars[_name] = Var(_name,_type,is_array=True)
+                        members = {}
+                        if isinstance(self.types[_type],Struct) : members = self.types[_type].members
+                        self.vars[_name] = Var(_name,_type,is_array=True,members=members)
                         expr = {
                               'expr' : "std::vecotr<%s> %s;\n" % (_type,_name),
                               'type' : _type,
@@ -186,7 +192,9 @@ class Generator(object):
                         HascalException(f"Type '{_type}' not defined:{_line}")
                         sys.exit(1)
                   else:
-                        self.vars[_name] = Var(_name,_type,is_array=True)
+                        members = {}
+                        if isinstance(self.types[_type],Struct) : members = self.types[_type].members
+                        self.vars[_name] = Var(_name,_type,is_array=True,members=members)
                         expr = {
                               'expr' : "std::vector<%s> %s = %s ;\n" % (_type,_name,_expr['expr']),
                               'type' : _type,
@@ -248,7 +256,23 @@ class Generator(object):
                               }
                               return expr
                   else :
+                        # Known issue :
+                        # 
+                        # struct a {
+                        #     var y : int
+                        # }
+                        #
+                        # struct foo { 
+                        #     var x : int
+                        #     var s : a
+                        # }
+                        # var bar : foo
+                        # bar.s.y = 1 # error : Mismatched type 'a' and 'int'.
+                        #
                         _full_name = '.'.join(arg for arg in node[1])
+                        _first_name = node[1][0]
+                        _end_name = node[1][len(node[1])-1]
+
                         if _name in self.consts :
                               HascalException(f"'{_name}'is a constant, cannot change it")
                               sys.exit(1)
@@ -258,14 +282,13 @@ class Generator(object):
                         elif not _name in self.vars :
                               HascalException(f"Variable '{_name}' not defined")
                               sys.exit(1) 
-                        # this code have bug. because search name in struct members
-                        elif _full_name in self.vars and (self.vars[_name].type != _expr['type']):
-                              HascalException(f"Mismatched type {self.vars[_name].type} and {_expr['type']}:{_line}")
+                        elif str(self.vars[_name].members[_end_name]) != _expr['type']:
+                              HascalException(f"Mismatched type {str(self.vars[_name].members[_end_name])} and {_expr['type']}:{_line}")
                               sys.exit(1)
                         else :
                               expr = {
                                     'expr' : "%s = %s;\n" % (_full_name,_expr['expr']),
-                                    'type' : self.vars[_name].type,
+                                    'type' : str(self.vars[_name].members[_end_name])
                               }
                               return expr
 
@@ -296,7 +319,25 @@ class Generator(object):
                               }
                               return expr
                   else :
+                        # Known issue :
+                        # 
+                        # struct a {
+                        #     var y : int
+                        # }
+                        #
+                        # struct foo { 
+                        #     var x : int
+                        #     var s : a
+                        # }
+                        # var bar : foo
+                        # bar.s.y = 1 # error : Mismatched type 'a' and 'int'.
+                        #
                         _full_name = '.'.join(arg for arg in node[1])
+                        _first_name = node[1][0]
+                        _end_name = node[1][len(node[1]-1)]
+                        _final_type = None
+
+                        self.types(_first_name).members[_final_type]
                         if _name in self.consts :
                               HascalException(f"'{_name}'is a constant, cannot change it")
                               sys.exit(1)
@@ -307,13 +348,13 @@ class Generator(object):
                               HascalException(f"Variable '{_name}' not defined")
                               sys.exit(1) 
                         # this code have bug. because search name in struct members
-                        elif _full_name in self.vars and (self.vars[_name].type != _expr['type']):
-                              HascalException(f"Mismatched type {self.vars[_name].type} and {_expr['type']}:{_line}")
+                        elif str(self.vars[_name].members[_end_name]) != _expr['type']:
+                              HascalException(f"Mismatched type {str(self.vars[_name].members[_end_name])} and {_expr['type']}:{_line}")
                               sys.exit(1)
                         else :     
                               expr = {
                                     'expr' : "%s[%s] = %s;\n" % (_full_name,_expr_index['expr'],_expr['expr']),
-                                    'type' : self.vars[_name].type,
+                                    'type' : str(self.vars[_name].members[_end_name]),
                               }
                               return expr
             #-----------------------------------------
@@ -582,21 +623,20 @@ class Generator(object):
 
                   self.funcs[_name] = Function(_name,_params,_return_type)
                   _name = node[2]
-                  _type = node[1]
                   _compiled_params = node[3]
                   _expr = self.walk(node[4])
                   _res = ""
                   for e in _expr :
                         _res += e['expr']
-                  res = "%s %s(%s) {\n%s\n}\n" % (_type,_name,_compiled_params,_res) 
+                  res = "%s %s(%s) {\n%s\n}\n" % (_return_type,_name,_compiled_params,_res) 
 
                   # program arguments 
                   _params_keys = list(_params.keys())
                   if not _compiled_params in ['',None] and (_name == "main" and _params[_params_keys[0]] == "std::vector<string>"):
-                        res = "%s %s(int argc,char** args) {\nstd::vector<std::string> argv;\nif (argc > 1) {argv.assign(args + 1, args + argc);}\nelse {argv = { args[0] };}\n%s\n}\n" % (_type,_name,_res) 
+                        res = "%s %s(int argc,char** args) {\nstd::vector<std::string> argv;\nif (argc > 1) {argv.assign(args + 1, args + argc);}\nelse {argv = { args[0] };}\n%s\n}\n" % (_return_type,_name,_res) 
                         expr = {
                               'expr' : res,
-                              'type' : _type,
+                              'type' : _return_type,
                         }
                         return expr
                   self.vars = current_vars
@@ -629,7 +669,7 @@ class Generator(object):
             if node[0] == 'struct':
                   _name = node[1]
                   _body = self.walk(node[2])
-                  _members = { } # todo
+                  _members = { }
                   # generate output code and member
                   res = ""
                   for e in _body :
@@ -764,7 +804,7 @@ class Generator(object):
                   }
                   return expr
             #---------------------------------------
-            # <expr> ;                    
+            # <expr>                   
             if node[0] == 'expr':
                   _expr = self.walk(node[1])
                   expr = {
@@ -773,7 +813,7 @@ class Generator(object):
                   }
                   return expr
             #---------------------------------------
-            # <expr>(<params>);
+            # <expr>(<params>)
             if node[0] == 'call':
                   _name = node[1]
                   if self.exists(_name):
@@ -796,7 +836,7 @@ class Generator(object):
             if node[0] == 'add':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
-
+                  _line = node[3]
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                         sys.exit(1)
@@ -807,23 +847,10 @@ class Generator(object):
                         }
                         return expr
 
-            if node[0] == 'add_cont':
-                  _expr0 = self.walk(node[1])
-                  _expr1 = self.walk(node[2])
-
-                  if _expr0['type'] != _expr1['type'] :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        sys.exit(1)
-                  else :
-                        expr = {
-                              'expr' : '%s ~ %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : _expr0['type'] # or : _expr1['type']
-                        }
-                        return expr
-
             if node[0] == 'sub':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
+                  _line = node[3]
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
@@ -838,6 +865,7 @@ class Generator(object):
             if node[0] == 'mul':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
+                  _line = node[3]
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
@@ -852,6 +880,7 @@ class Generator(object):
             if node[0] == 'div':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
+                  _line = node[3]
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
@@ -866,6 +895,7 @@ class Generator(object):
             if node[0] == 'pow':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
+                  _line = node[3]
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
@@ -1084,18 +1114,20 @@ class Generator(object):
                               sys.exit(1)
                         
                   else :
+                        _first_name = node[1][0]
+                        _end_name = node[1][len(node[1])-1]
                         _full_name = '.'.join(arg for arg in node[1])
                         # todo : should return member's type not struct
                         if _name in self.vars:
                               expr = {
                                     'expr' : "%s" % (_full_name),
-                                    'type' : self.vars[_name].type,
+                                    'type' :str(self.vars[_name].members[_end_name]),
                               }
                               return expr
                         elif _name in self.consts :
                               expr = {
                                     'expr' : "%s" % (_full_name),
-                                    'type' : self.consts[_name].type,
+                                    'type' : str(self.consts[_name].members[_end_name]),
                               }
                               return expr
                         elif _name in self.types :
@@ -1236,10 +1268,11 @@ class Generator(object):
                   return expr
 
 class Var(object):
-      def __init__(self,name,type,is_array=False):
+      def __init__(self,name,type,is_array=False,members={}):
             self.name = name
             self.type = type
             self.is_array = is_array
+            self.members = members
 
 class Const(Var):
       ...

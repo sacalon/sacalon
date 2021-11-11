@@ -90,9 +90,9 @@ class HascalCompiler(object):
 
         # compile with g++ compiler
         try :
-            check_call(['g++', outname+".cc",'-o',outname,'-O3'], stdout=DEVNULL, stderr=STDOUT)
+            # check_call(['g++', outname+".cc",'-o',outname,'-O3'], stdout=DEVNULL, stderr=STDOUT)
             # uncomment it for development(and comment top line)
-            # os.system('g++ '+ outname+".cc")
+            os.system('g++ '+ outname+".cc")
         except :
             HascalException("unknown error in compile file")
 

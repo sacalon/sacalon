@@ -316,9 +316,6 @@ class Parser(Parser):
       @_('MINUS expr %prec UMINUS')
       def expr(self, p):
             return ('sub', ('int', 0), p.expr,p.lineno)
-      @_('expr ALPHA expr')
-      def expr(self, p):
-            return ('add_cont', p.expr0, p.expr1,p.lineno)
       @_('LPAREN expr RPAREN')
       def expr(self, p):
             return ('paren_expr',p.expr,p.lineno)
@@ -471,22 +468,7 @@ class Parser(Parser):
       def return_type(self, p):
             return str(p.NAME)
             
-      @_('LBRCK INTVAR RBRCK')
+      @_('LBRCK return_type RBRCK')
       def return_type2(self, p):
-            return 'std::vector<int>'
-      @_('LBRCK STRINGVAR RBRCK')
-      def return_type2(self, p):
-            return 'std::vector<string>'
-      @_('LBRCK CHARVAR RBRCK')
-      def return_type2(self, p):
-            return 'std::vector<char>'
-      @_('LBRCK BOOLVAR RBRCK')
-      def return_type2(self, p):
-            return 'std::vector<bool>'
-      @_('LBRCK FLOATVAR RBRCK')
-      def return_type2(self, p):
-            return 'std::vector<float>'
-      @_('LBRCK NAME RBRCK')
-      def return_type2(self, p):
-            return "std::vector<{0}>".format(p.NAME)
+            return "std::vector<{0}>".format(p.return_type)
       #------------------------------------------
