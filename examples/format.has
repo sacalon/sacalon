@@ -1,5 +1,6 @@
-function main() : int {
-    var name = ReadStr()
-    print(format("Hi {}",name))
+function main() : int{
+    var name = ReadStr("Enter your name :")
+    var fmt_str = format("Hi,",name)
+    print(fmt_str)
     return 0
 }
