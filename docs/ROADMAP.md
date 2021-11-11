@@ -1,10 +1,15 @@
-# Hascal's Roadmap for v1.3.x
+# Hascal's Roadmap 
 
-## Base
+<details>
+<summary>v1.3.x</summary>
+
+## v1.3.x
+
+### Base
 - C++ in back-end
 - garbage collection and Rust-like memory management
 
-## Language
+### Language
 - multi library import :
 ```
 use http, random
@@ -56,5 +61,6 @@ var foo = {
 let x : int = 1
 ```
 
-## Standard Library
+### Standard Library
 - `json` library
+</details>
