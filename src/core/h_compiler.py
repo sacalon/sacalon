@@ -337,7 +337,6 @@ class Generator(object):
                         _end_name = node[1][len(node[1]-1)]
                         _final_type = None
 
-                        self.types(_first_name).members[_final_type]
                         if _name in self.consts :
                               HascalException(f"'{_name}'is a constant, cannot change it")
                               sys.exit(1)
@@ -347,7 +346,6 @@ class Generator(object):
                         elif not _name in self.vars :
                               HascalException(f"Variable '{_name}' not defined")
                               sys.exit(1) 
-                        # this code have bug. because search name in struct members
                         elif str(self.vars[_name].members[_end_name]) != _expr['type']:
                               HascalException(f"Mismatched type {str(self.vars[_name].members[_end_name])} and {_expr['type']}:{_line}")
                               sys.exit(1)
