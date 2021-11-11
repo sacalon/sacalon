@@ -1,8 +1,8 @@
-use d.time
+use libcpp.time
 
-function GetYear():int
-function GetMonth():int
-function GetDay():int
-function GetHour():int
-function GetMinute():int
-function GetSecond():int
+function get_year():int
+function get_month():int
+function get_day():int
+function get_hour():int
+function get_minute():int
+function get_second():int

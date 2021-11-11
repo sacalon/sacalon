@@ -5,7 +5,7 @@
 # Copyright 2019-2022 Hascal Development Team,
 # all rights reserved.
 
-use d.math
+use libcpp.math
 
 function sin(x:float): float
 function cos(x:float): float

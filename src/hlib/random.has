@@ -1,2 +1,2 @@
-use d.random
-function RandomNumber(min:int,max:int) : int
+use libcpp.random
+function RandInt(max:int) : int
