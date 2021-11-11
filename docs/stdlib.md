@@ -60,7 +60,7 @@ example :
 print("float :",ReadFloat());
 ```
 
-### to_int(input:auto) : int
+### to_int(input:Type) : int
 Convert values to int
 
 example :
@@ -68,7 +68,7 @@ example :
 print(to_int("123456"));
 ```
 
-### to_string(input:auto) : string
+### to_string(input:Type) : string
 Convert values to string
 
 example :
@@ -76,7 +76,7 @@ example :
 print(to_string(123));
 ```
 
-### to_float(input:auto) : float
+### to_float(input:Type) : float
 Convert values to float
 
 example :
@@ -96,50 +96,29 @@ print("Bye");
 
 ## `file`
 
-### RemoveFile(name:string)
-Removes a file
+### read_file(file_name:string) : string
+Read from file
 
 example :
 ```
-RemoveFile("todo.txt");
+var content : string = read_file("todo.txt");
 ```
 
-### CloseFile(file:File)
-Closes a file
+### write_file(path:string,text:string) : bool
+Write to file
 
 example :
 ```
-var file = File("todo.txt","w");
-CloseFile(f);
+write_file("todo.txt","- Going to gym")
 ```
 
-### ReadFromFile(file:File) : string
-Reads a file and returns a string value
-
-example:
-```
-var myfile = File("todo.txt","r");
-print(ReadFromFile(myfile));
-```
-
-### WriteToFile(file:File,data:string)
-Writes a string to a file
-
-example :
-```
-var file = File("todo.txt","w");
-
-WriteToFile(file,"1-test");
-CloseFile(f);
-```
-
-### listdir(path:string) : [string]
+<!-- ### listdir(path:string) : [string]
 Lists dirs,files on a path
 
 example :
 ```
 print(listdir("C:\\"));
-```
+``` -->
 
 ## `os`
 
@@ -166,12 +145,12 @@ while true {
 
 ## `time`
 
-- `GetYear():int` : Get year
-- `GetMonth():int` : Get month
-- `GetDay():int` : Get day
-- `GetHour():int` : Get hour
-- `GetMinute():int` : Get minute
-- `GetSecond():int` : Get second
+- `get_year():int` : Get current year
+- `get_month():int` : Get current month
+- `get_day():int` : Get current day
+- `get_hour():int` : Get current hour
+- `get_minute():int` : Get current minute
+- `get_second():int` : Get current second
 
 
 ## `math`
@@ -180,6 +159,8 @@ Math Functions
 - `cos(val:float):float` : Returns cosine of x
 - `tan(val:float):float` : Returns tangent of x
 - `PI : float` : PI number
-- `fmax(x:float,y:float):float` : Returns the larger of x and y. 
-- `fmin(val:float):float` : Returns the smaller of x and y. 
+- `fmax(x:float,y:float):float` : Returns the larger of x and y(floating point). 
+- `fmin(x:float,y:float):float` : Returns the smaller of x and y(floating point). 
+- `max(x:int,y:int):int` : Returns the larger of x and y. 
+- `min(x:int,y:int):int` : Returns the smaller of x and y. 
 - `abs(x:float):float` : Calculates the absolute value of a number. 
