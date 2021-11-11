@@ -17,7 +17,7 @@ print("Hello World");
 ```
 
 ### ReadStr() : string
-Read string values from user
+Read string values from stdin
 
 example :
 ```
@@ -27,7 +27,7 @@ print("Hi,",name);
 ```
 
 ### ReadInt() : int
-Read int values from user
+Read int values from stdin
 
 example :
 ```
@@ -37,7 +37,7 @@ print("your age :",name);
 ```
 
 ### ReadChar() : char
-Read a character from user
+Read a character from stdin
 
 example :
 ```
@@ -45,7 +45,7 @@ print("char :",ReadChar());
 ```
 
 ### ReadBool() : bool
-Read a bool values from user
+Read a bool values from stdin
 
 example :
 ```
@@ -53,7 +53,7 @@ print("bool :",ReadBool());
 ```
 
 ### ReadFloat() : float
-Read float values from user
+Read float values from stdin
 
 example :
 ```
