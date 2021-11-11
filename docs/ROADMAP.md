@@ -25,14 +25,6 @@ line2
 """
 ```
 
-- function decorators :
-```
-@no_gc
-@static
-function add(a:int,b:int) : int {
-    return a + b
-}
-```
 - lambdas :
 ```
 var mythread = thread(@(1000,true){
@@ -40,6 +32,32 @@ var mythread = thread(@(1000,true){
 })
 ```
 
+- immutable variables
+```
+let x : int = 1
+```
+
+### Standard Library
+- `json` library
+</details>
+
+<details>
+<summary>v1.4.x</summary>
+
+### Base
+- More stability
+- Manual memory allocation
+
+### Language
+
+- function decorators :
+```
+@static
+function add(a:int,b:int) : int {
+    return a + b
+}
+```
+- `@no_mm` decorator for manual memory management
 - dictionaries :
 ```
 var names_age = dict(string,int,{
@@ -54,11 +72,14 @@ var foo = {
 }
 ```
 
-- immutable variables
-```
-let x : int = 1
-```
-
 ### Standard Library
-- `json` library
+- `sqlite` library
+</details>
+
+<details>
+<summary>v1.5.x</summary>
+
+### Base
+- **Rewrite Hascal in Hascal(bootstrapping compiler**
+
 </details>
