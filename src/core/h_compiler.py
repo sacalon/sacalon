@@ -35,7 +35,17 @@ class Generator(object):
                   'ReadFloat' : Function('ReadFloat',{},'float'),
                   'ReadChar' : Function('ReadChar',{},'char'),
                   'ReadBool' : Function('ReadBool',{},'bool'),
+
                   'format' : Function('format',{'...':'...'},'string'),
+                  'split' : Function('split',{'str':'string','sep':'string'},'string'),
+                  'exit' : Function('exit',{'exit_code':'int'},'void'),
+                  'error' : Function('error',{'errmsg':'string'},'void'),
+
+                  'to_int' : Function('to_int',{'...':'...'},'void'),
+                  'to_string' : Function('to_string',{'...':'...'},'void'),
+                  'to_bool' : Function('to_bool',{'...':'...'},'void'),
+                  'to_char' : Function('to_char',{'...':'...'},'void'),
+                  'to_float' : Function('to_float',{'...':'...'},'void'),
                   # todo
             }
 
