@@ -1,4 +1,4 @@
-function main(){
+function main():int{
     print("Enter your name :")
     var x : string
     x = ReadStr()
