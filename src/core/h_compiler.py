@@ -94,6 +94,32 @@ class Generator(object):
             #-------------------------------------
             # statement declares :
             
+            # var <name> = <expr>
+            if node[0] == 'declare' and node[1] == "no_type":
+                  _name = node[2]
+                  _expr = self.walk(node[3])
+                  _type = _expr['type']
+                  _line = node[4]
+                  if _name in self.vars or _name in self.consts :
+                        HascalException(f"'{_name}' exists, cannot redefine it:{_line}")
+                        sys.exit(1)
+                  elif _name in self.types :
+                        HascalException(f"'{_name}' defined as a type, cannot redefine it as a variable:{_line}")
+                        sys.exit(1)
+                  else:
+                        members = {}
+                        if isinstance(self.types[_type],Struct) : members = self.types[_type].members
+                        self.vars[_name] = Var(_name,_type,members=members)
+                        res = ""
+                        if not self.types[_type].stdtype : res = "%s %s = {} ;\n" % (_type,_name)
+                        else : res = "%s %s;\n" % (_type,_name)
+                        expr = {
+                              'expr' : res,
+                              'type' : _type,
+                              'name' : _name,
+                        }
+                        return expr
+
             # var <name> : <return_type>
             if node[0] == 'declare' and node[1] == "no_equal":
                   _name = node[3]

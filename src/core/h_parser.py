@@ -71,6 +71,11 @@ class Parser(Parser):
       def statement(self, p):
             return p.var_declare
 
+      # var <name> = <expr>
+      @_('VAR NAME ASSIGN expr')
+      def var_declare(self, p):
+            return ('declare','no_type',p.NAME, p.expr,p.lineno) 
+
       # var <name> : <return_type>
       @_('VAR NAME COLON return_type')
       def var_declare(self, p):
