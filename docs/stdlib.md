@@ -9,7 +9,7 @@
 ## Built-in functions 
 
 ### print(...)
-Standard Hascal print function
+Standard Hascal's print function
 
 example :
 ```
