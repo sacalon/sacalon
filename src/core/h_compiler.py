@@ -267,7 +267,7 @@ class Generator(object):
                         #     var s : a
                         # }
                         # var bar : foo
-                        # bar.s.y = 1 # error : Mismatched type 'a' and 'int'.
+                        # bar.s.y = 1 
                         #
                         _full_name = '.'.join(arg for arg in node[1])
                         _first_name = node[1][0]
@@ -330,7 +330,7 @@ class Generator(object):
                         #     var s : a
                         # }
                         # var bar : foo
-                        # bar.s.y = 1 # error : Mismatched type 'a' and 'int'.
+                        # bar.s.y = 1
                         #
                         _full_name = '.'.join(arg for arg in node[1])
                         _first_name = node[1][0]
