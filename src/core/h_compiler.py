@@ -647,7 +647,7 @@ class Generator(object):
                   
                   expr = {
                         'expr' : res,
-                        'type' : _type,
+                        'type' : _return_type,
                   }
                   return expr
             #-------------------------------------
