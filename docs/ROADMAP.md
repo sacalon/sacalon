@@ -56,16 +56,5 @@ var foo = {
 let x : int = 1
 ```
 
-- builtin string formation method
-```
-var x = 1
-var y = 2
-print(format("x is {}, y is {},x,y))
-```
-
-- typealias :
-```
-typealias StringArray = [string]
-```
 ## Standard Library
 - `json` library

@@ -1,0 +1,5 @@
+function main() : int {
+    var name = ReadStr()
+    print(format("Hi {}",name))
+    return 0
+}

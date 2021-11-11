@@ -35,6 +35,7 @@ class Generator(object):
                   'ReadFloat' : Function('ReadFloat',{},'float'),
                   'ReadChar' : Function('ReadChar',{},'char'),
                   'ReadBool' : Function('ReadBool',{},'bool'),
+                  'format' : Function('format',{'...':'...'},'string'),
                   # todo
             }
 
@@ -110,9 +111,7 @@ class Generator(object):
                         members = {}
                         if isinstance(self.types[_type],Struct) : members = self.types[_type].members
                         self.vars[_name] = Var(_name,_type,members=members)
-                        res = ""
-                        if not self.types[_type].stdtype : res = "%s %s = {} ;\n" % (_type,_name)
-                        else : res = "%s %s;\n" % (_type,_name)
+                        res = "auto %s = %s;\n" % (_name,_expr['expr'])
                         expr = {
                               'expr' : res,
                               'type' : _type,
