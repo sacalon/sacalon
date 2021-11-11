@@ -8,7 +8,8 @@ function <name>(<name>:<type>,...):<return_type> {
   <statements>
 }
 ```
-**NOTE:** if your function , don't return any thing ,you can use following syntax.
+
+Function's syntax without value :
 ```
 function <name>(<name>:<type>,...){
   <statements>
@@ -19,7 +20,7 @@ function foo(x:int){
 }
 ```
 
-**NOTE:** if your function , don't get any value , you can use following syntax.
+Function's syntax without parameters :
 ```
 function <name>(){
   <statements>
@@ -38,11 +39,10 @@ function foo(){
 ## Call a function
 for call and excute a function , use this syntax :
 ```
-<function name>(<arguments>)
+<function_name>(<arguments>)
 ```
 
 ## return a value in function
-for return a value , look following example :
 ```
 function foo() :int{
   return 1

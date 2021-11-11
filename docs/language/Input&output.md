@@ -15,10 +15,11 @@ print('$') # Character
 ## Read values from user
 
 You can read any type of values from user with one of this functions:
-- `ReadStr`
-- `ReadInt`
-- `ReadFloat`
-- `ReadChar`
+- `ReadStr` : Read string
+- `ReadInt` : Read int
+- `ReadFloat` : Read float
+- `ReadChar` : Read char
+- `ReadBool` : Read boolean value
 
 This is an example for `ReadInt` function:
 

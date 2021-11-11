@@ -25,7 +25,7 @@ struct Student{
     var age : int
 }
 
-var John0 = Student() 
+var John0 : Student
 ```
 
 ## Access to struct fields
@@ -36,7 +36,7 @@ struct Student{
     var age : int
 }
 
-var John0 = Student() 
+var John0 : Student
 John0.name = "John0"
 print(John0.name)
 ```
@@ -45,13 +45,13 @@ print(John0.name)
 example :
 ```
 struct Student {
-    var my_brothers : [string]
+    var friends : [string]
 }
 
 var me : Student 
-me.my_brothers[0] = "Ali" 
+me.friends[0] = "Ali" 
 
-print(me.my_brothers[0]) # output : Ali
+print(me.friends[0]) # output : Ali
 ```
 
 ## struct as function argument
@@ -64,7 +64,7 @@ function foo(obj:Student){
     print(obj.name)
 }
 
-var bar = Student("john")
+var bar : Student = ["john"]
 
 foo(bar)
 ```

@@ -25,7 +25,7 @@ if <condition> {
 
 example :
 ```
-var x = 1
+var x : int = 1
 if x == 1 {
   print("x==1")
 }
@@ -43,7 +43,7 @@ if <condition> {
 
 example :
 ```
-var foo = 2
+var foo : int = 2
 if foo == 1{
   print("foo==1")
 }else {
@@ -64,7 +64,7 @@ if <condition> {
 
 example :
 ```
-var foo = 2
+var foo : int = 2
 if foo == 1{
   print("foo==1")
 }else if foo == 2{
@@ -90,7 +90,7 @@ for <name> = <expr> downto <expr> {
 
 example :
 ```
-var x = 1
+var x : int = 1
 
 for x = 1 to 10 {
 	print(x)
@@ -113,7 +113,7 @@ while <condition> {
 ```
 example :
 ```
-var x = 1
+var x : int = 1
 
 while x<=100 {
 	print("\n",x)
