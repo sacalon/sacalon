@@ -29,7 +29,13 @@ class Generator(object):
 
             # functions
             self.funcs = {
-                  'print' : Function('print',{'...':'...'},'void')
+                  'print' : Function('print',{'...':'...'},'void'),
+                  'ReadStr' : Function('ReadStr',{},'string'),
+                  'ReadInt' : Function('ReadInt',{},'int'),
+                  'ReadFloat' : Function('ReadFloat',{},'float'),
+                  'ReadChar' : Function('ReadChar',{},'char'),
+                  'ReadBool' : Function('ReadBool',{},'bool'),
+                  # todo
             }
 
             # list of imported libraries
