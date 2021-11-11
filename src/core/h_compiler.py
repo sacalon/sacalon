@@ -172,7 +172,7 @@ class Generator(object):
                         if isinstance(self.types[_type],Struct) : members = self.types[_type].members
                         self.vars[_name] = Var(_name,_type,members=members)
                         expr = {
-                              'expr' : "%s %s = %s;\n" % (_type,_name,_expr['expr']),
+                              'expr' : "auto %s = %s;\n" % (_name,_expr['expr']),
                               'type' : _type,
                               'name' : _name,
                         }
