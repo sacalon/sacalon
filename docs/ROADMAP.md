@@ -3,8 +3,6 @@
 <details>
 <summary>v1.3.x</summary>
 
-## v1.3.x
-
 ### Base
 - C++ in back-end
 - garbage collection and Rust-like memory management
