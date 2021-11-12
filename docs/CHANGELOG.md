@@ -9,6 +9,9 @@
 #### Bug fixes
 - Fix semantic analyser bugs
 
+#### Removed
+- `for to` and `for downto` statement removed
+
 </details>
 
 <details>
