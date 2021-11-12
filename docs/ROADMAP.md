@@ -37,19 +37,6 @@ var mythread = thread(@(1000,true){
 let x : int = 1
 ```
 
-### Standard Library
-- `json` library
-</details>
-
-<details>
-<summary>v1.4.x</summary>
-
-### Base
-- More stability
-- Manual memory allocation
-
-### Language
-
 - function decorators :
 ```
 @static
@@ -71,15 +58,8 @@ var foo = {
    "Y" : 2
 }
 ```
-
+- `panic` based error management
 ### Standard Library
-- `sqlite` library
-</details>
+- `json`, `sqlite` library
+</details<
 
-<details>
-<summary>v1.5.x</summary>
-
-### Base
-- **Rewrite Hascal in Hascal(bootstrapping compiler**
-
-</details>
