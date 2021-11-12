@@ -61,5 +61,6 @@ var foo = {
 - `panic` based error management
 ### Standard Library
 - `json`, `sqlite` library
-</details<
+
+</details>
 
