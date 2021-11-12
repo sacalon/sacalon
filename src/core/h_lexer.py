@@ -10,7 +10,7 @@ from sys import exit
 
 class Lexer(Lexer):
         tokens = {
-                NAME, FOR, WHILE, TO,DOWNTO,
+                NAME, FOR, WHILE,IN,
                 IF, ELSE,
                 RETURN,
                 INTVAR, STRINGVAR, CHARVAR,BOOLVAR,FLOATVAR,
@@ -25,7 +25,6 @@ class Lexer(Lexer):
                 LBRCK,RBRCK,
                 TRUE,FALSE,
                 VAR,CONST,
-                SEM,
                 USE,LOCAL,
                 FUNCTION,
                 BREAK,CONTINUE,
@@ -46,7 +45,6 @@ class Lexer(Lexer):
         RPAREN = r'\)'
         LBC = r'\{'
         RBC = r'\}'
-        SEM    = r';'
         COLON  = r':'
         COMMA = r','
         NOTEQ = r'!='
@@ -80,8 +78,7 @@ class Lexer(Lexer):
         NAME["return"] = RETURN
         
         NAME["for"] = FOR
-        NAME["to"] = TO
-        NAME["downto"] = DOWNTO
+        NAME["in"] = IN
         NAME["while"] = WHILE
         
         NAME["struct"] = STRUCT

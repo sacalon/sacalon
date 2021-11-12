@@ -1,0 +1,7 @@
+function main():int{
+    var x : [int] = [1,2,3]
+    for y in x {
+        print(y)
+    }
+    return 0
+}

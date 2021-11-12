@@ -158,19 +158,13 @@ class Parser(Parser):
       @_('for_stmt')
       def in_statement(self, p):
             return p.for_stmt
-      # for <name> = <expr> to <expr> {
-      #      <in_block>
-      # }
-      @_('FOR NAME ASSIGN expr TO expr LBC in_block RBC')
-      def for_stmt(self, p):
-            return ('for', p.NAME,p.expr0,p.expr1,p.in_block,p.lineno)
 
-      # for <name> = <expr> downto <expr> {
+      # for <name> in <name> {
       #      <in_block>
       # }
-      @_('FOR NAME ASSIGN expr DOWNTO expr LBC in_block RBC')
+      @_('FOR NAME IN name LBC in_block RBC')
       def for_stmt(self, p):
-            return ('for_down', p.NAME,p.expr0,p.expr1,p.in_block,p.lineno)
+            return ('for', p.NAME,p.name[0],p.in_block,p.lineno)
       #-----------------------------------
       @_('while_stmt')
       def in_statement(self, p):

@@ -815,36 +815,28 @@ class Generator(object):
                   }
                   return expr
             #------------------------------------
-            # for <name> to <expr> {
+            # for <name> in <name> {
             #     <block>
             # }
             if node[0] == 'for':      
-                  name = node[1]
-                  expr0 = self.walk(node[2])
-                  expr1 = self.walk(node[3])
-                  body = self.walk(node[4])
+                  _name = node[1]
+                  # todo
+                  _name2 = node[2][0]
+                  _line = node[4]
                   res = ""
-                  for e in body :
-                        res += e['expr']
+                  if not (_name2 in self.vars or _name2 in self.consts) :
+                        HascalException(f"'{_name2}' not defined:{_line}") #todo
+                  elif _name2 in self.vars :
+                        if self.vars[_name2].is_array != True :
+                              HascalException(f"'{_name2}' is not iterable:{_line}") 
+                        current_vars = self.vars
+                        self.vars[_name] = Var(_name,self.vars[_name2].type)
+                        body = self.walk(node[3])
+                        self.vars = current_vars
+                        for e in body :
+                              res += e['expr']
                   expr = {
-                        'expr' : 'for(%s=%s;%s<=%s;%s++){\n%s\n}\n' % (name,expr0['expr'],name,expr1['expr'],name,res),
-                        'type' : '',
-                  }
-                  return expr
-            
-            # for <name> downto <expr> {
-            #     <block>
-            # }
-            if node[0] == 'for_down':      
-                  name = node[1]
-                  expr0 = self.walk(node[2])
-                  expr1 = self.walk(node[3])
-                  body = self.walk(node[4])
-                  res = ""
-                  for e in body :
-                        res += e['expr']
-                  expr = {
-                        'expr' :  'for(%s=%s;%s>=%s;%s--){\n%s\n}\n' % (name,expr0['expr'],name,expr1['expr'],name,res),
+                        'expr' : 'for(auto %s : %s){\n%s\n}\n' % (_name,_name2,res),
                         'type' : '',
                   }
                   return expr
@@ -1151,24 +1143,28 @@ class Generator(object):
                               expr = {
                                     'expr' : "%s" % (_name),
                                     'type' : self.vars[_name].type,
+                                    'obj' : self.vars[_name]
                               }
                               return expr
                         elif _name in self.consts :
                               expr = {
                                     'expr' : "%s" % (_name),
                                     'type' : self.consts[_name].type,
+                                    'obj' : self.consts[_name]
                               }
                               return expr
                         elif _name in self.types :
                               expr = {
                                     'expr' : "%s" % (_name),
                                     'type' : self.types[_name],
+                                    'obj' : self.types[_name]
                               }
                               return expr
                         elif _name in self.funcs :
                               expr = {
                                     'expr' : "%s" % (_name),
                                     'type' : 'Function',
+                                    'obj' : self.funcs[_name]
                               }
                               return expr
                         else :
