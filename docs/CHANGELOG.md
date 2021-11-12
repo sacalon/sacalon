@@ -20,4 +20,7 @@
 #### New features
 - Basic Semantic Anaslyser
 
+#### Changes
+- remove semicolon from syntax
+
 </details>
