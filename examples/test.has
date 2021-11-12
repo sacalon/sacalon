@@ -30,10 +30,6 @@ function main(argv:[string]) : int {
 	} else if h == true or (y == 1 or pi == 3.14){
 		print("foo")
 	}
-	
-	for x = 1 to 10 {
-		print(x)
-	}
 
 	while x < 100 {
 		print(x)
