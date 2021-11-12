@@ -310,9 +310,6 @@ class Parser(Parser):
       @_('expr DIVIDE expr')
       def expr(self, p):
             return ('div', p.expr0, p.expr1,p.lineno)
-      @_('expr POW expr')
-      def expr(self, p):
-            return ('pow', p.expr0, p.expr1,p.lineno)
       @_('MINUS expr %prec UMINUS')
       def expr(self, p):
             return ('sub', ('int', 0), p.expr,p.lineno)

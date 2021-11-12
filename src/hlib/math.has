@@ -15,10 +15,10 @@ function max(a:float,b:float): float
 function fmin(a:float,b:float): float 
 function min(a:float,b:float): float
 function abs(a:float): float
+function pow(a:float,b:float): float 
 
 # function sqrt(a:float): float
 # function round(a:float): int
 # function log(a:float): float
 # function exp(a:float): float
 # function floor(a:float): float
-# function pow(a:float,b:float): float

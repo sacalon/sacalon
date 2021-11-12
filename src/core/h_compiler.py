@@ -46,7 +46,6 @@ class Generator(object):
                   'to_bool' : Function('to_bool',{'...':'...'},'void'),
                   'to_char' : Function('to_char',{'...':'...'},'void'),
                   'to_float' : Function('to_float',{'...':'...'},'void'),
-                  # todo
             }
 
             # list of imported libraries
@@ -113,10 +112,10 @@ class Generator(object):
                   _line = node[4]
                   if _name in self.vars or _name in self.consts :
                         HascalException(f"'{_name}' exists, cannot redefine it:{_line}")
-                        sys.exit(1)
+                        
                   elif _name in self.types :
                         HascalException(f"'{_name}' defined as a type, cannot redefine it as a variable:{_line}")
-                        sys.exit(1)
+                        
                   else:
                         members = {}
                         if isinstance(self.types[_type],Struct) : members = self.types[_type].members
@@ -136,13 +135,13 @@ class Generator(object):
                   _line = node[4]
                   if _name in self.vars or _name in self.consts :
                         HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
-                        sys.exit(1)
+                        
                   elif _name in self.types :
                         HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
-                        sys.exit(1)
+                        
                   elif not _type in self.types :
                         HascalException(f"Type '{_type}' not defined:{_line}")
-                        sys.exit(1)
+                        
                   else:
                         members = {}
                         if isinstance(self.types[_type],Struct) : members = self.types[_type].members
@@ -166,16 +165,16 @@ class Generator(object):
 
                   if _name in self.vars or _name in self.consts  :
                         HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
-                        sys.exit(1)
+                        
                   elif _name in self.types :
                         HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
-                        sys.exit(1)
+                        
                   elif _type != _expr['type'] :
                         HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
-                        sys.exit(1)
+                        
                   elif not _type in self.types :
                         HascalException(f"Type '{_type}' not defined:{_line}")
-                        sys.exit(1)
+                        
                   else:
                         members = {}
                         if isinstance(self.types[_type],Struct) : members = self.types[_type].members
@@ -195,13 +194,13 @@ class Generator(object):
 
                   if _name in self.vars or _name in self.consts :
                         HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
-                        sys.exit(1)
+                        
                   elif _name in self.types :
                         HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
-                        sys.exit(1)
+                        
                   elif not _type in self.types :
                         HascalException(f"Type '{_type}' not defined:{_line}")
-                        sys.exit(1)
+                        
                   else:
                         members = {}
                         if isinstance(self.types[_type],Struct) : members = self.types[_type].members
@@ -222,16 +221,16 @@ class Generator(object):
 
                   if _name in self.vars or _name in self.consts :
                         HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
-                        sys.exit(1)
+                        
                   elif _name in self.types :
                         HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
-                        sys.exit(1)
+                        
                   elif _type != _expr['type'] :
                         HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
-                        sys.exit(1)
+                        
                   elif not _type in self.types :
                         HascalException(f"Type '{_type}' not defined:{_line}")
-                        sys.exit(1)
+                        
                   else:
                         members = {}
                         if isinstance(self.types[_type],Struct) : members = self.types[_type].members
@@ -252,16 +251,16 @@ class Generator(object):
 
                   if _name in self.vars or _name in self.consts :
                         HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
-                        sys.exit(1)
+                        
                   elif _name in self.types :
                         HascalException(f"'{_name}' defined as a type ,cannot redefine it as a constant:{_line}")
-                        sys.exit(1)
+                        
                   elif _type != _expr['type'] :
                         HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
-                        sys.exit(1)
+                        
                   elif not _type in self.types :
                         HascalException(f"Type '{_type}' not defined:{_line}")
-                        sys.exit(1)
+                        
                   else:
                         self.consts[_name] = Const(_name,_type)
                         expr = {
@@ -280,10 +279,10 @@ class Generator(object):
 
                   if _name in self.vars or _name in self.consts :
                         HascalException(f"'{_name}' exists, cannot redefine it:{_line}")
-                        sys.exit(1)
+                        
                   elif _name in self.types :
                         HascalException(f"'{_name}' defined as a type, cannot redefine it as a constant:{_line}")
-                        sys.exit(1)
+                        
                   else:
                         self.consts[_name] = Const(_name,_type)
                         expr = {
@@ -302,16 +301,16 @@ class Generator(object):
                   if len(node[1]) == 1:
                         if _name in self.consts :
                               HascalException(f"'{_name}'is a constant, cannot change it")
-                              sys.exit(1)
+                              
                         elif _name in self.types:
                               HascalException(f"'{_name}'is a type, cannot assign it")
-                              sys.exit(1)
+                              
                         elif not _name in self.vars :
                               HascalException(f"Variable '{_name}' not defined")
-                              sys.exit(1) 
+                               
                         elif _name in self.vars and (self.vars[_name].type != _expr['type']):
                               HascalException(f"Mismatched type {self.vars[_name].type} and {_expr['type']}:{_line}")
-                              sys.exit(1)
+                              
                         else :
                               expr = {
                                     'expr' :  "%s = %s;\n" % (_name,_expr['expr']),
@@ -338,16 +337,16 @@ class Generator(object):
 
                         if _name in self.consts :
                               HascalException(f"'{_name}'is a constant, cannot change it")
-                              sys.exit(1)
+                              
                         elif _name in self.types:
                               HascalException(f"'{_name}'is a type, cannot assign it")
-                              sys.exit(1)
+                              
                         elif not _name in self.vars :
                               HascalException(f"Variable '{_name}' not defined")
-                              sys.exit(1) 
+                               
                         elif str(self.vars[_name].members[_end_name]) != _expr['type']:
                               HascalException(f"Mismatched type {str(self.vars[_name].members[_end_name])} and {_expr['type']}:{_line}")
-                              sys.exit(1)
+                              
                         else :
                               expr = {
                                     'expr' : "%s = %s;\n" % (_full_name,_expr['expr']),
@@ -365,16 +364,16 @@ class Generator(object):
                   if len(node[1]) == 1:
                         if _name in self.consts :
                               HascalException(f"'{_name}'is a constant, cannot change it")
-                              sys.exit(1)
+                              
                         elif _name in self.types:
                               HascalException(f"'{_name}'is a type, cannot assign it")
-                              sys.exit(1)
+                              
                         elif not _name in self.vars :
                               HascalException(f"Variable '{_name}' not defined")
-                              sys.exit(1) 
+                               
                         elif _name in self.vars and (self.vars[_name].type != _expr['type']):
                               HascalException(f"Mismatched type {self.vars[_name].type} and {_expr['type']}:{_line}")
-                              sys.exit(1)
+                              
                         else :
                               expr = {
                                     'expr' : "%s[%s] = %s;\n" % (_name,_expr_index['expr'],_expr['expr']),
@@ -402,16 +401,16 @@ class Generator(object):
 
                         if _name in self.consts :
                               HascalException(f"'{_name}'is a constant, cannot change it")
-                              sys.exit(1)
+                              
                         elif _name in self.types:
                               HascalException(f"'{_name}'is a type, cannot assign it")
-                              sys.exit(1)
+                              
                         elif not _name in self.vars :
                               HascalException(f"Variable '{_name}' not defined")
-                              sys.exit(1) 
+                               
                         elif str(self.vars[_name].members[_end_name]) != _expr['type']:
                               HascalException(f"Mismatched type {str(self.vars[_name].members[_end_name])} and {_expr['type']}:{_line}")
-                              sys.exit(1)
+                              
                         else :     
                               expr = {
                                     'expr' : "%s[%s] = %s;\n" % (_full_name,_expr_index['expr'],_expr['expr']),
@@ -432,7 +431,7 @@ class Generator(object):
             if node[0] == 'break':
                   expr = {
                         'expr' : 'break;\n',
-                        'type' : 'void', # todo
+                        'type' : '',
                   }
                   return expr
             
@@ -440,7 +439,7 @@ class Generator(object):
             if node[0] == 'continue':
                   expr = {
                         'expr' : 'continue;\n',
-                        'type' : 'void', # todo
+                        'type' : '',
                   }
                   return expr
             #-----------------------------------------
@@ -469,7 +468,7 @@ class Generator(object):
                                                       self.add_to_output(cpp_code,hpp_code)
                                     except FileNotFoundError:
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
-                                          sys.exit(1)
+                                          
                               else :
                                     path = node[1]
                                     final_path = str(self.BASE_DIR+"\\hlib\\")
@@ -493,7 +492,7 @@ class Generator(object):
                                                 self.types += generator.types
                                     except FileNotFoundError:
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
-                                          sys.exit(1)
+                                          
 
                   else :
                         if node[1] in self.imported :
@@ -518,7 +517,7 @@ class Generator(object):
                                                       self.add_to_output(cpp_code,hpp_code)
                                     except FileNotFoundError:
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
-                                          sys.exit(1)
+                                          
                               else :
                                     path = node[1]
                                     final_path = str(self.BASE_DIR+"/hlib/")
@@ -542,7 +541,7 @@ class Generator(object):
                                                 self.types += generator.types
                                     except FileNotFoundError:
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
-                                          sys.exit(1)
+                                          
             
             # local use <lib_name> ;
             if node[0] == 'use_local':
@@ -892,15 +891,17 @@ class Generator(object):
                               return expr
                   else :
                         HascalException(f"Function '{_name}' not defined")
-                        sys.exit(1)
+                        
             # --------------operators-----------------
+            # todo : error if string *-/ string
+            # <expr> + <expr>
             if node[0] == 'add':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
                   _line = node[3]
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        sys.exit(1)
+                        
                   else :
                         expr = {
                               'expr' : '%s + %s' % (_expr0['expr'],_expr1['expr']),
@@ -908,6 +909,7 @@ class Generator(object):
                         }
                         return expr
 
+            # <expr> - <expr>
             if node[0] == 'sub':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
@@ -915,7 +917,7 @@ class Generator(object):
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        sys.exit(1)
+                        
                   else :
                         expr = {
                               'expr' : '%s - %s' % (_expr0['expr'],_expr1['expr']),
@@ -923,6 +925,7 @@ class Generator(object):
                         }
                         return expr
 
+            # <expr> * <expr>
             if node[0] == 'mul':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
@@ -930,7 +933,7 @@ class Generator(object):
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        sys.exit(1)
+                        
                   else :
                         expr = {
                               'expr' : '%s * %s' % (_expr0['expr'],_expr1['expr']),
@@ -938,6 +941,7 @@ class Generator(object):
                         }
                         return expr
 
+            # <expr> / <expr>
             if node[0] == 'div':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
@@ -945,7 +949,7 @@ class Generator(object):
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        sys.exit(1)
+                        
                   else :
                         expr = {
                               'expr' : '%s / %s' % (_expr0['expr'],_expr1['expr']),
@@ -953,21 +957,7 @@ class Generator(object):
                         }
                         return expr
 
-            if node[0] == 'pow':
-                  _expr0 = self.walk(node[1])
-                  _expr1 = self.walk(node[2])
-                  _line = node[3]
-
-                  if _expr0['type'] != _expr1['type'] :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        sys.exit(1)
-                  else :
-                        expr = {
-                              'expr' : '%s ^ %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : _expr0['type'] # or : _expr1['type']
-                        }
-                        return expr
-
+            # (<expr>)
             if node[0] == 'paren_expr':
                   _expr0 = self.walk(node[1])
 
@@ -976,6 +966,11 @@ class Generator(object):
                         'type' : _expr0['type'] 
                   }
                   return expr
+            
+            # --------------end of operators-----------------  
+
+            # ---------------conditions---------------------
+            # <condition>
             if node[0] == 'cond':
                   _expr0 = self.walk(node[1])
 
@@ -985,6 +980,7 @@ class Generator(object):
                   }
                   return expr
 
+            # not <condition>
             if node[0] == 'not':
                   _expr0 = self.walk(node[1])
 
@@ -994,6 +990,7 @@ class Generator(object):
                   }
                   return expr
 
+            # <condition> and <condition>
             if node[0] == 'and':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
@@ -1005,6 +1002,7 @@ class Generator(object):
                   }
                   return expr
 
+            # <condition> or <condition>
             if node[0] == 'or':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
@@ -1014,9 +1012,7 @@ class Generator(object):
                         'type' : _expr0['type'] # or : _expr1['type']
                   }
                   return expr
-            # --------------end of operators-----------------  
 
-            # ---------------conditions---------------------
             # <expr> == <expr>
             if node[0] == 'equals':
                   _expr0 = self.walk(node[1])
@@ -1024,7 +1020,7 @@ class Generator(object):
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        sys.exit(1)
+                        
                   else :
                         expr = {
                               'expr' : '%s == %s' % (_expr0['expr'],_expr1['expr']),
@@ -1039,7 +1035,7 @@ class Generator(object):
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        sys.exit(1)
+                        
                   else :
                         expr = {
                               'expr' : '%s != %s' % (_expr0['expr'],_expr1['expr']),
@@ -1054,7 +1050,7 @@ class Generator(object):
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        sys.exit(1)
+                        
                   else :
                         expr = {
                               'expr' : '%s >= %s' % (_expr0['expr'],_expr1['expr']),
@@ -1069,7 +1065,7 @@ class Generator(object):
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        sys.exit(1)
+                        
                   else :
                         expr = {
                               'expr' : '%s <= %s' % (_expr0['expr'],_expr1['expr']),
@@ -1084,7 +1080,7 @@ class Generator(object):
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        sys.exit(1)
+                        
                   else :
                         expr = {
                               'expr' : '%s > %s' % (_expr0['expr'],_expr1['expr']),
@@ -1099,7 +1095,7 @@ class Generator(object):
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        sys.exit(1)
+                        
                   else :
                         expr = {
                               'expr' : '%s < %s' % (_expr0['expr'],_expr1['expr']),
@@ -1169,16 +1165,19 @@ class Generator(object):
                                     'type' : self.types[_name],
                               }
                               return expr
-                        # todo : pass function name
+                        elif _name in self.funcs :
+                              expr = {
+                                    'expr' : "%s" % (_name),
+                                    'type' : 'Function',
+                              }
+                              return expr
                         else :
-                              HascalException(f"'{_name}' was not declared in this scope:{_line}")
-                              sys.exit(1)
-                        
+                              HascalException(f"'{_name}' is not reachable or not defined:{_line}")
                   else :
                         _first_name = node[1][0]
                         _end_name = node[1][len(node[1])-1]
                         _full_name = '.'.join(arg for arg in node[1])
-                        # todo : should return member's type not struct
+
                         if _name in self.vars:
                               expr = {
                                     'expr' : "%s" % (_full_name),
@@ -1191,24 +1190,29 @@ class Generator(object):
                                     'type' : str(self.consts[_name].members[_end_name]),
                               }
                               return expr
+
                         elif _name in self.types :
                               expr = {
                                     'expr' : "%s" % (_full_name),
                                     'type' : self.types[_name],
                               }
                               return expr
-                        # todo : pass function name
+                        
+                        elif _name in self.funcs :
+                              expr = {
+                                    'expr' : "%s" % (_full_name),
+                                    'type' : 'Function',
+                              }
+                              return expr
                         else :
-                              HascalException(f"'{_name}' was not declared in this scope:{_line}")
-                              sys.exit(1)
-            
+                              HascalException(f"'{_name}' is not reachable or not defined:{_line}")                             
+            #---------------------------------------
             # <name>[<expr>]
             if node[0] == 'var_index':
                   _name = node[1][0]
                   _expr = self.walk(node[2])
                   _line = node[3]
                   if len(node[1]) == 1:
-                        
                         if _name in self.vars:
                               expr = {
                                     'expr' : "%s" % (_name,_expr['expr']),
@@ -1221,23 +1225,12 @@ class Generator(object):
                                     'type' : self.consts[_name].type,
                               }
                               return expr
-                        elif _name in self.types :
-                              expr = {
-                                    'expr' : "%s" % (_name,_expr['expr']),
-                                    'type' : self.types[_name],
-                              }
-                              return expr
-                        # todo : pass function name
                         else :
-                              HascalException(f"'{_name}' was not declared in this scope:{_line}")
-                              sys.exit(1)
-                        
+                              HascalException(f"'{_name}' is not reachable or not defined:{_line}")
                   else :
-                        # todo : type checker between expr and name type
-
+                        _end_name = node[1][len(node[1])-1]
                         _full_name = '.'.join(arg for arg in node[1])
-                        # todo : should return member's type not struct
-                        if _name in self.vars:
+                        if _name in self.vars:   
                               expr = {
                                     'expr' : "%s" % (_full_name,_expr['expr']),
                                     'type' : self.vars[_name].type,
@@ -1249,32 +1242,23 @@ class Generator(object):
                                     'type' : self.consts[_name].type,
                               }
                               return expr
-                        elif _name in self.types :
-                              expr = {
-                                    'expr' : "%s" % (_full_name,_expr['expr']),
-                                    'type' : self.types[_name],
-                              }
-                              return expr
                         else :
-                              HascalException(f"'{_name}' was not declared in this scope:{_line}")
-                              sys.exit(1)
-
+                              HascalException(f"'{_name}' is not reachable or not defined:{_line}")
             #-------------------------------------------
-            # <expr> , <expr>
+            # <expr>, <expr>
             if node[0] == 'exprs':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
 
                   if _expr0['type'] != _expr1['type']:
                         HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
-                        sys.exit(1)
+                        
                   else :
                         expr = {
                               'expr' : '%s,%s' % (_expr0['expr'],_expr1['expr']),
                               'type' : _expr0['type'] # or : _expr1['type']
                         }
                         return expr
-
             # [<expr>]
             if node[0] == 'list':
                   _expr = self.walk(node[1])

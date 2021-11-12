@@ -11,4 +11,4 @@ class HascalException():
         sys.stderr.write(colorama.Fore.RED+"Error : ")
         sys.stderr.write(colorama.Style.RESET_ALL)
         sys.stderr.write(exception_message)
-        
+        sys.exit(1)
