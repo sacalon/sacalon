@@ -18,7 +18,7 @@
 - [x] Cross Platform
 - [x] Fast & Powerful
 - [x] Easy to learn
-- [x] C-Family syntax, inspired by Swift, TypeScript
+- [x] C-Family syntax, inspired by Swift, Rust, TypeScript
 - [x] C++ On Back-End
 - [x] Native binaries with no dependency
 - [x] Compatible with C\C++
