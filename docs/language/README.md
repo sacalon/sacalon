@@ -140,5 +140,9 @@ function main() : int {
 
 ### Numbers
 ```typescript
-
+function main() : int {
+    var a : int = 123 # or : var a = 123
+    var b : float = 1.23 # or : var b = 1.24
+}
 ```
+This will assign the value of `123` to `a` and `1.23` to `b`.
