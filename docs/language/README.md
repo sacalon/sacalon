@@ -146,3 +146,13 @@ function main() : int {
 }
 ```
 This will assign the value of `123` to `a` and `1.23` to `b`.
+
+### Arrays
+#### Basic Array Concepts
+Arrays are collections of data elements of the same type. They can be represented by a list of elements surrounded by brackets. The elements can be accessed by appending an index (starting with 0) in brackets to the array variable:
+```typescript
+function main() : int {
+    var a = [1,2,3] # int array with length 3
+    var b = [1.0,2.0,3.0] # float array with length 3
+}
+```
