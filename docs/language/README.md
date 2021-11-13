@@ -224,5 +224,38 @@ function main() : int {
    for i in a {
        print(i) # prints elements of `a` variable
    }
+   return 0
+}
+```
+
+## While Loop
+```typescript
+function main() : int {
+   var a = 1
+   while a <= 100 {
+       print(a)
+       a = a + 1
+   }
+   return 0
+}
+```
+## Structs
+```typescript
+struct Color {
+   var r : int
+   var g : int
+   var b : int
+   var name = "Transparent" # optional value
+}
+
+function main() : int {
+   var a : Color
+   a.r = 1
+   a.g = 110
+   a.b = 255
+   print(a.r,a.g,a.b)
+   
+   var b = Color(34,156,255,"AColor")
+   return 0
 }
 ```
