@@ -161,7 +161,7 @@ class Generator(object):
                   _name = node[3]
                   _type = node[2]
                   _expr = self.walk(node[4])
-                  _line = node[4]
+                  _line = node[5]
 
                   if _name in self.vars or _name in self.consts  :
                         HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
@@ -824,17 +824,17 @@ class Generator(object):
                   _name2 = node[2][0]
                   _line = node[4]
                   res = ""
+                  current_vars = dict(self.vars)
                   if not (_name2 in self.vars or _name2 in self.consts) :
                         HascalException(f"'{_name2}' not defined:{_line}") #todo
                   elif _name2 in self.vars :
                         if self.vars[_name2].is_array != True :
                               HascalException(f"'{_name2}' is not iterable:{_line}") 
-                        current_vars = self.vars
                         self.vars[_name] = Var(_name,self.vars[_name2].type)
                         body = self.walk(node[3])
-                        self.vars = current_vars
                         for e in body :
                               res += e['expr']
+                  self.vars = current_vars
                   expr = {
                         'expr' : 'for(auto %s : %s){\n%s\n}\n' % (_name,_name2,res),
                         'type' : '',
