@@ -186,7 +186,7 @@ function main() : int {
    return 0
 }
 ```
-If you want import a local library, you can use `local` keyword :
+If you want to import a local library, you can use `local` keyword :
 ```typescript
 local use addlib #import add()
 function main() : int {
