@@ -202,7 +202,7 @@ var x = 1
 var y = 2
 function main() : int {
    if x == y {
-
+       # something
    } else if not x != y {
        # something
    } else if x == y and x != 2 {
@@ -216,3 +216,13 @@ function main() : int {
 }
 ```
 `if` statements are pretty straightforward and similar to most other languages. Unlike other C-like languages, there are no parentheses surrounding the condition and the braces are always required.
+
+## For Loop
+```typescript
+function main() : int {
+   var a = [1,2,3]
+   for i in a {
+       print(i) # prints elements of `a` variable
+   }
+}
+```
