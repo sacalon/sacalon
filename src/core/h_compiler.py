@@ -300,7 +300,7 @@ class Generator(object):
 
                   if len(node[1]) == 1:
                         if _name in self.consts :
-                              HascalException(f"'{_name}'is a constant, cannot change it")
+                              HascalException(f"'{_name}'is a constant, cannot assign it")
                               
                         elif _name in self.types:
                               HascalException(f"'{_name}'is a type, cannot assign it")
@@ -336,7 +336,7 @@ class Generator(object):
                         _end_name = node[1][len(node[1])-1]
 
                         if _name in self.consts :
-                              HascalException(f"'{_name}'is a constant, cannot change it")
+                              HascalException(f"'{_name}'is a constant, cannot assign it")
                               
                         elif _name in self.types:
                               HascalException(f"'{_name}'is a type, cannot assign it")
@@ -363,7 +363,7 @@ class Generator(object):
 
                   if len(node[1]) == 1:
                         if _name in self.consts :
-                              HascalException(f"'{_name}'is a constant, cannot change it")
+                              HascalException(f"'{_name}'is a constant, cannot assign it")
                               
                         elif _name in self.types:
                               HascalException(f"'{_name}'is a type, cannot assign it")
@@ -400,7 +400,7 @@ class Generator(object):
                         _final_type = None
 
                         if _name in self.consts :
-                              HascalException(f"'{_name}'is a constant, cannot change it")
+                              HascalException(f"'{_name}'is a constant, cannot assign it")
                               
                         elif _name in self.types:
                               HascalException(f"'{_name}'is a type, cannot assign it")
