@@ -32,7 +32,7 @@ Build hascal excutable file :
 NOTE: But you can add Hascal to `$PATH` for easily use.
 
 ## Hello World
-```c#
+```typescript
 function main() : int {
     print("Hello World")
     return 0
@@ -52,7 +52,7 @@ As in many other languages (such as C++ and Rust), `main` is the entry point of 
 ```
 
 ## Variables
-```c#
+```typescript
 var foo : int
 var foobar : int = 1
 
@@ -64,7 +64,7 @@ function main() : int {
 ```
 
 ## Functions
-```c#
+```typescript
 function add(x:int,y:int): int {
     return x + y
 }
@@ -100,7 +100,7 @@ double # double floating point(soon)
 ```
 
 ### Strings
-```c#
+```typescript
 function main() : int {
     var text = "Hello World"
     print(text[0]) # output : H 
@@ -112,7 +112,7 @@ function main() : int {
 ```
 
 ### String operators
-```c#
+```typescript
 function main() : int {
     var text = "Hello "
     print(text + "World") # output : Hello World 
@@ -120,7 +120,7 @@ function main() : int {
 }
 ```
 All operators in Hascal must have values of the same type on both sides. You cannot concatenate an integer to a string:
-```c#
+```typescript
 function main() : int {
     var text = "age = "
     var age = 23
@@ -129,7 +129,7 @@ function main() : int {
 }
 ```
 We have to either convert age to a string:
-```c#
+```typescript
 function main() : int {
     var text = "age = "
     var age = 23
@@ -139,6 +139,6 @@ function main() : int {
 ```
 
 ### Numbers
-```
+```typescript
 
 ```
