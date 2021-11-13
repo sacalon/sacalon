@@ -65,7 +65,23 @@ function main() : int {
 
 ## Functions
 ```c#
+function add(x:int,y:int): int {
+    return x + y
+}
 
+# overloading function
+function add(x:int,y:int,z:int): int {
+    return x + y + z
+}
+
+function add2(x:int,y:int){
+    print(x + y)
+}
+
+function main(): int {
+    print(add(1,2))
+    print(add(1,2,3))
+}
 ```
 
 ## Hascal Types
@@ -116,7 +132,12 @@ We have to either convert age to a string:
 function main() : int {
     var text = "age = "
     var age = 23
-    print(text + to_string(age)) # error : Mismatched type 'string' and 'int' :2 
+    print(text + to_string(age)) # error : Mismatched type 'string' and 'int' :3
     return 0
 }
+```
+
+### Numbers
+```
+
 ```
