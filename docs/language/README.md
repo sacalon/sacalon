@@ -194,3 +194,25 @@ function main() : int {
    return 0
 }
 ```
+
+## If
+```typescript
+local use addlib #import add()
+var x = 1
+var y = 2
+function main() : int {
+   if x == y {
+
+   } else if not x != y {
+       # something
+   } else if x == y and x != 2 {
+       # something
+   } else if x != y or x == 10 {
+       # something
+   } else {
+       # something
+   }
+   return 0
+}
+```
+`if` statements are pretty straightforward and similar to most other languages. Unlike other C-like languages, there are no parentheses surrounding the condition and the braces are always required.
