@@ -143,6 +143,7 @@ function main() : int {
 function main() : int {
     var a : int = 123 # or : var a = 123
     var b : float = 1.23 # or : var b = 1.24
+    return 0
 }
 ```
 This will assign the value of `123` to `a` and `1.23` to `b`.
@@ -154,6 +155,10 @@ Arrays are collections of data elements of the same type. They can be represente
 function main() : int {
     var a = [1,2,3] # int array with length 3
     var b = [1.0,2.0,3.0] # float array with length 3
+    print(a[0])
+    a[0] = 4
+    print(a[0])
+    return 0
 }
 ```
 
@@ -169,5 +174,23 @@ You can get length of array's elements with `len` function :
 function main() : int {
    var a = [1,2,3]
    print(len(a)) # output : 3
+}
+```
+
+## Importing Libraries
+Libraries can imported with `use` keyword :
+```typescript
+use os
+function main() : int {
+   system("gcc --version")
+   return 0
+}
+```
+If you want import a local library, you can use `local` keyword :
+```typescript
+local use addlib #import add()
+function main() : int {
+   print(add(1,2))
+   return 0
 }
 ```
