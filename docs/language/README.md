@@ -156,3 +156,18 @@ function main() : int {
     var b = [1.0,2.0,3.0] # float array with length 3
 }
 ```
+
+#### Array Initialization
+The basic initialization syntax is as described above. The type of an array is determined by the first element:
+
+- `[1, 2, 3]` is an array of ints (`[int]`).
+- `["a", "b"]` is an array of strings (`[string]`).
+
+#### Array Size
+You can get length of array's elements with `len` function :
+```typescript
+function main() : int {
+   var a = [1,2,3]
+   print(len(a)) # output : 3
+}
+```
