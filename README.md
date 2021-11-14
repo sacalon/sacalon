@@ -20,7 +20,7 @@
 - [x] Easy to learn
 - [x] Inspired by Swift, Pascal
 - [x] C++ On Back-End
-- [x] Native binaries with no dependency
+- [x] Fast As C++
 - [x] Compatible with C\C++
 <!-- - [x] Garbage Collection and Manual Memory Allocation -->
 
