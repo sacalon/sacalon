@@ -64,7 +64,7 @@ function main() : int {
 > You can see more Hascal examples in [examples folder](https://github.com/hascal/hascal/tree/main/examples).
 
 ## Documentation
-> You can find documentations on installation and using Hascal, [Here](https://github.com/hascal/hascal/tree/main/docs)
+> You can find Hascal's documentation, [Here](https://github.com/hascal/hascal/tree/main/docs)
 
 ## Build from source
 > See [build help page](docs/BUILD.md)
