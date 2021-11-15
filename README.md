@@ -34,7 +34,7 @@ function main() : int {
 ```
 Formatting Strings :
 ```typescript
-function main() : int{
+function main() : int {
     var name = ReadStr("Enter your name :")
     var fmt_str = format("Hi,",name)
     print(fmt_str)
