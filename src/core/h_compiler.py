@@ -46,6 +46,9 @@ class Generator(object):
                   'to_bool' : Function('to_bool',{'...':'...'},'void'),
                   'to_char' : Function('to_char',{'...':'...'},'void'),
                   'to_float' : Function('to_float',{'...':'...'},'void'),
+
+                  'len' : Function('len',{'s':'string'},'int'),
+
             }
 
             # list of imported libraries
