@@ -16,7 +16,7 @@
 > **NOTE:** Hascal is currently under development.
 ## Features
 - [x] Cross Platform
-- [x] Fast & Powerful
+- [x] Safe
 - [x] Easy to learn
 - [x] Inspired by Swift, Pascal
 - [x] C++ On Back-End
