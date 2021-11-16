@@ -1,4 +1,4 @@
-# Interfacing to C\C++
+# Interfacing to C/C++
 You can use C and C++ in Hascal.
 For example, we want to write a function for print abs of a value in c++ and use it in hascal, first create a folder with `cpp` name and create `absprint.cc` and `absprint.hpp` in created folder.
 
