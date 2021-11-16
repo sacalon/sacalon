@@ -83,7 +83,7 @@ function main(): int {
     print(add(1,2,3))
 }
 ```
-Again, the type comes after `:` and `:` comes afterthe argument's name.
+Again, the type comes after `:` and `:` comes after the argument's name.
 
 ## Hascal Types
 
