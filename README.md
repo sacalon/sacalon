@@ -5,7 +5,7 @@
 
   # The Hascal Programming Language
   [Website](https://hascal.github.io) |
-  [Docs](docs/) |
+  [Docs](https://hascal.github.io/docs/) |
   [Gitter](https://gitter.im/hascal/community) |
   [LinkedIn](https://linkedin.com/company/hascal-lang)
 </div>
@@ -68,6 +68,7 @@ function main() : int {
 
 ## Build from source
 > See [build help page](docs/BUILD.md)
+
 
 ## Contributions
 Any contribution is welcome :)
