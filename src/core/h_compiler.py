@@ -485,14 +485,14 @@ class Generator(object):
                                           with open(final_path, 'r') as f:
                                                 parser = Parser()
                                                 tree = parser.parse(Lexer().tokenize(f.read()))
-                                                generator = Generator()
+                                                generator = Generator(self.BASE_DIR)
                                                 output_cpp = generator.generate(tree,True)
 
                                                 self.imported.append(name)
                                                 self.imported += generator.imported
                                                 self.add_to_output(output_cpp,generator.src_includes)
-                                                self.funcs += generator.funcs
-                                                self.types += generator.types
+                                                self.funcs.update(generator.funcs)
+                                                self.types.update(generator.types)
                                     except FileNotFoundError:
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                                           
@@ -540,11 +540,11 @@ class Generator(object):
                                                 self.imported.append(name)
                                                 self.imported += generator.imported
                                                 self.add_to_output(output_cpp,generator.src_includes)
-                                                self.funcs += generator.funcs
-                                                self.types += generator.types
+                                                self.funcs.update(generator.funcs)
+                                                self.types.update(generator.types)
                                     except FileNotFoundError:
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
-                                          
+                  return {'expr':'','type':''}
             
             # local use <lib_name> ;
             if node[0] == 'use_local':
@@ -593,7 +593,7 @@ class Generator(object):
                                                 self.imported.append(name)
                                                 self.imported += generator.imported
                                                 self.add_to_output(output_cpp, generator.src_includes)
-                                                self.funcs += generator.funcs
+                                                self.funcs.update(generator.funcs)
                                     except FileNotFoundError:
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                               
@@ -639,7 +639,7 @@ class Generator(object):
                                           self.imported.append(name)
                                           self.imported += generator.imported
                                           self.add_to_output(output_cpp, generator.src_includes)
-                                          self.funcs += generator.funcs
+                                          self.funcs.update(generator.funcs)
                               except FileNotFoundError:
                                     HascalException(f"cannot found '{name}' library. Are you missing a library ?")
             #-----------------------------------------
@@ -714,7 +714,6 @@ class Generator(object):
                   _name = node[2]
                   _return_type = node[1]
                   _params = { }
-
                   params = node[3].split(',')
                   if len(params) != 1:
                         for p in params:
@@ -725,6 +724,7 @@ class Generator(object):
                         _params[param[1]] = param[0]
 
                   self.funcs[_name] = Function(_name,_params,_return_type)
+                  return {'expr':'','type':'type'}
             #-------------------------------------
             # struct <name> {
             #     <struct_declares>

@@ -275,7 +275,7 @@ class Parser(Parser):
       # function <name>()
       @_('FUNCTION NAME LPAREN RPAREN')
       def statement(self, p):
-            return ('inline_function','void', p.NAME,p.lineno)  
+            return ('inline_function','void', p.NAME,'',p.lineno)  
       #------------------------------------
       @_('expr')
       def in_statement(self, p):

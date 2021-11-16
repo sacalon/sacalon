@@ -1,0 +1,6 @@
+use http
+
+function main() : int {
+    print(get("https://google.com"))
+    return 0
+}

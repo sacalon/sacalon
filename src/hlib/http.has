@@ -1,2 +1,2 @@
 use libcpp.http
-function get() : string
+function get(url:string) : string
