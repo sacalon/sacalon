@@ -3,6 +3,7 @@
 
 ## Installation
 Prequistes :
+
 - python v3.8 or higher
 - pyinstaller 
 - GCC/G++ on your `$PATH`
@@ -18,6 +19,7 @@ $ make deps
 ```
 
 Build hascal excutable file :
+
   - On POSIX(Linux,MacOS,BSDs) :
   ```
   $ make
