@@ -1,5 +1,4 @@
-# Hascal Documentation
-
+# Introduction
 [Hascal](https://hascal.github.io) is a general-purpose open source programming language that makes it easy to build simple,optimal, reliable, and efficient software. 
 
 ## Installation

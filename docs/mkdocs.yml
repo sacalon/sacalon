@@ -1,0 +1,34 @@
+site_name: Hascal Documentation
+site_url: https://hascal.github.io
+nav:
+    - Home Page : 'https://hascal.github.io'
+    - Hascal Documentation: index.md
+    - Standard Library: stdlib.md
+    - Interfacing to C\C++: interfacing.md
+
+theme:
+  name: material
+  logo: assets/logo.png
+  favicon: assets/logo.png
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - toc.integrate
+    - navigation.top
+extra:
+  generator: false
+  homepage: https://hascal.github.io
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/hascal
+plugins:
+  - search
+next_previous: true
+repo_url: https://github.com/hascal/hascal/
+copyright: Copyright &copy; 2019 - 2022 Hascal Foundation
