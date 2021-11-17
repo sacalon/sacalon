@@ -7,7 +7,8 @@
   [Website](https://hascal.github.io) |
   [Docs](https://hascal.github.io/docs/) |
   [Gitter](https://gitter.im/hascal/community) |
-  [LinkedIn](https://linkedin.com/company/hascal-lang)
+  [LinkedIn](https://linkedin.com/company/hascal-lang) \
+  [Changelog](docs/CHANGELOG.md)
 </div>
 
 **Hascal** is a general-purpose open source programming language that makes it easy to build simple,optimal, reliable, and efficient software.
