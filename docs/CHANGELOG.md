@@ -5,7 +5,8 @@
 
 #### New features
 - `for in` statement
-
+- flag option
+  
 #### Bug fixes
 - Fix semantic analyser bugs
 
