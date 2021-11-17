@@ -47,7 +47,7 @@ HTTP Response :
 use http
 
 function main(): int {
-    print(get("google.com"))
+    print(get("http://google.com"))
     return 0
 }
 ```
