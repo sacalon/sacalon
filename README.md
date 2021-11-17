@@ -17,6 +17,7 @@
 ## Features
 - [x] Cross Platform
 - [x] Simple and easy to learn
+- [x] Fast like C++ 
 - [x] Inspired by Swift, Pascal
 - [x] C++ On Back-End
 - [x] Fast As C++
