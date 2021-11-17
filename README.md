@@ -18,7 +18,7 @@
 - [x] Cross Platform
 - [x] Simple and easy to learn
 - [x] Fast like C++ 
-- [x] Inspired by Swift, Pascal
+- [x] Inspired by Swift, Pascal, Python
 - [x] C++ On Back-End
 - [x] Fast As C++
 - [x] Compatible with C\C++
