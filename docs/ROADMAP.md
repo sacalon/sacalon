@@ -59,6 +59,8 @@ var foo = {
 }
 ```
 - `panic` based error management
+- linker flag option
+    
 ### Standard Library
 - `json`, `sqlite` library
 
