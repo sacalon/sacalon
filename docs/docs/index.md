@@ -217,7 +217,7 @@ function main() : int {
 }
 ```
 `if` statements are pretty straightforward and similar to most other languages. Unlike other C-like languages, there are no parentheses surrounding the condition and the braces are always required.
-> You can see Hascal's conditional operators, [here](cond_op.md)
+> You can see Hascal's conditional operators, [here](../cond_op/)
 
 ## For Loop
 ```typescript
