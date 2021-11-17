@@ -8,8 +8,10 @@ from .h_error import HascalException
 from .h_lexer import Lexer
 from .h_parser import Parser
 import sys
+from os.path import isfile
 
 class Generator(object):
+      LDFLAGS = []
       def __init__(self,BASE_DIR):
             self.BASE_DIR = BASE_DIR
             self.src_includes = ""
@@ -66,7 +68,8 @@ class Generator(object):
                   runtime = open(self.BASE_DIR+"/hlib/libcpp/std.cc").read()
                   runtime_h = open(self.BASE_DIR+"/hlib/libcpp/std.hpp").read()
                   return f"{runtime_h}\n{runtime}\n{self.src_includes}\n{self.src_pre_main}\n{result}\n"
-      
+      def get_flags(self):
+            return self.LDFLAGS
       def exists(self,name):
             if name in self.funcs:
                   return True
@@ -448,7 +451,7 @@ class Generator(object):
             #-----------------------------------------
             # use <lib_name> ;
             if node[0] == 'use':
-                  if sys.platform.startswith('win32'):
+                  if sys.platform.startswith('win'):
                         if node[1] in self.imported :
                               ...
                         else :
@@ -460,6 +463,8 @@ class Generator(object):
                                     ends_of_path = path[-1]
                                     for x in path[:-1]:
                                           final_path += x + "\\"
+                                    final_path_ld = final_path + ends_of_path + ".ld"
+                                    # final_path_wld = final_path + ends_of_path + ".wld"
                                     final_path_h = final_path + ends_of_path + ".hpp"
                                     final_path += ends_of_path + ".cc"
                                     try:
@@ -471,7 +476,15 @@ class Generator(object):
                                                       self.add_to_output(cpp_code,hpp_code)
                                     except FileNotFoundError:
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
-                                          
+                                    # if isfile(final_path_wld):
+                                    #       with open(final_path_ld) as f:
+                                    #             ld = f.read().split(',')
+                                    #             self.LDFLAGS += ld  
+                                    if isfile(final_path_ld):
+                                          with open(final_path_ld) as f:
+                                                ld = list(f.read().split(','))
+                                                for i in ld :
+                                                      self.LDFLAGS.append(i)                                     
                               else :
                                     path = node[1]
                                     final_path = str(self.BASE_DIR+"\\hlib\\")
@@ -509,6 +522,7 @@ class Generator(object):
                                     ends_of_path = path[-1]
                                     for x in path[:-1]:
                                           final_path += x + "/"
+                                    final_path_ld = final_path + ends_of_path + ".ld"
                                     final_path_h = final_path + ends_of_path + ".hpp"
                                     final_path += ends_of_path + ".cc"
                                     try:
@@ -520,7 +534,11 @@ class Generator(object):
                                                       self.add_to_output(cpp_code,hpp_code)
                                     except FileNotFoundError:
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
-                                          
+                                    if isfile(final_path_ld):
+                                          with open(final_path_ld) as f:
+                                                ld = list(f.read().split(','))
+                                                for i in ld :
+                                                      self.LDFLAGS.append(i)    
                               else :
                                     path = node[1]
                                     final_path = str(self.BASE_DIR+"/hlib/")
@@ -560,6 +578,7 @@ class Generator(object):
                                     ends_of_path = path[-1]
                                     for x in path[:-1]:
                                           final_path += x + "\\"
+                                    final_path_ld = final_path + ends_of_path + ".ld"
                                     final_path_h = final_path + ends_of_path + ".hpp"
                                     final_path += ends_of_path + ".cc"
 
@@ -572,6 +591,10 @@ class Generator(object):
                                                       self.add_to_output(cpp_code,hpp_code)
                                     except FileNotFoundError:
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                                    if isfile(final_path_ld):
+                                          with open(final_path_ld) as f:
+                                                ld = f.read().split(',')
+                                                self.LDFLAGS += ld  
 
                               else :
                                     tmp = '.'.join(name for name in node[1])

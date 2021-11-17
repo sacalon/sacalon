@@ -4,7 +4,7 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
     return size * nmemb;
 }
 
-// todo : support htpps
+// todo : support https
 string get(string url){
     CURL *curl;
     CURLcode res;
@@ -15,12 +15,11 @@ string get(string url){
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
         res = curl_easy_perform(curl);
         curl_easy_cleanup(curl);
 
-        return readBuffer + std::endl;
+        return readBuffer + "\n";
     }else {
-        return std::to_string(curl);
+        return "Error";
     }
 }

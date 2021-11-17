@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 
 *.exe
+*.dll
+
 # C extensions
 *.so
 
@@ -129,3 +131,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+*.crt

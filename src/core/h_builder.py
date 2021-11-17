@@ -88,11 +88,18 @@ class HascalCompiler(object):
             HascalException("GCC/G++ is not installed")
             sys.exit(1)
 
-        # compile with g++ compiler
+        FLAGS = ['g++', outname+".cc",'-o',outname,'-O3']
+        for ld in self.generator.get_flags() :
+            if not ld in FLAGS:
+                FLAGS.append(ld)
+        # compile to binary
         try :
-            check_call(['g++', outname+".cc",'-o',outname,'-O3'], stdout=DEVNULL, stderr=STDOUT)
+            check_call(FLAGS, stdout=DEVNULL, stderr=STDOUT)
             # uncomment it for development(and comment top line)
-            # os.system('g++ '+ outname+".cc")
+            # flags_str = ""
+            # for flag in FLAGS :
+            #   flags_str += " " + flag
+            # os.system(flags_str)
         except :
             HascalException("unknown error in compile file")
 
