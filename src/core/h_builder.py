@@ -10,11 +10,12 @@ from .h_compiler import Generator # hascal to d compiler
 from .h_error import HascalException # hascal excpetion handling
 from .h_help import * # hascal compiler information
 
-
 from os.path import isfile 
 from subprocess import DEVNULL, STDOUT, check_call
 import sys
 import os
+import requests
+import json
 
 class HascalCompiler(object):
     def __init__(self,argv,BASE_DIR):
@@ -26,7 +27,7 @@ class HascalCompiler(object):
         self.argv = argv
         # arguments checking
         if len(self.argv) > 1 :
-            if self.argv[1] == "-h" or self.argv[1] == "--help":
+            if self.argv[1] in ["-h","--help"]:
                 # show help
                 output_message = [f"Hascal Compiler {HASCAL_COMPILER_VERSION} {sys.platform}",
                                     "Copyright (c) 2019-2022 Hascal Development Team,",
@@ -39,22 +40,63 @@ class HascalCompiler(object):
                 for msg in output_message:
                     print(msg)
                 sys.exit()
-            elif self.argv[1] == "-v" or self.argv[1] == "--version":
+            elif self.argv[1] in ["-v","--version"]:
                 # show version
                 print(f"Hascal {HASCAL_COMPILER_VERSION} --- {sys.platform}")
+            elif self.argv[1] == "install" :
+                if len(argv) < 3 :
+                    HascalException("You must give one library name to install\nusage :\n\thascal install <library_name>")
+                print(f"Installing '{self.argv[2]}'...")
+                if os.path.isfile(self.BASE_DIR+"/hlib/index.json"):
+                    print("Update Libraries Index...")
+                    index = get_index()
+                    if not self.argv[2] in index :
+                        HascalException(f"Library {self.argv[2]} not found")
+                    # dowload files
+                    for file in index[self.argv[2]]["files"] :
+                        r = requests.get(f"{BASE_URL}/{self.argv[2]}/{file}")
+                        with open(self.BASE_DIR+"/hlib/"+file,'w',encoding='utf-8') as f :
+                            f.write(str(r.content.decode("utf-8")))
+                else :
+                    print("Get Libraries Index")
+                    index = get_index()
+                    print(index)
+                    if not self.argv[2] in index :
+                        HascalException(f"Library {self.argv[2]} not found")     
+                    # dowload files
+                    for file in index[self.argv[2]]["files"] :
+                        r = requests.get(f"{BASE_URL}/{self.argv[2]}/{file}")
+                        with open(self.BASE_DIR+"/hlib/"+file,'w',encoding='utf-8') as f :
+                            f.write(str(r.content.decode("utf-8")))
+                print(f"'{self.argv[2]}' library installed successfully!")
+            elif self.argv[1] == "uninstall" :
+                if len(argv) < 3 :
+                    HascalException("You must give one library name to uninstall\nusage :\n\thascal uninstall <library_name>")
+
+                if not os.path.isfile(self.BASE_DIR+"/hlib/index.json"):
+                    HascalException("Library index file(index.json) not found in 'hlib' folder")
+                print(f"Uninstalling '{self.argv[2]}'...")
+                data = ""
+                with open(self.BASE_DIR+"/hlib/index.json",'r',encoding='utf-8') as f :
+                    data = f.read()
+                index = json.loads(data)
+                if not self.argv[2] in index :
+                    HascalException(f"Library {self.argv[2]} not found")
+                for file in index[self.argv[2]]["files"] :
+                    os.remove(self.BASE_DIR+"/hlib/"+file)
+                print(f"'{self.argv[2]}'' library uninstalled successfully!")
             else :
                 # check file extension
                 if not self.argv[1].endswith(".has"):
                     # show file extension error 
                     HascalException(f"The specified file is not a hascal(.has) file")
                 else :
-                    with open(argv[1]) as fin:
-                            self.code = fin.read()
-                    self.compile()
                     try:
-                        ...
+                        with open(argv[1]) as fin:
+                            self.code = fin.read()  
                     except FileNotFoundError :
                         HascalException(f"File '{argv[1]}' not found")
+                    self.compile()
         else:
             output_message = [f"Hascal Compiler {HASCAL_COMPILER_VERSION} {sys.platform}",
                                 "Copyright (c) 2019-2022 Hascal Development Team,",
@@ -88,6 +130,8 @@ class HascalCompiler(object):
             HascalException("GCC/G++ is not installed")
             sys.exit(1)
 
+        if os.path.isfile("config.json"):
+            ...
         FLAGS = ['g++', outname+".cc",'-o',outname,'-O3']
         for ld in self.generator.get_flags() :
             if not ld in FLAGS:
@@ -107,3 +151,12 @@ class HascalCompiler(object):
             os.remove(outname+".cc")
         except :
             ...
+
+BASE_URL = "https://raw.githubusercontent.com/hascal/libs/main"
+
+def get_index():
+    r = requests.get(f"{BASE_URL}/index.json")
+    if r :
+        return r.json()
+    else :
+        HascalException("Cannot download libraries index")

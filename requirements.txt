@@ -2,3 +2,4 @@ pyinstaller
 colorama
 mkdocs
 mkdocs-material
+requests
