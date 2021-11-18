@@ -1,2 +1,4 @@
 pyinstaller
 colorama
+mkdocs
+mkdocs-material
