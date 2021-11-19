@@ -21,7 +21,6 @@
 - [x] Fast like C++ 
 - [x] Inspired by Swift, Pascal, Python
 - [x] C++ On Back-End
-- [x] Fast As C++
 - [x] Compatible with C\C++
 <!-- - [x] Garbage Collection and Manual Memory Allocation -->
 
