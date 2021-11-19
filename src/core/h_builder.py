@@ -43,6 +43,8 @@ class HascalCompiler(object):
             elif self.argv[1] in ["-v","--version"]:
                 # show version
                 print(f"Hascal {HASCAL_COMPILER_VERSION} --- {sys.platform}")
+            
+            # START : Library Manager
             elif self.argv[1] == "install" :
                 if len(argv) < 3 :
                     HascalException("You must give one library name to install\nusage :\n\thascal install <library_name>")
@@ -50,6 +52,8 @@ class HascalCompiler(object):
                 if os.path.isfile(self.BASE_DIR+"/hlib/index.json"):
                     print("Update Libraries Index...")
                     index = get_index()
+                    with open(self.BASE_DIR+"/hlib/index.json","w") as f:
+                        f.write(json.dumps(index))
                     if not self.argv[2] in index :
                         HascalException(f"Library {self.argv[2]} not found")
                     # dowload files
@@ -60,7 +64,8 @@ class HascalCompiler(object):
                 else :
                     print("Get Libraries Index")
                     index = get_index()
-                    print(index)
+                    with open(self.BASE_DIR+"/hlib/index.json","w") as f:
+                        f.write(json.dumps(index))
                     if not self.argv[2] in index :
                         HascalException(f"Library {self.argv[2]} not found")     
                     # dowload files
@@ -69,6 +74,7 @@ class HascalCompiler(object):
                         with open(self.BASE_DIR+"/hlib/"+file,'w',encoding='utf-8') as f :
                             f.write(str(r.content.decode("utf-8")))
                 print(f"'{self.argv[2]}' library installed successfully!")
+
             elif self.argv[1] == "uninstall" :
                 if len(argv) < 3 :
                     HascalException("You must give one library name to uninstall\nusage :\n\thascal uninstall <library_name>")
@@ -84,7 +90,28 @@ class HascalCompiler(object):
                     HascalException(f"Library {self.argv[2]} not found")
                 for file in index[self.argv[2]]["files"] :
                     os.remove(self.BASE_DIR+"/hlib/"+file)
-                print(f"'{self.argv[2]}'' library uninstalled successfully!")
+                print(f"'{self.argv[2]}' library uninstalled successfully!")
+
+            elif self.argv[1] == "update" :
+                if len(argv) < 3 :
+                    HascalException("You must give one library name to update\nusage :\n\thascal update <library_name>")
+                if not os.path.isfile(self.BASE_DIR+"/hlib/index.json"):
+                    HascalException("Library index file(index.json) not found in 'hlib' folder")
+                print(f"Updating '{self.argv[2]}'...")
+                if os.path.isfile(self.BASE_DIR+"/hlib/index.json"):
+                    print("Update Libraries Index...")
+                    index = get_index()
+                    with open(self.BASE_DIR+"/hlib/index.json","w") as f:
+                        f.write(json.dumps(index))
+                    if not self.argv[2] in index :
+                        HascalException(f"Library {self.argv[2]} is deleted from server, you have currently latest version.")
+                    # dowload files
+                    for file in index[self.argv[2]]["files"] :
+                        r = requests.get(f"{BASE_URL}/{self.argv[2]}/{file}")
+                        with open(self.BASE_DIR+"/hlib/"+file,'w',encoding='utf-8') as f :
+                            f.write(str(r.content.decode("utf-8")))
+                print(f"'{self.argv[2]}' library updated successfully!")
+            # END : Library Manager
             else :
                 # check file extension
                 if not self.argv[1].endswith(".has"):

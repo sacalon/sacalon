@@ -1,0 +1,3 @@
+function log(string s){
+  print(s)
+}
