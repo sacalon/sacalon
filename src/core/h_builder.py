@@ -157,20 +157,31 @@ class HascalCompiler(object):
             HascalException("GCC/G++ is not installed")
             sys.exit(1)
 
+        ARGS = {
+            "compiler" : "g++",
+            "optimize" : "-O3",
+            "flags" : ['-o',outname],
+            "ccfile" : outname+".cc",
+        }
+        for flag in self.generator.get_flags() :
+            if not flag in ARGS["flags"]:
+                ARGS["flags"].append(flag)
+
         if os.path.isfile("config.json"):
-            ...
-        FLAGS = ['g++', outname+".cc",'-o',outname,'-O3']
-        for ld in self.generator.get_flags() :
-            if not ld in FLAGS:
-                FLAGS.append(ld)
+            with open("config.json","r") as f :
+                config = json.loads(f.read())
+                if "compiler" in config :
+                    ARGS["compiler"] = config["compiler"]
+                if "optimize" in config :
+                    ARGS["optimize"] = config["optimize"]
+                if "flags" in config :
+                    ARGS["flags"] += config["flags"]
+                          
         # compile to binary
         try :
-            check_call(FLAGS, stdout=DEVNULL, stderr=STDOUT)
+            check_call([ARGS["compiler"],ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"], stdout=DEVNULL, stderr=STDOUT)
             # uncomment it for development(and comment top line)
-            # flags_str = ""
-            # for flag in FLAGS :
-            #   flags_str += " " + flag
-            # os.system(flags_str)
+            # os.system(ARGS["compiler"] +" " + ARGS["optimize"] + " " + ARGS["ccfile"] + " " +flags_str)
         except :
             HascalException("unknown error in compile file")
 
