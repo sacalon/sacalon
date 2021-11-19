@@ -5,6 +5,7 @@ nav:
     - Hascal Documentation: index.md
     - Standard Library: stdlib.md
     - Interfacing to C\C++: interfacing.md
+    - Library Mangaer: libmanager.md
 
 theme:
   name: material
