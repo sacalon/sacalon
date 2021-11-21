@@ -6,7 +6,7 @@
 ### Base
 - C++ in back-end
 - garbage collection and Rust-like memory management
-
+- null safety
 ### Language
 - multi library import :
 ```
