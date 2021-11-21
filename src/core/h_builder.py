@@ -16,6 +16,7 @@ import sys
 import os
 import requests
 import json
+import zipfile
 
 class HascalCompiler(object):
     def __init__(self,argv,BASE_DIR):
@@ -56,41 +57,39 @@ class HascalCompiler(object):
                         f.write(json.dumps(index))
                     if not self.argv[2] in index :
                         HascalException(f"Library {self.argv[2]} not found")
-                    # dowload files
-                    for file in index[self.argv[2]]["files"] :
-                        r = requests.get(f"{BASE_URL}/{self.argv[2]}/{file}")
-                        with open(self.BASE_DIR+"/hlib/"+file,'w',encoding='utf-8') as f :
-                            f.write(str(r.content.decode("utf-8")))
+                    # dowload zip file
+                    r = requests.get(f"{BASE_URL}/{self.argv[2]}/{index[self.argv[2]]['zip']}")
+                    # write zip file to disk
+                    with open(self.BASE_DIR+"/hlib/tmp.zip","wb") as f :
+                        f.write(r.content)
+                    # extract downloaded zip file to hlib folder
+                    with zipfile.ZipFile(self.BASE_DIR+"/hlib/tmp.zip", 'r') as zip_ref:
+                        zip_ref.extractall(self.BASE_DIR+"/hlib/")
+                    # remove downloaded zip file
+                    os.remove(self.BASE_DIR+"/hlib/tmp.zip")
+                    
                 else :
                     print("Get Libraries Index")
                     index = get_index()
                     with open(self.BASE_DIR+"/hlib/index.json","w") as f:
                         f.write(json.dumps(index))
                     if not self.argv[2] in index :
-                        HascalException(f"Library {self.argv[2]} not found")     
-                    # dowload files
-                    for file in index[self.argv[2]]["files"] :
-                        r = requests.get(f"{BASE_URL}/{self.argv[2]}/{file}")
-                        with open(self.BASE_DIR+"/hlib/"+file,'w',encoding='utf-8') as f :
-                            f.write(str(r.content.decode("utf-8")))
+                        HascalException(f"Library {self.argv[2]} not found")
+
+                    # dowload zip file
+                    r = requests.get(f"{BASE_URL}/{self.argv[2]}/{index[self.argv[2]]['zip']}")
+                    # write zip file to disk
+                    with open(self.BASE_DIR+"/hlib/tmp.zip","wb") as f :
+                        f.write(r.content)
+                    # extract downloaded zip file to hlib folder
+                    with zipfile.ZipFile(self.BASE_DIR+"/hlib/tmp.zip", 'r') as zip_ref:
+                        zip_ref.extractall(self.BASE_DIR+"/hlib/")
+                    # remove downloaded zip file
+                    os.remove(self.BASE_DIR+"/hlib/tmp.zip")
                 print(f"'{self.argv[2]}' library installed successfully!")
 
-            elif self.argv[1] == "uninstall" :
-                if len(argv) < 3 :
-                    HascalException("You must give one library name to uninstall\nusage :\n\thascal uninstall <library_name>")
-
-                if not os.path.isfile(self.BASE_DIR+"/hlib/index.json"):
-                    HascalException("Library index file(index.json) not found in 'hlib' folder")
-                print(f"Uninstalling '{self.argv[2]}'...")
-                data = ""
-                with open(self.BASE_DIR+"/hlib/index.json",'r',encoding='utf-8') as f :
-                    data = f.read()
-                index = json.loads(data)
-                if not self.argv[2] in index :
-                    HascalException(f"Library {self.argv[2]} not found")
-                for file in index[self.argv[2]]["files"] :
-                    os.remove(self.BASE_DIR+"/hlib/"+file)
-                print(f"'{self.argv[2]}' library uninstalled successfully!")
+            elif self.argv[1] == "uninstall" : # todo
+                ...
 
             elif self.argv[1] == "update" :
                 if len(argv) < 3 :
@@ -105,12 +104,25 @@ class HascalCompiler(object):
                         f.write(json.dumps(index))
                     if not self.argv[2] in index :
                         HascalException(f"Library {self.argv[2]} is deleted from server, you have currently latest version.")
-                    # dowload files
-                    for file in index[self.argv[2]]["files"] :
-                        r = requests.get(f"{BASE_URL}/{self.argv[2]}/{file}")
-                        with open(self.BASE_DIR+"/hlib/"+file,'w',encoding='utf-8') as f :
-                            f.write(str(r.content.decode("utf-8")))
+                    # dowload zip file
+                    r = requests.get(f"{BASE_URL}/{self.argv[2]}/{index[self.argv[2]]['zip']}")
+                    # write zip file to disk
+                    with open(self.BASE_DIR+"/hlib/tmp.zip","wb") as f :
+                        f.write(r.content)
+                    # extract downloaded zip file to hlib folder
+                    with zipfile.ZipFile(self.BASE_DIR+"/hlib/tmp.zip", 'r') as zip_ref:
+                        zip_ref.extractall(self.BASE_DIR+"/hlib/")
+                    # remove downloaded zip file
+                    os.remove(self.BASE_DIR+"/hlib/tmp.zip")
+
                 print(f"'{self.argv[2]}' library updated successfully!")
+            elif self.argv[1] == "export" :
+                if len(argv) < 3 :
+                    HascalException("You must give one zip file name to export library(only name not extension)\nusage :\n\thascal export <zip_file_name>")
+                current_dir = os.getcwd()
+                zipf = zipfile.ZipFile(self.argv[2]+".zip", 'w', zipfile.ZIP_DEFLATED)
+                zipdir(current_dir, zipf)
+                zipf.close()
             # END : Library Manager
             else :
                 # check file extension
@@ -182,6 +194,7 @@ class HascalCompiler(object):
             check_call([ARGS["compiler"],ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"], stdout=DEVNULL, stderr=STDOUT)
             # uncomment it for development(and comment top line)
             # os.system(ARGS["compiler"] +" " + ARGS["optimize"] + " " + ARGS["ccfile"] + " " +flags_str)
+            ...
         except :
             HascalException("unknown error in compile file")
 
@@ -198,3 +211,11 @@ def get_index():
         return r.json()
     else :
         HascalException("Cannot download libraries index")
+    
+def zipdir(path, ziph):
+    length = len(path)
+    # ziph is zipfile handle
+    for root, dirs, files in os.walk(path):
+        folder = root[length:] # path without "parent"
+        for file in files:
+            ziph.write(os.path.join(root, file), os.path.join(folder, file))

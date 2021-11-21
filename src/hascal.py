@@ -7,14 +7,9 @@
 # all rights reserved.
 
 from sys import argv 
-from core.h_builder import HascalCompiler # importing hascal compiler
+from core.h_builder import HascalCompiler
 import pathlib
-import os
+
 if __name__ == "__main__":  
       BASE_DIR = str(pathlib.Path(__file__).parent.resolve())
       HascalCompiler(argv,BASE_DIR)
-            
-
-      
-      
-      
