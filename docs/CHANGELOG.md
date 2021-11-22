@@ -5,6 +5,7 @@
 
 #### New features
 - `for in` statement
+- library manager
 - flag option
   
 #### Bug fixes
