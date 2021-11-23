@@ -162,19 +162,14 @@ class HascalCompiler(object):
         with open(outname+".cc", 'w') as fout:
             fout.write(output)
 
-        # check if gcc installed
-        try :
-            check_call(['g++','--version'], stdout=DEVNULL, stderr=STDOUT)
-        except :
-            HascalException("GCC/G++ is not installed")
-            sys.exit(1)
-
         ARGS = {
             "compiler" : "g++",
             "optimize" : "-O3",
             "flags" : ['-o',outname],
+            "no_check_gcc_g++" : 1,
             "ccfile" : outname+".cc",
         }
+
         for flag in self.generator.get_flags() :
             if not flag in ARGS["flags"]:
                 ARGS["flags"].append(flag)
@@ -188,7 +183,17 @@ class HascalCompiler(object):
                     ARGS["optimize"] = config["optimize"]
                 if "flags" in config :
                     ARGS["flags"] += config["flags"]
-                          
+                if "no_check_gcc_g++" in config :
+                    ARGS["no_check_gcc_g++"] = config["no_check_gcc_g++"]
+
+        # user may use other compiler instead of gcc\g++ for compiling hascal programs
+        if ARGS["no_check_gcc_g++"] == 1 :
+            # check if gcc installed
+            try :
+                check_call(['g++','--version'], stdout=DEVNULL, stderr=STDOUT)
+            except :
+                HascalException("GCC/G++ is not installed")   
+
         # compile to binary
         try :
             check_call([ARGS["compiler"],ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"], stdout=DEVNULL, stderr=STDOUT)
