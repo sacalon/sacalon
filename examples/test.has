@@ -40,5 +40,6 @@ function main(argv:[string]) : int {
 	print(a.y)
 	var fooo : int = a.y + 2131322
 	z[1] = 3
+	z = [1,2,3]
 	return 0
 }
