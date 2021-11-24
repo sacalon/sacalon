@@ -5,7 +5,7 @@
 
 ### Base
 - C++ in back-end
-- garbage collection and Rust-like memory management
+- `std::shared_ptr` based memory management
 - null safety
 ### Language
 - multi library import :
