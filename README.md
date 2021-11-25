@@ -17,11 +17,11 @@
 <!-- > Visit [Hascal's Official Website](https://hascal.github.io) -->
 > **NOTE:** Hascal is currently under development.
 ## Features
-- [x] Cross Platform
+- [x] Cross platform
 - [x] Simple and easy to learn
 - [x] Fast and powerful like C++ 
 - [x] Inspired by Swift, Pascal
-- [x] C++ On Back-End
+- [x] C++ on backend
 - [x] Compatible with C\C++
 <!-- - [x] Garbage Collection and Manual Memory Allocation -->
 
