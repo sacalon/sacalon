@@ -20,7 +20,7 @@
 - [x] Cross Platform
 - [x] Simple and easy to learn
 - [x] Fast and powerful like C++ 
-- [x] Inspired by Swift, Pascal, Python
+- [x] Inspired by Swift, Pascal
 - [x] C++ On Back-End
 - [x] Compatible with C\C++
 <!-- - [x] Garbage Collection and Manual Memory Allocation -->
