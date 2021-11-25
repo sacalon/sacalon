@@ -50,6 +50,7 @@ class Generator(object):
                   'to_float' : Function('to_float',{'...':'...'},'void'),
 
                   'len' : Function('len',{'s':'string'},'int'),
+                  'regex' : Function('regex',{'regex_str':'string','str':'string'},'bool'),
 
             }
 

@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <cstdarg>
-#include <regex>
+#include <cstring>
 #include <type_traits>
 #include <typeinfo>
+#include <regex>

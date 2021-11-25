@@ -176,4 +176,11 @@ struct is_specialization<Ref<Args...>, Ref>: std::true_type {};
 int len(string s){
 	return s.length();
 }
+
+bool regex(string regex_string,string str){
+    if(std::regex_match(regex_string, std::regex(str) ))
+        return true;
+    return false;
+}
+
 // exit()
