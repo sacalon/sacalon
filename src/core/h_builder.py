@@ -199,9 +199,8 @@ class HascalCompiler(object):
             check_call([ARGS["compiler"],ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"], stdout=DEVNULL, stderr=STDOUT)
             # uncomment it for development(and comment top line)
             # check_call([ARGS["compiler"],ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"])
-            ...
         except :
-            HascalException("unknown error in compile file")
+            HascalException("Unknown error in compile file")
 
         try :
             os.remove(outname+".cc")
