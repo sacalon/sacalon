@@ -70,7 +70,7 @@ function main() : int {
 ## Contributions
 Any contribution is welcome :)
 
-![graph](https://contrib.rocks/image?repo=hascal/hascal)
+[![graph](https://contrib.rocks/image?repo=hascal/hascal)](https://github.com/hascal/hascal/graphs/contributors)
 
 ## License
 The compiler and the standard libraries are licensed under the **"Boost Software License"**,
