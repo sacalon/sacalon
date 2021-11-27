@@ -15,6 +15,9 @@
 **Hascal** is a general-purpose open source programming language that makes it easy to build simple,optimal, reliable, and efficient software.
 
 > Visit [Hascal's Official Website](https://hascal.github.io)
+
+> Hascal pronounces like "Pascal"
+
 > **NOTE:** Hascal is still in the very early stages of development.
 ## Features
 - [x] Cross platform
