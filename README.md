@@ -27,14 +27,14 @@
 
 ## Examples
 Hello World :
-```typescript
+```c#
 function main() : int {
     print("Hello World!")
     return 0
 }
 ```
 Formatting Strings :
-```typescript
+```c#
 function main() : int {
     var name = ReadStr("Enter your name :")
     var fmt_str = format("Hi,",name)
@@ -44,7 +44,7 @@ function main() : int {
 ```
 
 HTTP Response :
-```typescript
+```c#
 use http
 
 function main(): int {
@@ -54,7 +54,7 @@ function main(): int {
 ```
 
 System Command :
-```typescript
+```c#
 use os
 
 function main() : int {
