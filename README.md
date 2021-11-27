@@ -67,10 +67,6 @@ function main() : int {
 ## Documentation
 > You can find Hascal's documentation, [Here](https://hascal.github.io/docs)
 
-## Build from source
-> See [build help page](docs/BUILD.md)
-
-
 ## Contributions
 Any contribution is welcome :)
 
