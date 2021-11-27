@@ -14,11 +14,9 @@
 
 **Hascal** is a general-purpose open source programming language that makes it easy to build simple,optimal, reliable, and efficient software.
 
-> Visit [Hascal's Official Website](https://hascal.github.io)
-
-> Hascal pronounces like "Pascal"
-
-> **NOTE:** Hascal is still in the very early stages of development.
+> **NOTES:** 
+> - Hascal pronounces like "Pascal".
+> - Hascal is still in the very early stages of development.
 ## Features
 - [x] Cross platform
 - [x] Simple and easy to learn
@@ -30,14 +28,15 @@
 
 ## Examples
 Hello World :
-```c#
+```typescript
 function main() : int {
     print("Hello World!")
     return 0
 }
 ```
+
 Formatting Strings :
-```c#
+```typescript
 function main() : int {
     var name = ReadStr("Enter your name :")
     var fmt_str = format("Hi,",name)
@@ -47,7 +46,7 @@ function main() : int {
 ```
 
 HTTP Response :
-```c#
+```typescript
 use http
 
 function main(): int {
@@ -57,7 +56,7 @@ function main(): int {
 ```
 
 System Command :
-```c#
+```typescript
 use os
 
 function main() : int {
@@ -65,6 +64,7 @@ function main() : int {
     return 0
 }
 ```
+
 > You can see more Hascal examples in [examples folder](https://github.com/hascal/hascal/tree/main/examples).
 
 ## Documentation
