@@ -55,16 +55,6 @@ function main(): int {
 }
 ```
 
-System Command :
-```typescript
-use os
-
-function main() : int {
-    system("gcc --version")
-    return 0
-}
-```
-
 > You can see more Hascal examples in [examples folder](https://github.com/hascal/hascal/tree/main/examples).
 
 ## Documentation
