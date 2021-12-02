@@ -183,4 +183,16 @@ bool regex(string regex_string,string str){
     return false;
 }
 
+// this function is used to get length of a vector
+template <typename T>
+int len(std::vector<T> v){
+	return v.size();
+}
+
+// this function is used to get length of a string
+template <typename T>
+int len(T s){
+	return s.length();
+}
+
 // exit()

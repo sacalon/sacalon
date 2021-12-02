@@ -267,7 +267,7 @@ class Parser(Parser):
       # function <name>() : <return_type>
       @_('FUNCTION NAME LPAREN RPAREN COLON return_type')
       def statement(self, p):
-            return ('inline_function',p.return_type, p.NAME,p.lineno)  
+            return ('inline_function',p.return_type, p.NAME,'',p.lineno)  
       # function <name>(<params>)
       @_('FUNCTION NAME LPAREN params RPAREN')
       def statement(self, p):

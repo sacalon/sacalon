@@ -50,6 +50,7 @@ class Generator(object):
                   'to_float' : Function('to_float',{'...':'...'},'void'),
 
                   'len' : Function('len',{'s':'string'},'int'),
+                  'len' : Function('len',{'vec':'T'},'int'),
                   'regex' : Function('regex',{'regex_str':'string','str':'string'},'bool'),
 
             }
@@ -286,12 +287,11 @@ class Generator(object):
 
                   if _name in self.vars or _name in self.consts :
                         HascalException(f"'{_name}' exists, cannot redefine it:{_line}")
-                        
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type, cannot redefine it as a constant:{_line}")
-                        
+                        HascalException(f"'{_name}' defined as a type, cannot redefine it as a constant:{_line}")   
                   else:
                         self.consts[_name] = Const(_name,_type)
+
                         expr = {
                               'expr' : "const auto %s = %s ;\n" % (_name,_expr['expr']),
                               'type' : _type,
@@ -739,12 +739,13 @@ class Generator(object):
                   _name = node[2]
                   _return_type = node[1]
                   _params = { }
+
                   params = node[3].split(',')
                   if len(params) != 1:
                         for p in params:
                               param = p.split(' ')
                               _params[param[1]] = param[0]
-                  elif len(params) == 1 and (params[0] != '' or params[0] != None) : 
+                  elif len(params) == 1 and (params[0] != '' and params[0] != None) : 
                         param = params[0].split(' ')
                         _params[param[1]] = param[0]
 
@@ -899,7 +900,7 @@ class Generator(object):
                   if self.exists(_name):
                         if _name == "print":
                               expr = {
-                                    'expr' : 'std::cout << %s' % ('<< '.join(self.walk(arg)['expr'] for arg in node[2])),
+                                    'expr' : 'std::cout << %s << std::endl' % ('<< '.join(self.walk(arg)['expr'] for arg in node[2])),
                                     'type' : self.funcs['print'].return_type,
                               }
                               return expr
@@ -911,7 +912,6 @@ class Generator(object):
                               return expr
                   else :
                         HascalException(f"Function '{_name}' not defined")
-                        
             # --------------operators-----------------
             # todo : error if string *-/ string
             # <expr> + <expr>
@@ -1037,7 +1037,7 @@ class Generator(object):
             if node[0] == 'equals':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
-
+                  _line = node[3]
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                         
@@ -1052,6 +1052,7 @@ class Generator(object):
             if node[0] == 'not_equals':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
+                  _line = node[3]
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
@@ -1067,6 +1068,7 @@ class Generator(object):
             if node[0] == 'greater_equals':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
+                  _line = node[3]
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
@@ -1082,6 +1084,7 @@ class Generator(object):
             if node[0] == 'less_equals':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
+                  _line = node[3]
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
@@ -1097,6 +1100,7 @@ class Generator(object):
             if node[0] == 'greater':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
+                  _line = node[3]
 
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
@@ -1112,7 +1116,8 @@ class Generator(object):
             if node[0] == 'less':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
-
+                  _line = node[3]
+                  
                   if _expr0['type'] != _expr1['type'] :
                         HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                         
@@ -1166,7 +1171,6 @@ class Generator(object):
                   _name = node[1][0]
                   _line = node[2]
                   if len(node[1]) == 1:
-                        
                         if _name in self.vars:
                               expr = {
                                     'expr' : "%s" % (_name),
@@ -1238,12 +1242,25 @@ class Generator(object):
                   _line = node[3]
                   if len(node[1]) == 1:
                         if _name in self.vars:
+                              if self.vars[_name].type.startswith('std::vector'):
+                                    expr = {
+                                          'expr' : "%s[%s]" % (_name,_expr['expr']),
+                                          'type' : self.vars[_name].type.split('<')[1].split('>')[0],
+                                    }
+                                    return expr
                               expr = {
-                                    'expr' : "%s" % (_name,_expr['expr']),
+                                    'expr' : "%s[%s]" % (_name,_expr['expr']),
                                     'type' : self.vars[_name].type,
                               }
                               return expr
                         elif _name in self.consts :
+                              if self.consts[_name].type.startswith('std::vector'):
+                                    expr = {
+                                          'expr' : "%s[%s]" % (_name,_expr['expr']),
+                                          'type' : self.vars[_name].type.split('<')[1].split('>')[0],
+                                    }
+                                    return expr
+
                               expr = {
                                     'expr' : "%s" % (_name,_expr['expr']),
                                     'type' : self.consts[_name].type,
@@ -1254,13 +1271,25 @@ class Generator(object):
                   else :
                         _end_name = node[1][len(node[1])-1]
                         _full_name = '.'.join(arg for arg in node[1])
-                        if _name in self.vars:   
+                        if _name in self.vars: 
+                              if self.vars[_name].type.startswith('std::vector'):
+                                    expr = {
+                                          'expr' : "%s[%s]" % (_name,_expr['expr']),
+                                          'type' : self.vars[_name].type.split('<')[1].split('>')[0],
+                                    }
+                                    return expr  
                               expr = {
                                     'expr' : "%s" % (_full_name,_expr['expr']),
                                     'type' : self.vars[_name].type,
                               }
                               return expr
                         elif _name in self.consts :
+                              if self.consts[_name].type.startswith('std::vector'):
+                                    expr = {
+                                          'expr' : "%s[%s]" % (_name,_expr['expr']),
+                                          'type' : self.vars[_name].type.split('<')[1].split('>')[0],
+                                    }
+                                    return expr  
                               expr = {
                                     'expr' : "%s" % (_full_name,_expr['expr']),
                                     'type' : self.consts[_name].type,
