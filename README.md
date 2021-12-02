@@ -24,7 +24,6 @@
 - [x] Inspired by Swift, Pascal
 - [x] C++ on backend
 - [x] Compatible with C\C++
-<!-- - [x] Garbage Collection and Manual Memory Allocation -->
 
 ## Examples
 Hello World :
