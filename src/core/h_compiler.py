@@ -611,7 +611,7 @@ class Generator(object):
                                           with open(final_path, 'r') as f:
                                                 parser = Parser()
                                                 tree = parser.parse(Lexer().tokenize(f.read()))
-                                                generator = Generator()
+                                                generator = Generator("./")
                                                 output_cpp = generator.generate(tree,True)
 
                                                 self.imported.append(name)
@@ -657,7 +657,7 @@ class Generator(object):
                                     with open(final_path, 'r') as f:
                                           parser = Parser()
                                           tree = parser.parse(Lexer().tokenize(f.read()))
-                                          generator = Generator()
+                                          generator = Generator("./")
                                           output_cpp = generator.generate(tree,True)
 
                                           self.imported.append(name)
@@ -666,6 +666,7 @@ class Generator(object):
                                           self.funcs.update(generator.funcs)
                               except FileNotFoundError:
                                     HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                  return {'expr':'','type':''}
             #-----------------------------------------
             # function <name> {
             #     <block>

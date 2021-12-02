@@ -1,0 +1,13 @@
+local use lexer
+
+function main(argv:[string]) : int {
+    print("Hascal Compiler {HASCAL_COMPILER_VERSION} {sys.platform}")
+    print("Copyright (c) 2019-2022 Hascal Development Team)")
+    print("All rights reserved.")
+    print("\nEnter following command for compile a Hascal program :")
+    print("hascal <inputfile.has> [output file name]")
+    print("other commands:")
+    print("\t--help,-h : show help")
+    print("\t--version,-v : show version")
+    return 0
+}
