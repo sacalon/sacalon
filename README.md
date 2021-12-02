@@ -18,7 +18,7 @@
 > - Hascal pronounces like "Pascal".
 > - Hascal is still in the very early stages of development.
 ## Features
-- [x] Cross platform
+- [x] Simplicity: the language can be learned in less than an hour
 - [x] Simple and easy to learn
 - [x] Fast and powerful like C++ 
 - [x] Inspired by Swift, Pascal
