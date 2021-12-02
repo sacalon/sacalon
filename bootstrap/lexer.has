@@ -1,3 +1,42 @@
-function lexer(src:string){
+# token struct
+struct token {
+    var type : string
+    var value : string
+}
+
+# token types
+var NAME = "NAME"
+var NUMBER = "NUMBER"
+var STRING = "STRING"
+var BOOLEAN = "BOOLEAN"
+var VAR = "VAR"
+var FUNCTION = "FUNCTION"
+var OPERATOR = "OPERATOR"
+var COLON = "COLON"
+var LBRACKET = "LBRACKET"
+var RBRACKET = "RBRACKET"
+var LPAREN = "LPAREN"
+var RPAREN = "RPAREN"
+var COMMA = "COMMA"
+var LBRACE = "LBRACE"
+var RBRACE = "RBRACE"
+
+var lexme = ""
+var current = 0
+var source = ""
+var tokens : [token]
+
+# this function is used to check if the current character is at the end of the string
+function isAtEnd() : bool {
+    if current >= len(source) {
+        return true
+    }
+    return false
+}
+
+function tokenizer(src:string): [token] {
+    var toks : [token]
+    source = src
     print("Not implemented")
+    return toks
 }

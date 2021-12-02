@@ -63,9 +63,8 @@ class Generator(object):
             result = ""
             for e in _expr :
                   result += e['expr']
-
             if use :
-                  return f"\n{self.src_pre_main}\n"
+                  return f"\n{self.src_includes}\n{self.src_pre_main}\n{result}"
             else :
                   runtime = open(self.BASE_DIR+"/hlib/libcpp/std.cc").read()
                   runtime_h = open(self.BASE_DIR+"/hlib/libcpp/std.hpp").read()
@@ -126,7 +125,13 @@ class Generator(object):
                         
                   else:
                         members = {}
-                        if isinstance(self.types[_type],Struct) : members = self.types[_type].members
+
+                        if _type.startswith('std::vector'):
+                              _type_name = _type.split('<')[1].split('>')[0]
+                              if _type_name in self.types and isinstance(self.types[_type_name],Struct) :
+                                    members = self.types[_type_name].members
+                        elif isinstance(self.types[_type],Struct) :
+                              members = self.types[_type].members
                         self.vars[_name] = Var(_name,_type,members=members)
                         res = "auto %s = %s;\n" % (_name,_expr['expr'])
                         expr = {
@@ -214,7 +219,7 @@ class Generator(object):
                         if isinstance(self.types[_type],Struct) : members = self.types[_type].members
                         self.vars[_name] = Var(_name,_type,is_array=True,members=members)
                         expr = {
-                              'expr' : "std::vecotr<%s> %s;\n" % (_type,_name),
+                              'expr' : "std::vector<%s> %s;\n" % (_type,_name),
                               'type' : _type,
                               'name' : _name,
                         }
@@ -508,9 +513,7 @@ class Generator(object):
                                                 self.funcs.update(generator.funcs)
                                                 self.types.update(generator.types)
                                     except FileNotFoundError:
-                                          HascalException(f"cannot found '{name}' library. Are you missing a library ?")
-                                          
-
+                                          HascalException(f"cannot found '{name}' library. Are you missing a library ?")            
                   else :
                         if node[1] in self.imported :
                               ...
@@ -618,6 +621,7 @@ class Generator(object):
                                                 self.imported += generator.imported
                                                 self.add_to_output(output_cpp, generator.src_includes)
                                                 self.funcs.update(generator.funcs)
+                                                self.types.update(generator.types)
                                     except FileNotFoundError:
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                               
@@ -664,6 +668,7 @@ class Generator(object):
                                           self.imported += generator.imported
                                           self.add_to_output(output_cpp, generator.src_includes)
                                           self.funcs.update(generator.funcs)
+                                          self.types.update(generator.types)
                               except FileNotFoundError:
                                     HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                   return {'expr':'','type':''}
@@ -857,7 +862,7 @@ class Generator(object):
                   if not (_name2 in self.vars or _name2 in self.consts) :
                         HascalException(f"'{_name2}' not defined:{_line}") #todo
                   elif _name2 in self.vars :
-                        if self.vars[_name2].is_array != True :
+                        if not self.vars[_name2].type.startswith('std::vector') :
                               HascalException(f"'{_name2}' is not iterable:{_line}") 
                         self.vars[_name] = Var(_name,self.vars[_name2].type)
                         body = self.walk(node[3])
@@ -1206,13 +1211,22 @@ class Generator(object):
                         _end_name = node[1][len(node[1])-1]
                         _full_name = '.'.join(arg for arg in node[1])
 
+                        members = {}
+                        
+
                         if _name in self.vars:
+                              if self.vars[_name].type.startswith('std::vector') :
+                                    _type_name = self.vars[_name].type.split('<')[1].split('>')[0]
+                                    members = {} if self.types.get(_type_name,{}) == {} else self.types[_type_name].members
                               expr = {
                                     'expr' : "%s" % (_full_name),
-                                    'type' :str(self.vars[_name].members[_end_name]),
+                                    'type' :str(members[_end_name]),
                               }
                               return expr
                         elif _name in self.consts :
+                              if self.consts[_name].type.startswith('std::vector') :
+                                    _type_name = self.consts[_name].type.split('<')[1].split('>')[0]
+                                    members = {} if self.types.get(_type_name,{}) == {} else self.types[_type_name].members
                               expr = {
                                     'expr' : "%s" % (_full_name),
                                     'type' : str(self.consts[_name].members[_end_name]),
@@ -1346,7 +1360,7 @@ class Generator(object):
             #--------------------------------------------
             if node[0] == 'string':
                   expr = {
-                        'expr' : '"%s"' % node[1],
+                        'expr' : 'std::string("%s")' % node[1],
                         'type' : node[0],
                   }
                   return expr

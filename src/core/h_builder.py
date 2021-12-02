@@ -168,6 +168,7 @@ class HascalCompiler(object):
             "flags" : ['-o',outname],
             "no_check_gcc_g++" : 1,
             "ccfile" : outname+".cc",
+            "g++_out" : 0,
         }
 
         for flag in self.generator.get_flags() :
@@ -177,6 +178,7 @@ class HascalCompiler(object):
         if os.path.isfile("config.json"):
             with open("config.json","r") as f :
                 config = json.loads(f.read())
+
                 if "compiler" in config :
                     ARGS["compiler"] = config["compiler"]
                 if "optimize" in config :
@@ -185,6 +187,8 @@ class HascalCompiler(object):
                     ARGS["flags"] += config["flags"]
                 if "no_check_gcc_g++" in config :
                     ARGS["no_check_gcc_g++"] = config["no_check_gcc_g++"]
+                if "g++_out" in config :
+                    ARGS["g++_out"] = config["g++_out"]
 
         # user may use other compiler instead of gcc\g++ for compiling hascal programs
         if ARGS["no_check_gcc_g++"] == 1 :
@@ -196,9 +200,10 @@ class HascalCompiler(object):
 
         # compile to binary
         try :
-            check_call([ARGS["compiler"],ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"], stdout=DEVNULL, stderr=STDOUT)
-            # uncomment it for development(and comment top line)
-            # check_call([ARGS["compiler"],ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"])
+            if ARGS["g++_out"] == 1 :
+                check_call([ARGS["compiler"],ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"])
+            else :
+                check_call([ARGS["compiler"],ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"], stdout=DEVNULL, stderr=STDOUT)
         except :
             HascalException("Unknown error in compile file")
 

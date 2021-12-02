@@ -191,7 +191,7 @@ int len(std::vector<T> v){
 
 // this function is used to get length of a string
 template <typename T>
-int len(T s){
+int len(string s){
 	return s.length();
 }
 

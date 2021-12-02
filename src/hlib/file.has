@@ -1,0 +1,4 @@
+use libcpp.file
+
+function read_file(path:string) : string
+function write_file(path:string,text:string) : string
