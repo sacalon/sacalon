@@ -260,3 +260,11 @@ function main() : int {
    return 0
 }
 ```
+
+## Inline C++ Code
+You can use inline c++ code in hascal with `cuse` keyword :
+```typescript
+cuse '#include <cstdio>'
+cuse 'int main(){printf("%d",1);return 0;}'
+// output : 1
+```

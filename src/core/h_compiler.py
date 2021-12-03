@@ -308,7 +308,7 @@ class Generator(object):
             if node[0] == 'cuse':
                   _c_code = node[1]
                   return {
-                        'expr' : _c_code,
+                        'expr' : _c_code+"\n",
                         'type' : '',
                   }
             #-------------------------------------
