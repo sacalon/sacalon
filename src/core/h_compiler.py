@@ -703,7 +703,7 @@ class Generator(object):
             #     <block>
             # }
             if node[0] == 'function':
-                  current_vars = self.vars
+                  current_vars = self.vars.copy()
                   _name = node[2]
                   _return_type = node[1]
                   _params = { }
@@ -719,8 +719,12 @@ class Generator(object):
                         param = params[0].split(' ')
                         _params[param[1]] = param[0]
                         self.vars[param[1]] = Var(param[1],param[0])
+                  
+                  if self.funcs.get(_name) != None:
+                        self.funcs[_name] = [self.funcs[_name],Function(_name,_params,_return_type)]
+                  else :
+                        self.funcs[_name] = Function(_name,_params,_return_type)
 
-                  self.funcs[_name] = Function(_name,_params,_return_type)
                   _name = node[2]
                   _compiled_params = node[3]
                   _expr = self.walk(node[4])
@@ -759,8 +763,12 @@ class Generator(object):
                   elif len(params) == 1 and (params[0] != '' and params[0] != None) : 
                         param = params[0].split(' ')
                         _params[param[1]] = param[0]
+                  
+                  if self.funcs.get(_name) != None:
+                        self.funcs[_name] = [self.funcs[_name],Function(_name,_params,_return_type)]
+                  else :
+                        self.funcs[_name] = Function(_name,_params,_return_type)
 
-                  self.funcs[_name] = Function(_name,_params,_return_type)
                   return {'expr':'','type':'type'}
             #-------------------------------------
             # struct <name> {
@@ -908,6 +916,8 @@ class Generator(object):
             # <expr>(<params>)
             if node[0] == 'call':
                   _name = node[1]
+                  _line = node[3]
+
                   if self.exists(_name):
                         if _name == "print":
                               expr = {
@@ -916,11 +926,38 @@ class Generator(object):
                               }
                               return expr
                         else :
-                              expr = {
-                                    'expr' : "%s(%s)" % (_name, ', '.join(self.walk(arg)['expr'] for arg in node[2])),
-                                    'type' : self.funcs[_name].return_type,
-                              }
-                              return expr
+                              if isinstance(self.funcs[_name],list):
+                                    _f_params = {}
+                                    for f in self.funcs[_name]:
+                                          _f_params[f.name] = f.params
+                                    
+                                    counter = 0
+                                    while counter < len(self.funcs[_name]):
+                                          f = self.funcs[_name][counter]
+
+                                          if len(f.params) != len(node[2]):
+                                                # check if there is at end of list
+                                                if counter == len(self.funcs[_name]) - 1:
+                                                      if len(f.params) > len(node[2]):
+                                                            HascalException(f"{_name} has more parameters than given:{_line}")
+                                                      else :
+                                                            HascalException(f"{_name} has less parameters than given:{_line}")
+                                                else :
+                                                      counter += 1
+                                                      continue
+                                          else :
+                                                expr = {
+                                                      'expr' : '%s(%s)' % (f.name,','.join(self.walk(arg)['expr'] for arg in node[2])),
+                                                      'type' : f.return_type,
+                                                }
+                                                return expr
+                                          counter += 1
+                              else :
+                                    expr = {
+                                          'expr' : "%s(%s)" % (_name, ', '.join(self.walk(arg)['expr'] for arg in node[2])),
+                                          'type' : self.funcs[_name].return_type,
+                                    }
+                                    return expr
                   else :
                         HascalException(f"Function '{_name}' not defined")
             # --------------operators-----------------
