@@ -334,7 +334,7 @@ class Parser(Parser):
             return ('string', p.STRING,p.lineno)
       @_('CHAR')
       def expr(self, p):
-            return ('char', p.CHAR,p.CHAR.lineno)
+            return ('char', p.CHAR,p.lineno)
       @_('boolean')
       def expr(self, p):
             return ('bool', p.boolean[0],p.boolean[1])

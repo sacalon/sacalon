@@ -195,4 +195,9 @@ int len(string s){
 	return s.length();
 }
 
+// this function is used to append a value to a vector
+template <typename T>
+void append(std::vector<T>& v, T val){
+	v.push_back(val);
+}
 // exit()

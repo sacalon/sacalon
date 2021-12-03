@@ -51,6 +51,7 @@ class Generator(object):
 
                   'len' : Function('len',{'s':'string'},'int'),
                   'len' : Function('len',{'vec':'T'},'int'),
+                  'append' : Function('append',{'vec':'T','val':'T'},'int'),
                   'regex' : Function('regex',{'regex_str':'string','str':'string'},'bool'),
 
             }
@@ -312,20 +313,17 @@ class Generator(object):
 
                   if len(node[1]) == 1:
                         if _name in self.consts :
-                              HascalException(f"'{_name}'is a constant, cannot assign it")
-                              
+                              HascalException(f"'{_name}'is a constant, cannot assign it")   
                         elif _name in self.types:
-                              HascalException(f"'{_name}'is a type, cannot assign it")
-                              
+                              HascalException(f"'{_name}'is a type, cannot assign it")  
                         elif not _name in self.vars :
-                              HascalException(f"Variable '{_name}' not defined")
-                               
-                        elif _name in self.vars and (self.vars[_name].type != _expr['type']):
-                              HascalException(f"Mismatched type {self.vars[_name].type} and {_expr['type']}:{_line}")
-                              
+                              HascalException(f"Variable '{_name}' not defined")    
+                        elif _name in self.vars and not isinstance(self.types[self.vars[_name].type],Struct) and (self.vars[_name].type != _expr['type']):
+                              HascalException(f"Mismatched type {self.vars[_name].type} and {_expr['type']}:{_line}")    
                         else :
+                              res = "%s = %s;\n" % (_name,_expr['expr'])
                               expr = {
-                                    'expr' :  "%s = %s;\n" % (_name,_expr['expr']),
+                                    'expr' :  res,
                                     'type' : self.vars[_name].type,
                               }
                               return expr
@@ -1317,15 +1315,15 @@ class Generator(object):
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
 
-                  if _expr0['type'] != _expr1['type']:
-                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
+                  # if _expr0['type'] != _expr1['type']:
+                  #       HascalException(f"Mismatched type {_expr0} and {_expr['type']}:{_line}")
                         
-                  else :
-                        expr = {
-                              'expr' : '%s,%s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : _expr0['type'] # or : _expr1['type']
-                        }
-                        return expr
+                  # else :
+                  expr = {
+                        'expr' : '%s,%s' % (_expr0['expr'],_expr1['expr']),
+                        'type' : _expr0['type'] # or : _expr1['type']
+                  }
+                  return expr
             # [<expr>]
             if node[0] == 'list':
                   _expr = self.walk(node[1])

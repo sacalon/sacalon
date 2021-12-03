@@ -2,6 +2,7 @@
 struct token {
     var type : string
     var value : string
+    var line : int
 }
 
 # token types
@@ -24,6 +25,8 @@ var RBRACE = "RBRACE"
 var lexme = ""
 var current = 0
 var source = ""
+var line = 1
+
 var tokens : [token]
 
 # this function is used to check if the current character is at the end of the string
@@ -34,9 +37,31 @@ function isAtEnd() : bool {
     return false
 }
 
+function advance() : char{
+    current = current + 1
+    return source[current]
+}
+
+function scan_token(){
+    var c = advance()
+    var tok : token
+
+    if c == ' ' {
+        scan_token()
+    } else if c == '\n' {
+        line = line + 1
+    } else if c == '(' {
+        tok = [LPAREN,"(",line]
+        append(tokens,tok)
+    } else if c == ')' {
+        tok = [RPAREN,")",line]
+        append(tokens,tok)
+    } 
+}
 function tokenizer(src:string): [token] {
-    var toks : [token]
     source = src
-    print("Not implemented")
-    return toks
+    while isAtEnd() == false {
+        scan_token()
+    }
+    return tokens
 }
