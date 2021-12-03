@@ -164,3 +164,11 @@ Math Functions
 - `max(x:int,y:int):int` : Returns the larger of x and y. 
 - `min(x:int,y:int):int` : Returns the smaller of x and y. 
 - `abs(x:float):float` : Calculates the absolute value of a number. 
+
+## `strings`
+Work with strings
+- `is_alpha(c:char): bool` : check if char is alphabetic
+- `is_alphanum(c:char): bool` : check if char is alphanumeric
+- `is_space(c:char): bool` : check if char is space
+- `is_lower(c:char): bool` : check if char is lowercase
+- `is_upper(c:char): bool` : check if char is uppercase
