@@ -1,0 +1,7 @@
+use os
+
+function main(): int {
+    // to do
+    system("mkdocs build")
+    return 0
+}
