@@ -6,6 +6,10 @@ bool is_alphanum(char c){
     return std::is_alpha(c) || std::is_digit(c);
 }
 
+bool is_space(char c){
+    return std::isspace(c);
+}
+
 string to_lower(string str){
     string temp;
     for (char c : str)
