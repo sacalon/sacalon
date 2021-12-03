@@ -53,6 +53,15 @@ class Parser(Parser):
       def statement(self, p):
             return ('use_local', p.name[0],p.lineno)
       #-----------------------------------
+      # cuse <name>
+      @_('CUSE CHAR')
+      def statement(self, p):
+            return ('cuse',p.CHAR,p.lineno)
+      
+      @_('CUSE CHAR')
+      def in_statement(self, p):
+            return ('cuse',p.CHAR,p.lineno)
+      #-----------------------------------
       @_('enum_stmt')
       def statement(self, p):
             return p.enum_stmt

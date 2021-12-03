@@ -184,7 +184,7 @@ class HascalCompiler(object):
                 if "optimize" in config :
                     ARGS["optimize"] = config["optimize"]
                 if "flags" in config :
-                    ARGS["flags"] += config["flags"]
+                    ARGS["flags"] = config["flags"]
                 if "no_check_gcc_g++" in config :
                     ARGS["no_check_gcc_g++"] = config["no_check_gcc_g++"]
                 if "g++_out" in config :

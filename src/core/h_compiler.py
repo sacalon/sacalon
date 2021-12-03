@@ -305,6 +305,14 @@ class Generator(object):
                         }
                         return expr
             #-------------------------------------
+            if node[0] == 'cuse':
+                  _c_code = node[1]
+                  return {
+                        'expr' : _c_code,
+                        'type' : '',
+                  }
+            #-------------------------------------
+
             # <name> = <expr> ;         
             if node[0] == 'assign':
                   _name = node[1][0]
