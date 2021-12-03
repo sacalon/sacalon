@@ -1,0 +1,7 @@
+use libcpp.string
+
+function is_alpha(c:char): bool
+function is_alphanum(c:char): bool
+function is_space(c:char): bool
+function to_lower(str:string): string
+function to_upper(str:string): string
