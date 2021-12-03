@@ -1,2 +1,3 @@
 use libcpp.random
+
 function RandInt(max:int) : int

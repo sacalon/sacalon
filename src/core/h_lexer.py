@@ -31,7 +31,7 @@ class Lexer(Lexer):
                 CUSE,
                 STRUCT,ENUM}
         ignore = ' \t'
-        ignore_comment_slash = r'#.*'
+        ignore_comment_slash = r'//.*'
         
         NAME = r'[a-zA-Z_][a-zA-Z0-9_]*'
         NUMBER = r'\d+'

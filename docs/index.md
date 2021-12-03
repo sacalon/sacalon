@@ -48,8 +48,8 @@ As in many other languages (such as C++ and Rust), `main` is the entry point of 
 `print` is one of the few built-in functions. It prints the value passed to it to standard output.
 
 ## Comments
-```py
-# This is a single line command
+```typescript
+// This is a single line command
 ```
 
 ## Variables
@@ -89,25 +89,25 @@ Again, the type comes after `:` and `:` comes after the argument's name.
 ## Hascal Types
 
 ### Primitive types
-```nim
-bool # boolean value
+```typescript
+bool // boolean value
 
-string # string literal
+string // string literal
 
-int # integer value
+int // integer value
 
-float # floating point 
-double # double floating point(soon)
+float // floating point 
+double // double floating point(soon)
 ```
 
 ### Strings
 ```typescript
 function main() : int {
     var text = "Hello World"
-    print(text[0]) # output : H 
+    print(text[0]) // output : H 
 
     var text2 = "Hello\tWorld"
-    print(text2) # output : Hello   World
+    print(text2) // output : Hello   World
     return 0
 }
 ```
@@ -116,7 +116,7 @@ function main() : int {
 ```typescript
 function main() : int {
     var text = "Hello "
-    print(text + "World") # output : Hello World 
+    print(text + "World") // output : Hello World 
     return 0
 }
 ```
@@ -125,7 +125,7 @@ All operators in Hascal must have values of the same type on both sides. You can
 function main() : int {
     var text = "age = "
     var age = 23
-    print(text + age) # error : Mismatched type 'string' and 'int' :2 
+    print(text + age) // error : Mismatched type 'string' and 'int' :2 
     return 0
 }
 ```
@@ -134,7 +134,7 @@ We have to either convert age to a string:
 function main() : int {
     var text = "age = "
     var age = 23
-    print(text + to_string(age)) # error : Mismatched type 'string' and 'int' :3
+    print(text + to_string(age)) // error : Mismatched type 'string' and 'int' :3
     return 0
 }
 ```
@@ -142,8 +142,8 @@ function main() : int {
 ### Numbers
 ```typescript
 function main() : int {
-    var a : int = 123 # or : var a = 123
-    var b : float = 1.23 # or : var b = 1.24
+    var a : int = 123 // or : var a = 123
+    var b : float = 1.23 // or : var b = 1.24
     return 0
 }
 ```
@@ -154,8 +154,8 @@ This will assign the value of `123` to `a` and `1.23` to `b`.
 Arrays are collections of data elements of the same type. They can be represented by a list of elements surrounded by brackets. The elements can be accessed by appending an index (starting with 0) in brackets to the array variable:
 ```typescript
 function main() : int {
-    var a = [1,2,3] # int array with length 3
-    var b = [1.0,2.0,3.0] # float array with length 3
+    var a = [1,2,3] // int array with length 3
+    var b = [1.0,2.0,3.0] // float array with length 3
     print(a[0])
     a[0] = 4
     print(a[0])
@@ -174,7 +174,7 @@ You can get length of array's elements with `len` function :
 ```typescript
 function main() : int {
    var a = [1,2,3]
-   print(len(a)) # output : 3
+   print(len(a)) // output : 3
 }
 ```
 
@@ -189,7 +189,7 @@ function main() : int {
 ```
 If you want to import a local library, you can use `local` keyword :
 ```typescript
-local use addlib #import add()
+local use addlib //import add()
 function main() : int {
    print(add(1,2))
    return 0
@@ -198,7 +198,6 @@ function main() : int {
 
 ## If
 ```typescript
-local use addlib #import add()
 var x = 1
 var y = 2
 function main() : int {
@@ -224,7 +223,7 @@ function main() : int {
 function main() : int {
    var a = [1,2,3]
    for i in a {
-       print(i) # prints elements of `a` variable
+       print(i) // prints elements of `a` variable
    }
    return 0
 }
@@ -247,7 +246,7 @@ struct Color {
    var r : int
    var g : int
    var b : int
-   var name = "Transparent" # optional value
+   var name = "Transparent" // optional value
 }
 
 function main() : int {
