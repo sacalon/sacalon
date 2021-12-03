@@ -172,3 +172,7 @@ Work with strings
 - `is_space(c:char): bool` : check if char is space
 - `is_lower(c:char): bool` : check if char is lowercase
 - `is_upper(c:char): bool` : check if char is uppercase
+
+## `http`
+HTTP client-server library
+- `get(url:string) : string` : get content from url(only support http)
