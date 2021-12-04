@@ -49,7 +49,7 @@ As in many other languages (such as C++ and Rust), `main` is the entry point of 
 
 ## Comments
 ```typescript
-// This is a single line command
+// This is a single line comment
 ```
 
 ## Variables
