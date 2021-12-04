@@ -1,1 +1,1 @@
-This directory contains a bootstrspped Hascal compiler written in Hascal
+This directory contains bootstrapped Hascal compiler written in Hascal
