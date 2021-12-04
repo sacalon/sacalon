@@ -5,7 +5,7 @@
 
 ### Base
 - C++ in back-end
-- `std::shared_ptr` based memory management
+- `new/delete` c++ keyword based memory management
 - null safety
 ### Language
 - multi library import :
@@ -32,11 +32,6 @@ var mythread = thread(@(1000,true){
 })
 ```
 
-- immutable variables
-```
-let x : int = 1
-```
-
 - function decorators :
 ```
 @static
@@ -44,7 +39,9 @@ function add(a:int,b:int) : int {
     return a + b
 }
 ```
+
 - `@no_mm` decorator for manual memory management
+
 - dictionaries :
 ```
 var names_age = dict(string,int,{
@@ -58,7 +55,9 @@ var foo = {
    "Y" : 2
 }
 ```
+
 - `panic` based error management
+
 ### Standard Library
 - `json`, `sqlite` library
 
