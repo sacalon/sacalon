@@ -1,0 +1,35 @@
+use os
+
+function main():int {
+    print("cuse.has :")
+    system("hascal.py cuse.has")
+
+    print("for_in.has :")
+    system("hascal.py for_in.has")
+
+    print("func_overload.has :")
+    system("hascal.py func_overload.has")
+
+    print("nested_struct.has :")
+    system("hascal.py nested_struct.has")
+
+    print("test.has :")
+    system("hascal.py test.has")
+
+    print("format.has :")
+    system("hascal.py format.has")
+
+    print("get.has :")
+    system("hascal.py get.has")
+
+    print("hello.has :")
+    system("hascal.py hello.has")
+
+    print("read_from_stdin.has :")
+    system("hascal.py read_from_stdin.has")
+
+    print("regex.has :")
+    system("hascal.py regex.has")
+
+    return 0
+}

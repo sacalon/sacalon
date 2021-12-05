@@ -129,6 +129,11 @@ class Parser(Parser):
       @_('name LBRCK expr RBRCK ASSIGN expr')
       def in_statement(self, p):
             return ('assign_var_index', p.name[0],p.expr0,p.expr1,p.lineno)
+      
+      # <name>[<expr>].<name> = <expr>
+      @_('name LBRCK expr RBRCK DOT name ASSIGN expr')
+      def in_statement(self, p):
+            return ('assign_var_index_struct', p.name0[0],p.name1[0],p.expr0,p.expr1,p.lineno)
       #-----------------------------------
       @_('if_stmt')
       def in_statement(self, p):

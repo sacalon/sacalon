@@ -16,3 +16,8 @@ string os_name()
     return "unknown";
     #endif
 }
+
+int system(string cmd)
+{
+    return system(cmd.c_str());
+}
