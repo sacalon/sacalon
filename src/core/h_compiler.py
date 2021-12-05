@@ -44,10 +44,10 @@ class Generator(object):
                   'error' : Function('error',{'errmsg':'string'},'void'),
 
                   'to_int' : Function('to_int',{'...':'...'},'void'),
-                  'to_string' : Function('to_string',{'...':'...'},'void'),
-                  'to_bool' : Function('to_bool',{'...':'...'},'void'),
-                  'to_char' : Function('to_char',{'...':'...'},'void'),
-                  'to_float' : Function('to_float',{'...':'...'},'void'),
+                  'to_string' : Function('to_string',{'...':'...'},'string'),
+                  'to_bool' : Function('to_bool',{'...':'...'},'bool'),
+                  'to_char' : Function('to_char',{'...':'...'},'char'),
+                  'to_float' : Function('to_float',{'...':'...'},'float'),
 
                   'len' : Function('len',{'s':'string'},'int'),
                   'len' : Function('len',{'vec':'T'},'int'),
@@ -126,12 +126,12 @@ class Generator(object):
                   else:
                         members = {}
 
-                        if _type.startswith('std::vector'):
-                              _type_name = _type.split('<')[1].split('>')[0]
+                        if isinstance(_type,Array):
+                              _type_name = str(_type).split('<')[1].split('>')[0]
                               if _type_name in self.types and isinstance(self.types[_type_name],Struct) :
                                     members = self.types[_type_name].members
-                        elif isinstance(self.types[_type],Struct) :
-                              members = self.types[_type].members
+                        elif isinstance(_type,Struct) :
+                              members = _type.members
                         self.vars[_name] = Var(_name,_type,members=members)
                         res = "auto %s = %s;\n" % (_name,_expr['expr'])
                         expr = {
@@ -977,16 +977,18 @@ class Generator(object):
                   _name2 = node[2][0]
                   _line = node[4]
                   res = ""
-                  current_vars = dict(self.vars)
+                  current_vars = self.vars.copy()
+
                   if not (_name2 in self.vars or _name2 in self.consts) :
                         HascalException(f"'{_name2}' not defined:{_line}") #todo
-                  elif _name2 in self.vars :
-                        if not str(self.vars[_name2].type).startswith('std::vector') :
-                              HascalException(f"'{_name2}' is not iterable:{_line}") 
-                        self.vars[_name] = Var(_name,self.vars[_name2].type)
-                        body = self.walk(node[3])
-                        for e in body :
-                              res += e['expr']
+
+                  if not isinstance(self.vars[_name2].type,Array) :
+                        HascalException(f"'{_name2}' is not iterable:{_line}") 
+
+                  self.vars[_name] = Var(_name,self.vars[_name2].type.type_obj)
+                  body = self.walk(node[3])
+                  for e in body :
+                        res += e['expr']
                   self.vars = current_vars
                   expr = {
                         'expr' : 'for(auto %s : %s){\n%s\n}\n' % (_name,_name2,res),
@@ -1089,8 +1091,7 @@ class Generator(object):
                   _line = node[3]
 
                   if str(_expr0['type']) != str(_expr1['type']) :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}.")  
                   else :
                         expr = {
                               'expr' : '%s - %s' % (_expr0['expr'],_expr1['expr']),
@@ -1105,8 +1106,7 @@ class Generator(object):
                   _line = node[3]
 
                   if str(_expr0['type']) != str(_expr1['type']) :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}") 
                   else :
                         expr = {
                               'expr' : '%s * %s' % (_expr0['expr'],_expr1['expr']),
@@ -1121,8 +1121,7 @@ class Generator(object):
                   _line = node[3]
 
                   if str(_expr0['type']) != str(_expr1['type']) :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                        
+                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}") 
                   else :
                         expr = {
                               'expr' : '%s / %s' % (_expr0['expr'],_expr1['expr']),
@@ -1132,11 +1131,10 @@ class Generator(object):
 
             # (<expr>)
             if node[0] == 'paren_expr':
-                  _expr0 = self.walk(node[1])
-
+                  _expr = self.walk(node[1])
                   expr = {
-                        'expr' : '(%s)' % (_expr0['expr']),
-                        'type' : _expr0['type'] 
+                        'expr' : '(%s)' % (_expr['expr']),
+                        'type' : _expr['type'] 
                   }
                   return expr
             
@@ -1399,9 +1397,12 @@ class Generator(object):
                               if str(self.vars[_name].type).startswith('std::vector'):
                                     expr = {
                                           'expr' : "%s[%s]" % (_name,_expr['expr']),
-                                          'type' : self.vars[_name].type.split('<')[1].split('>')[0],
+                                          'type' : self.types[str(self.vars[_name].type).split('<')[1].split('>')[0]],
                                     }
                                     return expr
+                              elif not str(self.vars[_name].type).startswith('string'):
+                                    HascalException(f"{_name} is not subscriptable:{_line}")
+                              
                               expr = {
                                     'expr' : "%s[%s]" % (_name,_expr['expr']),
                                     'type' : self.vars[_name].type,
@@ -1411,9 +1412,11 @@ class Generator(object):
                               if str(self.consts[_name].type).startswith('std::vector'):
                                     expr = {
                                           'expr' : "%s[%s]" % (_name,_expr['expr']),
-                                          'type' : self.vars[_name].type.split('<')[1].split('>')[0],
+                                          'type' : self.types[str(self.vars[_name].type).split('<')[1].split('>')[0]],
                                     }
                                     return expr
+                              elif not str(self.vars[_name].type).startswith('string'):
+                                    HascalException(f"{_name} is not subscriptable:{_line}")
 
                               expr = {
                                     'expr' : "%s" % (_name,_expr['expr']),
@@ -1429,9 +1432,12 @@ class Generator(object):
                               if str(self.vars[_name].type).startswith('std::vector'):
                                     expr = {
                                           'expr' : "%s[%s]" % (_name,_expr['expr']),
-                                          'type' : self.vars[_name].type.split('<')[1].split('>')[0],
+                                          'type' : self.types[str(self.vars[_name].type).split('<')[1].split('>')[0]],
                                     }
                                     return expr  
+                              elif not str(self.vars[_name].type).startswith('string'):
+                                    HascalException(f"{_name} is not subscriptable:{_line}")
+
                               expr = {
                                     'expr' : "%s" % (_full_name,_expr['expr']),
                                     'type' : self.vars[_name].type,
@@ -1441,9 +1447,12 @@ class Generator(object):
                               if str(self.consts[_name].type).startswith('std::vector'):
                                     expr = {
                                           'expr' : "%s[%s]" % (_name,_expr['expr']),
-                                          'type' : self.vars[_name].type.split('<')[1].split('>')[0],
+                                          'type' : self.types[str(self.vars[_name].type).split('<')[1].split('>')[0]],
                                     }
                                     return expr  
+                              elif not str(self.vars[_name].type).startswith('string'):
+                                    HascalException(f"{_name} is not subscriptable:{_line}")
+
                               expr = {
                                     'expr' : "%s" % (_full_name,_expr['expr']),
                                     'type' : self.consts[_name].type,

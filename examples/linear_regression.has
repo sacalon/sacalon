@@ -1,0 +1,50 @@
+// simple linear regression model from scratch in Hascal programming language
+
+// y = mx + b
+// m = slope, b = y-intercept
+// y = mx + b
+
+use math // mean()
+
+function RMSE(y:[float], predicted_y:[float], len_x:int): float {
+    var my_temp : float
+    var i = 0
+    while i < len(y) {
+        my_temp = my_temp + pow((y[i] - predicted_y[i]),2)
+        my_temp = my_temp / to_float(len_x)
+        my_temp = pow(my_temp,(1/2))
+        i = i + 1
+    }
+    return(my_temp)
+}
+    
+
+function main(): int {
+    // our data
+    var x : [float] = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+    var y : [float] = [1.0, 3.0, 2.0, 5.0, 7.0, 8.0, 8.0, 9.0, 10.0, 12.0]
+
+    // calculate the slope and y-intercept
+    var m : float = (y[0] - y[9]) / (x[0] - x[9])
+    var b : float = y[0] - m * x[0]
+
+    // calculate the predicted y values
+    var y_pred : [float]
+    for i in x {
+        append(y_pred,m * i + b)
+    }
+
+    // calculate the root mean squared error
+    var rmse : float = RMSE(y, y_pred, len(x))
+
+    // print the rmse and the predicted y values
+    print("RMSE: ", rmse)
+
+    // print the predicted y values
+    print("Predicted y values: ")
+    for i in x {
+        print(i, ": ", y_pred[i])
+    }
+    
+    return 0
+}
