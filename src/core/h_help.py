@@ -1,4 +1,4 @@
-# The Hascal Help Information
+# Help Informations
 #
 # The Hascal Programming Language
 # Copyright 2019-2022 Hascal Development Team,
@@ -6,3 +6,4 @@
 
 HASCAL_COMPILER_VERSION = "1.3.3"
 HASCAL_GITHUB_REPO = "https://github.com/hascal/hascal"
+
