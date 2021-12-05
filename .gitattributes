@@ -1,2 +1,2 @@
 *.has linguist-language=Swift text=auto
-*.has linguist-detectable=true
+examples/ linguist-documentation
