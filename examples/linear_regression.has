@@ -1,4 +1,25 @@
 // simple linear regression model from scratch in Hascal programming language
+//
+// y = mx + b
+// m = slope, b = y-intercept
+//               ^
+// m = mean(y) - b * x
+//
+///     Σ(x[i] - mean(x))(y[i] - mean(y))
+// b = __________________________________
+//            Σ(x[i] - mean(x)) ^ 2
+//
+// Our data :
+// | Area(x) | Price(y) |
+// |---------|----------|
+// | 1       | 1        |
+// | 2       | 3        |
+// | 4       | 3        |
+// | 3       | 2        |
+// | 5       | 5        |
+//
+// This function calculates the RMSE (Root Mean Square Error)
+// simple linear regression model from scratch in Hascal programming language
 
 // y = mx + b
 // m = slope, b = y-intercept
@@ -6,32 +27,60 @@
 
 use math // mean()
 
-function RMSE(y:[float], predicted_y:[float], len_x:int): float {
-    var my_temp : float
+
+/// Calculate the y intercept(b)
+function calc_y_intercept(x:[float], y:[float],avg_x:float, avg_y:float) : float {
+    var b_numerator = 0.0
+    var b_denumerator = 0.0
+
     var i = 0
-    while i < len(y) {
-        my_temp = my_temp + pow((y[i] - predicted_y[i]),2)
-        my_temp = my_temp / to_float(len_x)
-        my_temp = pow(my_temp,(1/2))
+    while i < len(x){
+        b_numerator = b_numerator + ((x[i] - avg_x)*(y[i] - avg_y))
+        b_denumerator = b_denumerator + pow((x[i] - avg_x),2)
         i = i + 1
     }
-    return(my_temp)
+
+    return(b_numerator/b_denumerator)
 }
-    
+
+// Predict y for a given x
+function predict(x:float, m:float, b:float) : float {
+    return(m*x + b)
+}
+
+// Calculate the RMSE
+function RMSE(y:[float], predicted_y:[float], len_x:int) : float {
+    var result = 0.0
+
+    var i = 0
+    while i < len_x{
+        result = result + pow((y[i] - predicted_y[i]),2)
+        result = result / to_float(len_x)
+        result = pow(result,(1/2))
+        i = i + 1
+    }
+    return result
+
+}
+
 
 function main(): int {
     // our data
-    var x : [float] = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
-    var y : [float] = [1.0, 3.0, 2.0, 5.0, 7.0, 8.0, 8.0, 9.0, 10.0, 12.0]
+    var x : [float] = [1.0,2.0,4.0,3.0,5.0]
+    var y : [float] = [1.0,3.0,3.0,2.0,5.0]
+
+    // calculate the mean of x and y
+    var avg_x = mean(x)
+    var avg_y = mean(y)
 
     // calculate the slope and y-intercept
-    var m : float = (y[0] - y[9]) / (x[0] - x[9])
-    var b : float = y[0] - m * x[0]
+    var b = calc_y_intercept(x, y, avg_x, avg_y)
+    var m = avg_y - (b * avg_x)
 
     // calculate the predicted y values
     var y_pred : [float]
     for i in x {
-        append(y_pred,m * i + b)
+        append(y_pred,predict(i, m, b))
     }
 
     // calculate the root mean squared error
