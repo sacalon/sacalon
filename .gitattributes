@@ -1,2 +1,2 @@
 *.has linguist-language=Swift text=auto
-examples/ linguist-documentation
+examples/*.has linguist-documentation=false
