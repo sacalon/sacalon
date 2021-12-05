@@ -7,9 +7,11 @@
 - `for in` statement
 - library manager
 - flag option
-  
+- `cuse` statement
+
 #### Bug fixes
 - Fix semantic analyser bugs
+- Fix nested struct bug
 
 #### Removed
 - `for to` and `for downto` statement removed
