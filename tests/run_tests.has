@@ -31,5 +31,8 @@ function main():int {
     print("regex.has :")
     system("hascal.py regex.has")
 
+    print("linear_regression.has :")
+    system("hascal.py linear_regression.has")
+
     return 0
 }
