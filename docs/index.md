@@ -202,15 +202,15 @@ var x = 1
 var y = 2
 function main() : int {
    if x == y {
-       # something
+       // something
    } else if not x != y {
-       # something
+       // something
    } else if x == y and x != 2 {
-       # something
+       // something
    } else if x != y or x == 10 {
-       # something
+       // something
    } else {
-       # something
+       // something
    }
    return 0
 }
