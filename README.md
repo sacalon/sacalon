@@ -20,7 +20,7 @@
 ## Features
 - [x] Simple and easy to learn
 - [x] Fast and powerful like C++
-- [x] Inspired by Swift, Pascal
+- [x] Inspired by Swift and Pascal
 - [x] C++ on backend
 - [x] Compatible with C\C++
 
