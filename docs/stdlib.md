@@ -169,6 +169,7 @@ Math Functions
 Work with strings
 - `is_alpha(c:char): bool` : check if char is alphabetic
 - `is_alphanum(c:char): bool` : check if char is alphanumeric
+- `is_number(c:char): bool` : check if char is number
 - `is_space(c:char): bool` : check if char is space
 - `is_lower(c:char): bool` : check if char is lowercase
 - `is_upper(c:char): bool` : check if char is uppercase

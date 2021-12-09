@@ -1374,7 +1374,7 @@ class Parser(metaclass=ParserMeta):
             if lineno:
                 sys.stderr.write(colorama.Fore.RED+"Error : ")
                 sys.stderr.write(colorama.Style.RESET_ALL)
-                sys.stderr.write(f'Syntax error at line {lineno}, token={token.type}\n')
+                sys.stderr.write(f'Syntax error at line {lineno}, token={token.type}, value={token.value}\n')
             else:
                 sys.stderr.write(colorama.Fore.RED+"Error : ")
                 sys.stderr.write(colorama.Style.RESET_ALL)

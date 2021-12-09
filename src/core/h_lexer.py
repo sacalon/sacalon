@@ -9,6 +9,7 @@ from .h_error import HascalException
 from sys import exit
 
 class Lexer(Lexer):
+        # todo : increase the line number after comments
         tokens = {
                 NAME, FOR, WHILE,IN,
                 IF, ELSE,

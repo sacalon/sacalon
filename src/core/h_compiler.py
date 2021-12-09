@@ -928,6 +928,7 @@ class Generator(object):
             #     <block>
             # }
             if node[0] == 'if':
+                  cuurent_vars = self.vars.copy()
                   cond = self.walk(node[1])
                   body = self.walk(node[2])
 
@@ -935,12 +936,14 @@ class Generator(object):
                   for e in body :
                         res += e['expr']
 
+                  self.vars = cuurent_vars
                   expr = {
                         'expr' : 'if(%s){\n%s\n}\n' % (cond['expr'],res),
                         'type' : '',
                   }
                   return expr
             if node[0] == 'if_else':
+                  cuurent_vars = self.vars.copy()
                   cond = self.walk(node[1])
                   body = self.walk(node[2])
                   body2 = self.walk(node[3])
@@ -950,18 +953,23 @@ class Generator(object):
                   res2 = ""
                   for e in body2 :
                         res += e['expr']
+
+                  self.vars = cuurent_vars
                   expr = {
                         'expr' : 'if(%s){\n%s\n}else {\n%s\n}\n' % (cond['expr'],res,res2),
                         'type' : '',
                   }
                   return expr
             if node[0] == 'if_else2':
+                  cuurent_vars = self.vars.copy()
                   cond = self.walk(node[1])
                   body = self.walk(node[2])
                   body2 = self.walk(node[3])
                   res = ""
                   for e in body :
                         res += e['expr']
+
+                  self.vars = cuurent_vars
                   expr = {
                         'expr' : 'if(%s){\n%s\n}else %s\n' % (cond['expr'],res,body2['expr']),
                         'type' : '',

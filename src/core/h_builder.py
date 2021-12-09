@@ -131,7 +131,7 @@ class HascalCompiler(object):
                     HascalException(f"The specified file is not a hascal(.has) file")
                 else :
                     try:
-                        with open(argv[1]) as fin:
+                        with open(argv[1],encoding="utf-8") as fin:
                             self.code = fin.read()  
                     except FileNotFoundError :
                         HascalException(f"File '{argv[1]}' not found")

@@ -71,6 +71,14 @@ float to_float(bool s){
 	return 0.0;
 }
 
+char to_char(int s){
+	return (char)(s+48);
+}
+
+char to_char(char c){
+	return c;
+}
+
 string ReadStr(){
 	string res;
 	std::cin >> res;
