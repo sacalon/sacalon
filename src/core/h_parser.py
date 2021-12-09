@@ -199,6 +199,13 @@ class Parser(Parser):
       @_('STRUCT NAME LBC block_struct RBC')
       def struct_stmt(self, p):
             return ('struct',p.NAME,p.block_struct,p.lineno)
+      
+      # struct <name> : <name> {
+      #     <block_struct>     
+      # }
+      @_('STRUCT NAME COLON NAME LBC block_struct RBC')
+      def struct_stmt(self, p):
+            return ('struct_inheritance',p.NAME0,p.NAME1,p.block_struct,p.lineno)
       #-----------------------------------
       # break
       @_('BREAK')
@@ -304,7 +311,7 @@ class Parser(Parser):
       @_('LBRCK exprs RBRCK')
       def expr(self, p):
             return ('list', p.exprs,p.lineno)
-            
+
       @_('expr PLUS expr')
       def expr(self, p):
             return ('add', p.expr0, p.expr1,p.lineno)

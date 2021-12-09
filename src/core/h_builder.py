@@ -11,7 +11,7 @@ from .h_error import HascalException # hascal excpetion handling
 from .h_help import * # hascal compiler information
 
 from os.path import isfile 
-from subprocess import DEVNULL, STDOUT, check_call
+from subprocess import DEVNULL, STDOUT, check_call, getoutput
 import sys
 import os
 import requests
@@ -168,6 +168,7 @@ class HascalCompiler(object):
             "flags" : ['-o',outname],
             "no_check_gcc_g++" : 1,
             "ccfile" : outname+".cc",
+            "c++_version" : "c++17",
             "g++_out" : 0,
         }
 
@@ -198,12 +199,26 @@ class HascalCompiler(object):
             except :
                 HascalException("GCC/G++ is not installed")   
 
+        # check if c++ compiler installed
+        try :
+            check_call([ARGS["compiler"], '--version'], stdout=DEVNULL, stderr=STDOUT)
+        except :
+            HascalException("C++ compiler is not installed")
+        
+        # check if c++ compiler supports ARGS["c++_version"]
+        try :
+            if int(getoutput(f'{ARGS["compiler"]} -dumpversion').split(".")[0]) < 8:
+                HascalException("C++ compiler doesn't support c++17")
+            
+        except :
+            HascalException(f"C++ compiler is not support {ARGS['c++_version']}")
+        
         # compile to binary
         try :
             if ARGS["g++_out"] == 1 :
-                check_call([ARGS["compiler"],ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"])
+                check_call([ARGS["compiler"],f'-std={ARGS["c++_version"]}',ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"])
             else :
-                check_call([ARGS["compiler"],ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"], stdout=DEVNULL, stderr=STDOUT)
+                check_call([ARGS["compiler"],f'-std={ARGS["c++_version"]}',ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"], stdout=DEVNULL, stderr=STDOUT)
         except :
             HascalException("Unknown error in compile file")
 

@@ -1,0 +1,12 @@
+struct a {
+    var b : int
+}
+
+struct b : a {
+
+}
+
+function main() : int {
+    var foo : b = b(1)
+   
+}

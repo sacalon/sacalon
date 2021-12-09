@@ -173,7 +173,7 @@ class Generator(object):
                   _type = node[2]
                   _expr = self.walk(node[4])
                   _line = node[5]
-
+            
                   if _name in self.vars or _name in self.consts  :
                         HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
@@ -877,7 +877,7 @@ class Generator(object):
                   return {'expr':'','type':'type'}
             #-------------------------------------
             # struct <name> {
-            #     <struct_declares>
+            #     <block_struct>
             # }
             if node[0] == 'struct':
                   _name = node[1]
@@ -891,6 +891,35 @@ class Generator(object):
                   self.types[_name] = Struct(_name,_members)
                   expr = {
                         'expr' : 'struct %s{\n%s\n};\n' % (_name,res),
+                        'type' : _name,
+                  } 
+                  return expr
+            
+            # struct <name> : <name> {
+            #     <block_struct>
+            # }
+            if node[0] == 'struct_inheritance':
+                  _name = node[1]
+                  _i_name = node[2]
+                  _body = self.walk(node[3])
+                  _line = node[4]
+                  _members = { }
+                  
+                  # get members from parent struct
+                  if self.types.get(_i_name) != None:
+                        _members = self.types[_i_name].members
+                  else :
+                        HascalException(f"Cannot found struct '{_i_name}'")
+
+                  # generate output code and member
+                  res = ""
+                  for e in _body :
+                        res += e['expr']
+                        _members[e['name']] = e['type']
+                        
+                  self.types[_name] = Struct(_name,_members)
+                  expr = {
+                        'expr' : 'struct %s : %s{\n%s\n};\n' % (_name,_i_name,res),
                         'type' : _name,
                   } 
                   return expr
@@ -1041,7 +1070,7 @@ class Generator(object):
                               }
                               return expr
                         else :
-                              if isinstance(self.funcs[_name],list):
+                              if isinstance(self.funcs.get(_name),list):
                                     _f_params = {}
                                     for f in self.funcs[_name]:
                                           _f_params[f.name] = f.params
@@ -1067,6 +1096,15 @@ class Generator(object):
                                                 }
                                                 return expr
                                           counter += 1
+                              if _name in self.types:
+                                    if not isinstance(self.types[_name],Struct):
+                                          HascalException(f"Cannot call type {_name}:{_line}")
+
+                                    expr = {
+                                                'expr' : '%s{%s}' % (_name,self.walk(node[2][0])['expr']),
+                                                'type' : self.types[_name],
+                                    }
+                                    return expr
                               else :
                                     expr = {
                                           'expr' : "%s(%s)" % (_name, ', '.join(self.walk(arg)['expr'] for arg in node[2])),
@@ -1473,9 +1511,6 @@ class Generator(object):
             if node[0] == 'exprs':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
-
-                  # if _expr0['type'] != _expr1['type']:
-                  #       HascalException(f"Mismatched type {_expr0} and {_expr['type']}:{_line}")
                         
                   expr = {
                         'expr' : '%s,%s' % (_expr0['expr'],_expr1['expr']),
@@ -1556,6 +1591,8 @@ class Struct(object):
             self.name = name
             self.members = members
             self.stdtype = False
+      def __str__(self):
+            return self.name
 
 class Enum(Struct):
       ...

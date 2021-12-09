@@ -6,7 +6,7 @@ Prequistes :
 
 - python v3.8 or higher
 - pyinstaller 
-- GCC/G++ on your `$PATH`
+- GCC/G++>=8.0.0 on your `$PATH`
 
 First clone Hascal's source :
 ```
