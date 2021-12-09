@@ -1,6 +1,18 @@
 # Hascal Changelog
 
 <details>
+<summary>v1.3.3</summary>
+
+#### New features
+- struct inheritance
+
+#### Bug fixes
+- Fix variable scope bug
+
+#### Removed
+</details>
+
+<details>
 <summary>v1.3.2</summary>
 
 #### New features
