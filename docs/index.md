@@ -243,21 +243,27 @@ function main() : int {
 ## Structs
 ```typescript
 struct Color {
-   var r : int
-   var g : int
-   var b : int
-   var name = "Transparent" // optional value
+    var r : int
+    var g : int
+    var b : int
+    var name = "Transparent" // optional value
+}
+
+struct RGB : Color {
+    // struct inheritance
 }
 
 function main() : int {
-   var a : Color
-   a.r = 1
-   a.g = 110
-   a.b = 255
-   print(a.r,a.g,a.b)
+    var a : Color
+    a.r = 1
+    a.g = 110
+    a.b = 255
+    print(a.r,a.g,a.b)
    
-   var b = Color(34,156,255,"AColor")
-   return 0
+    var b = Color(34,156,255,"AColor")
+
+    var c = RGB(255,0,0,"AColor")
+    return 0
 }
 ```
 
