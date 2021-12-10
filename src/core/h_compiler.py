@@ -157,9 +157,8 @@ class Generator(object):
                         members = {}
                         if isinstance(self.types[_type],Struct) : members = self.types[_type].members
                         self.vars[_name] = Var(_name,_type,members=members)
-                        res = ""
-                        if not self.types[_type].stdtype : res = "%s %s = {} ;\n" % (_type,_name)
-                        else : res = "%s %s;\n" % (_type,_name)
+                        res =  "%s %s ;\n" % (_type,_name)
+
                         expr = {
                               'expr' : res,
                               'type' : _type,
@@ -884,7 +883,8 @@ class Generator(object):
                   _name = node[1]
                   _body = self.walk(node[2])
                   _members = { }
-                  # generate output code and member
+                  
+                  # generate output code and members
                   res = ""
                   for e in _body :
                         if e.get('cuse') == None :
