@@ -293,6 +293,7 @@ class Generator(object):
                   return {
                         'expr' : _c_code+"\n",
                         'type' : '',
+                        'cuse' : True,
                   }
             #-------------------------------------
             # <name> = <expr>   
@@ -886,8 +887,9 @@ class Generator(object):
                   # generate output code and member
                   res = ""
                   for e in _body :
+                        if e.get('cuse') == None :
+                              _members[e['name']] = e['type']
                         res += e['expr']
-                        _members[e['name']] = e['type']
                   self.types[_name] = Struct(_name,_members)
                   expr = {
                         'expr' : 'struct %s{\n%s\n};\n' % (_name,res),
