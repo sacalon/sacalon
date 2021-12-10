@@ -23,7 +23,7 @@
 - [x] Inspired by Swift and Pascal
 - [x] C++ on backend
 - [x] Compatible with C\C++
-- [x] Null safety (WIP)
+
 ## Examples
 Hello World :
 ```typescript
