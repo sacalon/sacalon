@@ -438,6 +438,20 @@ function tokenizer(input:string) : [token] {
 	return tokens
 }
 
+struct node_t{
+	var kind : string
+	var value : string
+	// incomplete type
+}
+
+struct node : node_t {
+	var callee : node_t
+	var expr : node_t
+	var params : [node]
+	var args : [node]
+	var context : [node]
+}
+
 function main(argv:[string]) : int {
     return 0
 }

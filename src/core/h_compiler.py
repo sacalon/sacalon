@@ -161,7 +161,7 @@ class Generator(object):
 
                         expr = {
                               'expr' : res,
-                              'type' : _type,
+                              'type' : self.types[_type],
                               'name' : _name,
                         }
                         return expr
@@ -187,7 +187,7 @@ class Generator(object):
                         self.vars[_name] = Var(_name,_type,members=members)
                         expr = {
                               'expr' : "auto %s = %s;\n" % (_name,_expr['expr']),
-                              'type' : _type,
+                              'type' : self.types[_type],
                               'name' : _name,
                         }
                         return expr
@@ -261,7 +261,7 @@ class Generator(object):
                         self.consts[_name] = Const(_name,_type)
                         expr = {
                               'expr' : "const %s %s = %s ;\n" % (_type,_name,_expr['expr']),
-                              'type' : _type,
+                              'type' : self.types[_type],
                               'name' : _name,
                         }
                         return expr
@@ -282,7 +282,7 @@ class Generator(object):
 
                         expr = {
                               'expr' : "const auto %s = %s ;\n" % (_name,_expr['expr']),
-                              'type' : _type,
+                              'type' : self.types[_type],
                               'name' : _name,
                         }
                         return expr
@@ -881,8 +881,9 @@ class Generator(object):
             # }
             if node[0] == 'struct':
                   _name = node[1]
-                  _body = self.walk(node[2])
                   _members = { }
+                  self.types[_name] = Struct(_name,_members)
+                  _body = self.walk(node[2])
                   
                   # generate output code and members
                   res = ""
@@ -903,10 +904,11 @@ class Generator(object):
             if node[0] == 'struct_inheritance':
                   _name = node[1]
                   _i_name = node[2]
-                  _body = self.walk(node[3])
                   _line = node[4]
                   _members = { }
-                  
+                  self.types[_name] = Struct(_name,_members)
+                  _body = self.walk(node[3])
+
                   # get members from parent struct
                   if self.types.get(_i_name) != None:
                         _members = self.types[_i_name].members
@@ -917,6 +919,12 @@ class Generator(object):
                   res = ""
                   for e in _body :
                         res += e['expr']
+                        # todo :
+                        #     struct a {
+                        #             var a : [a] // only this works
+                        #             var b : a // but this not works, error : incompliant type
+                        #     }
+                        # 
                         _members[e['name']] = e['type']
                         
                   self.types[_name] = Struct(_name,_members)
@@ -1618,5 +1626,5 @@ class Array(Type):
             if isinstance(self.type_obj,Type):
                   return "std::vector<%s>" % (self.type_name)
             elif isinstance(self.type_obj,Struct):
-                  return "std::vector<%s>" % (self.name)
+                  return "std::vector<%s>" % (self.type_obj.name)
             
