@@ -8,6 +8,11 @@
 - `new/delete` c++ keyword based memory management
 - null safety
 ### Language
+- pointers and references
+```typescript
+var x : *int = 1
+print(&x)
+```
 - multi library import :
 ```
 use http, random
