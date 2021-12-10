@@ -5,11 +5,13 @@
 
 #### New features
 - struct inheritance
+- can use `cuse` statement on struct declaration
 
 #### Bug fixes
 - Fix variable scope bug
+- Fix variable declaration bug
+- Fix semantic analyser bug
 
-#### Removed
 </details>
 
 <details>
