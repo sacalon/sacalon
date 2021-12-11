@@ -156,7 +156,7 @@ class Generator(object):
                   else:
                         members = {}
                         if isinstance(self.types[_type],Struct) : members = self.types[_type].members
-                        self.vars[_name] = Var(_name,_type,members=members)
+                        self.vars[_name] = Var(_name,self.types[_type],members=members)
                         res =  "%s %s ;\n" % (_type,_name)
 
                         expr = {
@@ -184,7 +184,8 @@ class Generator(object):
                   else:
                         members = {}
                         if isinstance(self.types[_type],Struct) : members = self.types[_type].members
-                        self.vars[_name] = Var(_name,_type,members=members)
+                        self.vars[_name] = Var(_name,self.types[_type],members=members)
+
                         expr = {
                               'expr' : "auto %s = %s;\n" % (_name,_expr['expr']),
                               'type' : self.types[_type],
@@ -258,7 +259,7 @@ class Generator(object):
                   elif not _type in self.types :
                         HascalException(f"Type '{_type}' not defined:{_line}")
                   else:
-                        self.consts[_name] = Const(_name,_type)
+                        self.consts[_name] = Const(_name,self.types[_type])
                         expr = {
                               'expr' : "const %s %s = %s ;\n" % (_type,_name,_expr['expr']),
                               'type' : self.types[_type],
@@ -278,7 +279,7 @@ class Generator(object):
                   elif _name in self.types :
                         HascalException(f"'{_name}' defined as a type, cannot redefine it as a constant:{_line}")   
                   else:
-                        self.consts[_name] = Const(_name,_type)
+                        self.consts[_name] = Const(_name,self.types[_type])
 
                         expr = {
                               'expr' : "const auto %s = %s ;\n" % (_name,_expr['expr']),
@@ -327,11 +328,11 @@ class Generator(object):
                         elif not _name in self.vars :
                               HascalException(f"Variable '{_name}' not defined")
 
-                        elif isinstance(self.types[self.vars[_name].type],Struct) :
+                        elif isinstance(self.types[str(self.vars[_name].type)],Struct) :
                               # if struct has no member show error else set current member to _current_member
-                              if self.types[self.vars[_name].type].members == {} :
+                              if self.types[str(self.vars[_name].type)].members == {} :
                                     HascalException(f"Struct '{_name}' has no member:{_line}")
-                              _members = self.types[self.vars[_name].type].members
+                              _members = self.types[str(self.vars[_name].type)].members
 
                               for i in range(len(node[1])):
                                     # check if node[1][i] is a member of struct and check it is not first member
@@ -349,7 +350,7 @@ class Generator(object):
                                                       res = "%s = %s;\n" % (_full_name,_expr['expr'])
                                                       expr = {
                                                             'expr' :  res,
-                                                            'type' : self.vars[_name].type,
+                                                            'type' : _members[_current_member],
                                                       }
                                                       
                                                       return expr
@@ -367,7 +368,8 @@ class Generator(object):
                                                       'type' : _members[_current_member],
                                                 }
                                                 return expr
-                                    elif i == 0 : ...
+                                    elif i == 0 :
+                                          continue
                                     else :
                                           HascalException(f"'{node[1][i]}' is not a member of '{_name}':{_line}")
                         else :
@@ -407,11 +409,11 @@ class Generator(object):
                         elif not _name in self.vars :
                               HascalException(f"Variable '{_name}' not defined")     
 
-                        elif isinstance(self.types[self.vars[_name].type],Struct) :
+                        elif isinstance(self.types[str(self.vars[_name].type)],Struct) :
                               # if struct has no member show error else set current member to _current_member
-                              if self.types[self.vars[_name].type].members == {} :
+                              if self.types[str(self.vars[_name].type)].members == {} :
                                     HascalException(f"Struct '{_name}' has no member:{_line}")
-                              _members = self.types[self.vars[_name].type].members
+                              _members = self.types[str(self.vars[_name].type)].members
 
                               for i in range(len(node[1])):
                                     # check if node[1][i] is a member of struct and check it is not first member
@@ -428,11 +430,18 @@ class Generator(object):
                                                 if i == len(node[1])-1 :
                                                       if not str(_members[_current_member]).startswith('std::vector'):
                                                             HascalException(f"'{_current_member}' is not an array:{_line}")
+                                                      
+                                                      if str(_members[_current_member]) == "string" :
+                                                            expr = {
+                                                                  'expr' :  "%s[%s] = %s;\n" % (_full_name,_expr_index['expr'],_expr['expr']),
+                                                                  'type' : self.types['char'],
+                                                            }
+                                                            return expr
+                                                      
                                                       expr = {
                                                             'expr' :  "%s[%s] = %s;\n" % (_full_name,_expr_index['expr'],_expr['expr']),
-                                                            'type' : self.vars[_name].type,
+                                                            'type' : _members[_current_member],
                                                       }
-                                                      print(str(_members[_current_member]))
                                                       return expr
                                                 _members = _members[_current_member].members
                                                 continue
@@ -452,7 +461,8 @@ class Generator(object):
                                                 else :
                                                       _members = self.types[_members[_current_member]].members
                                                       continue
-                                    elif i == 0 : ...
+                                    elif i == 0 :
+                                          continue
                                     else :
                                           HascalException(f"'{node[1][i]}' is not a member of '{_name}':{_line}")     
                         else :
@@ -494,11 +504,11 @@ class Generator(object):
                               HascalException(f"Variable '{_name}' not defined")     
                         elif str(self.vars[_name].members[_end_name]) != _expr['type']:
                               HascalException(f"Mismatched type {str(self.vars[_name].members[_end_name])} and {_expr['type']}:{_line}")
-                        elif isinstance(self.types[self.vars[_name].type],Struct) :
+                        elif isinstance(self.types[str(self.vars[_name].type)],Struct) :
                               # if struct has no member show error else set current member to _current_member
-                              if self.types[self.vars[_name].type].members == {} :
+                              if self.types[str(self.vars[_name].type)].members == {} :
                                     HascalException(f"Struct '{_name}' has no member:{_line}")
-                              _members = self.types[self.vars[_name].type].members
+                              _members = self.types[str(self.vars[_name].type)].members
 
                               for i in range(len(node[1])-1):
                                     # check if node[1][i] is a member of struct and check it is not first member
@@ -516,10 +526,17 @@ class Generator(object):
                                                       # check if current member is an vector
                                                       if not _members[_current_member].type.startswith('std::vector') :
                                                             HascalException(f"Struct '{_name}' has no member:{_line}")
+                                                      
+                                                      if str(_members[_current_member]) == "string" :
+                                                            expr = {
+                                                                  'expr' :  "%s[%s] = %s;\n" % (_full_name,_expr_index['expr'],_expr['expr']),
+                                                                  'type' : self.types['char'],
+                                                            }
+                                                            return expr
 
                                                       expr = {
                                                             'expr' :  "%s[%s] = %s;\n" % (_full_name,_expr_index['expr'],_expr['expr']),
-                                                            'type' : self.vars[_name].type,
+                                                            'type' : _members[_current_member],
                                                       }
                                                       return expr
                                                 _members = _members[_current_member].members
@@ -535,7 +552,8 @@ class Generator(object):
                                                       'type' : _members[_current_member],
                                                 }
                                                 return expr
-                                    elif i == 0 : ...
+                                    elif i == 0 :
+                                          continue
                                     else :
                                           HascalException(f"'{node[1][i]}' is not a member of '{_name}':{_line}")        
                         else :
@@ -544,6 +562,11 @@ class Generator(object):
             # return <expr>
             if node[0] == 'return':
                   _expr = self.walk(node[1])
+                  _line = node[2]
+
+                  if _expr['expr'] in self.types :
+                        HascalException(f"Cannot return a type '{_expr['expr']}':{_line}")
+                  
                   expr = {
                         'expr' : "return %s;\n" %  _expr['expr'],
                         'type' : _expr['type']
@@ -1109,10 +1132,10 @@ class Generator(object):
                               if _name in self.types:
                                     if not isinstance(self.types[_name],Struct):
                                           HascalException(f"Cannot call type {_name}:{_line}")
-
+                                    
                                     expr = {
-                                                'expr' : '%s{%s}' % (_name,self.walk(node[2][0])['expr']),
-                                                'type' : self.types[_name],
+                                          'expr' : "%s{%s}" % (_name, ', '.join(self.walk(arg)['expr'] for arg in node[2])),
+                                          'type' : self.types[_name],
                                     }
                                     return expr
                               else :
@@ -1408,36 +1431,123 @@ class Generator(object):
                   else :
                         _full_name = '.'.join(arg for arg in node[1])
 
-                        members = {}
-                        
                         if _name in self.vars:
-                              if str(self.vars[_name].type).startswith('std::vector') :
-                                    _type_name = str(self.vars[_name].type).split('<')[1].split('>')[0]
-                                    members = {} if self.types.get(_type_name,{}) == {} else self.types[_type_name].members
+                              if isinstance(self.types[str(self.vars[_name].type)],Struct) :
+                                    # if struct has no member show error else set current member to _current_member
+                                    if self.types[str(self.vars[_name].type)].members == {} :
+                                          HascalException(f"Struct '{_name}' has no member:{_line}")
+                                    _members = self.types[str(self.vars[_name].type)].members
+
+                                    for i in range(len(node[1])):
+                                          # check if node[1][i] is a member of struct and check it is not first member
+                                          if node[1][i] in _members and i != 0 :
+                                                _current_member = node[1][i]
+
+                                                # check if current member is a struct
+                                                if isinstance(_members[_current_member],Struct) :
+                                                      # if struct has no member show error else set _members to _members[_current_member]
+                                                      if _members[_current_member].members == {} :
+                                                            HascalException(f"Struct '{_name}' has no member:{_line}")
+                                                
+                                                      # check if current member is the last member of node[1]
+                                                      if i == len(node[1])-1 :
+                                                            # check if current member is an vector
+                                                            if not _members[_current_member].type.startswith('std::vector') :
+                                                                  HascalException(f"Struct '{_name}' has no member:{_line}")
+                                                            expr = {
+                                                                  'expr' :  "%s" % (_full_name),
+                                                                  'type' : _members[_current_member],
+                                                            }
+                                                            return expr
+                                                      _members = _members[_current_member].members
+                                                      continue
+                                                else :
+                                                      if not _current_member in _members :
+                                                            HascalException(f"Struct '{_name}' has no member:{_line}")
+                                                      if str(_members[_current_member]).startswith('std::vector') :
+                                                            expr = {
+                                                                  'expr' : "%s" % (_full_name),
+                                                                  'type' : self.types[str(_members[_current_member]).split('<')[1].split('>')[0]],
+                                                            }
+                                                            return expr  
+
+                                                      expr = {
+                                                            'expr' : "%s" % (_full_name),
+                                                            'type' : _members[_current_member],
+                                                      }
+                                                      return expr
+                                          elif i == 0 :    
+                                                continue
+                                          else :
+                                                HascalException(f"'{node[1][i]}' is not a member of '{_name}':{_line}")  
+
+                              elif str(self.vars[_name].type).startswith('std::vector'):
+                                    expr = {
+                                          'expr' : "%s" % (_full_name),
+                                          'type' : self.types[str(self.vars[_name].type).split('<')[1].split('>')[0]],
+                                    }
+                                    return expr  
                               expr = {
                                     'expr' : "%s" % (_full_name),
-                                    'type' :str(members[_end_name]),
+                                    'type' : self.vars[_name].type,
                               }
                               return expr
                         elif _name in self.consts :
-                              if str(self.consts[_name].type).startswith('std::vector') :
-                                    _type_name = str(self.consts[_name].type).split('<')[1].split('>')[0]
-                                    members = {} if self.types.get(_type_name,{}) == {} else self.types[_type_name].members
+                              if isinstance(self.types[str(self.vars[_name].type)],Struct) :
+                                    # if struct has no member show error else set current member to _current_member
+                                    if self.types[self.consts[_name].type].members == {} :
+                                          HascalException(f"Struct '{_name}' has no member:{_line}")
+                                    _members = self.types[self.consts[_name].type].members
+
+                                    for i in range(len(node[1])-1):
+                                          # check if node[1][i] is a member of struct and check it is not first member
+                                          if node[1][i] in _members and i != 0 :
+                                                _current_member = node[1][i]
+                                          
+                                                # check if current member is a struct
+                                                if isinstance(_members[_current_member],Struct) :
+                                                      # if struct has no member show error else set _members to _members[_current_member]
+                                                      if _members[_current_member].members == {} :
+                                                            HascalException(f"Struct '{_name}' has no member:{_line}")
+                                                
+                                                      # check if current member is the last member of node[1]
+                                                      if i == len(node[1])-1 :
+                                                            # check if current member is an vector
+                                                            if not _members[_current_member].type.startswith('std::vector') :
+                                                                  HascalException(f"Struct '{_name}' has no member:{_line}")
+
+                                                            expr = {
+                                                                  'expr' :  "%s" % (_full_name),
+                                                                  'type' : _members[_current_member],
+                                                            }
+                                                            return expr
+                                                      _members = _members[_current_member].members
+                                                      continue
+                                                else :
+                                                      if not _current_member in _members :
+                                                            HascalException(f"Struct '{_name}' has no member:{_line}")
+                                                      if not _members[_current_member].type.startswith('std::vector') :
+                                                                  HascalException(f"Struct '{_name}' has no member:{_line}")
+
+                                                      expr = {
+                                                            'expr' : "%s" % (_full_name),
+                                                            'type' : _members[_current_member],
+                                                      }
+                                                      return expr
+                                          elif i == 0 : ...
+                                          else :
+                                                HascalException(f"'{node[1][i]}' is not a member of '{_name}':{_line}")  
+
+                              if str(self.consts[_name].type).startswith('std::vector'):
+                                    expr = {
+                                          'expr' : "%s" % (_name),
+                                          'type' : self.types[str(self.consts[_name].type).split('<')[1].split('>')[0]],
+                                    }
+                                    return expr  
+
                               expr = {
                                     'expr' : "%s" % (_full_name),
-                                    'type' : str(self.consts[_name].members[_end_name]),
-                              }
-                              return expr
-                        elif _name in self.types :
-                              expr = {
-                                    'expr' : "%s" % (_full_name),
-                                    'type' : self.types[_name],
-                              }
-                              return expr
-                        elif _name in self.funcs :
-                              expr = {
-                                    'expr' : "%s" % (_full_name),
-                                    'type' : 'Function',
+                                    'type' : self.consts[_name].type,
                               }
                               return expr
                         else :

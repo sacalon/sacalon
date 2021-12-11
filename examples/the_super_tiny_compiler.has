@@ -438,6 +438,29 @@ function tokenizer(input:string) : [token] {
 	return tokens
 }
 
+//
+// ============================================================================
+//                                 ヽ/❀o ل͜ o\ﾉ
+//                                THE PARSER!!!
+// ============================================================================
+//
+
+//
+// For our parser we're going to take our array of tokens and turn it into an
+// AST.
+//
+//   [{ type: 'paren', value: '(' }, ...]   =>   { type: 'Program', body: [...] }
+//
+
+// We will define our type, `node` here. Within node are pointers types to what
+// would otherwise be recursive types in Go. e.g.
+//
+// callee    node
+//
+// Would cause the Go compiler to complain about a recursive type. When we want
+// to use one of these types to pass through to a function, for example, we'd
+// use `&` as it'd be a reference. But we'll come to that a bit later on.
+
 struct node_t{
 	var kind : string
 	var value : string
@@ -447,9 +470,67 @@ struct node_t{
 struct node : node_t {
 	var callee : node_t
 	var expr : node_t
+	var body : [node]
 	var params : [node]
 	var args : [node]
 	var context : [node]
+}
+
+// Type `ast` is just another alias type. I find this makes part of the code
+// more readable, as you'll come to see that there are a ton of references to
+// `node`.
+struct ast : node {}
+
+// This is the counter variable that we'll use for parsing.
+var pc : int 
+
+// This variable will store our slice of `token`s inside of it.
+var pt : [token]
+
+// But this time we're going to use recursion instead of a `while` loop. So we
+// define a `walk` function.
+function walk() : node {
+	// Inside the walk function we start by grabbing the `current` token.
+	var tok : token = pt[pc]
+
+	if tok.kind == "number" {
+
+		// If we have one, we'll increment `current`.
+		pc = pc + 1
+
+		// And we'll return a new AST node called `NumberLiteral` and setting its
+		// value to the value of our token.
+		return node("NumberLiteral", tok.value)
+	}
+	return node()
+}
+
+// Okay, so we define a `parser` function that accepts our slice of `tokens`.
+function parser(tokens : [token]) : ast {
+	// Here, we initially give both the parser counter and the parser tokens a
+	// value.
+	pc = 0
+	pt = tokens
+
+	// Now, we're going to create our AST which will have a root which is a
+	// `Program` node.
+	var result_ast = ast("Program") // kind : Program
+
+	// And we're going to kickstart our `walk` function, which you can find just
+	// below this, we'll be pushing nodes to our `ast.body` slice.
+	//
+	// The reason we are doing this inside a loop is because our program can have
+	// `CallExpressions` after one another instead of being nested.
+	//
+	//   (add 2 2)
+	//   (subtract 4 2)
+	//
+	while pc < len(pt) {
+		append(result_ast.body, walk())
+	}
+
+	// At the end of our parser we'll return the AST.
+	return result_ast
 }
 
 function main(argv:[string]) : int {
