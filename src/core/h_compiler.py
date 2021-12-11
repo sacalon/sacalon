@@ -32,27 +32,27 @@ class Generator(object):
             # functions
             self.funcs = {
                   'print' : Function('print',{'...':'...'},'void'),
-                  'ReadStr' : Function('ReadStr',{},'string'),
-                  'ReadInt' : Function('ReadInt',{},'int'),
-                  'ReadFloat' : Function('ReadFloat',{},'float'),
-                  'ReadChar' : Function('ReadChar',{},'char'),
-                  'ReadBool' : Function('ReadBool',{},'bool'),
+                  'ReadStr' : Function('ReadStr',{},self.types['string']),
+                  'ReadInt' : Function('ReadInt',{},self.types['int']),
+                  'ReadFloat' : Function('ReadFloat',{},self.types['float']),
+                  'ReadChar' : Function('ReadChar',{},self.types['char']),
+                  'ReadBool' : Function('ReadBool',{},self.types['bool']),
 
-                  'format' : Function('format',{'...':'...'},'string'),
-                  'split' : Function('split',{'str':'string','sep':'string'},'string'),
-                  'exit' : Function('exit',{'exit_code':'int'},'void'),
-                  'error' : Function('error',{'errmsg':'string'},'void'),
+                  'format' : Function('format',{'...':'...'},self.types['string']),
+                  'split' : Function('split',{'str':'string','sep':'string'},self.types['string']),
+                  'exit' : Function('exit',{'exit_code':'int'},self.types['void']),
+                  'error' : Function('error',{'errmsg':'string'},self.types['void']),
 
-                  'to_int' : Function('to_int',{'...':'...'},'void'),
-                  'to_string' : Function('to_string',{'...':'...'},'string'),
-                  'to_bool' : Function('to_bool',{'...':'...'},'bool'),
-                  'to_char' : Function('to_char',{'...':'...'},'char'),
-                  'to_float' : Function('to_float',{'...':'...'},'float'),
+                  'to_int' : Function('to_int',{'...':'...'},self.types['int']),
+                  'to_string' : Function('to_string',{'...':'...'},self.types['string']),
+                  'to_bool' : Function('to_bool',{'...':'...'},self.types['bool']),
+                  'to_char' : Function('to_char',{'...':'...'},self.types['char']),
+                  'to_float' : Function('to_float',{'...':'...'},self.types['float']),
 
-                  'len' : Function('len',{'s':'string'},'int'),
-                  'len' : Function('len',{'vec':'T'},'int'),
-                  'append' : Function('append',{'vec':'T','val':'T'},'int'),
-                  'regex' : Function('regex',{'regex_str':'string','str':'string'},'bool'),
+                  'len' : Function('len',{'s':'string'},self.types['int']),
+                  'len' : Function('len',{'vec':'T'},self.types['int']),
+                  'append' : Function('append',{'vec':'T','val':'T'},self.types['int']),
+                  'regex' : Function('regex',{'regex_str':'string','str':'string'},self.types['bool']),
 
             }
 
