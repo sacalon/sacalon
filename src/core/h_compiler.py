@@ -394,11 +394,20 @@ class Generator(object):
                         elif self.vars[_name].type.type_name != str(_expr['type']):
                               HascalException(f"Mismatched3 type {self.vars[_name].type} and {_expr['type']}:{_line}") 
                         else :
-                              expr = {
-                                    'expr' : "%s[%s] = %s;\n" % (_name,_expr_index['expr'],_expr['expr']),
-                                    'type' : self.vars[_name].type,
-                              }
-                              return expr
+                              if str(self.vars[_name].type).startswith('std::vector'):
+                                    expr = {
+                                          'expr' : "%s[%s] = %s;\n" % (_name,_expr_index['expr'],_expr['expr']),
+                                          'type' : self.vars[_name].type.type_obj,
+                                    }
+                                    return expr
+                              elif str(self.vars[_name].type) == 'string' :
+                                    expr = {
+                                          'expr' : "%s[%s] = %s;\n" % (_name,_expr_index['expr'],_expr['expr']),
+                                          'type' : self.types['char'],
+                                    }
+                                    return expr
+                              else :
+                                    HascalException(f"Variable '{_name}' is not subscriptable:{_line}")
                   else :
                         _full_name = '.'.join(arg for arg in node[1])
 
