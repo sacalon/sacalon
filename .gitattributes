@@ -1,2 +1,3 @@
 *.has linguist-language=Swift text=auto
 examples/*.has linguist-documentation=false
+sly/ linguist-detectable=false
