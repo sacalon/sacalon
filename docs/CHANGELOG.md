@@ -1,4 +1,14 @@
 # Hascal Changelog
+<details>
+<summary>v1.3.4</summary>
+
+#### New features
+
+#### Bug fixes
+- Fix semantic analyser bugs
+
+#### Removed
+</details>
 
 <details>
 <summary>v1.3.3</summary>
