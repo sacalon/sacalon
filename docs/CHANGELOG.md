@@ -6,6 +6,7 @@
 
 #### Bug fixes
 - Fix semantic analyser bugs
+- Fix standard library bug
 
 #### Removed
 </details>
