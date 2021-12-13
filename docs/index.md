@@ -70,7 +70,7 @@ function add(x:int,y:int): int {
     return x + y
 }
 
-# overloading function
+// overloading function
 function add(x:int,y:int,z:int): int {
     return x + y + z
 }
@@ -175,6 +175,19 @@ You can get length of array's elements with `len` function :
 function main() : int {
    var a = [1,2,3]
    print(len(a)) // output : 3
+}
+```
+
+#### Array append
+You can append elements to array with `append` function :
+```typescript
+function main() : int {
+   var a = [1,2,3]
+   append(a,4)
+   for e in a {
+       print(e)
+   }
+   return 0
 }
 ```
 
