@@ -1,9 +1,9 @@
 # Hascal Changelog
 <details>
 <summary>v1.3.4</summary>
-
+  
 #### New features
-- compiler option : now can generate c++ code from hascal code with `c++_code` : 1` in `config.json` file
+- compiler option : now can generate c++ code from hascal code with `c++_code : 1` in `config.json` file
 - use `cuse` keyword to include c++ files.
 
 #### Bug fixes
