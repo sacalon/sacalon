@@ -34,5 +34,8 @@ function main():int {
     print("linear_regression.has :")
     system("hascal.py linear_regression.has")
 
+    print("cinclude.has :")
+    system("hascal.py cinclude.has")
+    
     return 0
 }

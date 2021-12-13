@@ -62,7 +62,7 @@ class Parser(Parser):
 
       # cuse <name>
       @_('CUSE CHAR')
-      def cuse(self, p):
+      def statement(self, p):
             return ('cuse',p.CHAR,p.lineno)
       
       # cuse <name>
@@ -75,9 +75,10 @@ class Parser(Parser):
       def statement(self, p):
             return ('cinclude_local', p.name[0],p.lineno)
       
-      @_('cuse')
+      # cuse <name>
+      @_('CUSE CHAR')
       def in_statement(self, p):
-            return p.cuse
+            return ('cuse',p.CHAR,p.lineno)
       #-----------------------------------
       @_('enum_stmt')
       def statement(self, p):
