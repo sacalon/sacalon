@@ -57,14 +57,27 @@ class Parser(Parser):
       def statement(self, p):
             return ('use_local', p.name[0],p.lineno)
       #-----------------------------------
+      
+      #-----------------------------------
+
       # cuse <name>
       @_('CUSE CHAR')
-      def statement(self, p):
+      def cuse(self, p):
             return ('cuse',p.CHAR,p.lineno)
       
-      @_('CUSE CHAR')
+      # cuse <name>
+      @_('CUSE name')
+      def statement(self, p):
+            return ('cinclude', p.name[0],p.lineno)
+      
+      # local cuse <name>
+      @_('LOCAL CUSE name')
+      def statement(self, p):
+            return ('cinclude_local', p.name[0],p.lineno)
+      
+      @_('cuse')
       def in_statement(self, p):
-            return ('cuse',p.CHAR,p.lineno)
+            return p.cuse
       #-----------------------------------
       @_('enum_stmt')
       def statement(self, p):

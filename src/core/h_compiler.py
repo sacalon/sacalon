@@ -295,6 +295,139 @@ class Generator(object):
                         'type' : '',
                         'cuse' : True,
                   }
+
+            # cuse <lib_name>
+            if node[0] == 'cinclude':
+                  if sys.platform.startswith('win'):
+                        if node[1] in self.imported :
+                              ...
+                        else :
+                              name = '.'.join(name for name in node[1])
+                              path = node[1]
+                              final_path = str(self.BASE_DIR+"\\hlib\\")
+
+                              ends_of_path = path[-1]
+                              for x in path[:-1]:
+                                    final_path += x + "\\"
+                              final_path_ld = final_path + ends_of_path + ".ld"
+                              # final_path_wld = final_path + ends_of_path + ".wld"
+                              final_path_h = final_path + ends_of_path + ".hpp"
+                              final_path += ends_of_path + ".cc"
+                              try:
+                                    with open(final_path, 'r') as fd:
+                                          cpp_code = fd.read()
+                                          with open(final_path_h,'r') as fh :
+                                                hpp_code = fh.read()
+                                                self.imported.append(name)
+                                                self.add_to_output(cpp_code,hpp_code)
+                              except FileNotFoundError:
+                                    HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                              # if isfile(final_path_wld):
+                              #       with open(final_path_ld) as f:
+                              #             ld = f.read().split(',')
+                              #             self.LDFLAGS += ld  
+                              if isfile(final_path_ld):
+                                    with open(final_path_ld) as f:
+                                          ld = list(f.read().split(','))
+                                          for i in ld :
+                                                self.LDFLAGS.append(i)                                          
+                  else :
+                        if node[1] in self.imported :
+                              ...
+                        else :
+                              name = '.'.join(name for name in node[1])
+                              path = node[1]
+                              final_path = str(self.BASE_DIR+"/hlib/")
+
+                              ends_of_path = path[-1]
+                              for x in path[:-1]:
+                                    final_path += x + "/"
+                              final_path_ld = final_path + ends_of_path + ".ld"
+                              # final_path_wld = final_path + ends_of_path + ".wld"
+                              final_path_h = final_path + ends_of_path + ".hpp"
+                              final_path += ends_of_path + ".cc"
+                              try:
+                                    with open(final_path, 'r') as fd:
+                                          cpp_code = fd.read()
+                                          with open(final_path_h,'r') as fh :
+                                                hpp_code = fh.read()
+                                                self.imported.append(name)
+                                                self.add_to_output(cpp_code,hpp_code)
+                              except FileNotFoundError:
+                                    HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                              # if isfile(final_path_wld):
+                              #       with open(final_path_ld) as f:
+                              #             ld = f.read().split(',')
+                              #             self.LDFLAGS += ld  
+                              if isfile(final_path_ld):
+                                    with open(final_path_ld) as f:
+                                          ld = list(f.read().split(','))
+                                          for i in ld :
+                                                self.LDFLAGS.append(i)   
+
+                  return {'expr':'','type':''}
+            
+            if node[0] == 'cinclude_local':
+                  if sys.platform.startswith('win32'):
+                        if node[1] in self.imported :
+                              ...
+                        else :
+                              name = '.'.join(name for name in node[1])
+                              path = name.split('.')
+                              final_path = ""
+
+                              ends_of_path = path[-1]
+                              for x in path[:-1]:
+                                    final_path += x + "\\"
+                              final_path_ld = final_path + ends_of_path + ".ld"
+                              final_path_h = final_path + ends_of_path + ".hpp"
+                              final_path += ends_of_path + ".cc"
+
+                              try:
+                                    with open(final_path, 'r') as fd:
+                                          cpp_code = fd.read()
+                                          with open(final_path_h,'r') as fh :
+                                                hpp_code = fh.read()
+                                                self.imported.append(name)
+                                                self.add_to_output(cpp_code,hpp_code)
+                              except FileNotFoundError:
+                                    HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                              if isfile(final_path_ld):
+                                    with open(final_path_ld) as f:
+                                          ld = f.read().split(',')
+                                          self.LDFLAGS += ld  
+                              
+                  else :
+                        if node[1] in self.imported :
+                              ...
+                        else : 
+                              name = '.'.join(name for name in node[1])
+                              path = name.split('.')
+                              final_path = ""
+
+                              ends_of_path = path[-1]
+                              for x in path[:-1]:
+                                    final_path += x + "\\"
+                              final_path_ld = final_path + ends_of_path + ".ld"
+                              final_path_h = final_path + ends_of_path + ".hpp"
+                              final_path += ends_of_path + ".cc"
+
+                              try:
+                                    with open(final_path, 'r') as fd:
+                                          cpp_code = fd.read()
+                                          with open(final_path_h,'r') as fh :
+                                                hpp_code = fh.read()
+                                                self.imported.append(name)
+                                                self.add_to_output(cpp_code,hpp_code)
+                              except FileNotFoundError:
+                                    HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                              if isfile(final_path_ld):
+                                    with open(final_path_ld) as f:
+                                          ld = f.read().split(',')
+                                          self.LDFLAGS += ld  
+                        
+
+                  return {'expr':'','type':''}
             #-------------------------------------
             # <name> = <expr>   
             if node[0] == 'assign':
@@ -598,7 +731,7 @@ class Generator(object):
                   }
                   return expr
             #-----------------------------------------
-            # use <lib_name> ;
+            # use <lib_name>
             if node[0] == 'use':
                   if sys.platform.startswith('win'):
                         if node[1] in self.imported :
@@ -711,7 +844,7 @@ class Generator(object):
                                           HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                   return {'expr':'','type':''}
             
-            # local use <lib_name> ;
+            # local use <lib_name>
             if node[0] == 'use_local':
                   if sys.platform.startswith('win32'):
                         if node[1] in self.imported :
