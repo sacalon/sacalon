@@ -602,6 +602,42 @@ function parser(tokens : [token]) : ast {
 	return result_ast
 }
 
+//
+// ============================================================================
+//                                 ⌒(❀>◞౪◟<❀)⌒
+//                               THE TRAVERSER!!!
+// ============================================================================
+//
+
+///
+// So now we have our AST, and we want to be able to visit different nodes with
+// a visitor. We need to be able to call the methods on the visitor whenever we
+// encounter a node with a matching type.
+//
+//   traverse(ast, {
+//     Program(node, parent) {
+//       // ...
+//     },
+//
+//     CallExpression(node, parent) {
+//       // ...
+//     },
+//
+//     NumberLiteral(node, parent) {
+//       // ...
+//     }
+//   });
+//
+
+// We will define our `visitor` type here in such a way that strings can
+// be tested against easily and then represent the function associoated with it.
+//
+// e.g.
+// "NumberLiteral" : func(n *node, p node) {
+//     // do something
+// }
+//
+
 function main(argv:[string]) : int {
     return 0
 }
