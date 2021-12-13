@@ -47,6 +47,31 @@ As in many other languages (such as C++ and Rust), `main` is the entry point of 
 
 `print` is one of the few built-in functions. It prints the value passed to it to standard output.
 
+## `config.json` :
+You can use `config.json` to configure your Hascal compiler.
+
+- `compiler` : your c++ compiler name(e.g : `g++`,`clang++`)
+- `optimize` : optimize level(0,1,2,3)
+- `flags` : flags list for your compiler(e.g:`["-pthread"]`)
+- `no_check_g++` : if you don't use g++, set this to `1`
+- `c++_version` : your c++ standard(e.g:`c++17` or `c++20`).note: c++ version must be greater than or equal to c++17
+- `g++_out` : if you want to see g++ output, set this to `1`
+- `c++_out` : if you want to see generated c++ code, set this to `1`
+
+example :
+```json
+
+{
+    "compiler":"g++",
+    "optimize":"-O2",
+    "flags":["-pthread"],
+    "no_check_g++":1,
+    "c++_version":"c++17",
+    "g++_out":1,
+    "c++_out":1
+}
+```
+
 ## Comments
 ```typescript
 // This is a single line comment
