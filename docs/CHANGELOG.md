@@ -3,6 +3,7 @@
 <summary>v1.3.4</summary>
 
 #### New features
+- compiler option : now can generate c++ code from hascal code
 
 #### Bug fixes
 - Fix semantic analyser bugs
