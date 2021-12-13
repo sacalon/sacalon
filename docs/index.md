@@ -287,3 +287,34 @@ cuse '#include <cstdio>'
 cuse 'int main(){printf("%d",1);return 0;}'
 // output : 1
 ```
+
+## Include C++ Code
+You can include C++ code in your Hascal file with `cuse` keyword :
+
+`add.cc` :
+```cpp
+int add(int x, int y) {
+    return x + y;
+}
+```
+`add.hpp` :
+```cpp
+// nothing but should be exist
+// if you want to include a c++ header file, you should include it in this file and not in `xxx.cc`
+// e.g :
+// #include <cmath>
+```
+
+`main.has` :
+```typescript
+// if you want to include a local file use `local` keyword 
+// but if you want to include a file in hascal standard library folder don't use `local` keyword
+local cuse add 
+
+function add(a:int,b:int): int
+
+function main() : int {
+    print(add(1,2))
+    return 0
+}
+```
