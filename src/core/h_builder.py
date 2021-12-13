@@ -18,6 +18,17 @@ import requests
 import json
 import zipfile
 
+def show_help():
+    output_message = [f"Hascal Compiler {HASCAL_COMPILER_VERSION} {sys.platform}",
+                                    "Copyright (c) 2019-2022 Hascal Development Team,",
+                                    "All rights reserved.",
+                                    "\nEnter following command for compile a Hascal program :",
+                                    "hascal <inputfile.has> [output file name]",
+                                    "other commands:",
+                                    "\t--help,-h : show help",
+                                    "\t--version,-v : show version"]
+    for line in output_message:
+        print(line)
 class HascalCompiler(object):
     def __init__(self,argv,BASE_DIR):
         self.BASE_DIR = BASE_DIR
@@ -28,25 +39,15 @@ class HascalCompiler(object):
         self.argv = argv
         # arguments checking
         if len(self.argv) > 1 :
-            if self.argv[1] in ["-h","--help"]:
+            if self.argv[1] in ["-h","--help","help"]:
                 # show help
-                output_message = [f"Hascal Compiler {HASCAL_COMPILER_VERSION} {sys.platform}",
-                                    "Copyright (c) 2019-2022 Hascal Development Team,",
-                                    "All rights reserved.",
-                                    "\nEnter following command for compile a Hascal program :",
-                                    "hascal <inputfile.has> [output file name]",
-                                    "other commands:",
-                                    "\t--help,-h : show help",
-                                    "\t--version,-v : show version"]
-                for msg in output_message:
-                    print(msg)
+                show_help()
                 sys.exit()
-            elif self.argv[1] in ["-v","--version"]:
+            elif self.argv[1] in ["-v","--version","version"]:
                 # show version
                 print(f"Hascal {HASCAL_COMPILER_VERSION} --- {sys.platform}")
-            
             # START : Library Manager
-            elif self.argv[1] == "install" :
+            elif self.argv[1] in "install" :
                 if len(argv) < 3 :
                     HascalException("You must give one library name to install\nusage :\n\thascal install <library_name>")
                 print(f"Installing '{self.argv[2]}'...")
@@ -124,17 +125,21 @@ class HascalCompiler(object):
                 zipdir(current_dir, zipf)
                 zipf.close()
             # END : Library Manager
+            elif self.argv[1] == "--verbose" : # print ast
+                if len(self.argv) == 3 :
+                    self.read_file(self.argv[2])
+                    tokens = self.lexer.tokenize(self.code)
+                    tree = self.parser.parse(tokens)
+                    print(tree)
+                else :
+                    HascalException("You must give one file name to print ast\nusage :\n\thascal --verbose <file_name>")
             else :
                 # check file extension
                 if not self.argv[1].endswith(".has"):
                     # show file extension error 
                     HascalException(f"The specified file is not a hascal(.has) file")
                 else :
-                    try:
-                        with open(argv[1],encoding="utf-8") as fin:
-                            self.code = fin.read()  
-                    except FileNotFoundError :
-                        HascalException(f"File '{argv[1]}' not found")
+                    self.read_file(self.argv[1])
                     self.compile()
         else:
             output_message = [f"Hascal Compiler {HASCAL_COMPILER_VERSION} {sys.platform}",
@@ -230,6 +235,12 @@ class HascalCompiler(object):
                 os.remove(outname+".cc")
             except :
                 ...
+    def read_file(self,file_name):
+        try:
+            with open(file_name,encoding="utf-8") as fin:
+                self.code = fin.read()  
+        except FileNotFoundError :
+            HascalException(f"File '{file_name}' not found")
         
 
 BASE_URL = "https://raw.githubusercontent.com/hascal/libs/main"
