@@ -142,16 +142,7 @@ class HascalCompiler(object):
                     self.read_file(self.argv[1])
                     self.compile()
         else:
-            output_message = [f"Hascal Compiler {HASCAL_COMPILER_VERSION} {sys.platform}",
-                                "Copyright (c) 2019-2022 Hascal Development Team,",
-                                "All rights reserved.",
-                                "\nEnter following command for compile a Hascal program :",
-                                "hascal <inputfile.has>",
-                                "other commands:",
-                                "\t--help,-h : show help",
-                                "\t--version,-v : show version"]
-            for msg in output_message:
-                print(msg)
+            show_help()
             sys.exit()
 
     # hascal to c++ compiler function
