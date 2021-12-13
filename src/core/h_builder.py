@@ -17,18 +17,15 @@ import os
 import requests
 import json
 import zipfile
+import platform
 
-def show_help():
-    output_message = [f"Hascal Compiler {HASCAL_COMPILER_VERSION} {sys.platform}",
-                                    "Copyright (c) 2019-2022 Hascal Development Team,",
-                                    "All rights reserved.",
-                                    "\nEnter following command for compile a Hascal program :",
-                                    "hascal <inputfile.has> [output file name]",
-                                    "other commands:",
-                                    "\t--help,-h : show help",
-                                    "\t--version,-v : show version"]
-    for line in output_message:
-        print(line)
+
+def show_help(all=False):
+    if all:
+        help_all()
+    else:
+        help_short()
+    
 class HascalCompiler(object):
     def __init__(self,argv,BASE_DIR):
         self.BASE_DIR = BASE_DIR
@@ -39,11 +36,11 @@ class HascalCompiler(object):
         self.argv = argv
         # arguments checking
         if len(self.argv) > 1 :
-            if self.argv[1] in ["-h","--help","help"]:
+            if self.argv[1] == "help":
                 # show help
-                show_help()
+                show_help(True)
                 sys.exit()
-            elif self.argv[1] in ["-v","--version","version"]:
+            elif self.argv[1] == "version":
                 # show version
                 print(f"Hascal {HASCAL_COMPILER_VERSION} --- {sys.platform}")
             # START : Library Manager
