@@ -4,6 +4,7 @@
 
 #### New features
 - compiler option : now can generate c++ code from hascal code
+- use `cuse` keyword to include c++ files.
 
 #### Bug fixes
 - Fix semantic analyser bugs
