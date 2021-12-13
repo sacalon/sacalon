@@ -170,6 +170,7 @@ class HascalCompiler(object):
             "ccfile" : outname+".cc",
             "c++_version" : "c++17",
             "g++_out" : 0,
+            "c++_code" : 0,
         }
 
         for flag in self.generator.get_flags() :
@@ -222,10 +223,14 @@ class HascalCompiler(object):
         except :
             HascalException("Unknown error in compile file")
 
-        try :
-            os.remove(outname+".cc")
-        except :
+        if ARGS["c++_code"] == 1 :
             ...
+        else :
+            try :
+                os.remove(outname+".cc")
+            except :
+                ...
+        
 
 BASE_URL = "https://raw.githubusercontent.com/hascal/libs/main"
 
