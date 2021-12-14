@@ -7,6 +7,8 @@
 - C++ in back-end
 - `new/delete` c++ keyword based memory management
 - null safety
+- basic support for pointers
+
 ### Language
 - multi library import :
 ```
