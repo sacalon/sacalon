@@ -5,6 +5,10 @@
 - [`os`](#os)
 - [`time`](#time)
 - [`math`](#math)
+- [`strings`](#strings)
+- [`http`](#http)
+- [`random`](#random)
+- [`libcinfo`](#libcinfo)
 
 ## Built-in functions 
 
@@ -95,22 +99,8 @@ print("Bye");
 ```
 
 ## `file`
-
-### read_file(file_name:string) : string
-Read from file
-
-example :
-```
-var content : string = read_file("todo.txt");
-```
-
-### write_file(path:string,text:string) : bool
-Write to file
-
-example :
-```
-write_file("todo.txt","- Going to gym")
-```
+- `read_file(file_name:string) : string` : Read a file and return its content
+- `write_file(file_name:string,content:string)` : Write a file
 
 <!-- ### listdir(path:string) : [string]
 Lists dirs,files on a path
@@ -121,30 +111,15 @@ print(listdir("C:\\"));
 ``` -->
 
 ## `os`
-
-### os_name() : string
-Gets type of OS(win32,linux,freebsd,macos,...)
-
-```
-print(os_name());
-```
-
-### system(command:string)
-Excutes a terminal command
-
-example :
-```
-var comm = "";
-
-while true {
-    print2("MyCMD>>>");
-    comm = ReadStr();
-    system(comm);
-}
-```
+- `os_name() : string` : Return OS name
+- `system()` : Execute a command
+- `compiler_name() : string` : Return compiler name
+- `architecture() : string` : Return architecture
+- `is_x86() : bool` : Return true if architecture is x86
+- `is_x64() : bool` : Return true if architecture is x64
 
 ## `time`
-
+Work with time/date
 - `get_year():int` : Get current year
 - `get_month():int` : Get current month
 - `get_day():int` : Get current day
@@ -177,3 +152,11 @@ Work with strings
 ## `http`
 HTTP client-server library
 - `get(url:string) : string` : get content from url(only support http)
+
+## `random`
+Random number generator
+- `random_int(max:int):int` : Returns a random integer between 0 and max
+
+## `libcinfo`
+Get information about libc
+- `libc_name() : string` : get name of libc
