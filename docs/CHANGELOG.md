@@ -4,6 +4,15 @@
   
 #### New features
 
+#### Standard library
+##### Updated
+- add `compiler_name()` function to get the name of the compiler
+- add `arch()` function to get the architecture of the system
+- add `is_x86()` function to check if the architecture is x86
+- add `is_x64()` function to check if the architecture is x64
+
+##### Added
+- add `libcinfo` library to get information about the libc
 
 #### Bug fixes
   
