@@ -2,3 +2,7 @@ use libcpp.os
 
 function os_name() : string
 function system(com:string)
+function is_x86() : bool
+function is_x64() : bool
+function compiler_name() : string
+function arch() : string

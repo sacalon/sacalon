@@ -114,7 +114,7 @@ print(listdir("C:\\"));
 - `os_name() : string` : Return OS name
 - `system()` : Execute a command
 - `compiler_name() : string` : Return compiler name
-- `architecture() : string` : Return architecture
+- `arch() : string` : Return architecture
 - `is_x86() : bool` : Return true if architecture is x86
 - `is_x64() : bool` : Return true if architecture is x64
 
