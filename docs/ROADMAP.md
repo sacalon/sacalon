@@ -8,6 +8,7 @@
 - `new/delete` c++ keyword based memory management
 - null safety
 - basic support for pointers
+- use `std::array` for fixed sized array instead of `std::vector`
 
 ### Language
 - multi library import :
