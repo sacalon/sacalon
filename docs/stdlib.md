@@ -117,6 +117,7 @@ print(listdir("C:\\"));
 - `arch() : string` : Return architecture
 - `is_x86() : bool` : Return true if architecture is x86
 - `is_x64() : bool` : Return true if architecture is x64
+- `getenv(name:string) : string` : Return environment variable
 
 ## `time`
 Work with time/date

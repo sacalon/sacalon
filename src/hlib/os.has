@@ -6,3 +6,4 @@ function is_x86() : bool
 function is_x64() : bool
 function compiler_name() : string
 function arch() : string
+function getenv(name:string) : string
