@@ -15,7 +15,7 @@
 - add `libcinfo` library to get information about the libc
 
 #### Bug fixes
-- Fix incompelet type defination bug
+- Fix incomplet type defination bug
 
 #### Removed
 
