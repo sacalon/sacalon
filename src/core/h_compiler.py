@@ -1033,12 +1033,16 @@ class Generator(object):
                   _members = { }
                   self.types[_name] = Struct(_name,_members)
                   _body = self.walk(node[2])
-                  
+                  _line = node[3]
                   # generate output code and members
                   res = ""
                   for e in _body :
+                        if str(e['type']) == _name :
+                              HascalException(f"Incomplete type definition '{_name}':{_line}")
+                        
                         if e.get('cuse') == None :
                               _members[e['name']] = e['type']
+
                         res += e['expr']
                   self.types[_name] = Struct(_name,_members)
                   expr = {
@@ -1067,14 +1071,13 @@ class Generator(object):
                   # generate output code and member
                   res = ""
                   for e in _body :
+                        if str(e['type']) == _name :
+                              HascalException(f"Incomplete type definition '{_name}':{_line}")
+                        
+                        if e.get('cuse') == None :
+                              _members[e['name']] = e['type']
+
                         res += e['expr']
-                        # todo :
-                        #     struct a {
-                        #             var a : [a] // only this works
-                        #             var b : a // but this not works, error : incompliant type
-                        #     }
-                        # 
-                        _members[e['name']] = e['type']
                         
                   self.types[_name] = Struct(_name,_members)
                   expr = {

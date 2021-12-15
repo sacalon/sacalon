@@ -1,0 +1,9 @@
+struct x{
+    var a : [x] // ok
+    var b : x // incomplete type error
+}
+
+function main() : int {
+    var foo : x
+    return 0
+}
