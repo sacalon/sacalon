@@ -10,6 +10,7 @@
 - basic support for pointers
 - use `std::array` for fixed sized array instead of `std::vector`
 - check if a function returns a value, else show error
+- redesign logo
 
 ### Language
 - multi library import :
