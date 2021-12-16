@@ -14,6 +14,7 @@
 ##### Added
 - add `libcinfo` library to get information about the libc
 - add `termcolor` library to colorize the output
+
 ![assets/termcolor.png](assets/termcolor.png)
 
 #### Bug fixes
