@@ -13,6 +13,8 @@
 - add `getenv` function to get an environment variable
 ##### Added
 - add `libcinfo` library to get information about the libc
+- add `termcolor` library to colorize the output
+![assets/termcolor.png](assets/termcolor.png)
 
 #### Bug fixes
 - Fix incomplete type defination bug

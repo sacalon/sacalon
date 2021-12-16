@@ -1,0 +1,4 @@
+use libcpp.termcolor
+
+function cprint(text:string,color:string)
+function reset_color()

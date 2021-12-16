@@ -9,94 +9,21 @@
 - [`http`](#http)
 - [`random`](#random)
 - [`libcinfo`](#libcinfo)
+- [`termcolor`](#termcolor)
 
 ## Built-in functions 
-
-### print(...)
-Standard Hascal's print function
-
-example :
-```
-print("Hello World");
-```
-
-### ReadStr() : string
-Read string values from stdin
-
-example :
-```
-print("What's your name ?");
-var name = ReadStr();
-print("Hi,",name);
-```
-
-### ReadInt() : int
-Read int values from stdin
-
-example :
-```
-print("What's your age ?");
-var name = ReadInt();
-print("your age :",name);
-```
-
-### ReadChar() : char
-Read a character from stdin
-
-example :
-```
-print("char :",ReadChar());
-```
-
-### ReadBool() : bool
-Read a bool values from stdin
-
-example :
-```
-print("bool :",ReadBool());
-```
-
-### ReadFloat() : float
-Read float values from stdin
-
-example :
-```
-print("float :",ReadFloat());
-```
-
-### to_int(input:Type) : int
-Convert values to int
-
-example :
-```
-print(to_int("123456"));
-```
-
-### to_string(input:Type) : string
-Convert values to string
-
-example :
-```
-print(to_string(123));
-```
-
-### to_float(input:Type) : float
-Convert values to float
-
-example :
-```
-print(to_float("3.14"));
-```
-
-### exit(exit_code:int)
-End program
-
-example:
-```
-print("Hello");
-exit(0);
-print("Bye");
-```
+- `print(...)` : Standard Hascal's print function
+- `ReadStr()` : Standard Hascal's read string function
+- `ReadInt()` : Standard Hascal's read integer function
+- `ReadFloat()` : Standard Hascal's read float function
+- `ReadBool()` : Standard Hascal's read boolean function
+- `ReadChar()` : Standard Hascal's read character function
+- `to_int(val:T)` : Standard Hascal's convert to integer function
+- `to_float(val:T)` : Standard Hascal's convert to float function
+- `to_bool(val:T)` : Standard Hascal's convert to boolean function
+- `to_char(val:T)` : Standard Hascal's convert to character function
+- `to_string(val:T)` : Standard Hascal's convert to string function
+- `exit(exit_code:int)` : Standard Hascal's exit function
 
 ## `file`
 - `read_file(file_name:string) : string` : Read a file and return its content
@@ -161,3 +88,8 @@ Random number generator
 ## `libcinfo`
 Get information about libc
 - `libc_name() : string` : get name of libc
+
+## `termcolor`
+Colorize text
+- `cprint(txt:string,color:string)` : print text in color
+- `reset_color()` : reset color
