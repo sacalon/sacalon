@@ -1,8 +1,6 @@
 # Hascal Changelog
 <details>
 <summary>v1.3.5</summary>
-  
-#### New features
 
 #### Standard library
 ##### Updated
@@ -19,8 +17,6 @@
 
 #### Bug fixes
 - Fix incomplete type defination bug
-
-#### Removed
 
 </details>
 
