@@ -4,6 +4,7 @@
 
 #### Standard library
 ##### Updated
+`os` :
 - add `compiler_name` function to get the name of the compiler
 - add `arch` function to get the architecture of the system
 - add `is_x86` function to check if the architecture is x86
