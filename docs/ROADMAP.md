@@ -63,7 +63,24 @@ var foo = {
 ```
 
 - `panic` based error management
+- namespace based library import
+e.g:
+`foo.has` :
+```
+function bar(): string {
+    return "bar"
+}
+```
 
+`main.has` :
+```
+use foo
+
+function main () : int {
+    print(foo::bar())
+    return 0
+}
+```
 ### Standard Library
 - `json`, `sqlite`, `thread` library
 
