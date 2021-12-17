@@ -371,6 +371,10 @@ class Parser(Parser):
       @_('STRING')
       def expr(self, p):
             return ('string', p.STRING,p.lineno)
+      @_('MULTILINE_STRING')
+      def expr(self, p):
+            return ('multiline_string', p.MULTILINE_STRING,p.lineno)
+      
       @_('CHAR')
       def expr(self, p):
             return ('char', p.CHAR,p.lineno)
@@ -380,6 +384,7 @@ class Parser(Parser):
       @_('float')
       def expr(self, p):
             return ('float', p.float[0],p.float[1])
+      
       @_('expr DOT NAME')
       def expr(self, p):
             return ('.', p.expr,p.NAME,p.lineno)

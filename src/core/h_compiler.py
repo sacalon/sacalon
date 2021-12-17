@@ -1801,11 +1801,16 @@ class Generator(object):
             #--------------------------------------------
             if node[0] == 'string':
                   expr = {
-                        'expr' : 'std::string(R"(%s)")' % node[1],
+                        'expr' : 'std::string("%s")' % node[1],
                         'type' : self.types[node[0]],
                   }
                   return expr
-
+            if node[0] == "multiline_string" :
+                  expr = {
+                        'expr' : 'std::string(R"(%s)")' % node[1],
+                        'type' : self.types['string'],
+                  }
+                  return expr
             if node[0] == 'bool' or node[0] == 'float' or node[0] == 'int':
                   expr = {
                         'expr' : '%s' % node[1],

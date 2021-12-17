@@ -15,7 +15,7 @@ class Lexer(Lexer):
                 IF, ELSE,
                 RETURN,
                 INTVAR, STRINGVAR, CHARVAR,BOOLVAR,FLOATVAR,
-                NUMBER, STRING,CHAR,
+                NUMBER, STRING,CHAR,MULTILINE_STRING,
                 GREATER, LESS, EQEQ, NOTEQ, GREATEREQ, LESSEQ,NOT,AND,OR,
                 PLUS, TIMES, MINUS, DIVIDE,
                 DOT,
@@ -94,10 +94,16 @@ class Lexer(Lexer):
 
         NAME["cuse"] = CUSE
 
-        @_(r'"((.|\n)*)"')
+        @_(r'"^"(\\\\|\\"|[^"])*""')
         def STRING(self, t):
                 t.value = t.value[1:-1]
                 return t
+        
+        @_(r'"""(\n|.)*?"""')
+        def MULTILINE_STRING(self, t):
+                t.value = t.value[3:-3]
+                return t
+        
         @_(r"'(.)'")
         def CHAR(self, t):
                 t.value = t.value[1:-1]
@@ -107,5 +113,5 @@ class Lexer(Lexer):
                 self.lineno += t.value.count('\n')
 
         def error(self, t):
-                HascalException("Illegal character '%s'" % t.value[0])
+                HascalException("Illegal character '%s':%s" % (t.value[0],t.lineno))
                 exit(1)

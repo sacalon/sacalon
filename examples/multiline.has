@@ -1,11 +1,10 @@
 function main():int {
-    var a = "
+    var a = """Hello World!
 Hello World!
 Hello World!
 Hello World!
 Hello World!
 Hello World!
-Hello World!
-    "
+    """
     print(a)
 }
