@@ -1800,7 +1800,7 @@ class Generator(object):
             #--------------------------------------------
             if node[0] == 'string':
                   expr = {
-                        'expr' : 'std::string("%s")' % node[1],
+                        'expr' : 'std::string(R"(%s)")' % node[1],
                         'type' : self.types[node[0]],
                   }
                   return expr
@@ -1817,7 +1817,7 @@ class Generator(object):
                         'expr' : '\'%s\'' % node[1],
                         'type' : self.types[node[0]],
                   }
-                  return expr
+                  return expr         
 
 class Var(object):
       def __init__(self,name,type,is_array=False,members={}):

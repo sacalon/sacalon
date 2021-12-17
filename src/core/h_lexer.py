@@ -94,11 +94,11 @@ class Lexer(Lexer):
 
         NAME["cuse"] = CUSE
 
-        @_(r'"([^\n\\]|\\\S)*?"')
+        @_(r'"((.|\n)*)"')
         def STRING(self, t):
                 t.value = t.value[1:-1]
                 return t
-        @_(r'\'([^\n\\]|\\\S)*?\'')
+        @_(r"'(.)'")
         def CHAR(self, t):
                 t.value = t.value[1:-1]
                 return t

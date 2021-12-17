@@ -43,9 +43,9 @@ class Parser(Parser):
       def struct_declare(self, p):
             return p.var_declare
       
-      @_('CUSE CHAR')
+      @_('CUSE STRING')
       def struct_declare(self, p):
-            return ('cuse',p.CHAR,p.lineno)
+            return ('cuse',p.STRING,p.lineno)
       #-----------------------------------
       # use <name>
       @_('USE name')
