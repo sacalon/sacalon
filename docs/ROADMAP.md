@@ -23,13 +23,6 @@ use http, random
 asm("mov e1, bx")
 ```
 
-- multi line string
-``` 
-var str = """line1
-line2
-"""
-```
-
 - lambdas :
 ```
 var mythread = thread(@(1000,true){
