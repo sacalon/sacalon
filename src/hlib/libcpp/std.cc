@@ -4,6 +4,11 @@ void error(string err_msg){
 	std::cerr << err_msg << std::endl ;
 }
 
+void panic(string err_msg){
+	error(err_msg);
+	exit(1);
+}
+
 int to_int(string s){
 	return std::stoi(s);
 }

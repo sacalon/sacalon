@@ -41,6 +41,7 @@ class Generator(object):
                   'format' : Function('format',{'...':'...'},self.types['string']),
                   'split' : Function('split',{'str':'string','sep':'string'},self.types['string']),
                   'exit' : Function('exit',{'exit_code':'int'},self.types['void']),
+                  'panic' : Function('panic',{'err_msg':'string'},self.types['string']),
                   'error' : Function('error',{'errmsg':'string'},self.types['void']),
 
                   'to_int' : Function('to_int',{'...':'...'},self.types['int']),
