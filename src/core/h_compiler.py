@@ -1509,7 +1509,7 @@ class Generator(object):
             if node[0] == 'expr_cond':
                   _expr = self.walk(node[1])
                   expr = {
-                        'expr' : '!%s' % (_expr['expr']), # may have bug
+                        'expr' : '%s' % (_expr['expr']), # may have bug
                         'type' : _expr['type'] 
                   }
                   return expr

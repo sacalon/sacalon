@@ -60,11 +60,16 @@ class Parser(Parser):
       
       #-----------------------------------
 
-      # cuse <name>
-      @_('CUSE CHAR')
+      # cuse "c code"
+      @_('CUSE STRING')
       def statement(self, p):
-            return ('cuse',p.CHAR,p.lineno)
+            return ('cuse',p.STRING,p.lineno)
       
+      # cuse """multi line c code"""
+      @_('CUSE MULTILINE_STRING')
+      def statement(self, p):
+            return ('cuse',p.MULTILINE_STRING,p.lineno)
+
       # cuse <name>
       @_('CUSE name')
       def statement(self, p):
@@ -75,10 +80,15 @@ class Parser(Parser):
       def statement(self, p):
             return ('cinclude_local', p.name[0],p.lineno)
       
-      # cuse <name>
-      @_('CUSE CHAR')
+      # cuse "c code"
+      @_('CUSE STRING')
       def in_statement(self, p):
-            return ('cuse',p.CHAR,p.lineno)
+            return ('cuse',p.STRING,p.lineno)
+      
+      # cuse """multi line c code"""
+      @_('CUSE MULTILINE_STRING')
+      def in_statement(self, p):
+            return ('cuse',p.MULTILINE_STRING,p.lineno)
       #-----------------------------------
       @_('enum_stmt')
       def statement(self, p):
