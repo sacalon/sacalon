@@ -55,7 +55,6 @@ var foo = {
 }
 ```
 
-- `panic` based error management
 - namespace based library import
 e.g:
 `foo.has` :
