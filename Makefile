@@ -9,6 +9,10 @@ windows :
 	xcopy src\hlib dist\hlib /E /H /C /I
 	xcopy examples dist\examples /E /H /C /I
 deps :
+	python3 --version
+	pip3 --version
+	pip3 install -r requirements.txt
+deps-windows:
 	python --version
 	pip --version
 	pip install -r requirements.txt
