@@ -1,5 +1,17 @@
 # Hascal Changelog
 <details>
+<summary>v1.3.6</summary>
+  
+#### New features
+
+#### Bug fixes
+
+#### Removed
+
+</details>
+
+
+<details>
 <summary>v1.3.5</summary>
 
 #### Standard library
