@@ -94,7 +94,7 @@ class Lexer(Lexer):
 
         NAME["cuse"] = CUSE
 
-        @_(r'"^"(\\\\|\\"|[^"])*""')
+        @_(r'("(?!"").*?(?<!\\)(\\\\)*?"|\'(?!").*?(?<!\\)(\\\\)*?\')')
         def STRING(self, t):
                 t.value = t.value[1:-1]
                 return t
