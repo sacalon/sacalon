@@ -1,4 +1,4 @@
 {
-    "flags" : ["-lSDL2","-lSDL2main"],
+    "flags" : ["-lSDL2","-lSDL2main","-o","main"],
     "g++_out" : 1
 }

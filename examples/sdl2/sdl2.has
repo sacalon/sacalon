@@ -1,3 +1,6 @@
+// This is a tiny sdl2 wrapper in hascal
+// You should install sdl2-bindings
+
 cuse """
 #include <SDL2/SDL.h>
 #undef main
