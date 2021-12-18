@@ -1,3 +1,4 @@
 *.has linguist-language=Pascal text=auto
 examples/*.has linguist-documentation=false
 sly/ linguist-detectable=false
+*.bf linguist-language=Pascal

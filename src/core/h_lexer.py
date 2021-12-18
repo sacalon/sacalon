@@ -87,7 +87,7 @@ class Lexer(Lexer):
 
         NAME["cuse"] = CUSE
 
-        @_(r'("(?!"").*?(?<!\\)(\\\\)*?"|\'(?!").*?(?<!\\)(\\\\)*?\')')
+        @_(r'("(?!"").*?(?<!\\)(\\\\)*?")')
         def STRING(self, t):
                 t.value = t.value[1:-1]
                 return t
@@ -101,6 +101,7 @@ class Lexer(Lexer):
         def CHAR(self, t):
                 t.value = t.value[1:-1]
                 return t
+        
         @_(r'\n+')
         def newline(self, t):
                 self.lineno += t.value.count('\n')

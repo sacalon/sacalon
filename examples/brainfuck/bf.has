@@ -13,7 +13,7 @@
 
 // Source: https://en.wikipedia.org/wiki/Brainfuck
 
-var hello_world =  "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++."
+use file
 
 function excute(code:string) {
     var ptr = 0 // Data pointer.
@@ -68,7 +68,11 @@ function excute(code:string) {
     }
 }
 
-function main() : int {
-    excute(hello_world)
+function main(argv:[string]) : int {
+    if len(argv) == 2 {
+        excute(read_file(argv[1]))
+    } else {
+        print("Usage: bf <file name>")
+    }
     return 0
 }
