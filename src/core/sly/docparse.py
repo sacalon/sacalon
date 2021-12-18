@@ -1,5 +1,4 @@
 __all__ = [ 'DocParseMeta' ]
-
 class DocParseMeta(type):
     @staticmethod
     def __new__(meta, clsname, bases, clsdict):
@@ -13,7 +12,6 @@ class DocParseMeta(type):
             assert isinstance(parsedict, dict), 'Parser must return a dictionary'
             clsdict.update(parsedict)
         return super().__new__(meta, clsname, bases, clsdict)
-
     @classmethod
     def __init_subclass__(cls):
         assert hasattr(cls, 'parser') and hasattr(cls, 'lexer')
