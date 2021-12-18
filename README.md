@@ -7,7 +7,6 @@
   [Website](https://hascal.github.io) |
   [Docs](https://hascal.github.io/docs/) |
   [Gitter](https://gitter.im/hascal/community) |
-  [LinkedIn](https://linkedin.com/company/hascal-lang) \
   [Changelog](docs/CHANGELOG.md) |
   [Library Index](https://github.com/hascal/libs)
 
