@@ -1,4 +1,4 @@
 *.has linguist-language=Pascal text=auto
 examples/*.has linguist-documentation=false
 sly/ linguist-detectable=false
-examples/brainfuck/programs/*.bf linguist-language=Pascal
+**.bf linguist-language=Pascal
