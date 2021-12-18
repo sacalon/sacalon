@@ -1,15 +1,8 @@
-# The Hascal Lexer
-#
-# The Hascal Programming Language
-# Copyright 2019-2021 Hascal Development Team,
-# all rights reserved.
-
 from .sly import Lexer
 from .h_error import HascalException
 from sys import exit
 
 class Lexer(Lexer):
-        # todo : increase the line number after comments
         tokens = {
                 NAME, FOR, WHILE,IN,
                 IF, ELSE,

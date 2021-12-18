@@ -1,8 +1,3 @@
-# The Hascal Compiler Error Manager
-#
-# The Hascal Programming Language
-# Copyright 2019-2022 Hascal Development Team,
-# all rights reserved.
 import sys
 import colorama
 class HascalException():

@@ -1,9 +1,3 @@
-# The Hascal Compiler
-#
-# The Hascal Programming Language
-# Copyright 2019-2022 Hascal Development Team,
-# all rights reserved.
-
 from .h_error import HascalException
 from .h_lexer import Lexer
 from .h_parser import Parser

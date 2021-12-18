@@ -1,9 +1,3 @@
-# The Hascal Parser
-# 
-# The Hascal Programming Language
-# Copyright 2019-2022 Hascal Development Team,
-# all rights reserved.
-
 from .sly import Parser
 from .h_lexer import Lexer
 

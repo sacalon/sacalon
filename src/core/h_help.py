@@ -1,8 +1,3 @@
-# Help Informations
-#
-# The Hascal Programming Language
-# Copyright 2019-2022 Hascal Development Team,
-# all rights reserved.
 import platform
 
 HASCAL_COMPILER_VERSION = "1.3.6"
@@ -22,7 +17,6 @@ def help_all():
         "\tupdate <library_name> : update a library",
         "\tuninstall <library_name> : uninstall a library",
     ]
-
     for line in output_message:
         print(line)
 
@@ -36,6 +30,5 @@ def help_short():
         "for show other commands:",
         "\thascal help",
     ]
-    
     for line in output_message:
         print(line)

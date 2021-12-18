@@ -1,9 +1,3 @@
-# The Hascal Compiler CLI
-#
-# The Hascal Programming Language
-# Copyright 2019-2022 Hascal Development Team,
-# all rights reserved.
-
 from .h_lexer import Lexer # hascal lexer
 from .h_parser import Parser # hascal parser
 from .h_compiler import Generator # hascal to d compiler
