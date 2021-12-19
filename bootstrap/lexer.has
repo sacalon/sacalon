@@ -1,5 +1,8 @@
 // The Hascal Lexer
 //
+// Copyright (c) 2019-2022 Hascal Foundation
+// all rights reserved.
+//
 // wikipedia :
 // In computer science, lexical analysis, lexing or tokenization is the process of 
 // converting a sequence of characters (such as in a computer program or web page) into 
