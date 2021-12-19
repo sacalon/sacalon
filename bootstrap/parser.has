@@ -9,3 +9,32 @@
 //
 // A parser usually checks all data provided to ensure it is sufficient to build a data structure in 
 // the form of a parse tree or an abstract syntax tree.
+
+struct node_t {
+    var node_type : string
+    var children : [node_t]
+    var token_start : token
+    // var symbol_table : symbol_table
+}
+
+struct expr {
+    var left : node_t
+    var operator : token
+    var right : node_t
+}
+
+function parser_abort(filename:string,msg:string,type:string,line:int){
+    error("{}: Expected '{}'', got '{}' instead:{}\n",filename,msg,type,to_string(line))
+    exit(1)
+}
+
+function parser_abort_msg(filename:string,msg:string,line:int){
+    error("{}: Expected '{}':{}\n",filename,msg,to_string(line))
+    exit(1)
+}
+
+function parser(filename:string,tokens:[token]): node_t {
+    var program : node_t = node_t("program",[],tokens[0])
+    // todo
+    return program
+}
