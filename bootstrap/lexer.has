@@ -26,7 +26,7 @@ var line = 1 // current line
 
 var _tokens : [token]
 
-// this function is used to check if the current character is at the end of the string
+// check if current character is at the end of the source code
 function isAtEnd() : bool {
     if current >= len(_source) {
         return true
@@ -34,22 +34,30 @@ function isAtEnd() : bool {
     return false
 }
 
+// get next character
 function advance() : char{
     current = current + 1
     return _source[current]
 }
 
+// scan next token
 function scan_token(){
     var c = advance()
     var tok : token
 
+    // skip whitespace
     if c == ' ' {
         scan_token()
-    } else if c == '\n' {
+    } 
+
+    // skip newline(lines saved as a token, we need it in parser phase)
+    else if c == '\n' {
         tok = token("NEWLINE", "", line)
         append(_tokens,tok)
         line = line + 1
-    } else if c == '(' {
+    } 
+    
+    else if c == '(' {
         tok = ["LPAREN","(",line]
         append(_tokens,tok)
     } else if c == ')' {
@@ -94,16 +102,38 @@ function scan_token(){
         tok = token("STAR", "*", line)
         append(_tokens,tok)
     } else if c == '/' {
-        tok = token("SLASH", "/", line)
-        append(_tokens,tok)
-    } else if c == '%' {
+        c = advance()
+        // skip single line comments
+        if c == '/' {
+            while not isAtEnd() and c != '\n' {
+                c = advance()
+            }
+        }
+        // skip multi line comments
+        else if c == '*' {
+            while not isAtEnd() and c != '*' and c != '/' {
+                c = advance()
+            }
+            c = advance()
+        }
+        // else it's a division
+        else {
+            tok = token("SLASH", "/", line)
+            append(_tokens,tok)
+        }
+    } 
+    else if c == '%' {
         tok = token("PERCENT", "%", line)
         append(_tokens,tok)
-    } else if c == '^' {
+    } 
+    else if c == '^' {
         tok = token("CARET", "^", line)
         append(_tokens,tok)
-    } else if c == '<' {
+    } 
+    else if c == '<' {
         c = advance()
+
+        // check if it's a less than or less than equal
         if c == '=' {
             tok = token("LTE", "<=", line)
             append(_tokens,tok)
