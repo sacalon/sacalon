@@ -40,30 +40,44 @@ function advance() : char{
     return _source[current]
 }
 
+// get next character without advancing
+function peek() : char {
+    if isAtEnd() {
+        return '\0'
+    }
+    return _source[current + 1]
+}
+
+// lexer error
+function lexer_error(filename:string, msg:string,line:int) {
+    var fmt_msg = format("{}: Illegal character '{}':{}", filename, msg, to_string(line))
+}
+
 // scan next token
-function scan_token(){
+function scan_token(filename:string){
     var c = advance()
     var tok : token
 
     // skip whitespace
     if c == ' ' {
-        scan_token()
+        scan_token(filename)
     } 
-
     // skip newline(lines saved as a token, we need it in parser phase)
     else if c == '\n' {
         tok = token("NEWLINE", "", line)
         append(_tokens,tok)
         line = line + 1
     } 
-    
+
     else if c == '(' {
         tok = ["LPAREN","(",line]
         append(_tokens,tok)
     } else if c == ')' {
         tok = ["RPAREN",")",line]
         append(_tokens,tok)
-    } else if is_alpha(c) or c == '_' {
+    } 
+    
+    else if is_alpha(c) or c == '_' {
         _lexme = to_string(c)
         while not isAtEnd() and (is_alpha(c) or is_number(c) or c == '_') {
             _lexme = _lexme + to_string(c)
@@ -75,7 +89,9 @@ function scan_token(){
         } else {
             tok = token("NAME",_lexme,line)
         }
-    } else if is_number(c) {
+    } 
+
+    else if is_number(c) {
         _lexme = to_string(c)
         while not isAtEnd() and is_number(c) {
             _lexme = _lexme + to_string(c)
@@ -83,7 +99,8 @@ function scan_token(){
         }
         tok = token("NUMBER", _lexme, line)
         append(_tokens,tok)
-    } else if c == '"' {
+    } 
+    else if c == '"' {
         _lexme = to_string(c)
         while not isAtEnd() and c != '"' {
             _lexme = _lexme + to_string(c)
@@ -92,16 +109,21 @@ function scan_token(){
         c = advance()
         tok = token("STRING", _lexme, line)
         append(_tokens,tok)
-    } else if c == '+' {
+    } 
+    
+    else if c == '+' {
         tok = token("PLUS", "+", line)
         append(_tokens,tok)
-    } else if c == '-' {
+    } 
+    else if c == '-' {
         tok = token("MINUS", "-", line)
         append(_tokens,tok)
-    } else if c == '*' {
-        tok = token("STAR", "*", line)
+    } 
+    else if c == '*' {
+        tok = token("TIMES", "*", line)
         append(_tokens,tok)
-    } else if c == '/' {
+    } 
+    else if c == '/' {
         c = advance()
         // skip single line comments
         if c == '/' {
@@ -118,35 +140,96 @@ function scan_token(){
         }
         // else it's a division
         else {
-            tok = token("SLASH", "/", line)
-            append(_tokens,tok)
-        }
-    } 
-    else if c == '%' {
-        tok = token("PERCENT", "%", line)
-        append(_tokens,tok)
-    } 
-    else if c == '^' {
-        tok = token("CARET", "^", line)
-        append(_tokens,tok)
-    } 
-    else if c == '<' {
-        c = advance()
-
-        // check if it's a less than or less than equal
-        if c == '=' {
-            tok = token("LTE", "<=", line)
-            append(_tokens,tok)
-        } else {
-            tok = token("LT","<",line)
+            tok = token("DIV", "/", line)
             append(_tokens,tok)
         }
     }
+
+    else if c == '=' {
+        c = peek()
+
+        // check if it's a assign or equal
+        if c == '=' {
+            tok = token("EQUAL", "==", line)
+            append(_tokens,tok)
+        } else {
+            tok = token("ASSIGN","=",line)
+            append(_tokens,tok)
+        }
+    }
+    else if c == '<' {
+        c = peek()
+
+        // check if it's a less than or less than equal
+        if c == '=' {
+            tok = token("LESSEQ", "<=", line)
+            append(_tokens,tok)
+        } else {
+            tok = token("LESS","<",line)
+            append(_tokens,tok)
+        }
+    }
+    else if c == '>' {
+        c = peek()
+
+        // check if it's a greater than or greater than equal
+        if c == '=' {
+            tok = token("GREATEREQ", ">=", line)
+            append(_tokens,tok)
+        } else {
+            tok = token("GREATER",">",line)
+            append(_tokens,tok)
+        }
+    }
+    else if c == '!' {
+        c = peek()
+
+        // check if it's a greater than or greater than equal
+        if c == '=' {
+            tok = token("GREATEREQ", ">=", line)
+            append(_tokens,tok)
+        } else {
+            lexer_error(filename,to_string(c),line)
+            exit(1)
+        }
+    }
+
+    else if c == '.' {
+        tok = token("DOT", ".", line)
+        append(_tokens,tok)
+    } 
+    else if c == ':' {
+        tok = token("COLON", ":", line)
+        append(_tokens,tok)
+    }
+    else if c == ',' {
+        tok = token("COMMA", ",", line)
+        append(_tokens,tok)
+    }
+
+    else if c == '{' {
+        tok = token("LBC", "{", line)
+        append(_tokens,tok)
+    }
+    else if c == '}' {
+        tok = token("RBC", "}", line)
+        append(_tokens,tok)
+    }
+
+    else if c == '[' {
+        tok = token("LBRCK", "[", line)
+        append(_tokens,tok)
+    }
+    else if c == ']' {
+        tok = token("RBRCK", "]", line)
+        append(_tokens,tok)
+    }
+    
 }
-function tokenizer(src:string): [token] {
+function tokenizer(filename:string,src:string): [token] {
     _source = src
     while isAtEnd() == false {
-        scan_token()
+        scan_token(filename)
     }
     return _tokens
 }
