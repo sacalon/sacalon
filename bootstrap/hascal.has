@@ -23,7 +23,6 @@ function main(argv:[string]) : int {
         print(format("Hascal Compiler v{} {}",VERSION,os_name()))
         exit(0)
     } else {
-        # read file
         var source = read_file(argv[0])
         var tokens = tokenizer(source)
         for token in tokens {

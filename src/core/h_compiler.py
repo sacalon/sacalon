@@ -3,6 +3,9 @@ from .h_lexer import Lexer
 from .h_parser import Parser
 import sys
 from os.path import isfile
+from pathlib import Path
+
+HLIB_BASE_DIR = str(Path(__file__).parents[1])
 
 class Generator(object):
       LDFLAGS = []
@@ -121,10 +124,18 @@ class Generator(object):
                   else:
                         members = {}
 
-                        if isinstance(_type,Array):
+                        if str(_type).startswith("std::vector"):
                               _type_name = str(_type).split('<')[1].split('>')[0]
                               if _type_name in self.types and isinstance(self.types[_type_name],Struct) :
                                     members = self.types[_type_name].members
+                              self.vars[_name] = Var(_name,Array(self.types[_type_name]),members=members)
+                              res = "auto %s = %s;\n" % (_name,_expr['expr'])
+                              expr = {
+                                    'expr' : res,
+                                    'type' : Array(self.types[_type_name]),
+                                    'name' : _name,
+                              }
+                              return expr
                         elif isinstance(_type,Struct) :
                               members = _type.members
                         self.vars[_name] = Var(_name,_type,members=members)
@@ -760,11 +771,11 @@ class Generator(object):
                               for x in path[:-1]:
                                     final_path += x + "\\"
                               final_path += ends_of_path + ".has"
-
                               try:
                                     with open(final_path, 'r') as f:
                                           parser = Parser()
                                           tree = parser.parse(Lexer().tokenize(f.read()))
+                                          
                                           generator = Generator(self.BASE_DIR)
                                           output_cpp = generator.generate(tree,True)
 
@@ -773,6 +784,7 @@ class Generator(object):
                                           self.add_to_output(output_cpp,generator.src_includes)
                                           self.funcs.update(generator.funcs)
                                           self.types.update(generator.types)
+                                          self.vars.update(generator.vars)
                               except FileNotFoundError:
                                     HascalException(f"cannot found '{name}' library. Are you missing a library ?")            
                   else :
@@ -814,7 +826,7 @@ class Generator(object):
                                     with open(final_path, 'r') as f:
                                           parser = Parser()
                                           tree = parser.parse(Lexer().tokenize(f.read()))
-                                          generator = Generator()
+                                          generator = Generator(self.BASE_DIR)
                                           output_cpp = generator.generate(tree,True)
 
                                           self.imported.append(name)
@@ -822,6 +834,7 @@ class Generator(object):
                                           self.add_to_output(output_cpp,generator.src_includes)
                                           self.funcs.update(generator.funcs)
                                           self.types.update(generator.types)
+                                          self.vars.update(generator.vars)
                               except FileNotFoundError:
                                     HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                   return {'expr':'','type':''}
@@ -869,7 +882,7 @@ class Generator(object):
                                     with open(final_path, 'r') as f:
                                           parser = Parser()
                                           tree = parser.parse(Lexer().tokenize(f.read()))
-                                          generator = Generator("./")
+                                          generator = Generator(HLIB_BASE_DIR)
                                           output_cpp = generator.generate(tree,True)
 
                                           self.imported.append(name)
@@ -877,6 +890,7 @@ class Generator(object):
                                           self.add_to_output(output_cpp, generator.src_includes)
                                           self.funcs.update(generator.funcs)
                                           self.types.update(generator.types)
+                                          self.vars.update(generator.vars)
                               except FileNotFoundError:
                                     HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                               
@@ -916,7 +930,7 @@ class Generator(object):
                                     with open(final_path, 'r') as f:
                                           parser = Parser()
                                           tree = parser.parse(Lexer().tokenize(f.read()))
-                                          generator = Generator("./")
+                                          generator = Generator(HLIB_BASE_DIR)
                                           output_cpp = generator.generate(tree,True)
 
                                           self.imported.append(name)
@@ -924,6 +938,7 @@ class Generator(object):
                                           self.add_to_output(output_cpp, generator.src_includes)
                                           self.funcs.update(generator.funcs)
                                           self.types.update(generator.types)
+                                          self.vars.update(generator.vars)
                               except FileNotFoundError:
                                     HascalException(f"cannot found '{name}' library. Are you missing a library ?")
                   return {'expr':'','type':''}
@@ -1269,7 +1284,7 @@ class Generator(object):
                                     }
                                     return expr
                   else :
-                        HascalException(f"Function '{_name}' not defined")
+                        HascalException(f"Function '{_name}' not defined:{_line}")
             # --------------operators-----------------
             # todo : error if string *-/ string
             # <expr> + <expr>

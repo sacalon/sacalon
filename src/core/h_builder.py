@@ -1,6 +1,6 @@
 from .h_lexer import Lexer # hascal lexer
 from .h_parser import Parser # hascal parser
-from .h_compiler import Generator # hascal to d compiler
+from .h_compiler import Generator,HLIB_BASE_DIR # hascal to d compiler
 from .h_error import HascalException # hascal excpetion handling
 from .h_help import * # hascal compiler information
 
@@ -141,6 +141,7 @@ class HascalCompiler(object):
         tokens = self.lexer.tokenize(self.code)
         tree = self.parser.parse(tokens)
         output = self.generator.generate(tree)
+        HLIB_BASE_DIR = self.BASE_DIR+"\\hlib\\" if sys.platform == "win32" else self.BASE_DIR+"/hlib/"
 
         tmp0 = self.argv[1]
         outname = self.argv[2] if len(self.argv) > 2 else tmp0[:-4]

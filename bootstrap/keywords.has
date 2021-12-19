@@ -1,0 +1,20 @@
+// check if an identifier is a reserved word
+function check_keyword(str:string):bool{
+    var hascal_keyword = [
+        "var","const",
+        "use","local","cuse",
+        "int","float","string","bool","char",
+        "if","else","while","for","in","not","and","or",
+        "break","continue","return",
+        "true","false",
+        "function",
+        "struct","enum"
+    ]
+
+    for keyword in hascal_keyword {
+        if keyword == str {
+            return true
+        }
+    }
+    return false
+}

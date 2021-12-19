@@ -97,7 +97,7 @@ class Lexer(Lexer):
                 t.value = t.value[3:-3]
                 return t
         
-        @_(r"'(.)'")
+        @_(r"\'.*?(?<!\\)(\\\\)*\'")
         def CHAR(self, t):
                 t.value = t.value[1:-1]
                 return t
