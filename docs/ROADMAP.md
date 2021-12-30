@@ -75,6 +75,7 @@ function main () : int {
 ```
 ### Standard Library
 - `json`, `sqlite`, `thread` library
+- qt wrapper
 
 </details>
 
