@@ -3,6 +3,8 @@
 <summary>v1.3.6</summary>
   
 #### New features
+- multi line string
+- add `sdl2` wrapper
 
 #### Bug fixes
 
