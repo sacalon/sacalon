@@ -7,8 +7,10 @@
 
   [Website](https://hascal.github.io) |
   [Docs](https://hascal.github.io/docs/) |
-  [Gitter](https://gitter.im/hascal/community) |
+  [Gitter](https://gitter.im/hascal/community)
+
   [Changelog](docs/CHANGELOG.md) |
+  [IDE Integration](docs/ide.md) |
   [Library Index](https://github.com/hascal/libs)
 
 </div>
