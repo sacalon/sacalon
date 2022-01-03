@@ -63,8 +63,10 @@ function main(): int {
 ## Contributions
 Any contribution is welcome :)
 
+[See our roadmap](docs/roadmap.md)
+
 <!-- [![graph](https://contrib.rocks/image?repo=hascal/hascal)](https://github.com/hascal/hascal/graphs/contributors)
- -->
+-->
 ## License
 The compiler and the standard libraries are licensed under the **"Boost Software License"**,
 Read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more details.
