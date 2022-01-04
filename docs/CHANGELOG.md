@@ -7,6 +7,7 @@
 - add `sdl2` wrapper
 
 #### Bug fixes
+- fix lexer bugs
 
 #### Removed
 
