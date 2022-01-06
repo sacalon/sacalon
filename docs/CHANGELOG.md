@@ -1,4 +1,4 @@
-# Hascal Changelog
+# Hascal's Changelog
 <details>
 <summary>v1.3.6</summary>
   
