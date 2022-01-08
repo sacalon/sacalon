@@ -68,7 +68,7 @@ Any contribution is welcome :)
 <!-- [![graph](https://contrib.rocks/image?repo=hascal/hascal)](https://github.com/hascal/hascal/graphs/contributors)
 -->
 ## License
-The compiler and the standard libraries are licensed under the **"Boost Software License"**,
+The compiler and the standard libraries are licensed under the **"MIT"**,
 Read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more details.
 
 ## About
