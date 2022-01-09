@@ -81,7 +81,7 @@ class HascalCompiler(object):
                 print(f"'{self.argv[2]}' library installed successfully!")
 
             elif self.argv[1] == "uninstall" : # todo
-                ...
+                HascalException("Uninstalling library is not implemented in this version.")
 
             elif self.argv[1] == "update" :
                 if len(argv) < 3 :
