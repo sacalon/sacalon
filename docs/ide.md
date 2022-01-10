@@ -7,3 +7,4 @@
 - Nano extension
 - Atom plugin
 - Notepad++ Extension
+- Intellij Idea plugin
