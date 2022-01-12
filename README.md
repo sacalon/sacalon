@@ -12,7 +12,7 @@
   [Changelog](docs/CHANGELOG.md) |
   [IDE Integration](docs/ide.md) |
   [Library Index](https://github.com/hascal/libs)
-
+  [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://LinkedIn.com/in/company/hascal-lang)
 </div>
 
 **Hascal** is a general purpose and open source programming language designed to build optimal, maintainable, reliable and efficient software.
