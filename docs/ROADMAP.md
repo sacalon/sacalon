@@ -76,5 +76,8 @@ function main () : int {
 - `json`, `sqlite`, `thread` library
 - `qt` wrapper
 
+### Library Manager
+- unistall library option
+
 </details>
 
