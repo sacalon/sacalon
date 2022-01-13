@@ -16,3 +16,5 @@ deps-windows:
 	python --version
 	pip --version
 	pip install -r requirements.txt
+path:
+	cp src/dist/hascal usr/local/bin/hascal
