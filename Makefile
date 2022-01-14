@@ -1,4 +1,4 @@
-# Makefile for Hascal
+# Hascal's Makefile
 
 build :
 	pyinstaller --noconfirm --onefile --console --name "hascal"  "src/hascal.py"
