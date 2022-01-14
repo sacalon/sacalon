@@ -132,3 +132,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 *.crt
+
+# Files and directories made after install installing in src/
+src/build/
+src/dist/
+src/hascal.spec
