@@ -213,4 +213,12 @@ template <typename T>
 void append(std::vector<T>& v, T val){
 	v.push_back(val);
 }
+
+string input(){
+	return ReadStr();
+}
+
+string input(string text){
+	return ReadStr(text);
+}
 // exit()
