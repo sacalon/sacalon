@@ -1,0 +1,8 @@
+function foo():int{
+    var a = 1
+    // should show error
+}
+
+function main():int{
+    
+}

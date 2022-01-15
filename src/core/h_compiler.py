@@ -708,7 +708,8 @@ class Generator(object):
                   
                   expr = {
                         'expr' : "return %s;\n" %  _expr['expr'],
-                        'type' : _expr['type']
+                        'type' : _expr['type'],
+                        'return' : True
                   }
                   return expr 
             #-----------------------------------------
@@ -993,6 +994,14 @@ class Generator(object):
                   _compiled_params = node[3]
                   _expr = self.walk(node[4])
                   _res = ""
+
+                  if _return_type != 'void' and len(_expr) < 1 :
+                        HascalException(f"Function '{_name}' must return a value at end of function block")
+                  if _return_type != 'void' and len(_expr) != 0 and _expr[-1].get('return') != True :
+                        HascalException(f"Function '{_name}' should return a value at end of function block")
+                  if _return_type != 'int' and _name == 'main':
+                        HascalException(f"Function 'main' must return 'int'")
+                  
                   for e in _expr :
                         _res += e['expr']
                   res = "%s %s(%s) {\n%s\n}\n" % (_return_type,_name,_compiled_params,_res) 
@@ -1000,6 +1009,7 @@ class Generator(object):
                   # program arguments 
                   _params_keys = list(_params.keys())
                   if not _compiled_params in ['',None] and (_name == "main" and _params[_params_keys[0]] == "std::vector<string>"):
+                        
                         res = "%s %s(int argc,char** args) {\nstd::vector<std::string> argv;\nif (argc > 1) {argv.assign(args + 1, args + argc);}\nelse {argv = { args[0] };}\n%s\n}\n" % (_return_type,_name,_res) 
                         expr = {
                               'expr' : res,
