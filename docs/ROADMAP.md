@@ -10,7 +10,7 @@
 - use `std::array` for fixed sized array instead of `std::vector`
 - check if a function not returns a value, else show error
 - redesign logo
-- js backend
+- js backend(`hascal2js`)
 
 ### Language
 - multi library import :
