@@ -1010,7 +1010,7 @@ class Generator(object):
                   _params_keys = list(_params.keys())
                   if not _compiled_params in ['',None] and (_name == "main" and _params[_params_keys[0]] == "std::vector<string>"):
                         
-                        res = "%s %s(int argc,char** args) {\nstd::vector<std::string> argv;\nif (argc > 1) {argv.assign(args + 1, args + argc);}\nelse {argv = { args[0] };}\n%s\n}\n" % (_return_type,_name,_res) 
+                        res = "%s %s(int argc,char** args) {\nstd::vector<std::string> argv;for(int i=0;i<argc;i++){argv.push_back(args[i]);}\n%s\n}\n" % (_return_type,_name,_res) 
                         expr = {
                               'expr' : res,
                               'type' : _return_type,
@@ -1158,12 +1158,13 @@ class Generator(object):
                   cond = self.walk(node[1])
                   body = self.walk(node[2])
                   body2 = self.walk(node[3])
+
                   res = ""
                   for e in body :
                         res += e['expr']
                   res2 = ""
                   for e in body2 :
-                        res += e['expr']
+                        res2 += e['expr']
 
                   self.vars = cuurent_vars
                   expr = {
