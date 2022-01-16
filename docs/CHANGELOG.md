@@ -89,7 +89,7 @@
 #### New features
 - Basic Semantic Anaslyser
 
-#### Changes
+#### Syntax Changes
 - remove semicolon from syntax
 
 </details>
