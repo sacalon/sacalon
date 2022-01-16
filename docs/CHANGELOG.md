@@ -8,7 +8,7 @@
 
 #### Bug fixes
 - fix lexer bugs
-- check if function returns a value at end of string
+- check if function returns a value at end of string else show error
 - `main` function should return int
 
 #### Removed
