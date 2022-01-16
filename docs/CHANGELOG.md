@@ -5,6 +5,7 @@
 #### New features
 - multi line string
 - add `sdl2` wrapper
+- add `export` library for exporting to C(see : [haspy](https://github.com/bistcuite/haspy))
 
 #### Bug fixes
 - fix lexer bugs
