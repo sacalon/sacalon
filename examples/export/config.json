@@ -1,0 +1,3 @@
+{
+	"flags" : ["-shared","-o","add.dll","-static"]
+}

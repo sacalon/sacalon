@@ -1,0 +1,10 @@
+use export
+
+cuse "EXPORT"
+function add(a:int, b:int):int {
+    return a + b
+}
+
+function main(): int {
+    return 0
+}
