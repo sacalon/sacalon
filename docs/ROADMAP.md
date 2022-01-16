@@ -4,11 +4,10 @@
 <summary>v1.3.x</summary>
 
 ### Base
-- `new/delete` c++ keyword based memory management
+- `memory` library for manual memory management
 - null safety
 - basic support for pointers
 - use `std::array` for fixed sized array instead of `std::vector`
-- check if a function not returns a value, else show error
 - redesign logo
 - js backend(`hascal2js`)
 
