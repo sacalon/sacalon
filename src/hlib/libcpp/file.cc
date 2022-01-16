@@ -21,7 +21,7 @@ bool write_file(std::string path,std::string text){
 		file.close();
 		return true;
 	}catch (int x){
-		return false;
+		throw std::runtime_error(std::string("Cannot write the file"));
 	}
 	return false;
 }
