@@ -8,6 +8,8 @@
 
 #### Bug fixes
 - fix lexer bugs
+- check if function returns a value at end of string
+- `main` function should return int
 
 #### Removed
 
