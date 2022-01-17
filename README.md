@@ -71,7 +71,7 @@ Any contribution is welcome :)
 -->
 ## License
 The compiler and the standard libraries are licensed under the **"MIT License"**,
-Read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more details.
+Read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more information.
 
 ## About
 Copyright © 2019-2022 **Hascal Foundation**, \
