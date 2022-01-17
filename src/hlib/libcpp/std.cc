@@ -217,8 +217,40 @@ void append(std::vector<T>& v, T val){
 string input(){
 	return ReadStr();
 }
-
 string input(string text){
 	return ReadStr(text);
 }
+
+template <typename T>
+T* mem_new(T val){
+	T* res = new T(val);
+	return res;
+}
+
+template <typename T>
+T* mem_realloc(T* ptr, T val){
+	delete ptr;
+	T* res = new T(val);
+	return res;
+}
+template <typename T>
+void mem_delete(T* ptr){
+	delete ptr;
+}
+template <typename T>
+std::vector<T>* mem_new(){
+	auto res = new std::vector<T>();
+	return res;
+}
+template <typename T>
+std::vector<T>* mem_renew(std::vector<T>* ptr,std::vector<T> val){
+	delete ptr;
+	auto res = new std::vector<T>(val);
+	return res;
+}
+template <typename T>
+void mem_delete(std::vector<T>* ptr){
+	delete ptr;
+}
+
 // exit()
