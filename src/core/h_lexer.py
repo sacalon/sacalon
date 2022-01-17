@@ -23,7 +23,8 @@ class Lexer(Lexer):
                 FUNCTION,
                 BREAK,CONTINUE,
                 CUSE,
-                STRUCT,ENUM}
+                STRUCT,ENUM,
+                AMPERSAND}
         ignore = ' \t'
         ignore_comment_slash = r'//.*'
         
@@ -50,6 +51,7 @@ class Lexer(Lexer):
         LBRCK = r'\['
         RBRCK = r'\]'
         DOT = r'\.'
+        AMPERSAND = r'&'
         
         NAME["var"] = VAR
         NAME["const"] = CONST

@@ -327,48 +327,72 @@ class Parser(Parser):
       @_('expr')
       def exprs(self, p):
             return p.expr
+      
+      # <expr>, <expr>
       @_('exprs COMMA expr')
       def exprs(self, p):
             return ('exprs', p.exprs, p.expr,p.lineno)
+      
+      # [<expr>, <expr>]
       @_('LBRCK exprs RBRCK')
       def expr(self, p):
             return ('list', p.exprs,p.lineno)
 
+      # <expr> + <expr>
       @_('expr PLUS expr')
       def expr(self, p):
             return ('add', p.expr0, p.expr1,p.lineno)
       
+      # <expr> * <expr>
       @_('expr TIMES expr')
       def expr(self, p):
             return ('mul', p.expr0, p.expr1,p.lineno)
+      
+      # <expr> - <expr>
       @_('expr MINUS expr')
       def expr(self, p):
             return ('sub', p.expr0, p.expr1,p.lineno)
+      
+      # <expr> / <expr>
       @_('expr DIVIDE expr')
       def expr(self, p):
             return ('div', p.expr0, p.expr1,p.lineno)
+      
+      # -<expr>
       @_('MINUS expr %prec UMINUS')
       def expr(self, p):
             return ('sub', ('int', 0), p.expr,p.lineno)
+      
+      # (<expr>)
       @_('LPAREN expr RPAREN')
       def expr(self, p):
             return ('paren_expr',p.expr,p.lineno)
 
+      # <name>(<args>)
       @_('NAME LPAREN args RPAREN')
       def expr(self, p):
             return ('call', p.NAME, p.args,p.lineno)
+      
+      # <name>()
       @_('NAME LPAREN RPAREN')
       def expr(self, p):
             return ('call', p.NAME, (),p.lineno)
+      
+      # <name>
       @_('name')
       def expr(self, p):
             return ('var', p.name[0],p.name[1])
+      
+      # not <expr>
       @_('NOT expr')
       def expr(self, p):
             return ('not', p.expr,p.lineno)
+      
+      # <name>[<expr>]
       @_('name LBRCK expr RBRCK')
       def expr(self, p):
             return ('var_index', p.name[0],p.expr,p.lineno)
+      
       @_('NUMBER')
       def expr(self, p):
             return ('int', p.NUMBER,p.lineno)
@@ -378,7 +402,6 @@ class Parser(Parser):
       @_('MULTILINE_STRING')
       def expr(self, p):
             return ('multiline_string', p.MULTILINE_STRING,p.lineno)
-      
       @_('CHAR')
       def expr(self, p):
             return ('char', p.CHAR,p.lineno)
@@ -389,12 +412,16 @@ class Parser(Parser):
       def expr(self, p):
             return ('float', p.float[0],p.float[1])
       
+      # <expr>.<name>
       @_('expr DOT NAME')
       def expr(self, p):
             return ('.', p.expr,p.NAME,p.lineno)
+      
+      # <expr>.<name>[<expr>]
       @_('expr DOT name LBRCK expr RBRCK')
       def expr(self, p):
             return ('.2', p.expr0,p.name[0],p.expr1,p.lineno)
+      
       @_('NUMBER DOT NUMBER')
       def float(self, p):
             return ("{0}.{1}".format(p.NUMBER0,p.NUMBER1),p.lineno)
@@ -404,19 +431,21 @@ class Parser(Parser):
       @_('name DOT name_t')
       def name(self, p):
             return (p.name[0] + [p.name_t[0]],p.name_t[1])
-    
       @_('NAME')
       def name_t(self, p):
             return (p.NAME,p.lineno)
-            
+
+      # true 
       @_('TRUE')
       def boolean(self, p):
             return ('true',p.lineno)
+      # false
       @_('FALSE')
       def boolean(self, p):
             return ('false',p.lineno)
             
       #------------------------------------------
+      # <name>.<name>
       @_('names COMMA NAME')
       def names(self, p):
             return "{0},{1}".format(p.names,p.NAME,p.lineno)
@@ -424,45 +453,67 @@ class Parser(Parser):
       def names(self, p):
             return p.NAME
       #------------------------------------------
+      # <expr> == <expr>
       @_('expr EQEQ expr')
       def condition(self, p):
             return ('equals', p.expr0, p.expr1,p.lineno)
+      
+      # <expr> != <expr>
       @_('expr NOTEQ expr')
       def condition(self, p):
             return ('not_equals', p.expr0, p.expr1,p.lineno)
+      
+      # <expr> >= <expr>
       @_('expr GREATEREQ expr')
       def condition(self, p):
             return ('greater_equals', p.expr0, p.expr1,p.lineno)
+      
+      # <expr> <= <expr>
       @_('expr LESSEQ expr')
       def condition(self, p):
             return ('less_equals', p.expr0, p.expr1,p.lineno)
+      
+      # <expr> > <expr>
       @_('expr GREATER expr')
       def condition(self, p):
             return ('greater', p.expr0, p.expr1,p.lineno)
+      
+      # <expr> < <expr>
       @_('expr LESS expr')
       def condition(self, p):
             return ('less', p.expr0, p.expr1,p.lineno)
+      
+      # <expr>
       @_('expr')
       def condition(self, p):
             return ('expr_cond',p.expr) # todo : return line number
 
+      # not <condition>
       @_('NOT condition')
       def condition(self, p):
             return ('not_cond', p.condition,p.lineno)
+      
+      # true/false
       @_('boolean')
       def condition(self, p):
             return ('bool_cond', p.boolean[0],p.lineno)
+      
+      # ( <condition> )
       @_('LPAREN condition RPAREN')
       def condition(self, p):
             return ('paren_cond', p.condition,p.lineno)
 
+      # <condition> and <condition>
       @_('condition AND condition')
       def condition(self, p):
             return ('and', p.condition0,p.condition1,p.lineno)
+      
+      # <condition> or <condition>
       @_('condition OR condition')
       def condition(self, p):
             return ('or', p.condition0,p.condition1,p.lineno)
       #-----------------------------------------
+      # <param>, <param>
       @_('param_t')
       def params(self, p):
             return str(p.param_t)
@@ -470,6 +521,7 @@ class Parser(Parser):
       def params(self, p):
             return str(p.params + "," + p.param_t)
 
+      # <name> : <return_type>
       @_('NAME COLON return_type')
       def param_t(self, p):
             return "{0} {1}".format(p.return_type,p.NAME,p.lineno)
@@ -477,36 +529,48 @@ class Parser(Parser):
       def param_t(self, p):
             return "{0} {1}".format(p.return_type2,p.NAME,p.lineno)
       #------------------------------------------
+      # <arg>, <arg>
       @_('arg')
       def args(self, p):
             return [p.arg]
       @_('args COMMA arg')
       def args(self, p):
             return p.args + [p.arg]
-
       @_('expr')
       def arg(self, p):
             return p.expr
       #------------------------------------------
+      # int
       @_('INTVAR')
       def return_type(self, p):
             return 'int'
+      
+      # string
       @_('STRINGVAR')
       def return_type(self, p):
             return 'string'
+      
+      # char
       @_('CHARVAR')
       def return_type(self, p):
             return 'char'
+      
+      # bool
       @_('BOOLVAR')
       def return_type(self, p):
             return 'bool'
+      
+      # float
       @_('FLOATVAR')
       def return_type(self, p):
             return 'float'
+      
+      # <name>
       @_('NAME')
       def return_type(self, p):
             return str(p.NAME)
-            
+      
+      # [<return_type>]
       @_('LBRCK return_type RBRCK')
       def return_type2(self, p):
             return "std::vector<{0}>".format(p.return_type)
