@@ -1,3 +1,7 @@
+function add(val:[int]){
+    print(1)
+}
+
 function add(a:int,b:int):int{
     return a+b
 }
@@ -5,6 +9,7 @@ function add(a:int,b:int):int{
 function add(a:int,b:int,c:int):int{
     return a+b+c
 }
+
 
 function main():int{
     var a:int = 1

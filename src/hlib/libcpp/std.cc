@@ -226,7 +226,6 @@ T* mem_new(T val){
 	T* res = new T(val);
 	return res;
 }
-
 template <typename T>
 T* mem_realloc(T* ptr, T val){
 	delete ptr;

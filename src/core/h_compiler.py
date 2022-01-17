@@ -150,7 +150,7 @@ class Generator(object):
             # var <name> : <return_type>
             if node[0] == 'declare' and node[1] == "no_equal":
                   _name = node[3]
-                  _type = node[2]
+                  _type = self.walk(node[2])['expr']
                   _line = node[4]
 
                   if _name in self.vars or _name in self.consts :
@@ -175,7 +175,7 @@ class Generator(object):
             # var <name> : <return_type> = <expr>
             if node[0] == 'declare' and node[1] == "equal2":
                   _name = node[3]
-                  _type = node[2]
+                  _type = self.walk(node[2])['expr']
                   _expr = self.walk(node[4])
                   _line = node[5]
             
@@ -202,7 +202,7 @@ class Generator(object):
             # var <name> : [<return_type>]
             if node[0] == 'declare_array' and node[1] == "no_equal":
                   _name = node[3]
-                  _type = node[2]
+                  _type = self.walk(node[2])['expr']
                   _line = node[4]
 
                   if _name in self.vars or _name in self.consts :
@@ -225,7 +225,7 @@ class Generator(object):
             # var <name> : [<return_type>] = <expr>
             if node[0] == 'declare_array' and node[1] == "equal2":
                   _name = node[3]
-                  _type = node[2]
+                  _type = self.walk(node[2])['expr']
                   _expr = self.walk(node[4])
                   _line = node[5]
 
@@ -252,7 +252,7 @@ class Generator(object):
             # const <name> : <return_type> = <expr> ;
             if node[0] == 'declare' and node[1] == "const":
                   _name = node[3]
-                  _type = node[2]
+                  _type = self.walk(node[2])['expr']
                   _expr = self.walk(node[4])
                   _line = node[5]
 
@@ -970,28 +970,31 @@ class Generator(object):
             if node[0] == 'function':
                   current_vars = self.vars.copy()
                   _name = node[2]
-                  _return_type = node[1]
+                  _return_type = self.walk(node[1])['expr']
                   _params = { }
 
-                  params = node[3].split(',')
+                  params = self.walk(node[3])
+                  params_type = params['type']
+                  params_name = params['name']
+
                   if len(params) != 1:
-                        for p in params:
-                              param = p.split(' ')
-                              _params[param[1]] = param[0]
-                              if param[0].endswith(']'): self.vars[param[1]] = Var(param[1],param[0],is_array=True)
-                              else : self.vars[param[1]] = Var(param[1],param[0])
-                  elif len(params) == 1 and params[0] != '' and params[0] != None: 
-                        param = params[0].split(' ')
-                        _params[param[1]] = param[0]
-                        self.vars[param[1]] = Var(param[1],param[0])
+                        for i in params_name :
+                              for j in params_type :
+                                    _params[i] = j
+                                    self.vars[i] = Var(i,j)
                   
+                  if params['expr'].endswith(','):
+                        params['expr'] = params['expr'][:-1]
+
                   if self.funcs.get(_name) != None:
-                        self.funcs[_name] = [self.funcs[_name],Function(_name,_params,_return_type)]
+                        if type(self.funcs[_name]) == Function:
+                              self.funcs[_name] = [self.funcs[_name],Function(_name,_params,_return_type)]
+                        else:
+                              self.funcs[_name].append(Function(_name,_params,_return_type))
                   else :
                         self.funcs[_name] = Function(_name,_params,_return_type)
 
                   _name = node[2]
-                  _compiled_params = node[3]
                   _expr = self.walk(node[4])
                   _res = ""
 
@@ -1004,11 +1007,11 @@ class Generator(object):
                   
                   for e in _expr :
                         _res += e['expr']
-                  res = "%s %s(%s) {\n%s\n}\n" % (_return_type,_name,_compiled_params,_res) 
+                  res = "%s %s(%s) {\n%s\n}\n" % (_return_type,_name,params['expr'],_res) 
 
                   # program arguments 
                   _params_keys = list(_params.keys())
-                  if not _compiled_params in ['',None] and (_name == "main" and _params[_params_keys[0]] == "std::vector<string>"):
+                  if len(params['name']) != 0 and (_name == "main" and str(_params[_params_keys[0]]) == "std::vector<string>"):
                         
                         res = "%s %s(int argc,char** args) {\nstd::vector<std::string> argv;for(int i=0;i<argc;i++){argv.push_back(args[i]);}\n%s\n}\n" % (_return_type,_name,_res) 
                         expr = {
@@ -1029,17 +1032,21 @@ class Generator(object):
                   _return_type = node[1]
                   _params = { }
 
-                  params = node[3].split(',')
+                  params = self.walk(node[3])
+                  params_type = params['type']
+                  params_expr = params['expr']
+                  params_name = params['name']
+                        
                   if len(params) != 1:
-                        for p in params:
-                              param = p.split(' ')
-                              _params[param[1]] = param[0]
-                  elif len(params) == 1 and (params[0] != '' and params[0] != None) : 
-                        param = params[0].split(' ')
-                        _params[param[1]] = param[0]
+                        for i in params_name :
+                              for j in params_type :
+                                    _params[i] = j   
                   
                   if self.funcs.get(_name) != None:
-                        self.funcs[_name] = [self.funcs[_name],Function(_name,_params,_return_type)]
+                        if type(self.funcs[_name]) == Function:
+                              self.funcs[_name] = [self.funcs[_name],Function(_name,_params,_return_type)]
+                        else:
+                              self.funcs[_name].append(Function(_name,_params,_return_type))
                   else :
                         self.funcs[_name] = Function(_name,_params,_return_type)
 
@@ -1230,6 +1237,13 @@ class Generator(object):
                         'type' : '',
                   }
                   return expr
+            #---------------------------------------
+            if node[0] == 'pass_by_ref' :
+                  _name = node[1]
+                  _line = node[2]
+                  if not (_name in self.vars or _name in self.consts) :
+                        HascalException(f"'{_name}' not defined:{_line}")
+                  
             #---------------------------------------
             # <expr>                   
             if node[0] == 'expr':
@@ -1819,6 +1833,85 @@ class Generator(object):
                   }
                   return expr
             #--------------------------------------------
+            # <return_type>
+            if node[0] == 'return_type':
+                  _type_name = node[1]
+                  _line = node[2]
+
+                  if not _type_name in self.types:
+                        HascalException(f"{_type_name} is not defined:{_line}")
+                  
+                  expr = {
+                        'expr' : _type_name,
+                        'type' : self.types[_type_name],
+                        'name' : _type_name,
+                  }
+                  return expr
+            
+            # [<return_type>]
+            if node[0] == 'return_type_array':
+                  _type_name = self.walk(node[1])['name']
+                  _line = node[2]
+
+                  if not _type_name in self.types:
+                        HascalException(f"{_type_name} is not defined:{_line}")
+                  
+                  expr = {
+                        'expr' : 'std::vector<%s>' % (_type_name),
+                        'type' : Array(self.types[_type_name]),
+                        'name' : _type_name,
+                  }
+                  return expr
+            
+            # *<return_type>
+            if node[0] == 'ptr_type':
+                  _type_name = node[1]
+                  _line = node[2]
+
+                  if not _type_name in self.types:
+                        HascalException(f"{_type_name} is not defined:{_line}")
+                  
+                  expr = {
+                        'expr' : '%s*' % (_type_name),
+                        'type' : Type(_type_name,False,is_ptr=True,ptr_str='*'),
+                        'name' : _type_name,
+                  }
+                  return expr
+            #--------------------------------------------
+            if node[0] == 'param_no' :
+                  expr = {
+                        'expr' : '',
+                        'type' : [],
+                        'name' : [],
+                  }
+                  return expr
+            
+            if node[0] == 'param' :
+                  _name = node[1]
+                  _return_type = self.walk(node[2])
+                  _type = _return_type['expr']
+                  _type_name = _return_type['name']
+                  _line = node[3]
+                  
+                  expr = {
+                        'expr' : '%s %s,' % (_type,_name),
+                        'type' : _return_type['type'],
+                        'name' : _name,
+                  }
+                  return expr
+            
+            if node[0] == 'params' :
+                  _params = self.walk(node[1])
+                  _param = self.walk(node[2])
+
+                  expr = {
+                        'expr' : '%s %s' % (_params['expr'],_param['expr']),
+                        'type' : _params['type'] + [_param['type']],
+                        'name' : _params['name'] + [_param['name']],
+                  }
+                  
+                  return expr
+            #--------------------------------------------
             if node[0] == 'string':
                   expr = {
                         'expr' : 'std::string("%s")' % node[1],
@@ -1862,23 +1955,36 @@ class Function(object):
             self.return_type = return_type
 
 class Struct(object):
-      def __init__(self,name,members):
+      def __init__(self,name,members,is_ptr=False,ptr_str=''):
             self.name = name
             self.members = members
             self.stdtype = False
+            self.is_ptr = is_ptr
+            self.ptr_str = ptr_str
+      
       def __str__(self):
-            return self.name
+            return self.get_type_name()
 
+      def get_type_name(self):
+            return self.name + self.ptr_str
 class Enum(Struct):
       ...
 
 class Type(object):
-      def __init__(self,type_name,stdtype):
+      def __init__(self,type_name,stdtype,is_ptr=False,ptr_str=''):
             self.type_name = type_name
             self.stdtype = stdtype
+            self.is_ptr = is_ptr
+            self.ptr_str = ptr_str
+      
       def __str__(self):
-            return "%s" % (self.type_name)
+            return self.get_type_name()
 
+      def get_type_name(self):
+            if self.is_ptr:
+                  return '%s%s' % (self.type_name,self.ptr_str)
+            else :
+                  return self.type_name + self.ptr_str
 class Array(Type):
       def __init__(self,type_obj):
             self.type_obj = type_obj
@@ -1889,7 +1995,7 @@ class Array(Type):
       
       def __str__(self):
             if isinstance(self.type_obj,Type):
-                  return "std::vector<%s>" % (self.type_name)
+                  return "std::vector<%s>" % (self.get_type_name())
             elif isinstance(self.type_obj,Struct):
                   return "std::vector<%s>" % (self.type_obj.name)
             
