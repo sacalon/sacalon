@@ -1,3 +1,0 @@
-use libcpp.libcinfo
-
-function libc_name() : string
