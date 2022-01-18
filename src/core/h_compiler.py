@@ -273,7 +273,55 @@ class Generator(object):
                         }
                         return expr
 
-            # const <name> = <expr> ;
+            # var <name> : *<return_type>
+            if node[0] == 'declare_ptr' and node[1] == "no_equal":
+                  _name = node[3]
+                  _type = self.walk(node[2])
+                  _line = node[4]
+
+                  if _name in self.vars or _name in self.consts :
+                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
+                  elif _name in self.types :
+                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")  
+                  else:
+                        members = {}
+                        if isinstance(self.types[_type['type'].type_name],Struct) : members = self.types[_type['type'].type_name].members
+                        self.vars[_name] = Var(_name,_type,members=members)
+                        res =  "%s %s ;\n" % (_type['expr'],_name)
+
+                        expr = {
+                              'expr' : res,
+                              'type' : _type['type'],
+                              'name' : _name,
+                        }
+                        return expr
+
+            # var <name> : *<return_type> = <expr>
+            if node[0] == 'declare_ptr' and node[1] == "equal2":
+                  _name = node[3]
+                  _type = self.walk(node[2])
+                  _expr = self.walk(node[4])
+                  _line = node[5]
+            
+                  if _name in self.vars or _name in self.consts  :
+                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
+                  elif _name in self.types :
+                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                  elif str(_type) != str(_expr['type']) :
+                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
+                  else:
+                        members = {}
+                        if isinstance(self.types[_type['type'].type_name],Struct) : members = self.types[_type['type'].type_name].members
+                        self.vars[_name] = Var(_name,_type,members=members)
+
+                        expr = {
+                              'expr' : "%s %s = %s;\n" % (_type['type'],_name,_expr['expr']),
+                              'type' : _type['type'],
+                              'name' : _name,
+                        }
+                        return expr
+            
+            # const <name> = <expr>
             if node[0] == 'declare' and node[1] == "const":
                   _name = node[2]
                   _expr = self.walk(node[3])
@@ -697,6 +745,22 @@ class Generator(object):
                                           HascalException(f"'{node[1][i]}' is not a member of '{_name}':{_line}")        
                         else :
                               HascalException(f"Variable '{_name}' is not a struct:{_line}")
+            
+            # *<name> = <expr>
+            if node[0] == 'assign_ptr' :
+                  _name = self.walk(node[1])
+                  _type = _name['type']
+                  _expr = self.walk(node[2])
+                  _line = node[3]
+
+                  if not _type['type'].is_ptr :
+                        HascalException(f"Invalid type argument of unary '*' (have '{_type['type']}'):{_line}")
+                  
+                  expr = {
+                        'expr' : "*%s = %s;\n" % (_name['expr'],self.walk(node[2])['expr']),
+                        'type' : _type,
+                  }
+                  return expr
             #-----------------------------------------
             # return <expr>
             if node[0] == 'return':
@@ -1238,12 +1302,32 @@ class Generator(object):
                   }
                   return expr
             #---------------------------------------
-            if node[0] == 'pass_by_ref' :
-                  _name = node[1]
+            if node[0] == 'cast' :
+                  _return_type = self.walk(node[1])
+                  _expr = self.walk(node[2])
+                  _line = node[3]
+
+                  expr = {
+                        'expr' : 'static_cast<%s>(%s)' % (_return_type['type'],_expr['expr']),
+                        'type' : _return_type['type'],
+                  }
+                  return expr
+            #---------------------------------------
+            if node[0] == 'pass_by_ptr' :
+                  _name = self.walk(node[1])
+                  _type = _name['type']
                   _line = node[2]
-                  if not (_name in self.vars or _name in self.consts) :
-                        HascalException(f"'{_name}' not defined:{_line}")
                   
+                  if not _type.is_ptr :
+                        HascalException(f"Invalid type argument of unary '*' (have '{_type}'):{_line}")
+                  
+                  type_ = Type(_type.type_name,_type.stdtype,is_ptr=False)
+
+                  expr = {
+                        'expr' : '*%s' % (_name['expr']),
+                        'type' : type_,
+                  }
+                  return expr
             #---------------------------------------
             # <expr>                   
             if node[0] == 'expr':
@@ -1865,16 +1949,16 @@ class Generator(object):
             
             # *<return_type>
             if node[0] == 'ptr_type':
-                  _type_name = node[1]
+                  _type = self.walk(node[1])
                   _line = node[2]
 
-                  if not _type_name in self.types:
-                        HascalException(f"{_type_name} is not defined:{_line}")
+                  if not _type['name'] in self.types:
+                        HascalException(f"{_type['name']} is not defined:{_line}")
                   
                   expr = {
-                        'expr' : '%s*' % (_type_name),
-                        'type' : Type(_type_name,False,is_ptr=True,ptr_str='*'),
-                        'name' : _type_name,
+                        'expr' : "%s*" % (_type['expr']),
+                        'type' : Type(_type['type'].type_name,_type['type'].stdtype,is_ptr=True,ptr_str='*'),
+                        'name' : _type['name'],
                   }
                   return expr
             #--------------------------------------------

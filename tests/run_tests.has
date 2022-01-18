@@ -37,5 +37,7 @@ function main():int {
     print("cinclude.has :")
     system("hascal.py cinclude.has")
     
+    print("ptr.has :")
+    system("hascal.py ptr.has")
     return 0
 }

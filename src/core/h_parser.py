@@ -127,6 +127,15 @@ class Parser(Parser):
       def var_declare(self, p):
             return ('declare_array','equal2',p.return_type, p.NAME,p.expr,p.lineno) 
 
+      # var <name> : <return_type>
+      @_('VAR NAME COLON return_type3')
+      def var_declare(self, p):
+            return ('declare_ptr','no_equal',p.return_type3, p.NAME,p.lineno) 
+      # var <name> : <return_type> = <expr>
+      @_('VAR NAME COLON return_type3 ASSIGN expr')
+      def var_declare(self, p):
+            return ('declare_ptr','equal2',p.return_type3, p.NAME,p.expr,p.lineno) 
+      
       # const <name> = <expr>
       @_('CONST NAME ASSIGN expr')
       def var_declare(self, p):
@@ -144,18 +153,27 @@ class Parser(Parser):
       #-----------------------------------
       # <name> = <expr>
       @_('name ASSIGN expr')
-      def in_statement(self, p):
+      def assign(self, p):
             return ('assign', p.name[0], p.expr,p.lineno)
       
       # <name>[<expr>] = <expr>
       @_('name LBRCK expr RBRCK ASSIGN expr')
-      def in_statement(self, p):
+      def assign(self, p):
             return ('assign_var_index', p.name[0],p.expr0,p.expr1,p.lineno)
       
       # <name>[<expr>].<name> = <expr>
       @_('name LBRCK expr RBRCK DOT name ASSIGN expr')
-      def in_statement(self, p):
+      def assign(self, p):
             return ('assign_var_index_struct', p.name0[0],p.name1[0],p.expr0,p.expr1,p.lineno)
+      
+      # *<name> = <expr>
+      @_('TIMES name ASSIGN expr')
+      def assign(self, p):
+            return ('assign_ptr', ('var', p.name[0],p.name[1]), p.expr,p.lineno)
+      
+      @_('assign')
+      def in_statement(self, p):
+            return p.assign
       #-----------------------------------
       @_('if_stmt')
       def in_statement(self, p):
@@ -245,35 +263,35 @@ class Parser(Parser):
       @_('FUNCTION NAME LBC in_block RBC')
       def statement(self, p):
             return ('function',('return_type','void',p.lineno), p.NAME, ('param_no',), p.in_block,p.lineno)
-
+      
       # function <name>() {
       #      <in_block>
       # }
       @_('FUNCTION NAME LPAREN RPAREN LBC in_block RBC')
       def statement(self, p):
             return ('function',('return_type','void',p.lineno), p.NAME,('param_no',), p.in_block,p.lineno)
-
+      
       # function <name>(<params>) {
       #      <in_block>
       # }
       @_('FUNCTION NAME LPAREN params RPAREN LBC in_block RBC')
       def statement(self, p):
             return ('function',('return_type','void',p.lineno), p.NAME, p.params, p.in_block,p.lineno)
- 
+      
       # function <name> : <return_type> {
       #      <in_block>
       # }   
       @_('FUNCTION NAME COLON return_type LBC in_block RBC')
       def statement(self, p):
             return ('function',p.return_type, p.NAME, ('param_no',), p.in_block,p.lineno)
-
+      
       # function <name>() : <return_type> {
       #      <in_block>
       # } 
       @_('FUNCTION NAME LPAREN RPAREN COLON return_type LBC in_block RBC')
       def statement(self, p):
             return ('function',p.return_type, p.NAME, ('param_no',), p.in_block,p.lineno) 
-
+      
       # function <name>(<params>) : <return_type> {
       #      <in_block>
       # }  
@@ -281,27 +299,46 @@ class Parser(Parser):
       def statement(self, p):
             return ('function',p.return_type, p.NAME, p.params, p.in_block,p.lineno)
       
+
       # function <name> : [<return_type>] {
       #      <in_block>
       # }
       @_('FUNCTION NAME COLON return_type2 LBC in_block RBC')
       def statement(self, p):
             return ('function',p.return_type2, p.NAME, ('param_no',), p.in_block,p.lineno)
-      
-      
       # function <name>() : [<return_type>] {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LPAREN COLON return_type2 RPAREN LBC in_block RBC')
+      @_('FUNCTION NAME LPAREN RPAREN COLON return_type2  LBC in_block RBC')
       def statement(self, p):
             return ('function',p.return_type2, p.NAME,('param_no',), p.in_block,p.lineno)
-
       # function <name>(<params>) : [<return_type>] {
       #      <in_block>
       # }
       @_('FUNCTION NAME LPAREN params RPAREN COLON return_type2 LBC in_block RBC')
       def statement(self, p):
             return ('function',p.return_type2, p.NAME, p.params, p.in_block,p.lineno)    
+
+
+      # function <name> : *<return_type> {
+      #      <in_block>
+      # }
+      @_('FUNCTION NAME COLON return_type3 LBC in_block RBC')
+      def statement(self, p):
+            return ('function',p.return_type3, p.NAME, ('param_no',), p.in_block,p.lineno)
+      # function <name>() : *<return_type> {
+      #      <in_block>
+      # }
+      @_('FUNCTION NAME LPAREN RPAREN COLON return_type3  LBC in_block RBC')
+      def statement(self, p):
+            return ('function',p.return_type3, p.NAME,('param_no',), p.in_block,p.lineno)
+      # function <name>(<params>) : *<return_type> {
+      #      <in_block>
+      # }
+      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type3 LBC in_block RBC')
+      def statement(self, p):
+            return ('function',p.return_type3, p.NAME, p.params, p.in_block,p.lineno) 
+
 
       # function <name>(<params>) : <return_type>
       @_('FUNCTION NAME LPAREN params RPAREN COLON return_type')
@@ -530,6 +567,10 @@ class Parser(Parser):
       @_('NAME COLON return_type2')
       def param_t(self, p):
             return ('param', p.NAME,p.return_type2,p.lineno)
+      
+      @_('NAME COLON return_type3')
+      def param_t(self, p):
+            return ('param', p.NAME,p.return_type3,p.lineno)
       #------------------------------------------
       # <arg>, <arg>
       @_('arg')
@@ -577,17 +618,24 @@ class Parser(Parser):
       def return_type2(self, p):
             return ('return_type_array',p.return_type,p.lineno)
       
+
       # *<return_type>
       @_('TIMES return_type')
-      def return_type2(self, p):
+      def return_type3(self, p):
             return ('ptr_type',p.return_type,p.lineno)
       #------------------------------------------
-      # &<name>
-      @_('AMP name')
-      def name(self, p):
-            return ('pass_by_ref',p.name[0],p.name[1])
+      # (<return_type>) <expr>
+      @_('LPAREN return_type RPAREN expr')
+      def expr(self, p):
+            return ('cast',p.return_type,p.expr,p.lineno)
+      #------------------------------------------
+
+      # # &<name>
+      # @_('AMP name')
+      # def expr(self, p):
+      #       return ('pass_by_ref',p.name[0],p.name[1])
       
       # *<name>
       @_('TIMES name')
-      def name(self, p):
-            return ('pass_by_ptr',p.name[0],p.name[1])
+      def expr(self, p):
+            return ('pass_by_ptr',('var', p.name[0],p.name[1]),p.lineno)

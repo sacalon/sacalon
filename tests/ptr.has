@@ -1,0 +1,15 @@
+function add(a:*int,b:*int):int{
+    return *a + *b
+}
+
+function main():int{
+    var a : *int
+    *a = 1
+
+    var b : *int
+    *b = 1
+
+    var sum = add(a,b)
+    print(sum)
+    return 0
+}
