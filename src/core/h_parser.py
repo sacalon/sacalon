@@ -154,17 +154,17 @@ class Parser(Parser):
       # <name> = <expr>
       @_('name ASSIGN expr')
       def assign(self, p):
-            return ('assign', p.name[0], p.expr,p.lineno)
+            return ('assign', ('var', p.name[0],p.name[1]), p.expr,p.lineno)
       
       # <name>[<expr>] = <expr>
       @_('name LBRCK expr RBRCK ASSIGN expr')
       def assign(self, p):
-            return ('assign_var_index', p.name[0],p.expr0,p.expr1,p.lineno)
+            return ('assign_var_index', ('var', p.name[0],p.name[1]),p.expr0,p.expr1,p.lineno)
       
       # <name>[<expr>].<name> = <expr>
       @_('name LBRCK expr RBRCK DOT name ASSIGN expr')
       def assign(self, p):
-            return ('assign_var_index_struct', p.name0[0],p.name1[0],p.expr0,p.expr1,p.lineno)
+            return ('assign_var_index_struct', ('var', p.name0[0],p.name0[1]),p.expr0,p.name1[0],p.expr1,p.lineno)
       
       # *<name> = <expr>
       @_('TIMES name ASSIGN expr')
@@ -428,7 +428,7 @@ class Parser(Parser):
       # <name>[<expr>]
       @_('name LBRCK expr RBRCK')
       def expr(self, p):
-            return ('var_index', p.name[0],p.expr,p.lineno)
+            return ('var_index', ('var', p.name[0],p.name[1]),p.expr,p.lineno)
       
       @_('NUMBER')
       def expr(self, p):
