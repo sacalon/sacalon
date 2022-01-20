@@ -52,23 +52,23 @@ void cprint(string txt, string color) {
         }
     #else
         if(color == "green"){
-            cout << GREEN << text << RESET;
+            std::cout << GREEN << text << RESET;
         } else if(color == "red"){
-            cout << RED << text << RESET;
+            std::cout << RED << text << RESET;
         } else if(color == "blue"){
-            cout << BLUE << text << RESET;
+            std::cout << BLUE << text << RESET;
         } else if(color == "yellow"){
-            cout << YELLOW << text << RESET;
+            std::cout << YELLOW << text << RESET;
         } else if(color == "white"){
-            cout << WHITE << text << RESET;
+            std::cout << WHITE << text << RESET;
         } else if(color == "cyan"){
-            cout << CYAN << text << RESET;
+            std::cout << CYAN << text << RESET;
         } else if(color == "magenta"){
-            cout << MAGENTA << text << RESET;
+            std::cout << MAGENTA << text << RESET;
         } else if(color == "black"){
-            cout << BLACK << text << RESET;
+            std::cout << BLACK << text << RESET;
         } else {
-            cout << RESET << text << RESET;
+            std::cout << RESET << text << RESET;
         }
     #endif
 }
