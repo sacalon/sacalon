@@ -579,6 +579,18 @@ class Parser(Parser):
       @_('args COMMA arg')
       def args(self, p):
             return p.args + [p.arg]
+      
+      @_('return_type')
+      def arg(self, p):
+            return p.return_type
+      
+      @_('return_type2')
+      def arg(self, p):
+            return p.return_type2
+      
+      @_('return_type3')
+      def arg(self, p):
+            return p.return_type3
       @_('expr')
       def arg(self, p):
             return p.expr
@@ -608,6 +620,11 @@ class Parser(Parser):
       def return_type(self, p):
             return ('return_type','float',p.lineno)
       
+      # void
+      @_('VOIDVAR')
+      def return_type(self, p):
+            return ('return_type','void',p.lineno)
+
       # <name>
       @_('NAME')
       def return_type(self, p):

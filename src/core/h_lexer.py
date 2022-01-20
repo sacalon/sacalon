@@ -7,7 +7,7 @@ class Lexer(Lexer):
                 NAME, FOR, WHILE,IN,
                 IF, ELSE,
                 RETURN,
-                INTVAR, STRINGVAR, CHARVAR,BOOLVAR,FLOATVAR,
+                INTVAR, STRINGVAR, CHARVAR,BOOLVAR,FLOATVAR,VOIDVAR,
                 NUMBER, STRING,CHAR,MULTILINE_STRING,
                 GREATER, LESS, EQEQ, NOTEQ, GREATEREQ, LESSEQ,NOT,AND,OR,
                 PLUS, TIMES, MINUS, DIVIDE,
@@ -64,6 +64,7 @@ class Lexer(Lexer):
         NAME["char"] = CHARVAR
         NAME["bool"] = BOOLVAR
         NAME["float"] = FLOATVAR
+        NAME["void"] = VOIDVAR
         
         NAME["not"] = NOT
         NAME["and"] = AND

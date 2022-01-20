@@ -1,0 +1,22 @@
+function is_86():bool{
+    if sizeof(void*) == 4 {
+        return true
+    }
+    return false
+}
+
+function is_64():bool{
+    if sizeof(void*) == 8 {
+        return true
+    }
+    return false
+}
+
+function main():int{
+    if is_64() {
+        print("64bit")
+    } else {
+        print("32bit")
+    }
+    return 0
+}

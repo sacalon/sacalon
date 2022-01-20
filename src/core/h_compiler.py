@@ -52,6 +52,8 @@ class Generator(object):
                   'append' : Function('append',{'vec':'T','val':'T'},self.types['int']),
                   'regex' : Function('regex',{'regex_str':'string','str':'string'},self.types['bool']),
 
+                  'sizeof' : Function('sizeof',{'T':'T'},self.types['int']),
+
             }
 
             # list of imported libraries
