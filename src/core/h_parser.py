@@ -619,8 +619,8 @@ class Parser(Parser):
             return ('return_type_array',p.return_type,p.lineno)
       
 
-      # *<return_type>
-      @_('TIMES return_type')
+      # <return_type>*
+      @_('return_type TIMES')
       def return_type3(self, p):
             return ('ptr_type',p.return_type,p.lineno)
       #------------------------------------------
@@ -631,9 +631,9 @@ class Parser(Parser):
       #------------------------------------------
 
       # # &<name>
-      # @_('AMP name')
-      # def expr(self, p):
-      #       return ('pass_by_ref',p.name[0],p.name[1])
+      @_('AMP name')
+      def expr(self, p):
+            return ('pass_by_ref',('var', p.name[0],p.name[1]),p.lineno)
       
       # *<name>
       @_('TIMES name')

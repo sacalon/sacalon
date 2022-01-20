@@ -285,7 +285,7 @@ class Generator(object):
                         HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")  
                   else:
                         members = {}
-                        if isinstance(self.types[_type['name']],Struct)  : members = self.types[_type['type'].name].members
+                        if isinstance(_type['type'],Struct)  : members = _type['type'].members
                         self.vars[_name] = Var(_name,_type['type'],members=members)
                         res =  "%s %s ;\n" % (_type['expr'],_name)
 
@@ -307,11 +307,11 @@ class Generator(object):
                         HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
-                  elif str(_type) != str(_expr['type']) :
-                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
+                  elif str(_type['type']) != str(_expr['type']) :
+                        HascalException(f"Mismatched type {_type['type']} and {_expr['type']}:{_line}")
                   else:
                         members = {}
-                        if isinstance(self.types[_type['name']],Struct)  : members = self.types[_type['type'].name].members
+                        if isinstance(_type['type'],Struct)  : members = _type['type'].members
                         self.vars[_name] = Var(_name,_type['type'],members=members)
 
                         expr = {
@@ -1112,6 +1112,19 @@ class Generator(object):
 
                   expr = {
                         'expr' : '*%s' % (_name['expr']),
+                        'type' : type_,
+                  }
+                  return expr
+            
+            if node[0] == 'pass_by_ref' :
+                  _name = self.walk(node[1])
+                  _type = _name['type']
+                  _line = node[2]
+
+                  type_ = Type(_type.type_name,_type.stdtype,is_ptr=True,ptr_str='*')
+
+                  expr = {
+                        'expr' : '&%s' % (_name['expr']),
                         'type' : type_,
                   }
                   return expr
