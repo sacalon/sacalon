@@ -6,6 +6,18 @@
 - multi line string
 - add `sdl2` wrapper
 - add `export` library for exporting to C(see : [haspy](https://github.com/bistcuite/haspy))
+- basic support for pointers
+```typescript
+var x : *int = 20
+var y : int = 10
+x = &y
+var z = *x // type : int
+
+// Pointers fix incomplete types on struct defination
+struct bar {
+    var self : *bar
+}
+```
 
 #### Bug fixes
 - fix lexer bugs
@@ -13,6 +25,7 @@
 - `main` function should returns int
 
 #### Removed
+- `libcinfo` library removed
 
 </details>
 
