@@ -868,11 +868,11 @@ class Generator(object):
                   
                   if len(params['name']) > 1 and _name == "main" :
                         HascalException(f"Function 'main' takes only zero or one arguments(with string array type)")
-                  
                   if len(params['name']) == 1 and ((isinstance(_params[_params_keys[0]],Array) and isinstance(_params[_params_keys[0]].type_obj,Struct)) or isinstance(_params[_params_keys[0]],Struct)) and _name == "main" :
                         HascalException(f"Function 'main' takes only zero or one arguments(with struct type)")
                   if len(params['name']) == 1 and _name == "main" and isinstance(_params[_params_keys[0]],Array) and _params[_params_keys[0]].type_obj.type_name != 'string' :
                         HascalException(f"Function 'main' takes only zero or one arguments(with string array type)")
+                  
                   expr = {
                         'expr' : res,
                         'type' : _type['type'],
