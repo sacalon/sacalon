@@ -6,7 +6,7 @@
 - multi line string
 - add `sdl2` wrapper
 - add `export` library for exporting to C(see : [haspy](https://github.com/bistcuite/haspy))
-- basic support for pointers
+- pointers and references
 ```typescript
 var x : *int = 20
 var y : int = 10
@@ -18,11 +18,13 @@ struct bar {
     var self : *bar
 }
 ```
+- add `sizeof` function
 
 #### Bug fixes
 - fix lexer bugs
 - check if function returns a value at end of string else show error
 - `main` function should returns int
+- fix `termcolor` library bugs
 
 #### Removed
 - `libcinfo` library removed
