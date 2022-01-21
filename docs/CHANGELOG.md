@@ -3,6 +3,7 @@
 <summary>v1.3.6</summary>
   
 #### New features
+- more data types : `int8`,`uint8`,`int16`,`uint16`,`int32`,`uint32`,`int64`,`uint64`,`double`
 - multi line string
 - add `sdl2` wrapper
 - add `export` library for exporting to C(see : [haspy](https://github.com/bistcuite/haspy))

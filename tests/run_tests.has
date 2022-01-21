@@ -39,5 +39,9 @@ function main():int {
     
     print("ptr.has :")
     system("hascal.py ptr.has")
+
+    print("compatible_type.has :")
+    system("hascal.py compatible_type.has")
+
     return 0
 }

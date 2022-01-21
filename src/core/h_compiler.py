@@ -15,10 +15,23 @@ class Generator(object):
             self.src_pre_main = ""
             #init standard types
             self.types = {
-                  'int' : Type('int',True),
-                  'float' : Type('float',True),
-                  'bool' : Type('bool',True),
-                  'char' : Type('char',True),
+                  'int' : Type('int',True,category='number'),
+                  'int8' : Type('int8',True,category='number'),
+                  'int16' : Type('int16',True,category='number'),
+                  'int32' : Type('int32',True,category='number'),
+                  'int64' : Type('int64',True,category='number'),
+                  'uint' : Type('uint',True,category='number'),
+                  'uint8' : Type('uint8',True,category='number'),
+                  'uint16' : Type('uint16',True,category='number'),
+                  'uint32' : Type('uint32',True,category='number'),
+                  'uint64' : Type('uint64',True,category='number'),
+
+
+                  'float' : Type('float',True,category='number'),
+                  'double' : Type('double',True,category='number'),
+
+                  'bool' : Type('bool',True,category='number'),
+                  'char' : Type('char',True,category='number'),
                   'string' : Type('string',True),
                   'void' : Type('void',True),
             }
@@ -127,19 +140,7 @@ class Generator(object):
                   else:
                         members = {}
 
-                        if str(_type).startswith("std::vector"):
-                              _type_name = str(_type).split('<')[1].split('>')[0]
-                              if _type_name in self.types and isinstance(self.types[_type_name],Struct) :
-                                    members = self.types[_type_name].members
-                              self.vars[_name] = Var(_name,Array(self.types[_type_name]),members=members)
-                              res = "auto %s = %s;\n" % (_name,_expr['expr'])
-                              expr = {
-                                    'expr' : res,
-                                    'type' : Array(self.types[_type_name]),
-                                    'name' : _name,
-                              }
-                              return expr
-                        elif isinstance(_type,Struct) :
+                        if isinstance(_type,Struct) :
                               members = _type.members
                         self.vars[_name] = Var(_name,_type,members=members)
                         res = "auto %s = %s;\n" % (_name,_expr['expr'])
@@ -153,24 +154,22 @@ class Generator(object):
             # var <name> : <return_type>
             if node[0] == 'declare' and node[1] == "no_equal":
                   _name = node[3]
-                  _type = self.walk(node[2])['expr']
+                  _type = self.walk(node[2])
                   _line = node[4]
 
                   if _name in self.vars or _name in self.consts :
                         HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")  
-                  elif not _type in self.types :
-                        HascalException(f"Type '{_type}' not defined:{_line}")
                   else:
                         members = {}
-                        if isinstance(self.types[_type],Struct) : members = self.types[_type].members
-                        self.vars[_name] = Var(_name,self.types[_type],members=members)
-                        res =  "%s %s ;\n" % (_type,_name)
+                        if isinstance(_type['type'],Struct) : members = _type['type'].members
+                        self.vars[_name] = Var(_name,_type['type'],members=members)
+                        res =  "%s %s ;\n" % (_type['expr'],_name)
 
                         expr = {
                               'expr' : res,
-                              'type' : self.types[_type],
+                              'type' : _type['type'],
                               'name' : _name,
                         }
                         return expr
@@ -178,7 +177,7 @@ class Generator(object):
             # var <name> : <return_type> = <expr>
             if node[0] == 'declare' and node[1] == "equal2":
                   _name = node[3]
-                  _type = self.walk(node[2])['expr']
+                  _type = self.walk(node[2])
                   _expr = self.walk(node[4])
                   _line = node[5]
             
@@ -186,18 +185,16 @@ class Generator(object):
                         HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
-                  elif str(_type) != str(_expr['type']) :
+                  elif is_compatible_type(_expr['type'],_type['type']) == False :
                         HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
-                  elif not _type in self.types :
-                        HascalException(f"Type '{_type}' not defined:{_line}")
                   else:
                         members = {}
-                        if isinstance(self.types[_type],Struct) : members = self.types[_type].members
-                        self.vars[_name] = Var(_name,self.types[_type],members=members)
+                        if isinstance(_type['type'],Struct) : members = _type['type'].members
+                        self.vars[_name] = Var(_name,_type['type'],members=members)
 
                         expr = {
-                              'expr' : "auto %s = %s;\n" % (_name,_expr['expr']),
-                              'type' : self.types[_type],
+                              'expr' : "%s %s = %s;\n" % (_type['expr'],_name,_expr['expr']),
+                              'type' : _type['type'],
                               'name' : _name,
                         }
                         return expr
@@ -205,22 +202,19 @@ class Generator(object):
             # var <name> : [<return_type>]
             if node[0] == 'declare_array' and node[1] == "no_equal":
                   _name = node[3]
-                  _type = self.walk(node[2])['expr']
+                  _type = self.walk(node[2])
                   _line = node[4]
 
                   if _name in self.vars or _name in self.consts :
                         HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")   
                   elif _name in self.types :
                         HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")   
-                  elif not _type in self.types :
-                        HascalException(f"Type '{_type}' not defined:{_line}")   
+   
                   else:
-                        members = {}
-                        if isinstance(self.types[_type],Struct) : members = self.types[_type].members
-                        self.vars[_name] = Var(_name,Array(self.types[_type]),is_array=True,members=members)
+                        self.vars[_name] = Var(_name,Array(_type['type']),is_array=True)
                         expr = {
-                              'expr' : "std::vector<%s> %s;\n" % (_type,_name),
-                              'type' : Array(self.types[_type]),
+                              'expr' : "std::vector<%s> %s;\n" % (_type['expr'],_name),
+                              'type' : Array(_type['type']),
                               'name' : _name,
                         }
                         return expr
@@ -228,7 +222,7 @@ class Generator(object):
             # var <name> : [<return_type>] = <expr>
             if node[0] == 'declare_array' and node[1] == "equal2":
                   _name = node[3]
-                  _type = self.walk(node[2])['expr']
+                  _type = self.walk(node[2])
                   _expr = self.walk(node[4])
                   _line = node[5]
 
@@ -236,23 +230,19 @@ class Generator(object):
                         HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
-                  elif str(Array(self.types[_type])) != str(_expr['type']) :
-                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")  
-                  elif not _type in self.types :
-                        HascalException(f"Type '{_type}' not defined:{_line}")  
+                  elif is_compatible_type(_expr['type'],Array(_type['type'])) == False :
+                        HascalException(f"Mismatched type {Array(_type['type'])} and {_expr['type']}:{_line}")    
                   else:
-                        members = {}
-                        if isinstance(self.types[_type],Struct) : members = self.types[_type].members
-                        self.vars[_name] = Var(_name,Array(self.types[_type]),is_array=True,members=members)
+                        self.vars[_name] = Var(_name,Array(_type['type']),is_array=True)
 
                         expr = {
-                              'expr' : "std::vector<%s> %s = %s ;\n" % (_type,_name,_expr['expr']),
-                              'type' : Array(self.types[_type]),
+                              'expr' : "std::vector<%s> %s = %s ;\n" % (_type['expr'],_name,_expr['expr']),
+                              'type' : Array(_type['type']),
                               'name' : _name,
                         }
                         return expr
                               
-            # const <name> : <return_type> = <expr> ;
+            # const <name> : <return_type> = <expr>
             if node[0] == 'declare' and node[1] == "const":
                   _name = node[3]
                   _type = self.walk(node[2])['expr']
@@ -482,7 +472,7 @@ class Generator(object):
                   _expr = self.walk(node[2])
                   _line = node[3]
 
-                  if str(_name['type']) != str(_expr['type']) :
+                  if is_compatible_type(_name['type'],_expr['type']) == False:
                         HascalException(f"Mismatched type '{_name['type']}' and '{_expr['type']}':{_line}") 
                   
                   expr = {
@@ -501,8 +491,8 @@ class Generator(object):
                   if not isinstance(_name['type'],Array) :
                         HascalException(f"'{_name['type']}' is not subscriptable:{_line}")
 
-                  if str(_name['type'].type_obj) != str(_expr['type']) :
-                        HascalException(f"Mismatched type '{_name['type']}' and '{_expr['type']}':{_line}") 
+                  if is_compatible_type(_name['type'].type_obj,_expr['type']) == False:
+                        HascalException(f"Mismatched type '{_name['type'].type_obj}' and '{_expr['type']}':{_line}") 
                   expr = {
                         'expr' : '%s[%s] = %s;' % (_name['expr'],_index['expr'],_expr['expr']),
                         'type' : _name['type'].type_obj
@@ -526,7 +516,7 @@ class Generator(object):
                   if not _field in _name['type'].type_obj.members :
                         HascalException(f"'{_name['type']}' has no field '{_field}':{_line}")
 
-                  if str(_name['type'].type_obj.members[_field]) != str(_expr['type']) :
+                  if is_compatible_type(_name['type'].type_obj.members[_field],_expr['type']) == False:
                         HascalException(f"Mismatched type '{_name['type'].type_obj.members[_field]}' and '{_expr['type']}':{_line}")
 
                   expr = {
@@ -544,7 +534,10 @@ class Generator(object):
 
                   if not _type.is_ptr :
                         HascalException(f"Invalid type argument of unary '*' (have '{_type['type']}'):{_line}")
-                  
+                  _type.is_ptr = False
+                  _type.ptr_str = ''
+                  if is_compatible_type(_type,_expr['type']) == False :
+                        HascalException(f"Mismatched type '{_type}' and '{_expr['type']}':{_line}")
                   expr = {
                         'expr' : "*%s = %s;\n" % (_name['expr'],self.walk(node[2])['expr']),
                         'type' : _type,
@@ -865,15 +858,21 @@ class Generator(object):
                   self.vars = current_vars
                   # program arguments 
                   _params_keys = list(_params.keys())
-                  if len(params['name']) != 0 and (_name == "main" and str(_params[_params_keys[0]]) == "std::vector<string>"):
-                        
-                        res = "%s %s(int argc,char** args) {\nstd::vector<std::string> argv;for(int i=0;i<argc;i++){argv.push_back(args[i]);}\n%s\n}\n" % (_return_type,_name,_res) 
+                  if len(params['name']) == 1 and (_name == "main" and isinstance(_params[_params_keys[0]],Array) and isinstance(_params[_params_keys[0]],Type) and _params[_params_keys[0]].type_obj.type_name == 'string'):
+                        res = "%s %s(int argc,char** args) {\nstd::vector<std::string> %s;for(int i=0;i<argc;i++){%s.push_back(args[i]);}\n%s\n}\n" % (_return_type,_name,_params_keys[0],_params_keys[0],_res) 
                         expr = {
                               'expr' : res,
                               'type' : _type['type'],
                         }
                         return expr
                   
+                  if len(params['name']) > 1 and _name == "main" :
+                        HascalException(f"Function 'main' takes only zero or one arguments(with string array type)")
+                  
+                  if len(params['name']) == 1 and ((isinstance(_params[_params_keys[0]],Array) and isinstance(_params[_params_keys[0]].type_obj,Struct)) or isinstance(_params[_params_keys[0]],Struct)) and _name == "main" :
+                        HascalException(f"Function 'main' takes only zero or one arguments(with struct type)")
+                  if len(params['name']) == 1 and _name == "main" and isinstance(_params[_params_keys[0]],Array) and _params[_params_keys[0]].type_obj.type_name != 'string' :
+                        HascalException(f"Function 'main' takes only zero or one arguments(with string array type)")
                   expr = {
                         'expr' : res,
                         'type' : _type['type'],
@@ -1110,7 +1109,7 @@ class Generator(object):
                   if not _type.is_ptr :
                         HascalException(f"Invalid type argument of unary '*' (have '{_type}'):{_line}")
                   
-                  type_ = Type(_type.type_name,_type.stdtype,is_ptr=False)
+                  type_ = Type(_type.type_name,_type.stdtype,is_ptr=False,ptr_str='',category=_type.category)
 
                   expr = {
                         'expr' : '*%s' % (_name['expr']),
@@ -1123,7 +1122,7 @@ class Generator(object):
                   _type = _name['type']
                   _line = node[2]
 
-                  type_ = Type(_type.type_name,_type.stdtype,is_ptr=True,ptr_str='*')
+                  type_ = Type(_type.type_name,_type.stdtype,is_ptr=True,ptr_str='*',category=_type.category)
 
                   expr = {
                         'expr' : '&%s' % (_name['expr']),
@@ -1711,13 +1710,13 @@ class Generator(object):
                   if isinstance(_type['type'],Struct):
                         expr = {
                               'expr' : "%s*" % (_type['expr']),
-                              'type' : Struct(_type['type'].name,_type['type'].members,is_ptr=True,ptr_str='*'),
+                              'type' : Struct(_type['type'].name,_type['type'].members,is_ptr=True,ptr_str='*',category=_type['type'].category),
                               'name' : _type['name'],
                         }
                         return expr
                   expr = {
                         'expr' : "%s*" % (_type['expr']),
-                        'type' : Type(_type['type'].type_name,_type['type'].stdtype,is_ptr=True,ptr_str='*'),
+                        'type' : Type(_type['type'].type_name,_type['type'].stdtype,is_ptr=True,ptr_str='*',category=_type['type'].category),
                         'name' : _type['name'],
                   }
                   return expr
@@ -1798,12 +1797,13 @@ class Function(object):
             self.return_type = return_type
 
 class Struct(object):
-      def __init__(self,name,members,is_ptr=False,ptr_str=''):
+      def __init__(self,name,members,category='',is_ptr=False,ptr_str=''):
             self.name = name
             self.members = members
             self.stdtype = False
             self.is_ptr = is_ptr
             self.ptr_str = ptr_str
+            self.category = name
       
       def __str__(self):
             return self.get_type_name()
@@ -1814,11 +1814,12 @@ class Enum(Struct):
       ...
 
 class Type(object):
-      def __init__(self,type_name,stdtype,is_ptr=False,ptr_str=''):
+      def __init__(self,type_name,stdtype,category='',is_ptr=False,ptr_str=''):
             self.type_name = type_name
             self.stdtype = stdtype
             self.is_ptr = is_ptr
             self.ptr_str = ptr_str
+            self.category = category
       
       def __str__(self):
             return self.get_type_name()
@@ -1829,8 +1830,10 @@ class Type(object):
             else :
                   return self.type_name + self.ptr_str
 class Array(Type):
-      def __init__(self,type_obj):
+      def __init__(self,type_obj,is_ptr=False,ptr_str=''):
             self.type_obj = type_obj
+            self.is_ptr = is_ptr
+            self.ptr_str = ptr_str
             if isinstance(type_obj,Type):
                   super().__init__(type_obj.type_name,type_obj.stdtype)
             elif isinstance(type_obj,Struct):
@@ -1838,7 +1841,31 @@ class Array(Type):
       
       def __str__(self):
             if isinstance(self.type_obj,Type):
-                  return "std::vector<%s>" % (self.get_type_name())
+                  return "std::vector<%s>%s" % (self.ptr_str,self.get_type_name())
             elif isinstance(self.type_obj,Struct):
-                  return "std::vector<%s>" % (self.type_obj.name)
-            
+                  return "std::vector<%s>%s" % (self.ptr_str,self.type_obj.name)
+
+def is_compatible_ptr(type_a,type_b):
+      if type_a.is_ptr == type_b.is_ptr:
+            return True
+      else:
+            return False
+
+
+def is_compatible_type(type_a,type_b):
+      if type_a == type_b:
+            return True
+      
+      if isinstance(type_a,Type) and isinstance(type_b,Type):
+            if str(type_a.category) == str(type_b.category) and is_compatible_ptr(type_a,type_b):
+                  return True
+            else :
+                  return False
+      
+      if isinstance(type_a,Struct) and isinstance(type_b,Struct):
+            if str(type_a.category) == str(type_b.category) and is_compatible_ptr(type_a,type_b):
+                  return True
+            else :
+                  return False
+
+      return False
