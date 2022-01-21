@@ -4,9 +4,8 @@
 <summary>v1.3.x</summary>
 
 ### Base
-- `memory` library for manual memory management
+- signals
 - null safety
-- basic support for pointers
 - use `std::array` for fixed sized array instead of `std::vector`
 - redesign logo
 - js backend(`hascal2js`)
