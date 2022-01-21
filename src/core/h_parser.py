@@ -260,102 +260,102 @@ class Parser(Parser):
       # function <name> {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LBC in_block RBC')
+      @_('generic_type FUNCTION NAME LBC in_block RBC')
       def statement(self, p):
-            return ('function',('return_type','void',p.lineno), p.NAME, ('param_no',), p.in_block,p.lineno)
+            return ('function',('return_type','void',p.lineno), p.NAME, ('param_no',), p.in_block,p.generic_type,p.lineno)
       
       # function <name>() {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LPAREN RPAREN LBC in_block RBC')
+      @_('generic_type FUNCTION NAME LPAREN RPAREN LBC in_block RBC')
       def statement(self, p):
-            return ('function',('return_type','void',p.lineno), p.NAME,('param_no',), p.in_block,p.lineno)
+            return ('function',('return_type','void',p.lineno), p.NAME,('param_no',), p.in_block,p.generic_type,p.lineno)
       
       # function <name>(<params>) {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LPAREN params RPAREN LBC in_block RBC')
+      @_('generic_type FUNCTION NAME LPAREN params RPAREN LBC in_block RBC')
       def statement(self, p):
-            return ('function',('return_type','void',p.lineno), p.NAME, p.params, p.in_block,p.lineno)
+            return ('function',('return_type','void',p.lineno), p.NAME, p.params, p.in_block,p.generic_type,p.lineno)
       
       # function <name> : <return_type> {
       #      <in_block>
       # }   
-      @_('FUNCTION NAME COLON return_type LBC in_block RBC')
+      @_('generic_type FUNCTION NAME COLON return_type LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type, p.NAME, ('param_no',), p.in_block,p.lineno)
+            return ('function',p.return_type, p.NAME, ('param_no',), p.in_block,p.generic_type,p.lineno)
       
       # function <name>() : <return_type> {
       #      <in_block>
       # } 
-      @_('FUNCTION NAME LPAREN RPAREN COLON return_type LBC in_block RBC')
+      @_('generic_type FUNCTION NAME LPAREN RPAREN COLON return_type LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type, p.NAME, ('param_no',), p.in_block,p.lineno) 
+            return ('function',p.return_type, p.NAME, ('param_no',), p.in_block,p.generic_type,p.lineno) 
       
       # function <name>(<params>) : <return_type> {
       #      <in_block>
       # }  
-      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type LBC in_block RBC')
+      @_('generic_type FUNCTION NAME LPAREN params RPAREN COLON return_type LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type, p.NAME, p.params, p.in_block,p.lineno)
+            return ('function',p.return_type, p.NAME, p.params, p.in_block,p.generic_type,p.lineno)
       
 
       # function <name> : [<return_type>] {
       #      <in_block>
       # }
-      @_('FUNCTION NAME COLON return_type2 LBC in_block RBC')
+      @_('generic_type FUNCTION NAME COLON return_type2 LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type2, p.NAME, ('param_no',), p.in_block,p.lineno)
+            return ('function',p.return_type2, p.NAME, ('param_no',), p.in_block,p.generic_type,p.lineno)
       # function <name>() : [<return_type>] {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LPAREN RPAREN COLON return_type2  LBC in_block RBC')
+      @_('generic_type FUNCTION NAME LPAREN RPAREN COLON return_type2  LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type2, p.NAME,('param_no',), p.in_block,p.lineno)
+            return ('function',p.return_type2, p.NAME,('param_no',), p.in_block,p.generic_type,p.lineno)
       # function <name>(<params>) : [<return_type>] {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type2 LBC in_block RBC')
+      @_('generic_type FUNCTION NAME LPAREN params RPAREN COLON return_type2 LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type2, p.NAME, p.params, p.in_block,p.lineno)    
+            return ('function',p.return_type2, p.NAME, p.params, p.in_block,p.generic_type,p.lineno)    
 
 
       # function <name> : *<return_type> {
       #      <in_block>
       # }
-      @_('FUNCTION NAME COLON return_type3 LBC in_block RBC')
+      @_('generic_type FUNCTION NAME COLON return_type3 LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type3, p.NAME, ('param_no',), p.in_block,p.lineno)
+            return ('function',p.return_type3, p.NAME, ('param_no',), p.in_block,p.generic_type,p.lineno)
       # function <name>() : *<return_type> {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LPAREN RPAREN COLON return_type3  LBC in_block RBC')
+      @_('generic_type FUNCTION NAME LPAREN RPAREN COLON return_type3  LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type3, p.NAME,('param_no',), p.in_block,p.lineno)
+            return ('function',p.return_type3, p.NAME,('param_no',), p.in_block,p.generic_type,p.lineno)
       # function <name>(<params>) : *<return_type> {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type3 LBC in_block RBC')
+      @_('generic_type FUNCTION NAME LPAREN params RPAREN COLON return_type3 LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type3, p.NAME, p.params, p.in_block,p.lineno) 
+            return ('function',p.return_type3, p.NAME, p.params, p.in_block,p.generic_type,p.lineno) 
 
 
       # function <name>(<params>) : <return_type>
-      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type')
+      @_('generic_type FUNCTION NAME LPAREN params RPAREN COLON return_type')
       def statement(self, p):
-            return ('inline_function',p.return_type, p.NAME, p.params,p.lineno)  
+            return ('inline_function',p.return_type, p.NAME, p.params,p.generic_type,p.lineno)  
       # function <name>() : <return_type>
-      @_('FUNCTION NAME LPAREN RPAREN COLON return_type')
+      @_('generic_type FUNCTION NAME LPAREN RPAREN COLON return_type')
       def statement(self, p):
-            return ('inline_function',p.return_type, p.NAME,('param_no',),p.lineno)  
+            return ('inline_function',p.return_type, p.NAME,('param_no',),p.generic_type,p.lineno)  
       # function <name>(<params>)
-      @_('FUNCTION NAME LPAREN params RPAREN')
+      @_('generic_type FUNCTION NAME LPAREN params RPAREN')
       def statement(self, p):
-            return ('inline_function',('return_type','void',p.lineno), p.NAME, p.params,p.lineno)  
+            return ('inline_function',('return_type','void',p.lineno), p.NAME, p.params,p.generic_type,p.lineno)  
       # function <name>()
-      @_('FUNCTION NAME LPAREN RPAREN')
+      @_('generic_type FUNCTION NAME LPAREN RPAREN')
       def statement(self, p):
-            return ('inline_function',('return_type','void',p.lineno), p.NAME,('param_no',),p.lineno)  
+            return ('inline_function',('return_type','void',p.lineno), p.NAME,('param_no',),p.generic_type,p.lineno)  
       #------------------------------------
       @_('expr')
       def in_statement(self, p):
@@ -646,8 +646,7 @@ class Parser(Parser):
       def expr(self, p):
             return ('cast',p.return_type,p.expr,p.lineno)
       #------------------------------------------
-
-      # # &<name>
+      # &<name>
       @_('AMP name')
       def expr(self, p):
             return ('pass_by_ref',('var', p.name[0],p.name[1]),p.lineno)
@@ -656,3 +655,30 @@ class Parser(Parser):
       @_('TIMES name')
       def expr(self, p):
             return ('pass_by_ptr',('var', p.name[0],p.name[1]),p.lineno)
+      # support for this : var x : int**
+      #------------------------------------------
+      # [<generic_params>]
+      @_('LBRCK generic_params RBRCK')
+      def generic_type(self, p):
+            return ('generic_type',p.generic_params,p.lineno)
+      
+      @_('')
+      def generic_type(self, p):
+            return ('generic_type',('generic_params_no',))
+      
+      # <name> : any
+      @_('NAME COLON ANY')
+      def generic_param(self, p):
+            return ('generic_param',p.NAME,p.lineno)
+      
+      # [<generic_params>,<generic_param>]
+      @_('generic_params COMMA generic_param')
+      def generic_params(self, p):
+            return ('generic_params',p.generic_params,p.generic_param,p.lineno)
+
+      # <generic_params>
+      @_('generic_param')
+      def generic_params(self, p):
+            return ('generic_params1',p.generic_param)
+      
+      

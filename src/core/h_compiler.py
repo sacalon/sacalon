@@ -815,6 +815,9 @@ class Generator(object):
             # }
             if node[0] == 'function':
                   current_vars = self.vars.copy()
+                  current_types = self.types.copy()
+                  _gtypes = self.walk(node[5])
+
                   _name = node[2]
                   _type = self.walk(node[1])
                   _return_type = _type['expr']
@@ -831,6 +834,7 @@ class Generator(object):
 
                   if params['expr'].endswith(','):
                         params['expr'] = params['expr'][:-1]
+
 
                   if self.funcs.get(_name) != None:
                         if type(self.funcs[_name]) == Function:
@@ -853,13 +857,15 @@ class Generator(object):
                   
                   for e in _expr :
                         _res += e['expr']
-                  res = "%s %s(%s) {\n%s\n}\n" % (_return_type,_name,params['expr'],_res) 
+                  res = "%s %s %s(%s) {\n%s\n}\n" % (_gtypes['expr'],_return_type,_name,params['expr'],_res) 
 
                   self.vars = current_vars
+                  self.types = current_types
+
                   # program arguments 
                   _params_keys = list(_params.keys())
                   if len(params['name']) == 1 and (_name == "main" and isinstance(_params[_params_keys[0]],Array) and isinstance(_params[_params_keys[0]],Type) and _params[_params_keys[0]].type_obj.type_name == 'string'):
-                        res = "%s %s(int argc,char** args) {\nstd::vector<std::string> %s;for(int i=0;i<argc;i++){%s.push_back(args[i]);}\n%s\n}\n" % (_return_type,_name,_params_keys[0],_params_keys[0],_res) 
+                        res = "%s %s %s(int argc,char** args) {\nstd::vector<std::string> %s;for(int i=0;i<argc;i++){%s.push_back(args[i]);}\n%s\n}\n" % (_gtypes['expr'],_return_type,_name,_params_keys[0],_params_keys[0],_res) 
                         expr = {
                               'expr' : res,
                               'type' : _type['type'],
@@ -1143,7 +1149,7 @@ class Generator(object):
             if node[0] == 'call':
                   _name = node[1]
                   _line = node[3]
-
+                  _args = [self.walk(_arg) for _arg in node[2]]
                   if self.exists(_name):
                         if _name == "print":
                               expr = {
@@ -1172,9 +1178,21 @@ class Generator(object):
                                                       counter += 1
                                                       continue
                                           else :
+                                                _return_type = f.return_type
+                                                if isinstance(f.return_type,Generic):
+                                                      keys = list(f.params.keys())
+                                                      for i in range(len(f.params)):
+                                                            if isinstance(f.params[keys[i]],Generic):
+                                                                  if f.params[keys[i]].type_name == f.return_type.type_name:
+                                                                        _return_type = _args[i]['type']
+                                                                        break
+                                                # check if return type is pointer
+                                                if isinstance(_return_type,Type) and _return_type.is_ptr:
+                                                      _return_type = Type(_return_type.type_name,_return_type.stdtype,is_ptr=True,ptr_str=_return_type.ptr_str,category=_return_type.category)
+                                                
                                                 expr = {
                                                       'expr' : '%s(%s)' % (f.name,','.join(self.walk(arg)['expr'] for arg in node[2])),
-                                                      'type' : f.return_type,
+                                                      'type' : _return_type,
                                                 }
                                                 return expr
                                           counter += 1
@@ -1188,9 +1206,21 @@ class Generator(object):
                                     }
                                     return expr
                               else :
+                                    _return_type = self.funcs[_name].return_type
+                                    if isinstance(self.funcs[_name].return_type,Generic):
+                                          keys = list(self.funcs[_name].params.keys())
+                                          for i in range(len(self.funcs[_name].params)):
+                                                if isinstance(self.funcs[_name].params[keys[i]],Generic):
+                                                      if self.funcs[_name].params[keys[i]].type_name == self.funcs[_name].return_type.type_name:
+                                                            _return_type = _args[i]['type']
+                                                            break
+                                    # check if return type is pointer
+                                    if isinstance(_return_type,Type) and _return_type.is_ptr:
+                                          _return_type = Type(_return_type.type_name,_return_type.stdtype,is_ptr=True,ptr_str=_return_type.ptr_str,category=_return_type.category)
+                                                
                                     expr = {
                                           'expr' : "%s(%s)" % (_name, ', '.join(self.walk(arg)['expr'] for arg in node[2])),
-                                          'type' : self.funcs[_name].return_type,
+                                          'type' : _return_type,
                                     }
                                     return expr
                   else :
@@ -1672,6 +1702,68 @@ class Generator(object):
                   }
                   return expr
             #--------------------------------------------
+            if node[0] == 'generic_params_no' :
+                  expr = {
+                        'expr' : '',
+                        'type' : [],
+                        'name' : [],
+                  }
+                  return expr
+            
+            if node[0] == 'generic_param' :
+                  _name = node[1]
+                  _line = node[2]
+
+                  if _name in self.types :
+                        HascalException(f"Type '{_name}' is already defined:{_line}")
+
+                  expr = {
+                        'expr' : "typename %s," % (_name),
+                        'type' : Generic(_name),
+                        'name' : _name,
+                  }
+                  return expr
+
+            if node[0] == 'generic_params' :
+                  _params = self.walk(node[1])
+                  _param = self.walk(node[2])
+
+                  expr = {
+                        'expr' : '%s %s' % (_params['expr'],_param['expr']),
+                        'type' : _params['type'] + [_param['type']],
+                        'name' : _params['name'] + [_param['name']],
+                  }
+                  return expr
+            
+            if node[0] == 'generic_params1' :
+                  _param = self.walk(node[1])
+
+                  expr = {
+                        'expr' : '%s' % (_param['expr']),
+                        'type' : [_param['type']],
+                        'name' : [_param['name']],
+                  }
+                  return expr
+            
+            if node[0] == 'generic_type' :
+                  _params = self.walk(node[1])
+                  params_name = _params['name']
+                  params_type = _params['type']
+                  params_expr = _params['expr']
+
+                  for i in range(len(params_name)):
+                        self.types[params_name[i]] = params_type[i]
+                  
+                  if params_expr.endswith(',') :params_expr = params_expr[:-1]
+                  res = 'template<%s>\n' % (params_expr)
+                  if params_expr == '' : res = ''
+                  expr = {
+                        'expr' : res,
+                        'type' : params_type,
+                        'name' : params_name,
+                  }
+                  return expr
+            #--------------------------------------------
             # <return_type>
             if node[0] == 'return_type':
                   _type_name = node[1]
@@ -1844,6 +1936,10 @@ class Array(Type):
                   return "std::vector<%s>%s" % (self.ptr_str,self.get_type_name())
             elif isinstance(self.type_obj,Struct):
                   return "std::vector<%s>%s" % (self.ptr_str,self.type_obj.name)
+
+class Generic(Type):
+      def __init__(self,name):
+            super().__init__(name,False)
 
 def is_compatible_ptr(type_a,type_b):
       if type_a.is_ptr == type_b.is_ptr:

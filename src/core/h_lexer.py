@@ -24,7 +24,8 @@ class Lexer(Lexer):
                 BREAK,CONTINUE,
                 CUSE,
                 STRUCT,ENUM,
-                AMP}
+                AMP,
+                ANY,}
         ignore = ' \t'
         ignore_comment_slash = r'//.*'
         
@@ -89,6 +90,8 @@ class Lexer(Lexer):
         NAME["continue"] = CONTINUE
 
         NAME["cuse"] = CUSE
+
+        NAME["any"] = ANY
 
         @_(r'("(?!"").*?(?<!\\)(\\\\)*?")')
         def STRING(self, t):

@@ -43,5 +43,8 @@ function main():int {
     print("compatible_type.has :")
     system("hascal.py compatible_type.has")
 
+    print("generics.has :")
+    system("hascal.py generics.has")
+
     return 0
 }
