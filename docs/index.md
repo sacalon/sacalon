@@ -89,6 +89,14 @@ function main() : int {
 }
 ```
 
+## Pointers
+```typescript
+var foo : int*
+var foobar : int = *foo
+var bar : int = 2
+foo = &bar
+```
+
 ## Functions
 ```typescript
 function add(x:int,y:int): int {

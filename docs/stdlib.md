@@ -93,3 +93,13 @@ Get information about libc
 Colorize text
 - `cprint(txt:string,color:string)` : print text in color
 - `reset_color()` : reset color
+
+Colors :
+- `red`
+- `green`
+- `yellow`
+- `blue`
+- `magenta`
+- `cyan`
+- `white`
+- `black`
