@@ -10,7 +10,7 @@
     return a+b
 }
 ```
-
+- type compatibility
 - multi line string
 - add `sdl2` wrapper
 - add `export` library for exporting to C(see : [haspy](https://github.com/bistcuite/haspy))
