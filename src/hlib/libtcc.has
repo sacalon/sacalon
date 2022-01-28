@@ -1,0 +1,163 @@
+// libtcc wrapper in hascal
+
+// example config.json :
+// {
+//      ...
+//      "flags" : ["libtcc.dll", "libtcc.a", "libtcc.so","libtcc.dylib"],
+//      ...
+// }
+
+use libcpp.libtcc
+
+struct libtcc_state {
+    cuse """
+    TCCState *state;
+    """
+}
+
+// create a new TCC compilation context
+function libtcc_new(): libtcc_state {
+    var state = libtcc_state()
+    cuse """
+    state.state = tcc_new();
+    return state;
+    """
+    return state // not yet work
+}
+
+// free a TCC compilation context
+function libtcc_delete(state: libtcc_state) {
+    cuse """
+    tcc_delete(state.state);
+    """
+}
+
+// set CONFIG_TCCDIR at runtime
+function libtcc_set_lib_path(state: libtcc_state, path: string) {
+    cuse """
+    tcc_set_lib_path(state.state, path.c_str());
+    """
+}
+
+// set options as from command line (multiple supported)
+function libtcc_set_options(state: libtcc_state, options: string) {
+    cuse """
+    tcc_set_options(state.state, options.c_str());
+    """
+}
+
+//*****************************//
+// preprocessor //
+
+// add include path
+function libtcc_add_include_path(state: libtcc_state, path: string) {
+    cuse """
+    tcc_add_include_path(state.state, path.c_str());
+    """
+}
+
+// add in system include path
+function libtcc_add_sysinclude_path(state: libtcc_state, path: string) {
+    cuse """
+    tcc_add_sysinclude_path(state.state, path.c_str());
+    """
+}
+
+// define preprocessor symbol 'sym'. Can put optional value
+function libtcc_define_symbol(state: libtcc_state, sym: string, value: string) {
+    cuse """
+    tcc_define_symbol(state.state, sym.c_str(), value.c_str());
+    """
+}
+
+// undefine preprocess symbol 'sym'
+function libtcc_undefine_symbol(state: libtcc_state, name: string) {
+    cuse """
+    tcc_undefine_symbol(state.state, name.c_str());
+    """
+}
+
+//*****************************//
+// compiling //
+
+// add a file (C file, dll, object, library, ld script). # todo : return an int value if error
+function libtcc_set_output_type(state: libtcc_state, type: int) {
+    cuse """
+    tcc_set_output_type(state.state, type);
+    """
+}
+
+// compile a string containing a C source. # todo : return an int value if error
+function libtcc_compile_string(state: libtcc_state, code: string) {
+    cuse """
+    tcc_compile_string(state.state, code.c_str());
+    """
+}
+
+//*****************************//
+// linking commands //
+
+// set output type. MUST BE CALLED before any compilation
+var LIBTCC_OUTPUT_MEMORY = 0
+var LIBTCC_OUTPUT_EXE = 2 // executable file //
+var LIBTCC_OUTPUT_DLL = 3 // dynamic library //
+var LIBTCC_OUTPUT_OBJ = 4 // object file //
+var LIBTCC_OUTPUT_PREPROCESS = 5 // only preprocess (used internally) //
+
+// equivalent to -Lpath option
+function libtcc_add_library_path(state: libtcc_state, path: string) {
+    cuse """
+    tcc_add_library_path(state.state, path.c_str());
+    """
+}
+
+// the library name is the same as the argument of the '-l' option
+function libtcc_add_library(state: libtcc_state, name: string) {
+    cuse """
+    tcc_add_library(state.state, name.c_str());
+    """
+}
+
+// add a symbol to the compiled program
+function libtcc_add_symbol(state: libtcc_state, name: string, val: string) {
+    cuse """
+    tcc_add_symbol(state.state, name.c_str(), val.c_str());
+    """
+}
+
+// output an executable, library or object file. DO NOT call
+// libtcc_relocate() before
+function libtcc_output_file(state: libtcc_state, filename: string) {
+    cuse """
+    tcc_output_file(state.state, filename.c_str());
+    """
+}
+
+// link and run main() function and return its value. DO NOT call
+// llibtcc_relocate() before
+function libtcc_run(state: libtcc_state, args: [string]) {
+    cuse """
+    // convert args to c array
+    char *argv[args.length];
+    for (int i = 0; i < args.length; i++) {
+        argv[i] = args[i].c_str();
+    }
+    tcc_run(state.state, args.length, argv);
+    """
+}
+
+// do all relocations (needed before using libtcc_get_symbol())
+function libtcc_relocate(state: libtcc_state) {
+    cuse """
+    tcc_relocate(state.state, TCC_RELOCATE_AUTO);
+    """
+}
+
+function libtcc_get_symbol(state: libtcc_state, name: string): string {
+    cuse """
+    const char *sym = tcc_get_symbol(state.state, name.c_str());
+    return std::string(sym);
+    """
+
+    // todo : use generics
+}
