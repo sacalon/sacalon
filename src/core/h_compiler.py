@@ -1,4 +1,4 @@
-from .h_error import HascalException
+from .h_error import HascalError
 from .h_lexer import Lexer
 from .h_parser import Parser
 import sys
@@ -134,9 +134,9 @@ class Generator(object):
                   _line = node[4]
 
                   if _name in self.vars or _name in self.consts :
-                        HascalException(f"'{_name}' exists, cannot redefine it:{_line}")
+                        HascalError(f"'{_name}' exists, cannot redefine it:{_line}")
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type, cannot redefine it as a variable:{_line}")
+                        HascalError(f"'{_name}' defined as a type, cannot redefine it as a variable:{_line}")
                   else:
                         members = {}
 
@@ -158,9 +158,9 @@ class Generator(object):
                   _line = node[4]
 
                   if _name in self.vars or _name in self.consts :
-                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
+                        HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")  
+                        HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")  
                   else:
                         members = {}
                         if isinstance(_type['type'],Struct) : members = _type['type'].members
@@ -182,11 +182,11 @@ class Generator(object):
                   _line = node[5]
             
                   if _name in self.vars or _name in self.consts  :
-                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
+                        HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                        HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
                   elif is_compatible_type(_expr['type'],_type['type']) == False :
-                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")
+                        HascalError(f"Mismatched type {_type} and {_expr['type']}:{_line}")
                   else:
                         members = {}
                         if isinstance(_type['type'],Struct) : members = _type['type'].members
@@ -206,9 +206,9 @@ class Generator(object):
                   _line = node[4]
 
                   if _name in self.vars or _name in self.consts :
-                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")   
+                        HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")   
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")   
+                        HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")   
    
                   else:
                         self.vars[_name] = Var(_name,Array(_type['type']),is_array=True)
@@ -227,11 +227,11 @@ class Generator(object):
                   _line = node[5]
 
                   if _name in self.vars or _name in self.consts :
-                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
+                        HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                        HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
                   elif is_compatible_type(_expr['type'],Array(_type['type'])) == False :
-                        HascalException(f"Mismatched type {Array(_type['type'])} and {_expr['type']}:{_line}")    
+                        HascalError(f"Mismatched type {Array(_type['type'])} and {_expr['type']}:{_line}")    
                   else:
                         self.vars[_name] = Var(_name,Array(_type['type']),is_array=True)
 
@@ -250,13 +250,13 @@ class Generator(object):
                   _line = node[5]
 
                   if _name in self.vars or _name in self.consts :
-                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
+                        HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a constant:{_line}")
+                        HascalError(f"'{_name}' defined as a type ,cannot redefine it as a constant:{_line}")
                   elif str(_type) != str(_expr['type']) :
-                        HascalException(f"Mismatched type {_type} and {_expr['type']}:{_line}")  
+                        HascalError(f"Mismatched type {_type} and {_expr['type']}:{_line}")  
                   elif not _type in self.types :
-                        HascalException(f"Type '{_type}' not defined:{_line}")
+                        HascalError(f"Type '{_type}' not defined:{_line}")
                   else:
                         self.consts[_name] = Const(_name,self.types[_type])
                         expr = {
@@ -272,9 +272,9 @@ class Generator(object):
                   _type = self.walk(node[2])
                   _line = node[4]
                   if _name in self.vars or _name in self.consts :
-                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
+                        HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")  
+                        HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")  
                   else:
                         members = {}
                         if isinstance(_type['type'],Struct)  : members = _type['type'].members
@@ -296,11 +296,11 @@ class Generator(object):
                   _line = node[5]
             
                   if _name in self.vars or _name in self.consts  :
-                        HascalException(f"'{_name}' exists ,cannot redefine it:{_line}")
+                        HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                        HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
                   elif str(_type['type']) != str(_expr['type']) :
-                        HascalException(f"Mismatched type {_type['type']} and {_expr['type']}:{_line}")
+                        HascalError(f"Mismatched type {_type['type']} and {_expr['type']}:{_line}")
                   else:
                         members = {}
                         if isinstance(_type['type'],Struct)  : members = _type['type'].members
@@ -321,9 +321,9 @@ class Generator(object):
                   _line = node[4]
 
                   if _name in self.vars or _name in self.consts :
-                        HascalException(f"'{_name}' exists, cannot redefine it:{_line}")
+                        HascalError(f"'{_name}' exists, cannot redefine it:{_line}")
                   elif _name in self.types :
-                        HascalException(f"'{_name}' defined as a type, cannot redefine it as a constant:{_line}")   
+                        HascalError(f"'{_name}' defined as a type, cannot redefine it as a constant:{_line}")   
                   else:
                         self.consts[_name] = Const(_name,self.types[_type])
 
@@ -366,7 +366,7 @@ class Generator(object):
                                           self.imported.append(name)
                                           self.add_to_output(cpp_code,hpp_code)
                         except FileNotFoundError:
-                              HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                              HascalError(f"cannot found '{name}' library. Are you missing a library ?")
                         # if isfile(final_path_wld):
                         #       with open(final_path_ld) as f:
                         #             ld = f.read().split(',')
@@ -396,7 +396,7 @@ class Generator(object):
                                           self.imported.append(name)
                                           self.add_to_output(cpp_code,hpp_code)
                         except FileNotFoundError:
-                              HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                              HascalError(f"cannot found '{name}' library. Are you missing a library ?")
                         # if isfile(final_path_wld):
                         #       with open(final_path_ld) as f:
                         #             ld = f.read().split(',')
@@ -432,7 +432,7 @@ class Generator(object):
                                           self.imported.append(name)
                                           self.add_to_output(cpp_code,hpp_code)
                         except FileNotFoundError:
-                              HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                              HascalError(f"cannot found '{name}' library. Are you missing a library ?")
                         if isfile(final_path_ld):
                               with open(final_path_ld) as f:
                                     ld = f.read().split(',')
@@ -458,7 +458,7 @@ class Generator(object):
                                           self.imported.append(name)
                                           self.add_to_output(cpp_code,hpp_code)
                         except FileNotFoundError:
-                              HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                              HascalError(f"cannot found '{name}' library. Are you missing a library ?")
                         if isfile(final_path_ld):
                               with open(final_path_ld) as f:
                                     ld = f.read().split(',')
@@ -473,7 +473,7 @@ class Generator(object):
                   _line = node[3]
 
                   if is_compatible_type(_name['type'],_expr['type']) == False:
-                        HascalException(f"Mismatched type '{_name['type']}' and '{_expr['type']}':{_line}") 
+                        HascalError(f"Mismatched type '{_name['type']}' and '{_expr['type']}':{_line}") 
                   
                   expr = {
                         'expr' : '%s = %s;' % (_name['expr'],_expr['expr']),
@@ -489,10 +489,10 @@ class Generator(object):
                   _line = node[4]
 
                   if not isinstance(_name['type'],Array) :
-                        HascalException(f"'{_name['type']}' is not subscriptable:{_line}")
+                        HascalError(f"'{_name['type']}' is not subscriptable:{_line}")
 
                   if is_compatible_type(_name['type'].type_obj,_expr['type']) == False:
-                        HascalException(f"Mismatched type '{_name['type'].type_obj}' and '{_expr['type']}':{_line}") 
+                        HascalError(f"Mismatched type '{_name['type'].type_obj}' and '{_expr['type']}':{_line}") 
                   expr = {
                         'expr' : '%s[%s] = %s;' % (_name['expr'],_index['expr'],_expr['expr']),
                         'type' : _name['type'].type_obj
@@ -508,16 +508,16 @@ class Generator(object):
                   _line = node[5]
 
                   if not isinstance(_name['type'],Array) :
-                        HascalException(f"'{_name['type']}' is not subscriptable:{_line}")
+                        HascalError(f"'{_name['type']}' is not subscriptable:{_line}")
                   
                   if not isinstance(_name['type'].type_obj,Struct) :
-                        HascalException(f"'{_name['type']}' is not a struct:{_line}")
+                        HascalError(f"'{_name['type']}' is not a struct:{_line}")
                   
                   if not _field in _name['type'].type_obj.members :
-                        HascalException(f"'{_name['type']}' has no field '{_field}':{_line}")
+                        HascalError(f"'{_name['type']}' has no field '{_field}':{_line}")
 
                   if is_compatible_type(_name['type'].type_obj.members[_field],_expr['type']) == False:
-                        HascalException(f"Mismatched type '{_name['type'].type_obj.members[_field]}' and '{_expr['type']}':{_line}")
+                        HascalError(f"Mismatched type '{_name['type'].type_obj.members[_field]}' and '{_expr['type']}':{_line}")
 
                   expr = {
                         'expr' : '%s[%s].%s = %s;' % (_name['expr'],_index['expr'],_field,_expr['expr']),
@@ -533,11 +533,11 @@ class Generator(object):
                   _line = node[3]
 
                   if not _type.is_ptr :
-                        HascalException(f"Invalid type argument of unary '*' (have '{_type['type']}'):{_line}")
+                        HascalError(f"Invalid type argument of unary '*' (have '{_type['type']}'):{_line}")
                   _type.is_ptr = False
                   _type.ptr_str = ''
                   if is_compatible_type(_type,_expr['type']) == False :
-                        HascalException(f"Mismatched type '{_type}' and '{_expr['type']}':{_line}")
+                        HascalError(f"Mismatched type '{_type}' and '{_expr['type']}':{_line}")
                   expr = {
                         'expr' : "*%s = %s;\n" % (_name['expr'],self.walk(node[2])['expr']),
                         'type' : _type,
@@ -550,7 +550,7 @@ class Generator(object):
                   _line = node[2]
 
                   if _expr['expr'] in self.types :
-                        HascalException(f"Cannot return a type '{_expr['expr']}':{_line}")
+                        HascalError(f"Cannot return a type '{_expr['expr']}':{_line}")
                   
                   expr = {
                         'expr' : "return %s;\n" %  _expr['expr'],
@@ -600,7 +600,7 @@ class Generator(object):
                                                 self.imported.append(name)
                                                 self.add_to_output(cpp_code,hpp_code)
                               except FileNotFoundError:
-                                    HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")
                               # if isfile(final_path_wld):
                               #       with open(final_path_ld) as f:
                               #             ld = f.read().split(',')
@@ -633,7 +633,7 @@ class Generator(object):
                                           self.types.update(generator.types)
                                           self.vars.update(generator.vars)
                               except FileNotFoundError:
-                                    HascalException(f"cannot found '{name}' library. Are you missing a library ?")            
+                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")            
                   else :
                         name = '.'.join(name for name in node[1])
                         if name.startswith("libcpp.") :
@@ -654,7 +654,7 @@ class Generator(object):
                                                 self.imported.append(name)
                                                 self.add_to_output(cpp_code,hpp_code)
                               except FileNotFoundError:
-                                    HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")
                               if isfile(final_path_ld):
                                     with open(final_path_ld) as f:
                                           ld = list(f.read().split(','))
@@ -683,7 +683,7 @@ class Generator(object):
                                           self.types.update(generator.types)
                                           self.vars.update(generator.vars)
                               except FileNotFoundError:
-                                    HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")
                   return {'expr':'','type':''}
             
             # local use <lib_name>
@@ -709,7 +709,7 @@ class Generator(object):
                                                 self.imported.append(name)
                                                 self.add_to_output(cpp_code,hpp_code)
                               except FileNotFoundError:
-                                    HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")
                               if isfile(final_path_ld):
                                     with open(final_path_ld) as f:
                                           ld = f.read().split(',')
@@ -739,7 +739,7 @@ class Generator(object):
                                           self.types.update(generator.types)
                                           self.vars.update(generator.vars)
                               except FileNotFoundError:
-                                    HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")
                               
                   elif sys.platform.startswith('linux'):
                         name = '.'.join(name for name in node[1])
@@ -761,7 +761,7 @@ class Generator(object):
                                                 self.imported.append(name)
                                                 self.add_to_output(cpp_code,hpp_code)
                               except FileNotFoundError:
-                                    HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")
 
                         else :
                               tmp = '.'.join(name for name in node[1])
@@ -787,7 +787,7 @@ class Generator(object):
                                           self.types.update(generator.types)
                                           self.vars.update(generator.vars)
                               except FileNotFoundError:
-                                    HascalException(f"cannot found '{name}' library. Are you missing a library ?")
+                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")
                   return {'expr':'','type':''}
             #-----------------------------------------
             # function <name> {
@@ -849,11 +849,11 @@ class Generator(object):
                   _res = ""
 
                   if _return_type != 'void' and len(_expr) < 1 :
-                        HascalException(f"Function '{_name}' must return a value at end of function block")
+                        HascalError(f"Function '{_name}' must return a value at end of function block")
                   if _return_type != 'void' and len(_expr) != 0 and _expr[-1].get('return') != True :
-                        HascalException(f"Function '{_name}' should return a value at end of function block")
+                        HascalError(f"Function '{_name}' should return a value at end of function block")
                   if _return_type != 'int' and _name == 'main':
-                        HascalException(f"Function 'main' must return 'int'")
+                        HascalError(f"Function 'main' must return 'int'")
                   
                   for e in _expr :
                         _res += e['expr']
@@ -873,11 +873,11 @@ class Generator(object):
                         return expr
                   
                   if len(params['name']) > 1 and _name == "main" :
-                        HascalException(f"Function 'main' takes only zero or one arguments(with string array type)")
+                        HascalError(f"Function 'main' takes only zero or one arguments(with string array type)")
                   if len(params['name']) == 1 and ((isinstance(_params[_params_keys[0]],Array) and isinstance(_params[_params_keys[0]].type_obj,Struct)) or isinstance(_params[_params_keys[0]],Struct)) and _name == "main" :
-                        HascalException(f"Function 'main' takes only zero or one arguments(with struct type)")
+                        HascalError(f"Function 'main' takes only zero or one arguments(with struct type)")
                   if len(params['name']) == 1 and _name == "main" and isinstance(_params[_params_keys[0]],Array) and _params[_params_keys[0]].type_obj.type_name != 'string' :
-                        HascalException(f"Function 'main' takes only zero or one arguments(with string array type)")
+                        HascalError(f"Function 'main' takes only zero or one arguments(with string array type)")
                   
                   expr = {
                         'expr' : res,
@@ -923,7 +923,7 @@ class Generator(object):
                   res = ""
                   for e in _body :
                         if str(e['type']) == _name :
-                              HascalException(f"Incomplete type definition '{_name}':{_line}")
+                              HascalError(f"Incomplete type definition '{_name}':{_line}")
                         
                         if e.get('cuse') == None :
                               _members[e['name']] = e['type']
@@ -951,13 +951,13 @@ class Generator(object):
                   if self.types.get(_i_name) != None:
                         _members = self.types[_i_name].members
                   else :
-                        HascalException(f"Cannot found struct '{_i_name}'")
+                        HascalError(f"Cannot found struct '{_i_name}'")
 
                   # generate output code and member
                   res = ""
                   for e in _body :
                         if str(e['type']) == _name :
-                              HascalException(f"Incomplete type definition '{_name}':{_line}")
+                              HascalError(f"Incomplete type definition '{_name}':{_line}")
                         
                         if e.get('cuse') == None :
                               _members[e['name']] = e['type']
@@ -1065,10 +1065,10 @@ class Generator(object):
                   current_vars = self.vars.copy()
 
                   if not (_name2 in self.vars or _name2 in self.consts) :
-                        HascalException(f"'{_name2}' not defined:{_line}") #todo
+                        HascalError(f"'{_name2}' not defined:{_line}") #todo
 
                   if not isinstance(self.vars[_name2].type,Array) :
-                        HascalException(f"'{_name2}' is not iterable:{_line}") 
+                        HascalError(f"'{_name2}' is not iterable:{_line}") 
 
                   self.vars[_name] = Var(_name,self.vars[_name2].type.type_obj)
                   body = self.walk(node[3])
@@ -1113,7 +1113,7 @@ class Generator(object):
                   _line = node[2]
                   
                   if not _type.is_ptr :
-                        HascalException(f"Invalid type argument of unary '*' (have '{_type}'):{_line}")
+                        HascalError(f"Invalid type argument of unary '*' (have '{_type}'):{_line}")
                   
                   type_ = Type(_type.type_name,_type.stdtype,is_ptr=False,ptr_str='',category=_type.category)
 
@@ -1171,9 +1171,9 @@ class Generator(object):
                                                 # check if there is at end of list
                                                 if counter == len(self.funcs[_name]) - 1:
                                                       if len(f.params) > len(node[2]):
-                                                            HascalException(f"{_name} has more parameters than given:{_line}")
+                                                            HascalError(f"{_name} has more parameters than given:{_line}")
                                                       else :
-                                                            HascalException(f"{_name} has less parameters than given:{_line}")
+                                                            HascalError(f"{_name} has less parameters than given:{_line}")
                                                 else :
                                                       counter += 1
                                                       continue
@@ -1198,7 +1198,7 @@ class Generator(object):
                                           counter += 1
                               if _name in self.types:
                                     if not isinstance(self.types[_name],Struct):
-                                          HascalException(f"Cannot call type {_name}:{_line}")
+                                          HascalError(f"Cannot call type {_name}:{_line}")
                                     
                                     expr = {
                                           'expr' : "%s{%s}" % (_name, ', '.join(self.walk(arg)['expr'] for arg in node[2])),
@@ -1224,7 +1224,7 @@ class Generator(object):
                                     }
                                     return expr
                   else :
-                        HascalException(f"Function '{_name}' not defined:{_line}")
+                        HascalError(f"Function '{_name}' not defined:{_line}")
             # --------------operators-----------------
             # todo : error if string *-/ string
             # <expr> + <expr>
@@ -1233,7 +1233,7 @@ class Generator(object):
                   _expr1 = self.walk(node[2])
                   _line = node[3]
                   if str(_expr0['type']) != str(_expr1['type']) :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                         
                   else :
                         expr = {
@@ -1249,7 +1249,7 @@ class Generator(object):
                   _line = node[3]
 
                   if str(_expr0['type']) != str(_expr1['type']) :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}.")  
+                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}.")  
                   else :
                         expr = {
                               'expr' : '%s - %s' % (_expr0['expr'],_expr1['expr']),
@@ -1264,7 +1264,7 @@ class Generator(object):
                   _line = node[3]
 
                   if str(_expr0['type']) != str(_expr1['type']) :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}") 
+                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}") 
                   else :
                         expr = {
                               'expr' : '%s * %s' % (_expr0['expr'],_expr1['expr']),
@@ -1279,7 +1279,7 @@ class Generator(object):
                   _line = node[3]
 
                   if str(_expr0['type']) != str(_expr1['type']) :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}") 
+                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}") 
                   else :
                         expr = {
                               'expr' : '%s / %s' % (_expr0['expr'],_expr1['expr']),
@@ -1348,7 +1348,7 @@ class Generator(object):
                   _expr1 = self.walk(node[2])
                   _line = node[3]
                   if str(_expr0['type']) != str(_expr1['type']) :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                   # todo : check if type is int or bool else error  
                   else :
                         expr = {
@@ -1364,7 +1364,7 @@ class Generator(object):
                   _line = node[3]
 
                   if str(_expr0['type']) != str(_expr1['type']) :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                   # todo : check if type is int or bool else error  
                   else :
                         expr = {
@@ -1380,7 +1380,7 @@ class Generator(object):
                   _line = node[3]
 
                   if str(_expr0['type']) != str(_expr1['type']) :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                   # todo : check if type is int or bool else error  
                   else :
                         expr = {
@@ -1396,7 +1396,7 @@ class Generator(object):
                   _line = node[3]
 
                   if str(_expr0['type']) != str(_expr1['type']) :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                   # todo : check if type is int or bool else error  
                   else :
                         expr = {
@@ -1412,7 +1412,7 @@ class Generator(object):
                   _line = node[3]
 
                   if str(_expr0['type']) != str(_expr1['type']) :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                   # todo : check if type is int or bool else error  
                   else :
                         expr = {
@@ -1428,7 +1428,7 @@ class Generator(object):
                   _line = node[3]
                   
                   if str(_expr0['type']) != str(_expr1['type']) :
-                        HascalException(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                   # todo : check if type is int or bool else error    
                   else :
                         expr = {
@@ -1506,7 +1506,7 @@ class Generator(object):
                               }
                               return expr
                         else :
-                              HascalException(f"'{_name}' is not reachable or not defined:{_line}")
+                              HascalError(f"'{_name}' is not reachable or not defined:{_line}")
                   else :
                         _full_name = ''
 
@@ -1519,7 +1519,7 @@ class Generator(object):
                               if isinstance(self.vars[_name].type,Struct) :
                                     # if struct has no member show error else set current member to _current_member
                                     if self.vars[_name].type.members == {} :
-                                          HascalException(f"Struct '{_name}' have not any members:{_line}")
+                                          HascalError(f"Struct '{_name}' have not any members:{_line}")
                                     _members = self.vars[_name].type.members
 
                                     _back_member_name = _name
@@ -1534,7 +1534,7 @@ class Generator(object):
                                                 if isinstance(_members[_current_member],Struct) :
                                                       # if struct has no member show error else set _members to _members[_current_member]
                                                       if _members[_current_member].members == {} :
-                                                            HascalException(f"Struct '{_name}' have not any members:{_line}")
+                                                            HascalError(f"Struct '{_name}' have not any members:{_line}")
 
                                                       # check if current member is the last member of node[1]
                                                       if i == len(node[1])-1 :
@@ -1554,7 +1554,7 @@ class Generator(object):
                                                       
                                                 else :
                                                       if not _current_member in _members :
-                                                            HascalException(f"Struct '{node[1][i-1]}' has no member named '{_current_member}':{_line}")
+                                                            HascalError(f"Struct '{node[1][i-1]}' has no member named '{_current_member}':{_line}")
 
                                                       _full_name += _current_member
                                                       expr = {
@@ -1565,7 +1565,7 @@ class Generator(object):
                                           elif i == 0 :    
                                                 continue
                                           else :
-                                                HascalException(f"Struct '{node[1][i-1]}' has no member named '{_current_member}':{_line}")  
+                                                HascalError(f"Struct '{node[1][i-1]}' has no member named '{_current_member}':{_line}")  
 
                               elif str(self.vars[_name].type).startswith('std::vector'):
                                     expr = {
@@ -1582,7 +1582,7 @@ class Generator(object):
                               if isinstance(self.types[str(self.vars[_name].type)],Struct) :
                                     # if struct has no member show error else set current member to _current_member
                                     if self.types[self.consts[_name].type].members == {} :
-                                          HascalException(f"Struct '{_name}' has no member:{_line}")
+                                          HascalError(f"Struct '{_name}' has no member:{_line}")
                                     _members = self.types[self.consts[_name].type].members
 
                                     for i in range(len(node[1])-1):
@@ -1594,13 +1594,13 @@ class Generator(object):
                                                 if isinstance(_members[_current_member],Struct) :
                                                       # if struct has no member show error else set _members to _members[_current_member]
                                                       if _members[_current_member].members == {} :
-                                                            HascalException(f"Struct '{_name}' has no member:{_line}")
+                                                            HascalError(f"Struct '{_name}' has no member:{_line}")
                                                 
                                                       # check if current member is the last member of node[1]
                                                       if i == len(node[1])-1 :
                                                             # check if current member is an vector
                                                             if not _members[_current_member].type.startswith('std::vector') :
-                                                                  HascalException(f"Struct '{_name}' has no member:{_line}")
+                                                                  HascalError(f"Struct '{_name}' has no member:{_line}")
 
                                                             expr = {
                                                                   'expr' :  "%s" % (_full_name),
@@ -1611,9 +1611,9 @@ class Generator(object):
                                                       continue
                                                 else :
                                                       if not _current_member in _members :
-                                                            HascalException(f"Struct '{_name}' has no member:{_line}")
+                                                            HascalError(f"Struct '{_name}' has no member:{_line}")
                                                       if not _members[_current_member].type.startswith('std::vector') :
-                                                                  HascalException(f"Struct '{_name}' has no member:{_line}")
+                                                                  HascalError(f"Struct '{_name}' has no member:{_line}")
 
                                                       expr = {
                                                             'expr' : "%s" % (_full_name),
@@ -1622,7 +1622,7 @@ class Generator(object):
                                                       return expr
                                           elif i == 0 : ...
                                           else :
-                                                HascalException(f"'{node[1][i]}' is not a member of '{_name}':{_line}")  
+                                                HascalError(f"'{node[1][i]}' is not a member of '{_name}':{_line}")  
 
                               if str(self.consts[_name].type).startswith('std::vector'):
                                     expr = {
@@ -1637,7 +1637,7 @@ class Generator(object):
                               }
                               return expr
                         else :
-                              HascalException(f"'{_name}' is not reachable or not defined:{_line}")                             
+                              HascalError(f"'{_name}' is not reachable or not defined:{_line}")                             
             #---------------------------------------
             # <name>[<expr>]
             if node[0] == 'var_index':
@@ -1658,7 +1658,7 @@ class Generator(object):
                         }
                         return expr
                   else :
-                        HascalException(f"'{_name['expr']}' is not subscriptable:{_line}")
+                        HascalError(f"'{_name['expr']}' is not subscriptable:{_line}")
             #-------------------------------------------
             # <expr>, <expr>
             if node[0] == 'exprs':
@@ -1715,7 +1715,7 @@ class Generator(object):
                   _line = node[2]
 
                   if _name in self.types :
-                        HascalException(f"Type '{_name}' is already defined:{_line}")
+                        HascalError(f"Type '{_name}' is already defined:{_line}")
 
                   expr = {
                         'expr' : "typename %s," % (_name),
@@ -1770,7 +1770,7 @@ class Generator(object):
                   _line = node[2]
 
                   if not _type_name in self.types:
-                        HascalException(f"{_type_name} is not defined:{_line}")
+                        HascalError(f"{_type_name} is not defined:{_line}")
                   
                   expr = {
                         'expr' : _type_name,
@@ -1797,7 +1797,7 @@ class Generator(object):
                   _line = node[2]
 
                   if not _type['name'] in self.types:
-                        HascalException(f"{_type['name']} is not defined:{_line}")
+                        HascalError(f"{_type['name']} is not defined:{_line}")
                   
                   if isinstance(_type['type'],Struct):
                         expr = {

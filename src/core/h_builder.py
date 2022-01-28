@@ -1,7 +1,7 @@
 from .h_lexer import Lexer # hascal lexer
 from .h_parser import Parser # hascal parser
 from .h_compiler import Generator,HLIB_BASE_DIR # hascal to d compiler
-from .h_error import HascalException # hascal excpetion handling
+from .h_error import HascalError # hascal excpetion handling
 from .h_help import * # hascal compiler information
 
 from os.path import isfile 
@@ -40,7 +40,7 @@ class HascalCompiler(object):
             # START : Library Manager
             elif self.argv[1] in "install" :
                 if len(argv) < 3 :
-                    HascalException("You must give one library name to install\nusage :\n\thascal install <library_name>")
+                    HascalError("You must give one library name to install\nusage :\n\thascal install <library_name>")
                 print(f"Installing '{self.argv[2]}'...")
                 if os.path.isfile(self.BASE_DIR+"/hlib/index.json"):
                     print("Update Libraries Index...")
@@ -48,7 +48,7 @@ class HascalCompiler(object):
                     with open(self.BASE_DIR+"/hlib/index.json","w") as f:
                         f.write(json.dumps(index))
                     if not self.argv[2] in index :
-                        HascalException(f"Library {self.argv[2]} not found")
+                        HascalError(f"Library {self.argv[2]} not found")
                     # dowload zip file
                     r = requests.get(f"{BASE_URL}/{self.argv[2]}/{index[self.argv[2]]['zip']}")
                     # write zip file to disk
@@ -66,7 +66,7 @@ class HascalCompiler(object):
                     with open(self.BASE_DIR+"/hlib/index.json","w") as f:
                         f.write(json.dumps(index))
                     if not self.argv[2] in index :
-                        HascalException(f"Library {self.argv[2]} not found")
+                        HascalError(f"Library {self.argv[2]} not found")
 
                     # dowload zip file
                     r = requests.get(f"{BASE_URL}/{self.argv[2]}/{index[self.argv[2]]['zip']}")
@@ -81,13 +81,13 @@ class HascalCompiler(object):
                 print(f"'{self.argv[2]}' library installed successfully!")
 
             elif self.argv[1] == "uninstall" : # todo
-                HascalException("Uninstalling library is not implemented in this version.")
+                HascalError("Uninstalling library is not implemented in this version.")
 
             elif self.argv[1] == "update" :
                 if len(argv) < 3 :
-                    HascalException("You must give one library name to update\nusage :\n\thascal update <library_name>")
+                    HascalError("You must give one library name to update\nusage :\n\thascal update <library_name>")
                 if not os.path.isfile(self.BASE_DIR+"/hlib/index.json"):
-                    HascalException("Library index file(index.json) not found in 'hlib' folder")
+                    HascalError("Library index file(index.json) not found in 'hlib' folder")
                 print(f"Updating '{self.argv[2]}'...")
                 if os.path.isfile(self.BASE_DIR+"/hlib/index.json"):
                     print("Update Libraries Index...")
@@ -95,7 +95,7 @@ class HascalCompiler(object):
                     with open(self.BASE_DIR+"/hlib/index.json","w") as f:
                         f.write(json.dumps(index))
                     if not self.argv[2] in index :
-                        HascalException(f"Library {self.argv[2]} is deleted from server, you have currently latest version.")
+                        HascalError(f"Library {self.argv[2]} is deleted from server, you have currently latest version.")
                     # dowload zip file
                     r = requests.get(f"{BASE_URL}/{self.argv[2]}/{index[self.argv[2]]['zip']}")
                     # write zip file to disk
@@ -110,7 +110,7 @@ class HascalCompiler(object):
                 print(f"'{self.argv[2]}' library updated successfully!")
             elif self.argv[1] == "export" :
                 if len(argv) < 3 :
-                    HascalException("You must give one zip file name to export library(only name not extension)\nusage :\n\thascal export <zip_file_name>")
+                    HascalError("You must give one zip file name to export library(only name not extension)\nusage :\n\thascal export <zip_file_name>")
                 current_dir = os.getcwd()
                 zipf = zipfile.ZipFile(self.argv[2]+".zip", 'w', zipfile.ZIP_DEFLATED)
                 zipdir(current_dir, zipf)
@@ -123,12 +123,12 @@ class HascalCompiler(object):
                     tree = self.parser.parse(tokens)
                     print(tree)
                 else :
-                    HascalException("You must give one file name to print ast\nusage :\n\thascal --verbose <file_name>")
+                    HascalError("You must give one file name to print ast\nusage :\n\thascal --verbose <file_name>")
             else :
                 # check file extension
                 if not self.argv[1].endswith(".has"):
                     # show file extension error 
-                    HascalException(f"The specified file is not a hascal(.has) file")
+                    HascalError(f"The specified file is not a hascal(.has) file")
                 else :
                     self.read_file(self.argv[1])
                     self.compile()
@@ -186,21 +186,21 @@ class HascalCompiler(object):
             try :
                 check_call(['g++','--version'], stdout=DEVNULL, stderr=STDOUT)
             except :
-                HascalException("GCC/G++ is not installed")   
+                HascalError("GCC/G++ is not installed")   
 
         # check if c++ compiler installed
         try :
             check_call([ARGS["compiler"], '--version'], stdout=DEVNULL, stderr=STDOUT)
         except :
-            HascalException("C++ compiler is not installed")
+            HascalError("C++ compiler is not installed")
         
         # check if c++ compiler supports ARGS["c++_version"]
         try :
             if int(getoutput(f'{ARGS["compiler"]} -dumpversion').split(".")[0]) < 8:
-                HascalException("C++ compiler doesn't support c++17")
+                HascalError("C++ compiler doesn't support c++17")
             
         except :
-            HascalException(f"C++ compiler is not support {ARGS['c++_version']}")
+            HascalError(f"C++ compiler is not support {ARGS['c++_version']}")
         
         # compile to binary
         try :
@@ -209,7 +209,7 @@ class HascalCompiler(object):
             else :
                 check_call([ARGS["compiler"],f'-std={ARGS["c++_version"]}',ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"], stdout=DEVNULL, stderr=STDOUT)
         except :
-            HascalException("Unknown error in compile file")
+            HascalError("Unknown error in compile file")
 
         if ARGS["c++_code"] == 1 :
             ...
@@ -223,7 +223,7 @@ class HascalCompiler(object):
             with open(file_name,encoding="utf-8") as fin:
                 self.code = fin.read()  
         except FileNotFoundError :
-            HascalException(f"File '{file_name}' not found")
+            HascalError(f"File '{file_name}' not found")
         
 
 BASE_URL = "https://raw.githubusercontent.com/hascal/libs/main"
@@ -233,7 +233,7 @@ def get_index():
     if r :
         return r.json()
     else :
-        HascalException("Cannot download libraries index")
+        HascalError("Cannot download libraries index")
     
 def zipdir(path, ziph):
     length = len(path)
