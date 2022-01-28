@@ -152,7 +152,7 @@ class HascalCompiler(object):
 
         ARGS = {
             "compiler" : "g++",
-            "optimize" : "-O3",
+            "optimize" : "",
             "flags" : ['-o',outname],
             "no_check_gcc_g++" : 1,
             "ccfile" : outname+".cc",
