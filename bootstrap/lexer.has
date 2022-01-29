@@ -14,20 +14,14 @@
 
 use strings
 local use keywords
-
-// token struct
-struct token {
-    var type : string
-    var value : string
-    var line : int
-}
+local use token
 
 var _lexme = "" // current lexeme
 var current = 0 // current character
 var _source = "" // source code
 var line = 1 // current line
 
-var _tokens : [token]
+var _tokens : [Token]
 
 // check if current character is at the end of the source code
 function isAtEnd() : bool {
@@ -57,17 +51,17 @@ function lexer_error(filename:string, msg:string,line:int) {
 }
 
 // scan next token
-function scan_token(filename:string){
+function scan_Token(filename:string){
     var c = advance()
-    var tok : token
+    var tok : Token
 
     // skip whitespace
     if c == ' ' {
-        scan_token(filename)
+        scan_Token(filename)
     } 
     // skip newline(lines saved as a token, we need it in parser phase)
     else if c == '\n' {
-        tok = token("NEWLINE", "", line)
+        tok = Token("NEWLINE", "", line)
         append(_tokens,tok)
         line = line + 1
     } 
@@ -88,9 +82,9 @@ function scan_token(filename:string){
         }
 
         if check_keyword(_lexme) {
-            tok = token(_lexme,_lexme,line)
+            tok = Token(_lexme,_lexme,line)
         } else {
-            tok = token("NAME",_lexme,line)
+            tok = Token("NAME",_lexme,line)
         }
     } 
 
@@ -100,7 +94,7 @@ function scan_token(filename:string){
             _lexme = _lexme + to_string(c)
             c = advance()
         }
-        tok = token("NUMBER", _lexme, line)
+        tok = Token("NUMBER", _lexme, line)
         append(_tokens,tok)
     } 
     else if c == '"' {
@@ -110,20 +104,20 @@ function scan_token(filename:string){
             c = advance()
         }
         c = advance()
-        tok = token("STRING", _lexme, line)
+        tok = Token("STRING", _lexme, line)
         append(_tokens,tok)
     } 
     
     else if c == '+' {
-        tok = token("PLUS", "+", line)
+        tok = Token("PLUS", "+", line)
         append(_tokens,tok)
     } 
     else if c == '-' {
-        tok = token("MINUS", "-", line)
+        tok = Token("MINUS", "-", line)
         append(_tokens,tok)
     } 
     else if c == '*' {
-        tok = token("TIMES", "*", line)
+        tok = Token("TIMES", "*", line)
         append(_tokens,tok)
     } 
     else if c == '/' {
@@ -143,7 +137,7 @@ function scan_token(filename:string){
         }
         // else it's a division
         else {
-            tok = token("DIV", "/", line)
+            tok = Token("DIV", "/", line)
             append(_tokens,tok)
         }
     }
@@ -153,10 +147,10 @@ function scan_token(filename:string){
 
         // check if it's a assign or equal
         if c == '=' {
-            tok = token("EQUAL", "==", line)
+            tok = Token("EQUAL", "==", line)
             append(_tokens,tok)
         } else {
-            tok = token("ASSIGN","=",line)
+            tok = Token("ASSIGN","=",line)
             append(_tokens,tok)
         }
     }
@@ -165,10 +159,10 @@ function scan_token(filename:string){
 
         // check if it's a less than or less than equal
         if c == '=' {
-            tok = token("LESSEQ", "<=", line)
+            tok = Token("LESSEQ", "<=", line)
             append(_tokens,tok)
         } else {
-            tok = token("LESS","<",line)
+            tok = Token("LESS","<",line)
             append(_tokens,tok)
         }
     }
@@ -177,10 +171,10 @@ function scan_token(filename:string){
 
         // check if it's a greater than or greater than equal
         if c == '=' {
-            tok = token("GREATEREQ", ">=", line)
+            tok = Token("GREATEREQ", ">=", line)
             append(_tokens,tok)
         } else {
-            tok = token("GREATER",">",line)
+            tok = Token("GREATER",">",line)
             append(_tokens,tok)
         }
     }
@@ -189,7 +183,7 @@ function scan_token(filename:string){
 
         // check if it's a greater than or greater than equal
         if c == '=' {
-            tok = token("GREATEREQ", ">=", line)
+            tok = Token("GREATEREQ", ">=", line)
             append(_tokens,tok)
         } else {
             lexer_error(filename,to_string(c),line)
@@ -198,41 +192,41 @@ function scan_token(filename:string){
     }
 
     else if c == '.' {
-        tok = token("DOT", ".", line)
+        tok = Token("DOT", ".", line)
         append(_tokens,tok)
     } 
     else if c == ':' {
-        tok = token("COLON", ":", line)
+        tok = Token("COLON", ":", line)
         append(_tokens,tok)
     }
     else if c == ',' {
-        tok = token("COMMA", ",", line)
+        tok = Token("COMMA", ",", line)
         append(_tokens,tok)
     }
 
     else if c == '{' {
-        tok = token("LBC", "{", line)
+        tok = Token("LBC", "{", line)
         append(_tokens,tok)
     }
     else if c == '}' {
-        tok = token("RBC", "}", line)
+        tok = Token("RBC", "}", line)
         append(_tokens,tok)
     }
 
     else if c == '[' {
-        tok = token("LBRCK", "[", line)
+        tok = Token("LBRCK", "[", line)
         append(_tokens,tok)
     }
     else if c == ']' {
-        tok = token("RBRCK", "]", line)
+        tok = Token("RBRCK", "]", line)
         append(_tokens,tok)
     }
     
 }
-function tokenizer(filename:string,src:string): [token] {
+function tokenizer(filename:string,src:string): [Token] {
     _source = src
     while isAtEnd() == false {
-        scan_token(filename)
+        scan_Token(filename)
     }
     return _tokens
 }
