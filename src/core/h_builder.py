@@ -174,7 +174,7 @@ class HascalCompiler(object):
                 if "optimize" in config :
                     ARGS["optimize"] = config["optimize"]
                 if "flags" in config :
-                    ARGS["flags"] = config["flags"]
+                    ARGS["flags"] += config["flags"]
                 if "no_check_gcc_g++" in config :
                     ARGS["no_check_gcc_g++"] = config["no_check_gcc_g++"]
                 if "g++_out" in config :
@@ -204,10 +204,15 @@ class HascalCompiler(object):
         
         # compile to binary
         try :
-            if ARGS["g++_out"] == 1 :
-                check_call([ARGS["compiler"],f'-std={ARGS["c++_version"]}',ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"])
+            compargs = [ARGS["compiler"],f'-std={ARGS["c++_version"]}',ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"]
+            for i in range(len(compargs)-1):
+                if compargs[i] == '' :
+                    compargs.pop(i)
+
+            if ARGS["g++_out"] == 1 :         
+                check_call(compargs)
             else :
-                check_call([ARGS["compiler"],f'-std={ARGS["c++_version"]}',ARGS["optimize"],ARGS["ccfile"]] + ARGS["flags"], stdout=DEVNULL, stderr=STDOUT)
+                check_call(compargs, stdout=DEVNULL, stderr=STDOUT)
         except :
             HascalError("Unknown error in compile file")
 
