@@ -205,10 +205,6 @@ struct is_specialization : std::false_type {};
 template<template<typename...> class Ref, typename... Args>
 struct is_specialization<Ref<Args...>, Ref>: std::true_type {};
 
-int len(string s){
-	return s.length();
-}
-
 bool regex(string regex_string,string str){
     if(std::regex_match(regex_string, std::regex(str) ))
         return true;
@@ -222,7 +218,6 @@ int len(std::vector<T> v){
 }
 
 // this function is used to get length of a string
-template <typename T>
 int len(string s){
 	return s.length();
 }
