@@ -67,10 +67,10 @@ function scan_Token(filename:string){
     } 
 
     else if c == '(' {
-        tok = ["LPAREN","(",line]
+        tok = Token("LPAREN","(",line)
         append(_tokens,tok)
     } else if c == ')' {
-        tok = ["RPAREN",")",line]
+        tok = Token("RPAREN",")",line)
         append(_tokens,tok)
     } 
     

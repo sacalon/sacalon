@@ -1935,7 +1935,7 @@ class Array(Type):
             if isinstance(self.type_obj,Type):
                   return "std::vector<%s>%s" % (self.ptr_str,self.get_type_name())
             elif isinstance(self.type_obj,Struct):
-                  return "std::vector<%s>%s" % (self.ptr_str,self.type_obj.name)
+                  return "std::vector<%s>%s" % (str(self.type_obj),self.ptr_str)
 
 class Generic(Type):
       def __init__(self,name):
