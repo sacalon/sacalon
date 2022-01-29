@@ -21,7 +21,7 @@ function show_help(){
 }
 
 function main(argv:[string]) : int {
-    if len(argv) == 0 or argv[0] == "--help" or argv[0] == "-h" {
+    if len(argv) == 1 or argv[0] == "--help" or argv[0] == "-h" {
         show_help()
         exit(0)
     } else if argv[0] == "version" {
