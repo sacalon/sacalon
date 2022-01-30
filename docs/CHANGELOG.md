@@ -1,5 +1,18 @@
 # Hascal's Changelog
 <details>
+<summary>v1.3.7</summary>
+
+#### New features
+
+#### Bug fixes
+
+#### Standart library
+
+#### Removed
+
+</details>
+
+<details>
 <summary>v1.3.6</summary>
   
 #### New features
@@ -25,6 +38,7 @@ struct bar {
 - check if function returns a value at end of string else show error
 - `main` function should returns int
 - fix `termcolor` library bugs
+- fix enum bugs
 
 #### Standart library
 - add `sdl2` wrapper
