@@ -6,8 +6,6 @@
 - more data types : `int8`,`uint8`,`int16`,`uint16`,`int32`,`uint32`,`int64`,`uint64`,`double`
 - type compatibility
 - multi line string
-- add `sdl2` wrapper
-- add `export` library for exporting to C(see : [haspy](https://github.com/bistcuite/haspy))
 - pointers and references
 ```typescript
 var x : *int = 20
@@ -27,6 +25,11 @@ struct bar {
 - check if function returns a value at end of string else show error
 - `main` function should returns int
 - fix `termcolor` library bugs
+
+#### Standart library
+- add `sdl2` wrapper
+- add `export` library for exporting to C(see : [haspy](https://github.com/bistcuite/haspy))
+- add `crypto.sha256` for sha256 hashing
 
 #### Removed
 - `libcinfo` library removed
