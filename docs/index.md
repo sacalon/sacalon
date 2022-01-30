@@ -180,6 +180,9 @@ function main() : int {
 function main() : int {
     var a : int = 123 // or : var a = 123
     var b : float = 1.23 // or : var b = 1.24
+    var c : double = b // type compatibility
+    var cc : int8 = c // type conversion
+    
     return 0
 }
 ```
