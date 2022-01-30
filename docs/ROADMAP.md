@@ -67,7 +67,7 @@ function bar(): string {
 use foo
 
 function main () : int {
-    print(foo::bar())
+    print(foo.bar())
     return 0
 }
 ```
