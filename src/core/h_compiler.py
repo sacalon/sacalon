@@ -976,11 +976,23 @@ class Generator(object):
             # }
             if node[0] == 'enum':
                   _name = node[1]
-                  _members = node[2]
-                  self.types[_name] = Enum(_name,_members)
+                  _members = node[2].split(',')
+
+                  if _name in self.types:
+                        HascalError(f"Redefinition of type '{_name}'")
+                  if _name in self.vars:
+                        HascalError(f"Redefinition of variable '{_name}'")
+                  if _name in self.funcs:
+                        HascalError(f"Redefinition of function '{_name}'")
+
+                  members = {}
+                  for i in range(len(_members)-1):
+                        members[str(_members[i])] = self.types['int']
+                  
+                  self.types[_name] = Enum(_name,members)
                   expr = {
-                        'expr' : 'enum %s{\n%s\n}\n' % (_name,_members),
-                        'type' : _name,
+                        'expr' : 'enum %s{\n%s\n};\n' % (_name,node[2]),
+                        'type' : self.types[_name],
                   } 
                   return expr
             #-------------------------------------
@@ -1509,7 +1521,7 @@ class Generator(object):
                               HascalError(f"'{_name}' is not reachable or not defined:{_line}")
                   else :
                         _full_name = ''
-
+                  
                         if _name in self.vars:
                               if self.vars[_name].type.is_ptr :
                                     _full_name += _name + '->'
@@ -1634,6 +1646,21 @@ class Generator(object):
                               expr = {
                                     'expr' : "%s" % (_full_name),
                                     'type' : self.consts[_name].type,
+                              }
+                              return expr
+                                                      
+                        elif _name in self.types and isinstance(self.types[_name],Enum):
+                              name = node[1]
+                              name.pop(0)
+                              if len(name) > 1 :
+                                    HascalError(f"Request for nested enum in '{_name}' :{_line}")
+                                    
+                              if not name[0] in self.types[_name].members :
+                                    HascalError(f"Enum '{_name}' has no member named '{name[0]}':{_line}")
+                                          
+                              expr = {
+                                    'expr' : "%s" % (name[0]),
+                                    'type' : self.types[_name],
                               }
                               return expr
                         else :
