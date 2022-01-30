@@ -657,28 +657,3 @@ class Parser(Parser):
             return ('pass_by_ptr',('var', p.name[0],p.name[1]),p.lineno)
       # support for this : var x : int**
       #------------------------------------------
-      # [<generic_params>]
-      @_('LBRCK generic_params RBRCK')
-      def generic_type(self, p):
-            return ('generic_type',p.generic_params,p.lineno)
-      
-      @_('')
-      def generic_type(self, p):
-            return ('generic_type',('generic_params_no',))
-      
-      # <name> : any
-      @_('NAME COLON ANY')
-      def generic_param(self, p):
-            return ('generic_param',p.NAME,p.lineno)
-      
-      # [<generic_params>,<generic_param>]
-      @_('generic_params COMMA generic_param')
-      def generic_params(self, p):
-            return ('generic_params',p.generic_params,p.generic_param,p.lineno)
-
-      # <generic_params>
-      @_('generic_param')
-      def generic_params(self, p):
-            return ('generic_params1',p.generic_param)
-      
-      
