@@ -4,12 +4,6 @@
   
 #### New features
 - more data types : `int8`,`uint8`,`int16`,`uint16`,`int32`,`uint32`,`int64`,`uint64`,`double`
-- generics(inspired by golang generics)
-```typescript
-[T:any] function add(a:T,b:T):T {
-    return a+b
-}
-```
 - type compatibility
 - multi line string
 - add `sdl2` wrapper
