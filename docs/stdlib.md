@@ -10,6 +10,7 @@
 - [`random`](#random)
 - [`libcinfo`](#libcinfo)
 - [`termcolor`](#termcolor)
+- [`crypto.sha256`](#crypto-sha256)
 
 ## Built-in functions 
 - `print(...)` : Standard Hascal's print function
@@ -103,3 +104,7 @@ Colors :
 - `cyan`
 - `white`
 - `black`
+
+## `crypto.sha256`
+SHA256 hash
+- `generate_sha256(data:string) : string` : return sha256 hash of string
