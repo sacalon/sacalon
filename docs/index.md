@@ -182,11 +182,11 @@ function main() : int {
     var b : float = 1.23 // or : var b = 1.24
     var c : double = b // type compatibility
     var cc : int8 = c // type conversion
-    
+
     return 0
 }
 ```
-This will assign the value of `123` to `a` and `1.23` to `b`.
+This will assign the value of `123` to `a` and `1.23` to `b` and `1.23` to `c` and `1` to `cc`.
 
 ### Arrays
 #### Basic Array Concepts
