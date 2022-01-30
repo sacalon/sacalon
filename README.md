@@ -6,7 +6,7 @@
   # The Hascal Programming Language
 
   [Website](https://hascal.github.io) |
-  [Docs](https://hascal.github.io/docs/) |
+  [Docs](https://hascal.github.io/docs/latest) |
   [Changelog](docs/CHANGELOG.md)
 
   [IDE Integration](docs/ide.md) |
