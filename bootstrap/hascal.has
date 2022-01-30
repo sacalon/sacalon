@@ -31,7 +31,7 @@ function main(argv:[string]) : int {
         var source = read_file(argv[1])
         var tokens = tokenizer(argv[1],source)
         for token in tokens {
-            print(token.type,":",token.value)
+            print(token.type," => ",token.value)
         }
     }
     

@@ -17,7 +17,7 @@ local use keywords
 local use token
 
 var _lexme = "" // current lexeme
-var current = 0 // current character
+var current = -1 // current character
 var _source = "" // source code
 var line = 1 // current line
 
@@ -32,7 +32,7 @@ function isAtEnd() : bool {
 }
 
 // get next character
-function advance() : char{
+function advance() : char {
     current = current + 1
     return _source[current]
 }
@@ -76,7 +76,8 @@ function scan_Token(filename:string){
     
     else if is_alpha(c) or c == '_' {
         _lexme = to_string(c)
-        while not isAtEnd() and (is_alpha(c) or is_number(c) or c == '_') {
+        c = advance()
+        while (isAtEnd() == false) and (is_alpha(c) or is_number(c) or c == '_') {
             _lexme = _lexme + to_string(c)
             c = advance()
         }
@@ -86,13 +87,14 @@ function scan_Token(filename:string){
         } else {
             tok = Token("NAME",_lexme,line)
         }
+        append(_tokens,tok)
     } 
 
     else if is_number(c) {
         _lexme = to_string(c)
         while not isAtEnd() and is_number(c) {
-            _lexme = _lexme + to_string(c)
             c = advance()
+            _lexme = _lexme + to_string(c) 
         }
         tok = Token("NUMBER", _lexme, line)
         append(_tokens,tok)
