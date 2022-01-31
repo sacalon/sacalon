@@ -54,12 +54,6 @@ class Generator(object):
                   'panic' : Function('panic',{'err_msg':'string'},self.types['string']),
                   'error' : Function('error',{'errmsg':'string'},self.types['void']),
 
-                  'to_int' : Function('to_int',{'...':'...'},self.types['int']),
-                  'to_string' : Function('to_string',{'...':'...'},self.types['string']),
-                  'to_bool' : Function('to_bool',{'...':'...'},self.types['bool']),
-                  'to_char' : Function('to_char',{'...':'...'},self.types['char']),
-                  'to_float' : Function('to_float',{'...':'...'},self.types['float']),
-
                   'len' : Function('len',{'s':'string'},self.types['int']),
                   'len' : Function('len',{'vec':'T'},self.types['int']),
                   'append' : Function('append',{'vec':'T','val':'T'},self.types['int']),

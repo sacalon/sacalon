@@ -7,4 +7,6 @@ Hello World!
 Hello World!
     """
     print(a)
+
+    return 0
 }

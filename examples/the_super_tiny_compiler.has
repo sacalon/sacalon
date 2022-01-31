@@ -314,6 +314,7 @@
 // We start by accepting an input string of code, and we're gonna set up two
 // things...
 
+use conv
 use strings
 
 struct token {
@@ -470,12 +471,12 @@ struct node  {
 	var kind : string
 	var value : string
 	var name : string
-	var callee : *node
-	var expression : *node
+	var callee : node*
+	var expression : node*
 	var body : [node]
 	var params : [node]
-	var arguments : *node
-	var context : *node
+	var arguments : node*
+	var context : node*
 }
 
 // Type `ast` is just another alias type. I find this makes part of the code
