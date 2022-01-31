@@ -1,0 +1,32 @@
+use libcpp.conv
+
+function to_int(val:string):int
+function to_int(val:int):int
+function to_int(val:float):int
+function to_int(val:bool):int
+function to_int(val:char):int
+function to_int(val:int):int
+
+function to_string(val:int):string
+function to_string(val:float):string
+function to_string(val:bool):string
+function to_string(val:char):string
+function to_string(val:char*):string
+function to_string(val:string):string
+
+function to_float(val:int):float
+function to_float(val:string):float
+function to_float(val:bool):float
+function to_float(val:char):float
+function to_float(val:float):float
+function to_float(val:double):float
+
+function to_char(val:int):char
+function to_char(val:char):char
+
+function to_cstr(val:string):char* {
+    cuse """
+    return val.c_str()
+    """
+    return "";
+}
