@@ -36,7 +36,6 @@ function add(a:int,b:int) : int {
 }
 ```
 
-- `@no_mm` decorator for manual memory management
 - `@extern_c` decorator defines a function or variable in an `extern "C"` block 
 
 - dictionaries :
