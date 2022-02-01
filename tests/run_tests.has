@@ -43,5 +43,8 @@ function main():int {
     print("compatible_type.has :")
     system("hascal.py compatible_type.has")
 
+    print("scope.has:")
+    system("hascal.py scope.has")
+    
     return 0
 }
