@@ -66,7 +66,7 @@ class Generator(object):
             # list of imported libraries
             self.imported = []
 
-            self.params_list = []
+            self.scope = False
       def generate(self, tree,use=False):
             _expr = self.walk(tree)
             result = ""
@@ -127,7 +127,7 @@ class Generator(object):
                   _type = _expr['type']
                   _line = node[4]
 
-                  if _name in self.vars or _name in self.consts :
+                  if (_name in self.vars or _name in self.consts) and self.scope == False: 
                         HascalError(f"'{_name}' exists, cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalError(f"'{_name}' defined as a type, cannot redefine it as a variable:{_line}")
@@ -151,7 +151,7 @@ class Generator(object):
                   _type = self.walk(node[2])
                   _line = node[4]
 
-                  if _name in self.vars or _name in self.consts :
+                  if (_name in self.vars or _name in self.consts) and self.scope == False :
                         HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")  
@@ -175,7 +175,7 @@ class Generator(object):
                   _expr = self.walk(node[4])
                   _line = node[5]
             
-                  if _name in self.vars or _name in self.consts  :
+                  if (_name in self.vars or _name in self.consts) and self.scope == False  :
                         HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
@@ -199,7 +199,7 @@ class Generator(object):
                   _type = self.walk(node[2])
                   _line = node[4]
 
-                  if _name in self.vars or _name in self.consts :
+                  if (_name in self.vars or _name in self.consts) and self.scope == False :
                         HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")   
                   elif _name in self.types :
                         HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")   
@@ -220,7 +220,7 @@ class Generator(object):
                   _expr = self.walk(node[4])
                   _line = node[5]
 
-                  if _name in self.vars or _name in self.consts :
+                  if (_name in self.vars or _name in self.consts) and self.scope == False :
                         HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
@@ -243,7 +243,7 @@ class Generator(object):
                   _expr = self.walk(node[4])
                   _line = node[5]
 
-                  if _name in self.vars or _name in self.consts :
+                  if (_name in self.vars or _name in self.consts) and self.scope == False :
                         HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalError(f"'{_name}' defined as a type ,cannot redefine it as a constant:{_line}")
@@ -260,12 +260,12 @@ class Generator(object):
                         }
                         return expr
 
-            # var <name> : *<return_type>
+            # var <name> : <return_type>*
             if node[0] == 'declare_ptr' and node[1] == "no_equal":
                   _name = node[3]
                   _type = self.walk(node[2])
                   _line = node[4]
-                  if _name in self.vars or _name in self.consts :
+                  if (_name in self.vars or _name in self.consts) and self.scope == False :
                         HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")  
@@ -282,14 +282,14 @@ class Generator(object):
                         }
                         return expr
 
-            # var <name> : *<return_type> = <expr>
+            # var <name> : <return_type>* = <expr>
             if node[0] == 'declare_ptr' and node[1] == "equal2":
                   _name = node[3]
                   _type = self.walk(node[2])
                   _expr = self.walk(node[4])
                   _line = node[5]
             
-                  if _name in self.vars or _name in self.consts  :
+                  if (_name in self.vars or _name in self.consts) and self.scope == False  :
                         HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
@@ -314,7 +314,7 @@ class Generator(object):
                   _type = _expr['type']
                   _line = node[4]
 
-                  if _name in self.vars or _name in self.consts :
+                  if (_name in self.vars or _name in self.consts) and self.scope == False :
                         HascalError(f"'{_name}' exists, cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalError(f"'{_name}' defined as a type, cannot redefine it as a constant:{_line}")   
@@ -810,6 +810,7 @@ class Generator(object):
             if node[0] == 'function':
                   current_vars = self.vars.copy()
                   current_types = self.types.copy()
+                  self.scope = True
 
                   _name = node[2]
                   _type = self.walk(node[1])
@@ -854,7 +855,8 @@ class Generator(object):
 
                   self.vars = current_vars
                   self.types = current_types
-
+                  self.scope = False
+                  
                   # program arguments 
                   _params_keys = list(_params.keys())
                   if len(params['name']) == 1 and (_name == "main" and isinstance(_params[_params_keys[0]],Array) and isinstance(_params[_params_keys[0]],Type) and _params[_params_keys[0]].type_obj.type_name == 'string'):
