@@ -18,11 +18,6 @@
 use http, random
 ```
 
-- inline assembly
-```
-asm("mov e1, bx")
-```
-
 - lambdas :
 ```
 var mythread = thread(@(1000,true){
