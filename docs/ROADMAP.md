@@ -9,6 +9,7 @@
 - use `std::array` for fixed sized array instead of `std::vector`
 - redesign logo
 - js backend(`hascal2js`)
+- static variables
 
 ### Language
 - multi library import :
