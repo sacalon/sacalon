@@ -6,6 +6,7 @@
 - speed up compilation time
 
 #### Bug fixes
+- fix scoping bug
 
 #### Standart library
 
