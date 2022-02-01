@@ -3,6 +3,7 @@
 <summary>v1.3.7</summary>
 
 #### New features
+- speed up compilation time
 
 #### Bug fixes
 
