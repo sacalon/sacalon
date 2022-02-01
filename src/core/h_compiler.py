@@ -60,7 +60,7 @@ class Generator(object):
                   'regex' : Function('regex',{'regex_str':'string','str':'string'},self.types['bool']),
 
                   'sizeof' : Function('sizeof',{'T':'T'},self.types['int']),
-
+                  'typeof' : Function('typeof',{'T':'T'},self.types['string']),
             }
 
             # list of imported libraries
