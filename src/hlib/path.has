@@ -1,0 +1,22 @@
+use libcpp.cwalk
+
+function path_normalize(path:string):string {
+    cuse """
+    char result[FILENAME_MAX];
+	
+	cwk_path_normalize(path.c_str(), result,
+    sizeof(result));
+	
+	return std::string(result);
+    """
+    return ""
+}
+
+function path_join(path_a:string, path_b:string):string {
+    cuse """
+    char result[FILENAME_MAX] ;
+	cwk_path_join(path_a.c_str(),path_b.c_str(),result,sizeof(result));
+	return std::string(result);
+    """
+    return ""
+}
