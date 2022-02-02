@@ -4,6 +4,7 @@
 
 #### New features
 - speed up compilation time
+- add `typeof` function
 
 #### Bug fixes
 - fix scoping bug
