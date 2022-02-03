@@ -935,13 +935,11 @@ class Generator(object):
                   for i in range(len(_members)) :
                         res += 'out << "' + keys[i] + '" << ":" << obj.' + keys[i]
                         # check if last member
-                        print(i)
                         if i == len(keys)-1 :
                               res += ';\n'
                         else :
                               res += ' << ",";\n'
                   res += 'out << ")";\nreturn out;\n}\n'
-                  print(res)
                   expr = {
                         'expr' : res,
                         'type' : _name,
@@ -1152,8 +1150,12 @@ class Generator(object):
                   _type = _name['type']
                   _line = node[2]
 
-                  type_ = Type(_type.type_name,_type.stdtype,is_ptr=True,ptr_str='*',category=_type.category)
-
+                  type_ = None
+                  if isinstance(_type,Struct) :
+                        type_ = Struct(_type.name,_type.members,is_ptr=True,ptr_str='&',category=_type.category)
+                  else :
+                        type_ = Type(_type.type_name,_type.stdtype,is_ptr=True,ptr_str='*',category=_type.category)
+                  
                   expr = {
                         'expr' : '&%s' % (_name['expr']),
                         'type' : type_,

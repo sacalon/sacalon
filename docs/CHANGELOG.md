@@ -3,6 +3,7 @@
 <summary>v1.3.7</summary>
 
 #### New features
+- functional programming paradigm
 - speed up compilation time
 - add `typeof` function
 - now can print arrays and structures

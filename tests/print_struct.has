@@ -2,6 +2,7 @@ struct point {
     var x : int
     var y : int
     var array : [int]
+    var self : point*
 }
 
 function main() : int {
@@ -9,7 +10,8 @@ function main() : int {
     p.x = 1
     p.y = 2
     p.array = [1, 2, 3]
-    
+    p.self = &p
+
     print(p)
     return 0
 }
