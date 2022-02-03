@@ -925,8 +925,25 @@ class Generator(object):
 
                         res += e['expr']
                   self.types[_name] = Struct(_name,_members)
+                  
+                  res = 'struct %s{\n%s\n};\n' % (_name,res)
+                  # overload std::cout operator for current struct
+                  res += 'std::ostream& operator<<(std::ostream& out,const %s& obj){\n' % _name
+                  res += f'out << "{_name}(";\n'
+                  
+                  keys = list(_members.keys())
+                  for i in range(len(_members)) :
+                        res += 'out << "' + keys[i] + '" << ":" << obj.' + keys[i]
+                        # check if last member
+                        print(i)
+                        if i == len(keys)-1 :
+                              res += ';\n'
+                        else :
+                              res += ' << ",";\n'
+                  res += 'out << ")";\nreturn out;\n}\n'
+                  print(res)
                   expr = {
-                        'expr' : 'struct %s{\n%s\n};\n' % (_name,res),
+                        'expr' : res,
                         'type' : _name,
                   } 
                   return expr

@@ -49,5 +49,7 @@ function main():int {
     print("print_array.has:")
     system("hascal.py print_array.has")
     
+    print("print_struct.has:")
+    system("hascal.py print_struct.has")
     return 0
 }
