@@ -221,4 +221,24 @@ std::string typeof(T val) {
 	return res;
 }
 
+template <typename T>
+std::ostream& operator<< (std::ostream& out, const std::vector<T>& v) {
+	out << "[";
+  for (auto it = v.begin(); it != v.end(); ++it) {
+	if (typeof(*it) == "string"){
+		out << "\"" << *it << "\"";
+	} else if(typeof(*it) == "char"){
+		out << "'" << *it << "'";		
+	}else {
+		out << *it;
+	}
+
+	if (it != v.end() - 1) {
+	  out << ", ";
+	}
+  }
+  out << "]";
+  return out;
+}
+
 // exit()

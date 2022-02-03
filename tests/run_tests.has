@@ -46,5 +46,8 @@ function main():int {
     print("scope.has:")
     system("hascal.py scope.has")
     
+    print("print_array.has:")
+    system("hascal.py print_array.has")
+    
     return 0
 }
