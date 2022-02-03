@@ -22,9 +22,10 @@
 > - Hascal pronounces like "Pascal".
 > - Hascal is still in the very early stages of development.
 ## Features
-- [x] Simple and easy to learn
+- [x] Easy to use and easy to learn
 - [x] Fast and powerful like C++
 - [x] Inspired by Swift and Pascal
+- [x] Functional programming
 - [x] C++ on backend
 - [x] Compatible with C\C++\Obj-C
 
@@ -47,12 +48,31 @@ function main() : int {
 }
 ```
 
-HTTP Response :
+Functional Programming :
 ```typescript
-use http
+use functional
 
-function main(): int {
-    print(get("http://example.com"))
+function main() : int {
+    var x = 1
+    var y = 2
+    var z = 3
+
+    var sum = plus(
+        plus(
+            x,
+            y
+        ),
+        z
+    )
+
+    var avg = divide(
+        sum,
+        3
+    )
+
+    print("Sum :",sum)
+    print("Average :",avg)
+
     return 0
 }
 ```
