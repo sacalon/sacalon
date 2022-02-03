@@ -26,8 +26,7 @@
 - [x] Fast and powerful like C++
 - [x] Inspired by Swift and Pascal
 - [x] C++ on backend
-- [x] Compatible with C\C++
-- [x] Strongly typed
+- [x] Compatible with C\C++\Obj-C
 
 ## Examples
 Hello World :
