@@ -1,0 +1,93 @@
+// functional programming with hascal
+
+function plus(a:float, b:float):float {
+    return a + b
+}
+
+function minus(a:float, b:float):float {
+    return a - b
+}
+
+function times(a:float, b:float):float {
+    return a * b
+}
+
+function divide(a:float, b:float):float {
+    return a / b
+}
+
+function equals(a:float, b:float): bool {
+    if (a == b) {
+        return true
+    }
+    return false
+}
+
+function lessThan(a:float, b:float): bool {
+    if (a < b) {
+        return true
+    }
+    return false
+}
+
+function greaterThan(a:float, b:float): bool {
+    if (a > b) {
+        return true
+    }
+    return false
+}
+
+function lessThanOrEqual(a:float, b:float): bool {
+    if (a <= b) {
+        return true
+    }
+    return false
+}
+
+function greaterThanOrEqual(a:float, b:float): bool {
+    if (a >= b) {
+        return true
+    }
+    return false
+}
+
+function notEqual(a:float, b:float): bool {
+    if (a != b) {
+        return true
+    }
+    return false
+}
+
+function if_and(a:bool, b:bool): bool {
+    if (a and b) {
+        return true
+    }
+    return false
+}
+
+function if_or(a:bool, b:bool): bool {
+    if (a or b) {
+        return true
+    }
+    return false
+}
+
+function if_not(a:bool): bool {
+    if (not a) {
+        return true
+    }
+    return false
+}
+
+function ifThenElse(a:bool, b:float, c:float): float {
+    if (a) {
+        return b
+    }
+    return c
+}
+
+function mod(a:float, b:float): float {
+    var aa = (int) a
+    var bb = (int) b
+    return aa - (bb * (aa / bb))
+}

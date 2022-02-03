@@ -179,30 +179,30 @@ class Parser(Parser):
       def in_statement(self, p):
             return p.if_stmt
 
-      # if <condition> {
+      # if <expr> {
       #      <block>
       # }
-      @_('IF condition LBC in_block RBC')
+      @_('IF expr LBC in_block RBC')
       def if_stmt(self, p):
-            return ('if', p.condition,p.in_block,p.lineno)
+            return ('if', p.expr,p.in_block,p.lineno)
 
-      # if <condition> {
+      # if <expr> {
       #      <in_block>
       # } else {
       #      <in_block>
       # }
-      @_('IF condition LBC in_block RBC ELSE LBC in_block RBC')
+      @_('IF expr LBC in_block RBC ELSE LBC in_block RBC')
       def if_stmt(self, p):
-            return ('if_else', p.condition,p.in_block0,p.in_block1,p.lineno)
+            return ('if_else', p.expr,p.in_block0,p.in_block1,p.lineno)
       
-      # if <condition> {
+      # if <expr> {
       #      <in_block>
-      # } else <condition> {
+      # } else <expr> {
       #      <in_block>
       # }
-      @_('IF condition LBC in_block RBC ELSE if_stmt')
+      @_('IF expr LBC in_block RBC ELSE if_stmt')
       def if_stmt(self, p):
-            return ('if_else2', p.condition,p.in_block,p.if_stmt,p.lineno)
+            return ('if_else2', p.expr,p.in_block,p.if_stmt,p.lineno)
       #-----------------------------------
       # return <expr>
       @_('RETURN expr')
@@ -223,12 +223,12 @@ class Parser(Parser):
       @_('while_stmt')
       def in_statement(self, p):
             return p.while_stmt
-      # while <condition> {
+      # while <expr> {
       #      <in_block>
       # }
-      @_('WHILE condition LBC in_block RBC')
+      @_('WHILE expr LBC in_block RBC')
       def while_stmt(self, p):
-            return ('while',p.condition,p.in_block,p.lineno)
+            return ('while',p.expr,p.in_block,p.lineno)
       #-----------------------------------
       @_('struct_stmt')
       def statement(self, p):
@@ -480,7 +480,6 @@ class Parser(Parser):
       @_('FALSE')
       def boolean(self, p):
             return ('false',p.lineno)
-            
       #------------------------------------------
       # <name>.<name>
       @_('names COMMA NAME')
@@ -492,63 +491,43 @@ class Parser(Parser):
       #------------------------------------------
       # <expr> == <expr>
       @_('expr EQEQ expr')
-      def condition(self, p):
+      def expr(self, p):
             return ('equals', p.expr0, p.expr1,p.lineno)
       
       # <expr> != <expr>
       @_('expr NOTEQ expr')
-      def condition(self, p):
+      def expr(self, p):
             return ('not_equals', p.expr0, p.expr1,p.lineno)
       
       # <expr> >= <expr>
       @_('expr GREATEREQ expr')
-      def condition(self, p):
+      def expr(self, p):
             return ('greater_equals', p.expr0, p.expr1,p.lineno)
       
       # <expr> <= <expr>
       @_('expr LESSEQ expr')
-      def condition(self, p):
+      def expr(self, p):
             return ('less_equals', p.expr0, p.expr1,p.lineno)
       
       # <expr> > <expr>
       @_('expr GREATER expr')
-      def condition(self, p):
+      def expr(self, p):
             return ('greater', p.expr0, p.expr1,p.lineno)
       
       # <expr> < <expr>
       @_('expr LESS expr')
-      def condition(self, p):
+      def expr(self, p):
             return ('less', p.expr0, p.expr1,p.lineno)
-      
-      # <expr>
-      @_('expr')
-      def condition(self, p):
-            return ('expr_cond',p.expr) # todo : return line number
 
-      # not <condition>
-      @_('NOT condition')
-      def condition(self, p):
-            return ('not_cond', p.condition,p.lineno)
+      # <expr> and <expr>
+      @_('expr AND expr')
+      def expr(self, p):
+            return ('and', p.expr0,p.expr1,p.lineno)
       
-      # true/false
-      @_('boolean')
-      def condition(self, p):
-            return ('bool_cond', p.boolean[0],p.lineno)
-      
-      # ( <condition> )
-      @_('LPAREN condition RPAREN')
-      def condition(self, p):
-            return ('paren_cond', p.condition,p.lineno)
-
-      # <condition> and <condition>
-      @_('condition AND condition')
-      def condition(self, p):
-            return ('and', p.condition0,p.condition1,p.lineno)
-      
-      # <condition> or <condition>
-      @_('condition OR condition')
-      def condition(self, p):
-            return ('or', p.condition0,p.condition1,p.lineno)
+      # <expr> or <expr>
+      @_('expr OR expr')
+      def expr(self, p):
+            return ('or', p.expr0,p.expr1,p.lineno)
       #-----------------------------------------
       # <param>, <param>
       @_('param_t')

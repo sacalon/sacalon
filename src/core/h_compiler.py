@@ -1317,7 +1317,7 @@ class Generator(object):
 
                   expr = {
                         'expr' : '%s' % (_expr0['expr']),
-                        'type' : _expr0['type'] 
+                        'type' : self.types['bool'] 
                   }
                   return expr
 
@@ -1327,7 +1327,7 @@ class Generator(object):
 
                   expr = {
                         'expr' : '!%s' % (_expr0['expr']), # may have bug
-                        'type' : _expr0['type'] 
+                        'type' : self.types['bool']
                   }
                   return expr
 
@@ -1339,7 +1339,7 @@ class Generator(object):
 
                   expr = {
                         'expr' : '%s && %s' % (_expr0['expr'],_expr1['expr']),
-                        'type' : _expr0['type'] # or : _expr1['type']
+                        'type' : self.types['bool']
                   }
                   return expr
 
@@ -1350,7 +1350,7 @@ class Generator(object):
                   _line = node[3]
                   expr = {
                         'expr' : '%s || %s' % (_expr0['expr'],_expr1['expr']),
-                        'type' : _expr0['type'] # or : _expr1['type']
+                        'type' : self.types['bool']
                   }
                   return expr
 
@@ -1359,13 +1359,13 @@ class Generator(object):
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
                   _line = node[3]
-                  if str(_expr0['type']) != str(_expr1['type']) :
+                  if not is_compatible_type(_expr0['type'],_expr1['type']) :
                         HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                  # todo : check if type is int or bool else error  
+                  
                   else :
                         expr = {
                               'expr' : '%s == %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : _expr0['type'] # or : _expr1['type']
+                              'type' : self.types['bool']
                         }
                         return expr
 
@@ -1381,7 +1381,7 @@ class Generator(object):
                   else :
                         expr = {
                               'expr' : '%s != %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : _expr0['type'] # or : _expr1['type']
+                              'type' : self.types['bool']
                         }
                         return expr
 
@@ -1397,7 +1397,7 @@ class Generator(object):
                   else :
                         expr = {
                               'expr' : '%s >= %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : _expr0['type'] # or : _expr1['type']
+                              'type' : self.types['bool']
                         }
                         return expr
 
@@ -1413,7 +1413,7 @@ class Generator(object):
                   else :
                         expr = {
                               'expr' : '%s <= %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : _expr0['type'] # or : _expr1['type']
+                              'type' : self.types['bool']
                         }
                         return expr
             
@@ -1429,7 +1429,7 @@ class Generator(object):
                   else :
                         expr = {
                               'expr' : '%s > %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : _expr0['type'] # or : _expr1['type']
+                              'type' : self.types['bool']
                         }
                         return expr
 
@@ -1445,7 +1445,7 @@ class Generator(object):
                   else :
                         expr = {
                               'expr' : '%s < %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : _expr0['type'] # or : _expr1['type']
+                              'type' : self.types['bool']
                         }
                         return expr
 
@@ -1454,7 +1454,7 @@ class Generator(object):
                   _expr0 = self.walk(node[1])
                   expr = {
                         'expr' : '!%s' % (_expr0['expr']), # may have bug
-                        'type' : _expr0['type'] 
+                        'type' : self.types['bool']
                   }
                   return expr
 
@@ -1462,7 +1462,7 @@ class Generator(object):
             if node[0] == 'bool_cond':
                   expr = {
                         'expr' : '%s' % (node[1]),
-                        'type' : 'bool',
+                        'type' : self.types['bool']
                   }
                   return expr
             
@@ -1471,7 +1471,7 @@ class Generator(object):
                   _expr = self.walk(node[1])
                   expr = {
                         'expr' : '%s' % (_expr['expr']), # may have bug
-                        'type' : _expr['type'] 
+                        'type' : self.types['bool']
                   }
                   return expr
             
@@ -1480,10 +1480,10 @@ class Generator(object):
                   _expr = self.walk(node[1])
                   expr = {
                         'expr' : '(%s)' % (_expr['expr']), # may have bug
-                        'type' : _expr['type'] 
+                        'type' : self.types['bool']
                   }
                   return expr
-            # ---------------end of conditions---------------------     
+            # ---------------end of conditions---------------------    
             # <name>
             if node[0] == 'var':
                   _name = node[1][0]
