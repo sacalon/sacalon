@@ -5,6 +5,7 @@
 #### New features
 - speed up compilation time
 - add `typeof` function
+- now can print arrays and structures
 
 #### Bug fixes
 - fix scoping bug
