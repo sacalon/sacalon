@@ -24,7 +24,7 @@
 ## Features
 - [x] Easy to use and easy to learn
 - [x] Fast and powerful like C++
-- [x] Inspired by Swift and Pascal
+- [x] Inspired by Swift, Pascal and a bit Haskell
 - [x] Functional programming
 - [x] C++ on backend
 - [x] Compatible with C\C++\Obj-C
