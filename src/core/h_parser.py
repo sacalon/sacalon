@@ -375,6 +375,18 @@ class Parser(Parser):
       def statement(self, p):
             return ('inline_function',('return_type','void',p.lineno), p.NAME,('param_no',),p.lineno)  
       #------------------------------------
+      # delete <name>
+      @_('DELETE NAME')
+      def delete(self, p):
+            return ('delete', p.NAME,p.lineno)
+      
+      @_('delete')
+      def statement(self, p):
+            return p.delete
+      @_('delete')
+      def in_statement(self, p):
+            return p.delete
+      #------------------------------------
       @_('expr')
       def in_statement(self, p):
             return ('expr', p.expr)
@@ -447,6 +459,19 @@ class Parser(Parser):
       @_('name LBRCK expr RBRCK')
       def expr(self, p):
             return ('var_index', ('var', p.name[0],p.name[1]),p.expr,p.lineno)
+      
+      # new <return_type>(<expr>)
+      @_('NEW return_type LPAREN expr RPAREN')
+      def expr(self, p):
+            return ('new', p.return_type, p.expr,p.lineno)
+      # new [<return_type>](<expr>)
+      @_('NEW return_type2 LPAREN expr RPAREN')
+      def expr(self, p):
+            return ('new', p.return_type2, p.expr,p.lineno)
+      # new <return_type>*(<expr>)
+      @_('NEW return_type3 LPAREN expr RPAREN')
+      def expr(self, p):
+            return ('new', p.return_type3, p.expr,p.lineno)
       
       @_('NUMBER')
       def expr(self, p):

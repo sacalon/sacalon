@@ -25,7 +25,7 @@ class Lexer(Lexer):
                 CUSE,
                 STRUCT,ENUM,
                 AMP,
-                ANY,}
+                NEW,DELETE}
         ignore = ' \t'
         ignore_comment_slash = r'//.*'
         
@@ -91,8 +91,9 @@ class Lexer(Lexer):
 
         NAME["cuse"] = CUSE
 
-        NAME["any"] = ANY
-
+        NAME["new"] = NEW
+        NAME["delete"] = DELETE
+        
         @_(r'("(?!"").*?(?<!\\)(\\\\)*?")')
         def STRING(self, t):
                 t.value = t.value[1:-1]

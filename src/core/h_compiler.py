@@ -4,8 +4,10 @@ from .h_parser import Parser
 import sys
 from os.path import isfile
 from pathlib import Path
+import copy
 
 HLIB_BASE_DIR = str(Path(__file__).parents[1])
+
 
 class Generator(object):
       LDFLAGS = []
@@ -124,7 +126,7 @@ class Generator(object):
             if node[0] == 'declare' and node[1] == "no_type":
                   _name = node[2]
                   _expr = self.walk(node[3])
-                  _type = _expr['type']
+                  _type = copy.deepcopy(_expr['type'])
                   _line = node[4]
 
                   if (_name in self.vars or _name in self.consts) and self.scope == False: 
@@ -174,7 +176,7 @@ class Generator(object):
                   _type = self.walk(node[2])
                   _expr = self.walk(node[4])
                   _line = node[5]
-            
+
                   if (_name in self.vars or _name in self.consts) and self.scope == False  :
                         HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
@@ -252,10 +254,10 @@ class Generator(object):
                   elif not _type in self.types :
                         HascalError(f"Type '{_type}' not defined:{_line}")
                   else:
-                        self.consts[_name] = Const(_name,self.types[_type])
+                        self.consts[_name] = Const(_name,copy.deepcopy(self.types[_type]))
                         expr = {
                               'expr' : "const %s %s = %s ;\n" % (_type,_name,_expr['expr']),
-                              'type' : self.types[_type],
+                              'type' : copy.deepcopy(self.types[_type]),
                               'name' : _name,
                         }
                         return expr
@@ -319,11 +321,11 @@ class Generator(object):
                   elif _name in self.types :
                         HascalError(f"'{_name}' defined as a type, cannot redefine it as a constant:{_line}")   
                   else:
-                        self.consts[_name] = Const(_name,self.types[_type])
+                        self.consts[_name] = Const(_name,copy.deepcopy(self.types[_type]))
 
                         expr = {
                               'expr' : "const auto %s = %s ;\n" % (_name,_expr['expr']),
-                              'type' : self.types[_type],
+                              'type' : copy.deepcopy(self.types[_type]),
                               'name' : _name,
                         }
                         return expr
@@ -924,6 +926,11 @@ class Generator(object):
                               _members[e['name']] = e['type']
 
                         res += e['expr']
+                  
+                  # update nested structs
+                  for member in _members :
+                        if isinstance(_members[member],Struct) and _members[member].name == _name :
+                              _members[member].members = self.types[_members[member].name].members
                   self.types[_name] = Struct(_name,_members)
                   
                   res = 'struct %s{\n%s\n};\n' % (_name,res)
@@ -959,7 +966,7 @@ class Generator(object):
 
                   # get members from parent struct
                   if self.types.get(_i_name) != None:
-                        _members = self.types[_i_name].members
+                        _members = copy.deepcopy(self.types[_i_name].members)
                   else :
                         HascalError(f"Cannot found struct '{_i_name}'")
 
@@ -997,12 +1004,12 @@ class Generator(object):
 
                   members = {}
                   for i in range(len(_members)-1):
-                        members[str(_members[i])] = self.types['int']
+                        members[str(_members[i])] = copy.deepcopy(self.types['int'])
                   
                   self.types[_name] = Enum(_name,members)
                   expr = {
                         'expr' : 'enum %s{\n%s\n};\n' % (_name,node[2]),
-                        'type' : self.types[_name],
+                        'type' : copy.deepcopy(self.types[_name]),
                   } 
                   return expr
             #-------------------------------------
@@ -1118,6 +1125,39 @@ class Generator(object):
                   }
                   return expr
             #---------------------------------------
+            if node[0] == 'new' :
+                  _type = self.walk(node[1])
+                  _expr = self.walk(node[2])
+                  _line = node[3]
+
+                  if is_compatible_type(_type['type'],_expr['type']) == False:
+                        HascalError(f"Mismatched type '{_type['type']}' and '{_expr['type']}' in 'new' expression:{_line}")
+                  
+                  _type['type'].is_ptr = True
+                  _type['type'].ptr_str += '*'
+
+                  expr = {
+                        'expr' : 'new %s(%s)' % (_type['expr'],_expr['expr']),
+                        'type' : _type['type'],
+                  }
+                  return expr
+            #---------------------------------------
+            if node[0] == 'delete' :
+                  _name = node[1]
+                  _line = node[2]
+
+                  if not _name in self.vars :
+                        HascalError(f"'{_name}' not defined:{_line}")
+                  
+                  if self.vars[_name].type.is_ptr == False :
+                        HascalError(f"'{_name}' is not a pointer:{_line}")
+                  
+                  expr = {
+                        'expr' : 'delete %s;\n' % (_name),
+                        'type' : copy.deepcopy(self.vars[_name].type),
+                  }
+                  return expr
+            #---------------------------------------
             if node[0] == 'cast' :
                   _return_type = self.walk(node[1])
                   _expr = self.walk(node[2])
@@ -1131,17 +1171,19 @@ class Generator(object):
             #---------------------------------------
             if node[0] == 'pass_by_ptr' :
                   _name = self.walk(node[1])
-                  _type = _name['type']
+                  _type = copy.deepcopy(_name['type'])
                   _line = node[2]
                   
                   if not _type.is_ptr :
                         HascalError(f"Invalid type argument of unary '*' (have '{_type}'):{_line}")
                   
-                  type_ = Type(_type.type_name,_type.stdtype,is_ptr=False,ptr_str='',category=_type.category)
+                  
+                  _type.is_ptr = False
+                  _type.ptr_str = ''
 
                   expr = {
                         'expr' : '*%s' % (_name['expr']),
-                        'type' : type_,
+                        'type' : _type,
                   }
                   return expr
             
@@ -1222,7 +1264,7 @@ class Generator(object):
                                     
                                     expr = {
                                           'expr' : "%s{%s}" % (_name, ', '.join(self.walk(arg)['expr'] for arg in node[2])),
-                                          'type' : self.types[_name],
+                                          'type' : copy.deepcopy(self.types[_name],)
                                     }
                                     return expr
                               else :
@@ -1246,7 +1288,8 @@ class Generator(object):
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
                   _line = node[3]
-                  if str(_expr0['type']) != str(_expr1['type']) :
+
+                  if is_compatible_type(_expr0['type'],_expr1['type']) == False:
                         HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                         
                   else :
@@ -1262,7 +1305,7 @@ class Generator(object):
                   _expr1 = self.walk(node[2])
                   _line = node[3]
 
-                  if str(_expr0['type']) != str(_expr1['type']) :
+                  if is_compatible_type(_expr0['type'],_expr1['type']) == False:
                         HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}.")  
                   else :
                         expr = {
@@ -1277,7 +1320,7 @@ class Generator(object):
                   _expr1 = self.walk(node[2])
                   _line = node[3]
 
-                  if str(_expr0['type']) != str(_expr1['type']) :
+                  if is_compatible_type(_expr0['type'],_expr1['type']) == False:
                         HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}") 
                   else :
                         expr = {
@@ -1292,7 +1335,7 @@ class Generator(object):
                   _expr1 = self.walk(node[2])
                   _line = node[3]
 
-                  if str(_expr0['type']) != str(_expr1['type']) :
+                  if is_compatible_type(_expr0['type'],_expr1['type']) == False:
                         HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}") 
                   else :
                         expr = {
@@ -1319,7 +1362,7 @@ class Generator(object):
 
                   expr = {
                         'expr' : '%s' % (_expr0['expr']),
-                        'type' : self.types['bool'] 
+                        'type' : copy.deepcopy(self.types['bool']) 
                   }
                   return expr
 
@@ -1329,7 +1372,7 @@ class Generator(object):
 
                   expr = {
                         'expr' : '!%s' % (_expr0['expr']), # may have bug
-                        'type' : self.types['bool']
+                        'type' : copy.deepcopy(self.types['bool'])
                   }
                   return expr
 
@@ -1341,7 +1384,7 @@ class Generator(object):
 
                   expr = {
                         'expr' : '%s && %s' % (_expr0['expr'],_expr1['expr']),
-                        'type' : self.types['bool']
+                        'type' : copy.deepcopy(self.types['bool'])
                   }
                   return expr
 
@@ -1352,7 +1395,7 @@ class Generator(object):
                   _line = node[3]
                   expr = {
                         'expr' : '%s || %s' % (_expr0['expr'],_expr1['expr']),
-                        'type' : self.types['bool']
+                        'type' : copy.deepcopy(self.types['bool'])
                   }
                   return expr
 
@@ -1367,7 +1410,7 @@ class Generator(object):
                   else :
                         expr = {
                               'expr' : '%s == %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : self.types['bool']
+                              'type' : copy.deepcopy(self.types['bool'])
                         }
                         return expr
 
@@ -1383,7 +1426,7 @@ class Generator(object):
                   else :
                         expr = {
                               'expr' : '%s != %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : self.types['bool']
+                              'type' : copy.deepcopy(self.types['bool'])
                         }
                         return expr
 
@@ -1399,7 +1442,7 @@ class Generator(object):
                   else :
                         expr = {
                               'expr' : '%s >= %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : self.types['bool']
+                              'type' : copy.deepcopy(self.types['bool'])
                         }
                         return expr
 
@@ -1415,7 +1458,7 @@ class Generator(object):
                   else :
                         expr = {
                               'expr' : '%s <= %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : self.types['bool']
+                              'type' : copy.deepcopy(self.types['bool'])
                         }
                         return expr
             
@@ -1431,7 +1474,7 @@ class Generator(object):
                   else :
                         expr = {
                               'expr' : '%s > %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : self.types['bool']
+                              'type' : copy.deepcopy(self.types['bool'])
                         }
                         return expr
 
@@ -1447,7 +1490,7 @@ class Generator(object):
                   else :
                         expr = {
                               'expr' : '%s < %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : self.types['bool']
+                              'type' : copy.deepcopy(self.types['bool'])
                         }
                         return expr
 
@@ -1456,7 +1499,7 @@ class Generator(object):
                   _expr0 = self.walk(node[1])
                   expr = {
                         'expr' : '!%s' % (_expr0['expr']), # may have bug
-                        'type' : self.types['bool']
+                        'type' : copy.deepcopy(self.types['bool'])
                   }
                   return expr
 
@@ -1464,7 +1507,7 @@ class Generator(object):
             if node[0] == 'bool_cond':
                   expr = {
                         'expr' : '%s' % (node[1]),
-                        'type' : self.types['bool']
+                        'type' : copy.deepcopy(self.types['bool'])
                   }
                   return expr
             
@@ -1473,7 +1516,7 @@ class Generator(object):
                   _expr = self.walk(node[1])
                   expr = {
                         'expr' : '%s' % (_expr['expr']), # may have bug
-                        'type' : self.types['bool']
+                        'type' : copy.deepcopy(self.types['bool'])
                   }
                   return expr
             
@@ -1482,7 +1525,7 @@ class Generator(object):
                   _expr = self.walk(node[1])
                   expr = {
                         'expr' : '(%s)' % (_expr['expr']), # may have bug
-                        'type' : self.types['bool']
+                        'type' : copy.deepcopy(self.types['bool'])
                   }
                   return expr
             # ---------------end of conditions---------------------    
@@ -1508,8 +1551,8 @@ class Generator(object):
                         elif _name in self.types :
                               expr = {
                                     'expr' : "%s" % (_name),
-                                    'type' : self.types[_name],
-                                    'obj' : self.types[_name]
+                                    'type' : copy.deepcopy(self.types[_name]),
+                                    'obj' : copy.deepcopy(self.types[_name])
                               }
                               return expr
                         elif _name in self.funcs :
@@ -1534,10 +1577,10 @@ class Generator(object):
                                     # if struct has no member show error else set current member to _current_member
                                     if self.vars[_name].type.members == {} :
                                           HascalError(f"Struct '{_name}' have not any members:{_line}")
-                                    _members = self.vars[_name].type.members
+                                    _members = copy.deepcopy(self.vars[_name].type.members)
 
                                     _back_member_name = _name
-                                    _back_member_type = self.vars[_name].type
+                                    _back_member_type = copy.deepcopy(self.vars[_name].type)
 
                                     for i in range(len(node[1])):
                                           # check if node[1][i] is a member of struct and check it is not first member
@@ -1584,7 +1627,7 @@ class Generator(object):
                               elif str(self.vars[_name].type).startswith('std::vector'):
                                     expr = {
                                           'expr' : "%s" % (_full_name),
-                                          'type' : self.types[str(self.vars[_name].type).split('<')[1].split('>')[0]],
+                                          'type' : copy.deepcopy(self.types[str(self.vars[_name].type).split('<')[1].split('>')[0]]),
                                     }
                                     return expr  
                               expr = {
@@ -1597,7 +1640,7 @@ class Generator(object):
                                     # if struct has no member show error else set current member to _current_member
                                     if self.types[self.consts[_name].type].members == {} :
                                           HascalError(f"Struct '{_name}' has no member:{_line}")
-                                    _members = self.types[self.consts[_name].type].members
+                                    _members = copy.deepcopy(self.types[self.consts[_name].type]).members
 
                                     for i in range(len(node[1])-1):
                                           # check if node[1][i] is a member of struct and check it is not first member
@@ -1641,7 +1684,7 @@ class Generator(object):
                               if str(self.consts[_name].type).startswith('std::vector'):
                                     expr = {
                                           'expr' : "%s" % (_name),
-                                          'type' : self.types[str(self.consts[_name].type).split('<')[1].split('>')[0]],
+                                          'type' : copy.deepcopy(self.types[str(self.consts[_name].type).split('<')[1].split('>')[0]]),
                                     }
                                     return expr  
 
@@ -1662,7 +1705,7 @@ class Generator(object):
                                           
                               expr = {
                                     'expr' : "%s" % (name[0]),
-                                    'type' : self.types[_name],
+                                    'type' : copy.deepcopy(self.types[_name]),
                               }
                               return expr
                         else :
@@ -1683,7 +1726,7 @@ class Generator(object):
                   elif str(_name['type']) == 'string' :
                         expr = {
                               'expr' : "%s[%s]" % (_name['expr'],_expr['expr']),
-                              'type' : self.types['char'],
+                              'type' : copy.deepcopy(self.types['char']),
                         }
                         return expr
                   else :
@@ -1741,7 +1784,7 @@ class Generator(object):
                   
                   expr = {
                         'expr' : _type_name,
-                        'type' : self.types[_type_name],
+                        'type' : copy.deepcopy(self.types[_type_name]),
                         'name' : _type_name,
                   }
                   return expr
@@ -1816,26 +1859,26 @@ class Generator(object):
             if node[0] == 'string':
                   expr = {
                         'expr' : 'std::string("%s")' % node[1],
-                        'type' : self.types[node[0]],
+                        'type' : copy.deepcopy(self.types[node[0]]),
                   }
                   return expr
             if node[0] == "multiline_string" :
                   expr = {
                         'expr' : 'std::string(R"(%s)")' % node[1],
-                        'type' : self.types['string'],
+                        'type' : copy.deepcopy(self.types['string']),
                   }
                   return expr
             if node[0] == 'bool' or node[0] == 'float' or node[0] == 'int':
                   expr = {
                         'expr' : '%s' % node[1],
-                        'type' : self.types[node[0]],
+                        'type' : copy.deepcopy(self.types[node[0]]),
                   }
                   return expr
 
             if node[0] == 'char':
                   expr = {
                         'expr' : '\'%s\'' % node[1],
-                        'type' : self.types[node[0]],
+                        'type' : copy.deepcopy(self.types[node[0]]),
                   }
                   return expr         
 

@@ -1,0 +1,21 @@
+function main() : int {
+    var a : int* = new int(10)
+    var b = new float(10.0)
+    var c = new string("hello")
+
+    print(*a)
+    print(*b)
+    print(*c)
+
+    a = new int(20)
+    print(*a)
+    
+    c = new string(*c + " world")
+    print(*c)
+
+    delete a
+    delete b
+    delete c
+
+    return 0
+}
