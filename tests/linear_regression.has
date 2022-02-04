@@ -26,7 +26,7 @@
 // y = mx + b
 
 use math // mean()
-
+use conv // to_float()
 
 /// Calculate the y intercept(b)
 function calc_y_intercept(x:[float], y:[float],avg_x:float, avg_y:float) : float {

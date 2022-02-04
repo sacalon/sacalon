@@ -343,11 +343,29 @@ class Parser(Parser):
       # function <name>(<params>) : <return_type>
       @_('FUNCTION NAME LPAREN params RPAREN COLON return_type')
       def statement(self, p):
-            return ('inline_function',p.return_type, p.NAME, p.params,p.lineno)  
+            return ('inline_function',p.return_type, p.NAME, p.params,p.lineno) 
+      # function <name>(<params>) : [<return_type>]
+      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type2')
+      def statement(self, p):
+            return ('inline_function',p.return_type2, p.NAME, p.params,p.lineno) 
+      # function <name>(<params>) : <return_type>*
+      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type3')
+      def statement(self, p):
+            return ('inline_function',p.return_type3, p.NAME, p.params,p.lineno) 
+      
       # function <name>() : <return_type>
       @_('FUNCTION NAME LPAREN RPAREN COLON return_type')
       def statement(self, p):
             return ('inline_function',p.return_type, p.NAME,('param_no',),p.lineno)  
+       # function <name>() : [<return_type>]
+      @_('FUNCTION NAME LPAREN RPAREN COLON return_type2')
+      def statement(self, p):
+            return ('inline_function',p.return_type2, p.NAME,('param_no',),p.lineno)  
+       # function <name>() : <return_type>*
+      @_('FUNCTION NAME LPAREN RPAREN COLON return_type3')
+      def statement(self, p):
+            return ('inline_function',p.return_type3, p.NAME,('param_no',),p.lineno)  
+
       # function <name>(<params>)
       @_('FUNCTION NAME LPAREN params RPAREN')
       def statement(self, p):
@@ -624,6 +642,11 @@ class Parser(Parser):
       @_('LPAREN return_type RPAREN expr')
       def expr(self, p):
             return ('cast',p.return_type,p.expr,p.lineno)
+      
+      # (<return_type>*) <expr>
+      @_('LPAREN return_type3 RPAREN expr')
+      def expr(self, p):
+            return ('cast',p.return_type3,p.expr,p.lineno)
       #------------------------------------------
       # &<name>
       @_('AMP name')

@@ -24,9 +24,4 @@ function to_float(val:double):float
 function to_char(val:int):char
 function to_char(val:char):char
 
-function to_cstr(val:string):char* {
-    cuse """
-    return val.c_str()
-    """
-    return "";
-}
+function to_cstr(val:string):char*

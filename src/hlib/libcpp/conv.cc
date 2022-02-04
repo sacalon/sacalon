@@ -73,3 +73,8 @@ char to_char(int s){
 char to_char(char c){
 	return c;
 }
+
+char* c_str(std::string s){
+	char* res = const_cast<char*>(s.c_str());
+	return res;
+}
