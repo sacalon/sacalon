@@ -3,6 +3,7 @@
 <summary>v1.3.7</summary>
 
 #### New features
+- manual memory management with `new` and `delete` keyword
 - functional programming paradigm
 - speed up compilation time
 - add `typeof` function
