@@ -67,6 +67,11 @@ class Generator(object):
             # list of imported libraries
             self.imported = []
 
+            # list of decorators
+            self.decorators = {
+                  'extern' : 'extern "C"',
+            }
+
             self.scope = False
       def generate(self, tree,use=False):
             _expr = self.walk(tree)
@@ -816,6 +821,8 @@ class Generator(object):
                   _name = node[2]
                   _type = self.walk(node[1])
                   _return_type = _type['expr']
+                  _line = node[5]
+                  _decorator = self.walk(node[6])['expr']
                   _params = { }
 
                   params = self.walk(node[3])
@@ -844,15 +851,15 @@ class Generator(object):
                   _res = ""
 
                   if _return_type != 'void' and len(_expr) < 1 :
-                        HascalError(f"Function '{_name}' must return a value at end of function block")
+                        HascalError(f"Function '{_name}' must return a value at end of function block:{_line}")
                   if _return_type != 'void' and len(_expr) != 0 and _expr[-1].get('return') != True :
-                        HascalError(f"Function '{_name}' should return a value at end of function block")
+                        HascalError(f"Function '{_name}' should return a value at end of function block:{_line}")
                   if _return_type != 'int' and _name == 'main':
                         HascalError(f"Function 'main' must return 'int'")
                   
                   for e in _expr :
                         _res += e['expr']
-                  res = "%s %s(%s) {\n%s\n}\n" % (_return_type,_name,params['expr'],_res) 
+                  res = "%s %s %s(%s) {\n%s\n}\n" % (_decorator,_return_type,_name,params['expr'],_res) 
 
                   self.vars = current_vars
                   self.types = current_types
@@ -861,7 +868,7 @@ class Generator(object):
                   # program arguments 
                   _params_keys = list(_params.keys())
                   if len(params['name']) == 1 and (_name == "main" and isinstance(_params[_params_keys[0]],Array) and isinstance(_params[_params_keys[0]],Type) and _params[_params_keys[0]].type_obj.type_name == 'string'):
-                        res = "%s %s(int argc,char** args) {\nstd::vector<std::string> %s;for(int i=0;i<argc;i++){%s.push_back(args[i]);}\n%s\n}\n" % (_return_type,_name,_params_keys[0],_params_keys[0],_res) 
+                        res = "%s %s %s(int argc,char** args) {\nstd::vector<std::string> %s;for(int i=0;i<argc;i++){%s.push_back(args[i]);}\n%s\n}\n" % (_decorator,_return_type,_name,_params_keys[0],_params_keys[0],_res) 
                         expr = {
                               'expr' : res,
                               'type' : _type['type'],
@@ -869,11 +876,11 @@ class Generator(object):
                         return expr
                   
                   if len(params['name']) > 1 and _name == "main" :
-                        HascalError(f"Function 'main' takes only zero or one arguments(with string array type)")
+                        HascalError(f"Function 'main' takes only zero or one arguments(with string array type):{_line}")
                   if len(params['name']) == 1 and ((isinstance(_params[_params_keys[0]],Array) and isinstance(_params[_params_keys[0]].type_obj,Struct)) or isinstance(_params[_params_keys[0]],Struct)) and _name == "main" :
-                        HascalError(f"Function 'main' takes only zero or one arguments(with struct type)")
+                        HascalError(f"Function 'main' takes only zero or one arguments(with struct type):{_line}")
                   if len(params['name']) == 1 and _name == "main" and isinstance(_params[_params_keys[0]],Array) and _params[_params_keys[0]].type_obj.type_name != 'string' :
-                        HascalError(f"Function 'main' takes only zero or one arguments(with string array type)")
+                        HascalError(f"Function 'main' takes only zero or one arguments(with string array type):{_line}")
                   
                   expr = {
                         'expr' : res,
@@ -1860,6 +1867,26 @@ class Generator(object):
                         'expr' : '%s %s' % (_params['expr'],_param['expr']),
                         'type' : _params['type'] + [_param['type']],
                         'name' : _params['name'] + [_param['name']],
+                  }
+                  return expr
+            #--------------------------------------------
+            if node[0] == 'decorator' :
+                  _name = node[1]
+                  _line = node[2]
+
+                  if not _name in self.decorators:
+                        HascalError(f"{_name} is not defined:{_line}")
+                  
+                  expr = {
+                        'expr' : self.decorators[_name] + " ",
+                        'type' : copy.deepcopy(self.types['void']),
+                  }
+                  return expr
+            
+            if node[0] == 'decorator_no' :
+                  expr = {
+                        'expr' : '',
+                        'type' : self.types['void'],
                   }
                   return expr
             #--------------------------------------------

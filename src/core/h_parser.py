@@ -260,120 +260,120 @@ class Parser(Parser):
       # function <name> {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LBC in_block RBC')
+      @_('decorator FUNCTION NAME LBC in_block RBC')
       def statement(self, p):
-            return ('function',('return_type','void',p.lineno), p.NAME, ('param_no',), p.in_block,p.lineno)
+            return ('function',('return_type','void',p.lineno), p.NAME, ('param_no',), p.in_block,p.lineno,p.decorator)
       
       # function <name>() {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LPAREN RPAREN LBC in_block RBC')
+      @_('decorator FUNCTION NAME LPAREN RPAREN LBC in_block RBC')
       def statement(self, p):
-            return ('function',('return_type','void',p.lineno), p.NAME,('param_no',), p.in_block,p.lineno)
+            return ('function',('return_type','void',p.lineno), p.NAME,('param_no',), p.in_block,p.lineno,p.decorator)
       
       # function <name>(<params>) {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LPAREN params RPAREN LBC in_block RBC')
+      @_('decorator FUNCTION NAME LPAREN params RPAREN LBC in_block RBC')
       def statement(self, p):
-            return ('function',('return_type','void',p.lineno), p.NAME, p.params, p.in_block,p.lineno)
+            return ('function',('return_type','void',p.lineno), p.NAME, p.params, p.in_block,p.lineno,p.decorator)
       
       # function <name> : <return_type> {
       #      <in_block>
       # }   
-      @_('FUNCTION NAME COLON return_type LBC in_block RBC')
+      @_('decorator FUNCTION NAME COLON return_type LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type, p.NAME, ('param_no',), p.in_block,p.lineno)
+            return ('function',p.return_type, p.NAME, ('param_no',), p.in_block,p.lineno,p.decorator)
       
       # function <name>() : <return_type> {
       #      <in_block>
       # } 
-      @_('FUNCTION NAME LPAREN RPAREN COLON return_type LBC in_block RBC')
+      @_('decorator FUNCTION NAME LPAREN RPAREN COLON return_type LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type, p.NAME, ('param_no',), p.in_block,p.lineno) 
+            return ('function',p.return_type, p.NAME, ('param_no',), p.in_block,p.lineno,p.decorator) 
       
       # function <name>(<params>) : <return_type> {
       #      <in_block>
       # }  
-      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type LBC in_block RBC')
+      @_('decorator FUNCTION NAME LPAREN params RPAREN COLON return_type LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type, p.NAME, p.params, p.in_block,p.lineno)
+            return ('function',p.return_type, p.NAME, p.params, p.in_block,p.lineno,p.decorator)
       
 
       # function <name> : [<return_type>] {
       #      <in_block>
       # }
-      @_('FUNCTION NAME COLON return_type2 LBC in_block RBC')
+      @_('decorator FUNCTION NAME COLON return_type2 LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type2, p.NAME, ('param_no',), p.in_block,p.lineno)
+            return ('function',p.return_type2, p.NAME, ('param_no',), p.in_block,p.lineno,p.decorator)
       # function <name>() : [<return_type>] {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LPAREN RPAREN COLON return_type2  LBC in_block RBC')
+      @_('decorator FUNCTION NAME LPAREN RPAREN COLON return_type2  LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type2, p.NAME,('param_no',), p.in_block,p.lineno)
+            return ('function',p.return_type2, p.NAME,('param_no',), p.in_block,p.lineno,p.decorator)
       # function <name>(<params>) : [<return_type>] {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type2 LBC in_block RBC')
+      @_('decorator FUNCTION NAME LPAREN params RPAREN COLON return_type2 LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type2, p.NAME, p.params, p.in_block,p.lineno)    
+            return ('function',p.return_type2, p.NAME, p.params, p.in_block,p.lineno,p.decorator)    
 
 
       # function <name> : *<return_type> {
       #      <in_block>
       # }
-      @_('FUNCTION NAME COLON return_type3 LBC in_block RBC')
+      @_('decorator FUNCTION NAME COLON return_type3 LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type3, p.NAME, ('param_no',), p.in_block,p.lineno)
+            return ('function',p.return_type3, p.NAME, ('param_no',), p.in_block,p.lineno,p.decorator)
       # function <name>() : *<return_type> {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LPAREN RPAREN COLON return_type3  LBC in_block RBC')
+      @_('decorator FUNCTION NAME LPAREN RPAREN COLON return_type3  LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type3, p.NAME,('param_no',), p.in_block,p.lineno)
+            return ('function',p.return_type3, p.NAME,('param_no',), p.in_block,p.lineno,p.decorator)
       # function <name>(<params>) : *<return_type> {
       #      <in_block>
       # }
-      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type3 LBC in_block RBC')
+      @_('decorator FUNCTION NAME LPAREN params RPAREN COLON return_type3 LBC in_block RBC')
       def statement(self, p):
-            return ('function',p.return_type3, p.NAME, p.params, p.in_block,p.lineno) 
+            return ('function',p.return_type3, p.NAME, p.params, p.in_block,p.lineno,p.decorator) 
 
 
       # function <name>(<params>) : <return_type>
-      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type')
+      @_('decorator FUNCTION NAME LPAREN params RPAREN COLON return_type')
       def statement(self, p):
-            return ('inline_function',p.return_type, p.NAME, p.params,p.lineno) 
+            return ('inline_function',p.return_type, p.NAME, p.params,p.lineno,p.decorator) 
       # function <name>(<params>) : [<return_type>]
-      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type2')
+      @_('decorator FUNCTION NAME LPAREN params RPAREN COLON return_type2')
       def statement(self, p):
-            return ('inline_function',p.return_type2, p.NAME, p.params,p.lineno) 
+            return ('inline_function',p.return_type2, p.NAME, p.params,p.lineno,p.decorator) 
       # function <name>(<params>) : <return_type>*
-      @_('FUNCTION NAME LPAREN params RPAREN COLON return_type3')
+      @_('decorator FUNCTION NAME LPAREN params RPAREN COLON return_type3')
       def statement(self, p):
-            return ('inline_function',p.return_type3, p.NAME, p.params,p.lineno) 
+            return ('inline_function',p.return_type3, p.NAME, p.params,p.lineno,p.decorator) 
       
       # function <name>() : <return_type>
-      @_('FUNCTION NAME LPAREN RPAREN COLON return_type')
+      @_('decorator FUNCTION NAME LPAREN RPAREN COLON return_type')
       def statement(self, p):
-            return ('inline_function',p.return_type, p.NAME,('param_no',),p.lineno)  
+            return ('inline_function',p.return_type, p.NAME,('param_no',),p.lineno,p.decorator)  
        # function <name>() : [<return_type>]
-      @_('FUNCTION NAME LPAREN RPAREN COLON return_type2')
+      @_('decorator FUNCTION NAME LPAREN RPAREN COLON return_type2')
       def statement(self, p):
-            return ('inline_function',p.return_type2, p.NAME,('param_no',),p.lineno)  
+            return ('inline_function',p.return_type2, p.NAME,('param_no',),p.lineno,p.decorator)  
        # function <name>() : <return_type>*
-      @_('FUNCTION NAME LPAREN RPAREN COLON return_type3')
+      @_('decorator FUNCTION NAME LPAREN RPAREN COLON return_type3')
       def statement(self, p):
-            return ('inline_function',p.return_type3, p.NAME,('param_no',),p.lineno)  
+            return ('inline_function',p.return_type3, p.NAME,('param_no',),p.lineno,p.decorator)  
 
       # function <name>(<params>)
-      @_('FUNCTION NAME LPAREN params RPAREN')
+      @_('decorator FUNCTION NAME LPAREN params RPAREN')
       def statement(self, p):
-            return ('inline_function',('return_type','void',p.lineno), p.NAME, p.params,p.lineno)  
+            return ('inline_function',('return_type','void',p.lineno), p.NAME, p.params,p.lineno,p.decorator)  
       # function <name>()
-      @_('FUNCTION NAME LPAREN RPAREN')
+      @_('decorator FUNCTION NAME LPAREN RPAREN')
       def statement(self, p):
-            return ('inline_function',('return_type','void',p.lineno), p.NAME,('param_no',),p.lineno)  
+            return ('inline_function',('return_type','void',p.lineno), p.NAME,('param_no',),p.lineno,p.decorator)  
       #------------------------------------
       # delete <name>
       @_('DELETE NAME')
@@ -616,6 +616,15 @@ class Parser(Parser):
       @_('expr')
       def arg(self, p):
             return p.expr
+      #------------------------------------------
+      # @<name>
+      @_('AT NAME')
+      def decorator(self, p):
+            return ('decorator', p.NAME,p.lineno)
+      
+      @_('')
+      def decorator(self, p):
+            return ('decorator_no',)
       #------------------------------------------
       # int
       @_('INTVAR')

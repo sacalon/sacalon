@@ -34,20 +34,6 @@ function add(a:int,b:int) : int {
 
 - `@extern_c` decorator defines a function or variable in an `extern "C"` block 
 
-- dictionaries :
-```
-var names_age = dict(string,int,{
-   "john" : 25,
-   "nickolas" : 38
-})
-
-# or :
-var foo = {
-   "X" : 1,
-   "Y" : 2
-}
-```
-
 ### Standard Library
 - `json`, `sqlite`, `thread` library
 - `qt` wrapper
