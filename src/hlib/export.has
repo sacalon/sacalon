@@ -1,3 +1,0 @@
-cuse """
-#define EXPORT extern "C"
-"""
