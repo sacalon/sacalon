@@ -19,8 +19,7 @@ typedef unsigned short uint16;
 typedef unsigned char uint8;
 typedef char int8;
 
-#define dict(type) std::unordered_map<std::string,type>
-#define dict(type1,type2) std::unordered_map<type1,type2>
+#define dict std::unordered_map
 
 void error(string err_msg){
 	std::cerr << err_msg << std::endl ;
