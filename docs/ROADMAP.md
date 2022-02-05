@@ -4,7 +4,6 @@
 <summary>v1.3.x</summary>
 
 ### Base
-- functional programming methods
 - signals
 - null safety
 - use `std::array` for fixed sized array instead of `std::vector`
