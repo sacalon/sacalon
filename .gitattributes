@@ -3,3 +3,4 @@ examples/*.has linguist-documentation=false
 tests/**.has linguist-documentation=false
 sly/ linguist-detectable=false
 **.bf linguist-language=Pascal
+**.js linguist-language=JavaScript
