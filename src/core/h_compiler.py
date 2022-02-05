@@ -59,7 +59,6 @@ class Generator(object):
                   'len' : Function('len',{'s':'string'},self.types['int']),
                   'len' : Function('len',{'vec':'T'},self.types['int']),
                   'append' : Function('append',{'vec':'T','val':'T'},self.types['int']),
-                  'regex' : Function('regex',{'regex_str':'string','str':'string'},self.types['bool']),
 
                   'sizeof' : Function('sizeof',{'T':'T'},self.types['int']),
                   'typeof' : Function('typeof',{'T':'T'},self.types['string']),
