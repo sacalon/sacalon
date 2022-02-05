@@ -70,6 +70,7 @@ class Generator(object):
             # list of decorators
             self.decorators = {
                   'extern' : 'extern "C"',
+                  'static' : 'static'
             }
 
             self.scope = False
