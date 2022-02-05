@@ -8,14 +8,15 @@
 - speed up compilation time
 - add `typeof` function
 - now can print arrays and structures
+- function decorators
+- `static` and `extern` decorator
 
 #### Bug fixes
 - fix scoping bug
 - fix `conv` library bug
 
-#### Standart library
-
 #### Removed
+- `export` library removed
 
 </details>
 
