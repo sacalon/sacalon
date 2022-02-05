@@ -1,0 +1,5 @@
+function main():int{
+    var foobar = "foobar" - "bar" // error
+
+    return 0
+}

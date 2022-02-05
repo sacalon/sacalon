@@ -1086,14 +1086,13 @@ class Generator(object):
             # }
             if node[0] == 'for':      
                   _name = node[1]
-                  # todo
                   _name2 = node[2][0]
                   _line = node[4]
                   res = ""
                   current_vars = self.vars.copy()
 
                   if not (_name2 in self.vars or _name2 in self.consts) :
-                        HascalError(f"'{_name2}' not defined:{_line}") #todo
+                        HascalError(f"'{_name2}' not defined:{_line}")
 
                   if not isinstance(self.vars[_name2].type,Array) :
                         HascalError(f"'{_name2}' is not iterable:{_line}") 
@@ -1291,12 +1290,11 @@ class Generator(object):
                   if is_compatible_type(_expr0['type'],_expr1['type']) == False:
                         HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                         
-                  else :
-                        expr = {
-                              'expr' : '%s + %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : _expr0['type'] # or : _expr1['type']
-                        }
-                        return expr
+                  expr = {
+                        'expr' : '%s + %s' % (_expr0['expr'],_expr1['expr']),
+                        'type' : _expr0['type'] # or : _expr1['type']
+                  }
+                  return expr
 
             # <expr> - <expr>
             if node[0] == 'sub':
@@ -1305,13 +1303,16 @@ class Generator(object):
                   _line = node[3]
 
                   if is_compatible_type(_expr0['type'],_expr1['type']) == False:
-                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}.")  
-                  else :
-                        expr = {
-                              'expr' : '%s - %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : _expr0['type'] # or : _expr1['type']
-                        }
-                        return expr
+                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")  
+
+                  if _expr0['type'].category != 'number' or _expr1['type'].category != 'number':
+                        HascalError(f"Cannot subtract {_expr0['type']} and {_expr1['type']}:{_line}")
+
+                  expr = {
+                        'expr' : '%s - %s' % (_expr0['expr'],_expr1['expr']),
+                        'type' : _expr0['type'] # or : _expr1['type']
+                  }
+                  return expr
 
             # <expr> * <expr>
             if node[0] == 'mul':
@@ -1321,12 +1322,15 @@ class Generator(object):
 
                   if is_compatible_type(_expr0['type'],_expr1['type']) == False:
                         HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}") 
-                  else :
-                        expr = {
-                              'expr' : '%s * %s' % (_expr0['expr'],_expr1['expr']),
-                              'type' : _expr0['type'] # or : _expr1['type']
-                        }
-                        return expr
+
+                  if _expr0['type'].category != 'number' or _expr1['type'].category != 'number':
+                        HascalError(f"Cannot multiply non-number type:{_line}")
+                  
+                  expr = {
+                        'expr' : '%s * %s' % (_expr0['expr'],_expr1['expr']),
+                        'type' : _expr0['type'] # or : _expr1['type']
+                  }
+                  return expr
 
             # <expr> / <expr>
             if node[0] == 'div':
@@ -1335,7 +1339,11 @@ class Generator(object):
                   _line = node[3]
 
                   if is_compatible_type(_expr0['type'],_expr1['type']) == False:
-                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}") 
+                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                  
+                  if _expr0['type'].category != 'number' or _expr1['type'].category != 'number':
+                        HascalError(f"Cannot divide non-number type:{_line}")
+                  
                   else :
                         expr = {
                               'expr' : '%s / %s' % (_expr0['expr'],_expr1['expr']),
