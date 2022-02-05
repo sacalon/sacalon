@@ -11,6 +11,7 @@
 
 #### Bug fixes
 - fix scoping bug
+- fix `conv` library bug
 
 #### Standart library
 
