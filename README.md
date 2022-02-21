@@ -7,11 +7,12 @@
 
   [Website](https://hascal.github.io) |
   [Docs](https://hascal.github.io/docs/latest) |
-  [Changelog](docs/CHANGELOG.md)
+  [Changelog](docs/CHANGELOG.md) |
+  [Roadmap](docs/ROADMAP.md)
 
   [IDE Integration](docs/ide.md) |
   [Library Index](https://github.com/hascal/libs)
-
+  
   [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://LinkedIn.com/in/company/hascal-lang)
   [![Gitter](https://img.shields.io/gitter/room/hascal/community?style=for-the-badge)](https://gitter.im/hascal/community)
   
