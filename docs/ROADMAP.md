@@ -6,7 +6,6 @@
 ### Base
 - signals
 - null safety
-- use `std::array` for fixed sized array instead of `std::vector`
 - redesign logo
 - js backend(`hascal2js`)
 - static variables
