@@ -32,8 +32,6 @@ function add(a:int,b:int) : int {
 }
 ```
 
-- `@extern_c` decorator defines a function or variable in an `extern "C"` block 
-
 ### Standard Library
 - `json`, `sqlite`, `thread` library
 - `qt` wrapper
