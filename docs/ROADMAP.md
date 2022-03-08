@@ -24,14 +24,6 @@ var mythread = thread(@(1000,true){
 })
 ```
 
-- function decorators :
-```
-@static
-function add(a:int,b:int) : int {
-    return a + b
-}
-```
-
 ### Standard Library
 - `json`, `sqlite`, `thread` library
 - `qt` wrapper
