@@ -45,21 +45,11 @@ class Parser(Parser):
       @_('USE name')
       def statement(self, p):
             return ('use', p.name[0],p.lineno)
-      
-      # local use <name>
-      @_('LOCAL USE name')
-      def statement(self, p):
-            return ('use_local', p.name[0],p.lineno)
 
       # use <name>,<name>,...
       @_('USE names2')
       def statement(self, p):
-            return ('uses', p.names2,p.lineno)
-      
-      # local use <name>,<name>,...
-      @_('LOCAL USE names2')
-      def statement(self, p):
-            return ('uses_local', p.names2,p.lineno)      
+            return ('uses', p.names2,p.lineno)     
       #-----------------------------------
 
       # cuse "c code"
