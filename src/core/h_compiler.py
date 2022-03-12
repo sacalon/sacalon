@@ -1,6 +1,7 @@
 from .h_error import HascalError
 from .h_lexer import Lexer
 from .h_parser import Parser
+from .h_import import use
 import sys
 from os.path import isfile
 from pathlib import Path
@@ -576,7 +577,7 @@ class Generator(object):
                   }
                   return expr
             #-----------------------------------------
-            # use <lib_name>
+            # use <name>
             if node[0] == 'use':
                   if node[1] in self.imported :
                         ...
@@ -612,29 +613,15 @@ class Generator(object):
                                           for i in ld :
                                                 self.LDFLAGS.append(i)                                   
                         else :
-                              path = node[1]
-                              final_path = str(self.BASE_DIR+"\\hlib\\")
+                              result = use(Generator,node[1],self.BASE_DIR)
 
-                              ends_of_path = path[-1]
-                              for x in path[:-1]:
-                                    final_path += x + "\\"
-                              final_path += ends_of_path + ".has"
-                              try:
-                                    with open(final_path, 'r') as f:
-                                          parser = Parser()
-                                          tree = parser.parse(Lexer().tokenize(f.read()))
-                                          
-                                          generator = Generator(self.BASE_DIR)
-                                          output_cpp = generator.generate(tree,True)
-
-                                          self.imported.append(name)
-                                          self.imported += generator.imported
-                                          self.add_to_output(output_cpp,generator.src_includes)
-                                          self.funcs.update(generator.funcs)
-                                          self.types.update(generator.types)
-                                          self.vars.update(generator.vars)
-                              except FileNotFoundError:
-                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")            
+                              self.imported.append(name)
+                              self.imported += result['generator'].imported
+                              self.add_to_output(result['output_cpp'],result['generator'].src_includes)
+                              self.funcs.update(result['generator'].funcs)
+                              self.types.update(result['generator'].types)
+                              self.vars.update(result['generator'].vars)
+                              
                   else :
                         name = '.'.join(name for name in node[1])
                         if name.startswith("libcpp.") :
@@ -662,133 +649,14 @@ class Generator(object):
                                           for i in ld :
                                                 self.LDFLAGS.append(i)    
                         else :
-                              path = node[1]
-                              final_path = str(self.BASE_DIR+"/hlib/")
+                              result = use(Generator,node[1],self.BASE_DIR)
 
-                              ends_of_path = path[-1]
-                              for x in path[:-1]:
-                                    final_path += x + "/"
-                              final_path += ends_of_path + ".has"
-
-                              try:
-                                    with open(final_path, 'r') as f:
-                                          parser = Parser()
-                                          tree = parser.parse(Lexer().tokenize(f.read()))
-                                          generator = Generator(self.BASE_DIR)
-                                          output_cpp = generator.generate(tree,True)
-
-                                          self.imported.append(name)
-                                          self.imported += generator.imported
-                                          self.add_to_output(output_cpp,generator.src_includes)
-                                          self.funcs.update(generator.funcs)
-                                          self.types.update(generator.types)
-                                          self.vars.update(generator.vars)
-                              except FileNotFoundError:
-                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")
-                  return {'expr':'','type':''}
-            
-            # local use <lib_name>
-            if node[0] == 'use_local':
-                  if sys.platform.startswith('win32'):
-                        name = '.'.join(name for name in node[1])
-                        if name.startswith("cpp."):
-                              path = name.split('.')
-                              final_path = ""
-
-                              ends_of_path = path[-1]
-                              for x in path[:-1]:
-                                    final_path += x + "\\"
-                              final_path_ld = final_path + ends_of_path + ".ld"
-                              final_path_h = final_path + ends_of_path + ".hpp"
-                              final_path += ends_of_path + ".cc"
-
-                              try:
-                                    with open(final_path, 'r') as fd:
-                                          cpp_code = fd.read()
-                                          with open(final_path_h,'r') as fh :
-                                                hpp_code = fh.read()
-                                                self.imported.append(name)
-                                                self.add_to_output(cpp_code,hpp_code)
-                              except FileNotFoundError:
-                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")
-                              if isfile(final_path_ld):
-                                    with open(final_path_ld) as f:
-                                          ld = f.read().split(',')
-                                          self.LDFLAGS += ld  
-
-                        else :
-                              tmp = '.'.join(name for name in node[1])
-                              path = tmp.split('.')
-                              final_path = ""
-
-                              ends_of_path = path[-1]
-                              for x in path[:-1]:
-                                    final_path += x + "\\"
-                              final_path += ends_of_path + ".has"
-
-                              try:
-                                    with open(final_path, 'r') as f:
-                                          parser = Parser()
-                                          tree = parser.parse(Lexer().tokenize(f.read()))
-                                          generator = Generator(HLIB_BASE_DIR)
-                                          output_cpp = generator.generate(tree,True)
-
-                                          self.imported.append(name)
-                                          self.imported += generator.imported
-                                          self.add_to_output(output_cpp, generator.src_includes)
-                                          self.funcs.update(generator.funcs)
-                                          self.types.update(generator.types)
-                                          self.vars.update(generator.vars)
-                              except FileNotFoundError:
-                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")
-                              
-                  elif sys.platform.startswith('linux'):
-                        name = '.'.join(name for name in node[1])
-                        if name.startswith("cpp."):
-                              path = name.split('.')
-                              final_path = ""
-
-                              ends_of_path = path[-1]
-                              for x in path[:-1]:
-                                    final_path += x + "/"
-                              final_path_h = final_path + ends_of_path + ".hpp"
-                              final_path += ends_of_path + ".cc"
-
-                              try:
-                                    with open(final_path, 'r') as fd:
-                                          cpp_code = fd.read()
-                                          with open(final_path_h,'r') as fh :
-                                                hpp_code = fh.read()
-                                                self.imported.append(name)
-                                                self.add_to_output(cpp_code,hpp_code)
-                              except FileNotFoundError:
-                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")
-
-                        else :
-                              tmp = '.'.join(name for name in node[1])
-                              path = tmp.split('.')
-                              final_path = ""
-
-                              ends_of_path = path[-1]
-                              for x in path[:-1]:
-                                    final_path += x + "/"
-                              final_path += ends_of_path + ".has"
-
-                              try:
-                                    with open(final_path, 'r') as f:
-                                          parser = Parser()
-                                          tree = parser.parse(Lexer().tokenize(f.read()))
-                                          generator = Generator(HLIB_BASE_DIR)
-                                          output_cpp = generator.generate(tree,True)
-
-                                          self.imported.append(name)
-                                          self.imported += generator.imported
-                                          self.add_to_output(output_cpp, generator.src_includes)
-                                          self.funcs.update(generator.funcs)
-                                          self.types.update(generator.types)
-                                          self.vars.update(generator.vars)
-                              except FileNotFoundError:
-                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")
+                              self.imported.append(name)
+                              self.imported += result['generator'].imported
+                              self.add_to_output(result['output_cpp'],result['generator'].src_includes)
+                              self.funcs.update(result['generator'].funcs)
+                              self.types.update(result['generator'].types)
+                              self.vars.update(result['generator'].vars)
                   return {'expr':'','type':''}
             #-----------------------------------------
             # function <name> {

@@ -5,7 +5,7 @@ from .h_error import HascalError # hascal excpetion handling
 from .h_help import * # hascal compiler information
 
 from os.path import isfile 
-from subprocess import DEVNULL, STDOUT, check_call, getoutput
+from subprocess import DEVNULL, STDOUT,PIPE, check_call, Popen
 import sys
 import os
 import requests
@@ -195,12 +195,11 @@ class HascalCompiler(object):
             HascalError("C++ compiler is not installed")
         
         # check if c++ compiler supports ARGS["c++_version"]
-        try :
-            if int(getoutput(f'{ARGS["compiler"]} -dumpversion').split(".")[0]) < 8:
-                HascalError("C++ compiler doesn't support c++17")
-            
-        except :
-            HascalError(f"C++ compiler is not support {ARGS['c++_version']}")
+        compiler_process = Popen([ARGS["compiler"],'-dumpversion'],stdout=PIPE,stderr=STDOUT)
+        out,err = compiler_process.communicate()
+        out = out.decode('utf-8')
+        if int(out.split(".")[0]) < 8:
+            HascalError("C++ compiler doesn't support c++17")
         
         # compile to binary
         try :

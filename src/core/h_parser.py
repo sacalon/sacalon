@@ -50,8 +50,16 @@ class Parser(Parser):
       @_('LOCAL USE name')
       def statement(self, p):
             return ('use_local', p.name[0],p.lineno)
-      #-----------------------------------
+
+      # use <name>,<name>,...
+      @_('USE names2')
+      def statement(self, p):
+            return ('uses', p.names2,p.lineno)
       
+      # local use <name>,<name>,...
+      @_('LOCAL USE names2')
+      def statement(self, p):
+            return ('uses_local', p.names2,p.lineno)      
       #-----------------------------------
 
       # cuse "c code"
@@ -524,13 +532,21 @@ class Parser(Parser):
       def boolean(self, p):
             return ('false',p.lineno)
       #------------------------------------------
-      # <name>.<name>
+      # <name>,<name>
       @_('names COMMA NAME')
       def names(self, p):
             return "{0},{1}".format(p.names,p.NAME,p.lineno)
       @_('NAME')
       def names(self, p):
             return p.NAME
+
+      # <name>,<name>
+      @_('names2 COMMA name')
+      def names2(self, p):
+            return "{0},{1}".format(p.names2,p.name[0],p.lineno)
+      @_('name')
+      def names2(self, p):
+            return p.name[0]
       #------------------------------------------
       # <expr> == <expr>
       @_('expr EQEQ expr')
