@@ -11,11 +11,6 @@
 - static variables
 
 ### Language
-- multi library import :
-```
-use http, random
-```
-
 - lambdas :
 ```
 var mythread = thread(@(1000,true){
