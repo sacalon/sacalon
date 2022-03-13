@@ -1242,7 +1242,7 @@ class Generator(object):
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
                   _line = node[3]
-                  if not is_compatible_type(_expr0['type'],_expr1['type']) :
+                  if is_compatible_type(_expr0['type'],_expr1['type']) == False:
                         HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                   
                   else :
@@ -1258,7 +1258,7 @@ class Generator(object):
                   _expr1 = self.walk(node[2])
                   _line = node[3]
 
-                  if str(_expr0['type']) != str(_expr1['type']) :
+                  if is_compatible_type(_expr0['type'],_expr1['type']) == False:
                         HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                   # todo : check if type is int or bool else error  
                   else :
@@ -1274,7 +1274,7 @@ class Generator(object):
                   _expr1 = self.walk(node[2])
                   _line = node[3]
 
-                  if str(_expr0['type']) != str(_expr1['type']) :
+                  if is_compatible_type(_expr0['type'],_expr1['type']) == False:
                         HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                   # todo : check if type is int or bool else error  
                   else :
@@ -1290,7 +1290,7 @@ class Generator(object):
                   _expr1 = self.walk(node[2])
                   _line = node[3]
 
-                  if str(_expr0['type']) != str(_expr1['type']) :
+                  if is_compatible_type(_expr0['type'],_expr1['type']) == False:
                         HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                   # todo : check if type is int or bool else error  
                   else :
@@ -1306,7 +1306,7 @@ class Generator(object):
                   _expr1 = self.walk(node[2])
                   _line = node[3]
 
-                  if str(_expr0['type']) != str(_expr1['type']) :
+                  if is_compatible_type(_expr0['type'],_expr1['type']) == False:
                         HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                   # todo : check if type is int or bool else error  
                   else :
@@ -1322,7 +1322,7 @@ class Generator(object):
                   _expr1 = self.walk(node[2])
                   _line = node[3]
                   
-                  if str(_expr0['type']) != str(_expr1['type']) :
+                  if is_compatible_type(_expr0['type'],_expr1['type']) == False:
                         HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
                   # todo : check if type is int or bool else error    
                   else :

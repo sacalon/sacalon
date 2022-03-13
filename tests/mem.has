@@ -1,0 +1,29 @@
+struct point {
+    var x : int
+    var y : int
+}
+
+function main() : int {
+    var a : int* = new int(10)
+    var b = new float(10.0)
+    var c = new string("hello")
+    var d : point* = new point(point(10,10))
+
+    print(*a)
+    print(*b)
+    print(*c)
+    print(*d)
+
+    a = new int(20)
+    print(*a)
+    
+    c = new string(*c + " world")
+    print(*c)
+
+    delete a
+    delete b
+    delete c
+    delete d
+
+    return 0
+}

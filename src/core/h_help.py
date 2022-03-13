@@ -15,7 +15,7 @@ def help_all():
         "\tversion : show version",
         "\tinstall <library_name> : install a library",
         "\tupdate <library_name> : update a library",
-        "\tuninstall <library_name> : uninstall a library",
+        "\tuninstall <library_name> : uninstall a library(not implemented)",
     ]
     for line in output_message:
         print(line)

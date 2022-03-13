@@ -46,10 +46,28 @@ function main():int {
     print("scope.has:")
     system("hascal.py scope.has")
     
-    print("print_array.has:")
-    system("hascal.py print_array.has")
+    print("mem.has:")
+    system("hascal.py mem.has")
     
-    print("print_struct.has:")
-    system("hascal.py print_struct.has")
+    print("path.has:")
+    system("hascal.py path.has")
+
+    print("multiline.has:")
+    system("hascal.py multiline.has")
+
+    print("func.has:")
+    system("hascal.py func.has")
+
+    print("fibonacci.has:")
+    system("hascal.py fibonacci.has")
+
+    print("enum.has:")
+    system("hascal.py enum.has")
+
+    print("dec.has:")
+    system("hascal.py dec.has")
+
+    print("colorized_term.has:")
+    system("hascal.py colorized_term.has")
     return 0
 }

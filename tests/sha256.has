@@ -1,0 +1,13 @@
+use crypto.sha256
+
+function main(argv:[string]):int {
+    if len(argv) == 2 {
+        var data : string = argv[0]
+        var hash : string = generate_sha256(data)
+        print(hash)
+    } else {
+        print("Usage: sha256 \"<string>\"")
+        return 1
+    }
+    return 0
+}

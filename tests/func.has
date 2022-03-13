@@ -1,0 +1,40 @@
+use functional
+
+function main() : int {
+    var a : int = 1
+    var b : int = 2
+    var c : int = 3
+
+    print("a+b:",
+        plus(a, b)
+    )
+
+    print("a-b:",
+        minus(a, b)
+    )
+
+    print("a*b:",
+        times(a, b)
+    )
+
+    print("a/b:",
+        divide(a, b)
+    )
+
+    print("a%b:",
+        mod(a, b)
+    )
+
+    c = ifThenElse(a < b, a, b)
+    print("a < b ? a : b:", c)
+
+    if if_and(a < b, b < c) {
+        print("a < b && b < c")
+    }
+
+    if if_or(a < b, b < c) {
+        print("a < b || b < c")
+    }
+    
+    return 0
+}

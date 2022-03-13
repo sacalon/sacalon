@@ -1,0 +1,12 @@
+function main():int {
+    var a = """Hello World!
+Hello World!
+Hello World!
+Hello World!
+Hello World!
+Hello World!
+    """
+    print(a)
+
+    return 0
+}
