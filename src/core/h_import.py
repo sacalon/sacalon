@@ -4,9 +4,14 @@ from .h_error import HascalError, HascalWarning
 from sys import platform
 from os.path import isfile
 
-def use(gen_class,path,BASE_DIR,filename=None):
+def use(gen_class,path_,BASE_DIR,filename=None):
     result = {}
-    name = '.'.join(name for name in path)
+    path = path_
+    if type(path_) == str : 
+        name = path_
+        path = [path_]
+    else : 
+        name = '.'.join(name for name in path_)
 
     if platform.startswith('win'):
             final_path = str(BASE_DIR+"\\hlib\\")
@@ -18,7 +23,6 @@ def use(gen_class,path,BASE_DIR,filename=None):
 
             final_path = final_path[:-1] + ".has"
             final_path_local = final_path_local[:-1] + ".has"
-
             if isfile(final_path) :
                 with open(final_path,'r') as f :
                     parser = Parser()

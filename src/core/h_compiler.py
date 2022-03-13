@@ -579,77 +579,32 @@ class Generator(object):
             #-----------------------------------------
             # use <name>
             if node[0] == 'use':
+                  name = '.'.join(name for name in node[1])
                   if node[1] in self.imported :
-                        ...
-                  if sys.platform.startswith('win'):
-                        name = '.'.join(name for name in node[1])
-                        if name.startswith("libcpp.") :
-                              path = node[1]
-                              final_path = str(self.BASE_DIR+"\\hlib\\")
-
-                              ends_of_path = path[-1]
-                              for x in path[:-1]:
-                                    final_path += x + "\\"
-                              final_path_ld = final_path + ends_of_path + ".ld"
-                              # final_path_wld = final_path + ends_of_path + ".wld"
-                              final_path_h = final_path + ends_of_path + ".hpp"
-                              final_path += ends_of_path + ".cc"
-                              try:
-                                    with open(final_path, 'r') as fd:
-                                          cpp_code = fd.read()
-                                          with open(final_path_h,'r') as fh :
-                                                hpp_code = fh.read()
-                                                self.imported.append(name)
-                                                self.add_to_output(cpp_code,hpp_code)
-                              except FileNotFoundError:
-                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")
-                              # if isfile(final_path_wld):
-                              #       with open(final_path_ld) as f:
-                              #             ld = f.read().split(',')
-                              #             self.LDFLAGS += ld  
-                              if isfile(final_path_ld):
-                                    with open(final_path_ld) as f:
-                                          ld = list(f.read().split(','))
-                                          for i in ld :
-                                                self.LDFLAGS.append(i)                                   
-                        else :
-                              result = use(Generator,node[1],self.BASE_DIR)
-
-                              self.imported.append(name)
-                              self.imported += result['generator'].imported
-                              self.add_to_output(result['output_cpp'],result['generator'].src_includes)
-                              self.funcs.update(result['generator'].funcs)
-                              self.types.update(result['generator'].types)
-                              self.vars.update(result['generator'].vars)
-                              
+                        ...      
                   else :
-                        name = '.'.join(name for name in node[1])
-                        if name.startswith("libcpp.") :
-                              path = node[1]
-                              final_path = str(self.BASE_DIR+"/hlib/")
+                        result = use(Generator,node[1],self.BASE_DIR)
 
-                              ends_of_path = path[-1]
-                              for x in path[:-1]:
-                                    final_path += x + "/"
-                              final_path_ld = final_path + ends_of_path + ".ld"
-                              final_path_h = final_path + ends_of_path + ".hpp"
-                              final_path += ends_of_path + ".cc"
-                              try:
-                                    with open(final_path, 'r') as fd:
-                                          cpp_code = fd.read()
-                                          with open(final_path_h,'r') as fh :
-                                                hpp_code = fh.read()
-                                                self.imported.append(name)
-                                                self.add_to_output(cpp_code,hpp_code)
-                              except FileNotFoundError:
-                                    HascalError(f"cannot found '{name}' library. Are you missing a library ?")
-                              if isfile(final_path_ld):
-                                    with open(final_path_ld) as f:
-                                          ld = list(f.read().split(','))
-                                          for i in ld :
-                                                self.LDFLAGS.append(i)    
+                        self.imported.append(name)
+                        self.imported += result['generator'].imported
+                        self.add_to_output(result['output_cpp'],result['generator'].src_includes)
+                        self.funcs.update(result['generator'].funcs)
+                        self.types.update(result['generator'].types)
+                        self.vars.update(result['generator'].vars)
+                  return {'expr':'','type':''}
+            
+            # use <name>, <name>,...
+            if node[0] == 'uses':
+                  names = str(node[1])
+                  names = names.replace("[","")
+                  names = names.replace("]","")
+                  names = names.replace("'","")
+                  names = names.split(",")
+                  for name in names :
+                        if name in self.imported :
+                              ...
                         else :
-                              result = use(Generator,node[1],self.BASE_DIR)
+                              result = use(Generator,name,self.BASE_DIR)
 
                               self.imported.append(name)
                               self.imported += result['generator'].imported

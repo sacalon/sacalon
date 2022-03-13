@@ -7,7 +7,7 @@
 //      ...
 // }
 
-use libcpp.libtcc
+cuse libcpp.libtcc
 
 struct libtcc_state {
     cuse """

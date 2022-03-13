@@ -1,4 +1,4 @@
-use libcpp.cwalk
+cuse libcpp.cwalk
 
 function path_normalize(path:string):string {
     cuse """
