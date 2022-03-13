@@ -1,5 +1,18 @@
 # Hascal's Changelog
 <details>
+<summary>v1.3.8</summary>
+
+#### New features
+
+#### Changes
+
+#### Bug fixes
+
+#### Removed
+
+</details>
+
+<details>
 <summary>v1.3.7</summary>
 
 #### New features
