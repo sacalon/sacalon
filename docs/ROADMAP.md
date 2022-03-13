@@ -19,8 +19,7 @@ var mythread = thread(@(1000,true){
 ```
 
 ### Standard Library
-- `json`, `sqlite`, `thread` library
-- `qt` wrapper
+- `json`, `thread` library
 
 ### Library Manager
 - unistall library option
