@@ -1,6 +1,6 @@
 import platform
 
-HASCAL_COMPILER_VERSION = "1.3.6"
+HASCAL_COMPILER_VERSION = "1.3.7"
 HASCAL_GITHUB_REPO = "https://github.com/hascal/hascal"
 
 def help_all():

@@ -10,6 +10,9 @@
 - now can print arrays and structures
 - function decorators
 - `static` and `extern` decorator
+- multiple library import
+- improve importing system
+- improve stdlib architecture
 
 #### Bug fixes
 - fix scoping bug
@@ -17,6 +20,7 @@
 
 #### Removed
 - `export` library removed
+- `local use` statement removed
 
 </details>
 
