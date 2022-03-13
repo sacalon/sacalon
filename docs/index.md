@@ -319,6 +319,40 @@ function main() : int {
 }
 ```
 
+## Manual memory management
+You can use `new` and `delete` keywords for manual memory management :
+```typescript
+struct point {
+    var x : int
+    var y : int
+}
+
+function main() : int {
+    var a : int* = new int(10)
+    var b = new float(10.0)
+    var c = new string("hello")
+    var d : point* = new point(point(10,10))
+
+    print(*a)
+    print(*b)
+    print(*c)
+    print(*d)
+
+    a = new int(20)
+    print(*a)
+    
+    c = new string(*c + " world")
+    print(*c)
+
+    delete a
+    delete b
+    delete c
+    delete d
+
+    return 0
+}
+```
+
 ## Inline C++ Code
 You can use inline c++ code in hascal with `cuse` keyword :
 ```typescript
