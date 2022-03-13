@@ -17,6 +17,7 @@
 #### Bug fixes
 - fix scoping bug
 - fix `conv` library bug
+- fix conditions bug
 
 #### Removed
 - `export` library removed
