@@ -26,6 +26,7 @@
 - `to_string(val:T)` : Standard Hascal's convert to string function
 - `exit(exit_code:int)` : Standard Hascal's exit function
 - `sizeof(T)` : Standard Hascal's sizeof function
+- `typeof(T)` : Standard Hascal's typeof function
 
 ## `file`
 - `read_file(file_name:string) : string` : Read a file and return its content

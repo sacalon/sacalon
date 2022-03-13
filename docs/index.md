@@ -234,16 +234,11 @@ function main() : int {
 Libraries can imported with `use` keyword :
 ```typescript
 use os
+// multiple import :
+use os,file
+
 function main() : int {
    system("gcc --version")
-   return 0
-}
-```
-If you want to import a local library, you can use `local` keyword :
-```typescript
-local use addlib //import add()
-function main() : int {
-   print(add(1,2))
    return 0
 }
 ```
@@ -380,7 +375,7 @@ int add(int x, int y) {
 
 `main.has` :
 ```typescript
-// if you want to include a local file use `local` keyword 
+// if you want to include a local c file, use `local` keyword befor `use` keyword
 // but if you want to include a file in hascal standard library folder don't use `local` keyword
 local cuse add 
 
