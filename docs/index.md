@@ -368,7 +368,7 @@ int add(int x, int y) {
 `add.hpp` :
 ```cpp
 // nothing but should be exist
-// if you want to include a c++ header file, you should include it in this file and not in `xxx.cc`
+// if you want to include a c++ header file, you should include it in this file and not in `add.cc`
 // e.g :
 // #include <cmath>
 ```
