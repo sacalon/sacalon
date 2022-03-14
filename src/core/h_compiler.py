@@ -347,9 +347,7 @@ class Generator(object):
             # cuse <lib_name>
             if node[0] == 'cinclude':
                   name = '.'.join(name for name in node[1])
-                  if node[1] in self.imported :
-                        ...
-                  else :
+                  if name not in self.imported :
                         result = cuse(Generator,node[1],self.BASE_DIR)
 
                         self.imported.append(name)
@@ -470,9 +468,7 @@ class Generator(object):
             # use <name>
             if node[0] == 'use':
                   name = '.'.join(name for name in node[1])
-                  if node[1] in self.imported :
-                        ...      
-                  else :
+                  if name not in self.imported :
                         result = use(Generator,node[1],self.BASE_DIR)
 
                         self.imported.append(name)
