@@ -67,11 +67,6 @@ class Parser(Parser):
       def statement(self, p):
             return ('cinclude', p.name[0],p.lineno)
       
-      # local cuse <name>
-      @_('LOCAL CUSE name')
-      def statement(self, p):
-            return ('cinclude_local', p.name[0],p.lineno)
-      
       # cuse "c code"
       @_('CUSE STRING')
       def in_statement(self, p):

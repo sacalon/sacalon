@@ -1,7 +1,7 @@
 from .h_error import HascalError
 from .h_lexer import Lexer
 from .h_parser import Parser
-from .h_import import use
+from .h_import import use, cuse
 import sys
 from os.path import isfile
 from pathlib import Path
@@ -346,125 +346,15 @@ class Generator(object):
 
             # cuse <lib_name>
             if node[0] == 'cinclude':
+                  name = '.'.join(name for name in node[1])
                   if node[1] in self.imported :
                         ...
-                  if sys.platform.startswith('win'):
-                        name = '.'.join(name for name in node[1])
-                        path = node[1]
-                        final_path = str(self.BASE_DIR+"\\hlib\\")
-
-                        ends_of_path = path[-1]
-                        for x in path[:-1]:
-                              final_path += x + "\\"
-                        final_path_ld = final_path + ends_of_path + ".ld"
-                        # final_path_wld = final_path + ends_of_path + ".wld"
-                        final_path_h = final_path + ends_of_path + ".hpp"
-                        final_path += ends_of_path + ".cc"
-                        try:
-                              with open(final_path, 'r') as fd:
-                                    cpp_code = fd.read()
-                                    with open(final_path_h,'r') as fh :
-                                          hpp_code = fh.read()
-                                          self.imported.append(name)
-                                          self.add_to_output(cpp_code,hpp_code)
-                        except FileNotFoundError:
-                              HascalError(f"cannot found '{name}' library. Are you missing a library ?")
-                        # if isfile(final_path_wld):
-                        #       with open(final_path_ld) as f:
-                        #             ld = f.read().split(',')
-                        #             self.LDFLAGS += ld  
-                        if isfile(final_path_ld):
-                              with open(final_path_ld) as f:
-                                    ld = list(f.read().split(','))
-                                    for i in ld :
-                                          self.LDFLAGS.append(i)                                          
                   else :
-                        name = '.'.join(name for name in node[1])
-                        path = node[1]
-                        final_path = str(self.BASE_DIR+"/hlib/")
+                        result = cuse(Generator,node[1],self.BASE_DIR)
 
-                        ends_of_path = path[-1]
-                        for x in path[:-1]:
-                              final_path += x + "/"
-                        final_path_ld = final_path + ends_of_path + ".ld"
-                        # final_path_wld = final_path + ends_of_path + ".wld"
-                        final_path_h = final_path + ends_of_path + ".hpp"
-                        final_path += ends_of_path + ".cc"
-                        try:
-                              with open(final_path, 'r') as fd:
-                                    cpp_code = fd.read()
-                                    with open(final_path_h,'r') as fh :
-                                          hpp_code = fh.read()
-                                          self.imported.append(name)
-                                          self.add_to_output(cpp_code,hpp_code)
-                        except FileNotFoundError:
-                              HascalError(f"cannot found '{name}' library. Are you missing a library ?")
-                        # if isfile(final_path_wld):
-                        #       with open(final_path_ld) as f:
-                        #             ld = f.read().split(',')
-                        #             self.LDFLAGS += ld  
-                        if isfile(final_path_ld):
-                              with open(final_path_ld) as f:
-                                    ld = list(f.read().split(','))
-                                    for i in ld :
-                                          self.LDFLAGS.append(i)   
-
-                  return {'expr':'','type':''}
-            
-            if node[0] == 'cinclude_local':
-                  if node[1] in self.imported :
-                        ...
-                  if sys.platform.startswith('win32'):
-                        name = '.'.join(name for name in node[1])
-                        path = name.split('.')
-                        final_path = ""
-
-                        ends_of_path = path[-1]
-                        for x in path[:-1]:
-                              final_path += x + "\\"
-                        final_path_ld = final_path + ends_of_path + ".ld"
-                        final_path_h = final_path + ends_of_path + ".hpp"
-                        final_path += ends_of_path + ".cc"
-
-                        try:
-                              with open(final_path, 'r') as fd:
-                                    cpp_code = fd.read()
-                                    with open(final_path_h,'r') as fh :
-                                          hpp_code = fh.read()
-                                          self.imported.append(name)
-                                          self.add_to_output(cpp_code,hpp_code)
-                        except FileNotFoundError:
-                              HascalError(f"cannot found '{name}' library. Are you missing a library ?")
-                        if isfile(final_path_ld):
-                              with open(final_path_ld) as f:
-                                    ld = f.read().split(',')
-                                    self.LDFLAGS += ld  
-                              
-                  else :
-                        name = '.'.join(name for name in node[1])
-                        path = name.split('.')
-                        final_path = ""
-
-                        ends_of_path = path[-1]
-                        for x in path[:-1]:
-                              final_path += x + "\\"
-                        final_path_ld = final_path + ends_of_path + ".ld"
-                        final_path_h = final_path + ends_of_path + ".hpp"
-                        final_path += ends_of_path + ".cc"
-
-                        try:
-                              with open(final_path, 'r') as fd:
-                                    cpp_code = fd.read()
-                                    with open(final_path_h,'r') as fh :
-                                          hpp_code = fh.read()
-                                          self.imported.append(name)
-                                          self.add_to_output(cpp_code,hpp_code)
-                        except FileNotFoundError:
-                              HascalError(f"cannot found '{name}' library. Are you missing a library ?")
-                        if isfile(final_path_ld):
-                              with open(final_path_ld) as f:
-                                    ld = f.read().split(',')
-                                    self.LDFLAGS += ld  
+                        self.imported.append(name)
+                        self.add_to_output(result['cpp_code'],result['header_code'])
+                        self.LDFLAGS += result["LDFLAGS"]
 
                   return {'expr':'','type':''}
             #-------------------------------------

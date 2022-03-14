@@ -19,7 +19,7 @@ class Lexer(Lexer):
                 LBRCK,RBRCK,
                 TRUE,FALSE,
                 VAR,CONST,
-                USE,LOCAL,
+                USE,
                 FUNCTION,
                 BREAK,CONTINUE,
                 CUSE,
@@ -59,8 +59,8 @@ class Lexer(Lexer):
         NAME["const"] = CONST
         
         NAME["use"] = USE
-        NAME["local"] = LOCAL
-        
+        NAME["cuse"] = CUSE
+
         NAME["int"] = INTVAR
         NAME["string"] = STRINGVAR
         NAME["char"] = CHARVAR
@@ -89,8 +89,6 @@ class Lexer(Lexer):
         
         NAME["break"] = BREAK
         NAME["continue"] = CONTINUE
-
-        NAME["cuse"] = CUSE
 
         NAME["new"] = NEW
         NAME["delete"] = DELETE
