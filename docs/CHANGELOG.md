@@ -5,8 +5,10 @@
 #### New features
 
 #### Changes
+- improve importing system
 
 #### Bug fixes
+- fix repetitious imports
 
 #### Removed
 
