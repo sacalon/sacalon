@@ -90,7 +90,7 @@ Any contribution is welcome :)
 <!-- [![graph](https://contrib.rocks/image?repo=hascal/hascal)](https://github.com/hascal/hascal/graphs/contributors)
 -->
 ## License
-The compiler and the standard libraries are licensed under the **"MIT License"**,
+The compiler and standard libraries are licensed under the **"MIT License"**,
 Read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more information.
 
 ## About
