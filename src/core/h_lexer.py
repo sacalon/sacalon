@@ -10,7 +10,7 @@ class Lexer(Lexer):
                 INTVAR, STRINGVAR, CHARVAR,BOOLVAR,FLOATVAR,VOIDVAR,
                 NUMBER, STRING,CHAR,MULTILINE_STRING,
                 GREATER, LESS, EQEQ, NOTEQ, GREATEREQ, LESSEQ,NOT,AND,OR,
-                PLUS, TIMES, MINUS, DIVIDE,
+                PLUS, TIMES, MINUS, DIVIDE,POW,
                 DOT,
                 ASSIGN,
                 COMMA, COLON,
@@ -24,7 +24,7 @@ class Lexer(Lexer):
                 BREAK,CONTINUE,
                 CUSE,
                 STRUCT,ENUM,
-                AMP,
+                AMP,QS,
                 NEW,DELETE,AT}
         ignore = ' \t'
         ignore_comment_slash = r'//.*'
@@ -36,6 +36,7 @@ class Lexer(Lexer):
         EQEQ   = r'=='
         MINUS  = r'-'
         TIMES  = r'\*'
+        POW = r'\^'
         DIVIDE = r'/'
         ASSIGN = r'='
         LPAREN = r'\('
@@ -54,6 +55,7 @@ class Lexer(Lexer):
         DOT = r'\.'
         AMP = r'&'
         AT = r'@'
+        QS = r'\?'
         
         NAME["var"] = VAR
         NAME["const"] = CONST
@@ -111,6 +113,8 @@ class Lexer(Lexer):
         @_(r'\n+')
         def newline(self, t):
                 self.lineno += t.value.count('\n')
+
+
 
         def error(self, t):
                 HascalError("Illegal character '%s':%s" % (t.value[0],t.lineno))

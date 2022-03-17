@@ -1,6 +1,5 @@
 import sys
 import colorama
-import warnings
 
 class HascalError:
     def __init__(self, exception_message):
@@ -14,4 +13,4 @@ class HascalError:
 class HascalWarning:
     def __init__(self, warning_message):
         colorama.init()
-        warnings.warn(colorama.Fore.YELLOW+"Warning : "+colorama.Style.RESET_ALL+warning_message)
+        print(colorama.Fore.YELLOW+"Warning : "+colorama.Style.RESET_ALL+warning_message)

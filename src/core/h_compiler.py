@@ -1,4 +1,4 @@
-from .h_error import HascalError
+from .h_error import HascalError, HascalWarning
 from .h_lexer import Lexer
 from .h_parser import Parser
 from .h_import import use, cuse
@@ -40,7 +40,9 @@ class Generator(object):
             }
 
             self.vars = { } # global vars
-            self.consts = { } # global consts
+            self.consts = {
+                  'NULL' : Const('NULL',Type('NULL',True,category='all-nullable'))
+            } # global consts
 
             # functions
             self.funcs = {
@@ -125,9 +127,7 @@ class Generator(object):
                         result.append(self.walk(statement))
                   self.vars = current_vars
                   return result
-            #-------------------------------------
-            # statement declares :
-            
+            #-------------------------------------            
             # var <name> = <expr>
             if node[0] == 'declare' and node[1] == "no_type":
                   _name = node[2]
@@ -139,6 +139,8 @@ class Generator(object):
                         HascalError(f"'{_name}' exists, cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalError(f"'{_name}' defined as a type, cannot redefine it as a variable:{_line}")
+                  elif _expr['type'].category == 'all-nullable' :
+                        HascalError(f"Assign 'NULL' to non-typed variable '{_name}':{_line}")
                   else:
                         members = {}
 
@@ -162,7 +164,9 @@ class Generator(object):
                   if (_name in self.vars or _name in self.consts) and self.scope == False :
                         HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
-                        HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")  
+                        HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                  elif is_nullable(_type['type']) == False :
+                        HascalError(f"The non-nullable variable '{_name}' must be initialized.\nTry adding an initializer expression:{_line}")
                   else:
                         members = {}
                         if isinstance(_type['type'],Struct) : members = _type['type'].members
@@ -187,8 +191,12 @@ class Generator(object):
                         HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                  elif is_nullable_compatible_type(_expr['type'],_type['type']) == False:
+                        HascalError(f"Assign 'NULL' to non-nullable variable '{_name}':{_line}")
+                  elif _expr['type'].category == 'all-nullable' and _name['type'].is_ptr == False :
+                        HascalError(f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL")
                   elif is_compatible_type(_expr['type'],_type['type']) == False :
-                        HascalError(f"Mismatched type {_type} and {_expr['type']}:{_line}")
+                        HascalError(f"Mismatched type {_type['type'].get_name_for_error()} and {_expr['type'].get_name_for_error()}:{_line}")
                   else:
                         members = {}
                         if isinstance(_type['type'],Struct) : members = _type['type'].members
@@ -211,7 +219,6 @@ class Generator(object):
                         HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")   
                   elif _name in self.types :
                         HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")   
-   
                   else:
                         self.vars[_name] = Var(_name,Array(_type['type']),is_array=True)
                         expr = {
@@ -229,11 +236,15 @@ class Generator(object):
                   _line = node[5]
 
                   if (_name in self.vars or _name in self.consts) and self.scope == False :
-                        HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
+                        HascalError(f"'{_name}' exists, cannot redefine it:{_line}")
                   elif _name in self.types :
-                        HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                        HascalError(f"'{_name}' defined as a type, cannot redefine it as a variable:{_line}")
+                  elif is_nullable_compatible_type(_expr['type'],_type['type']) == False:
+                        HascalError(f"Assign 'NULL' to non-nullable variable '{_name}':{_line}")
+                  elif _expr['type'].category == 'all-nullable' and _name['type'].is_ptr == False :
+                        HascalError(f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL")
                   elif is_compatible_type(_expr['type'],Array(_type['type'])) == False :
-                        HascalError(f"Mismatched type {Array(_type['type'])} and {_expr['type']}:{_line}")    
+                        HascalError(f"Mismatched type {Array(_type['type']).get_name_for_error()} and {_expr['type'].get_name_for_error()}:{_line}")    
                   else:
                         self.vars[_name] = Var(_name,Array(_type['type']),is_array=True)
 
@@ -243,11 +254,17 @@ class Generator(object):
                               'name' : _name,
                         }
                         return expr
-                              
+            # const <name> : <return_type>
+            if node[0] == 'declare' and node[1] == "const_no_expr":
+                  _name = node[3]
+                  _line = node[5]
+
+                  HascalError(f"Uninitialized const '{_name}'")
+
             # const <name> : <return_type> = <expr>
             if node[0] == 'declare' and node[1] == "const":
                   _name = node[3]
-                  _type = self.walk(node[2])['expr']
+                  _type = self.walk(node[2])
                   _expr = self.walk(node[4])
                   _line = node[5]
 
@@ -255,15 +272,17 @@ class Generator(object):
                         HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalError(f"'{_name}' defined as a type ,cannot redefine it as a constant:{_line}")
-                  elif str(_type) != str(_expr['type']) :
-                        HascalError(f"Mismatched type {_type} and {_expr['type']}:{_line}")  
-                  elif not _type in self.types :
-                        HascalError(f"Type '{_type}' not defined:{_line}")
+                  elif is_nullable_compatible_type(_expr['type'],_type['type']) == False:
+                        HascalError(f"Assign 'NULL' to non-nullable const '{_name}':{_line}")
+                  elif _expr['type'].category == 'all-nullable' and _name['type'].is_ptr == False :
+                        HascalError(f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL")
+                  elif is_compatible_type(_expr['type'],_type['type']) == False :
+                        HascalError(f"Mismatched type {_type['type'].get_name_for_error()} and {_expr['type'].get_name_for_error()}:{_line}") 
                   else:
-                        self.consts[_name] = Const(_name,copy.deepcopy(self.types[_type]))
+                        self.consts[_name] = Const(_name,_type['type'])
                         expr = {
                               'expr' : "const %s %s = %s ;\n" % (_type,_name,_expr['expr']),
-                              'type' : copy.deepcopy(self.types[_type]),
+                              'type' : _type['type'],
                               'name' : _name,
                         }
                         return expr
@@ -276,7 +295,9 @@ class Generator(object):
                   if (_name in self.vars or _name in self.consts) and self.scope == False :
                         HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
-                        HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")  
+                        HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
+                  elif is_nullable(_type['type']) == False :
+                        HascalError(f"The non-nullable variable '{_name}' must be initialized.\nTry adding an initializer expression:{_line}")
                   else:
                         members = {}
                         if isinstance(_type['type'],Struct)  : members = _type['type'].members
@@ -301,8 +322,12 @@ class Generator(object):
                         HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
                   elif _name in self.types :
                         HascalError(f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}")
-                  elif str(_type['type']) != str(_expr['type']) :
-                        HascalError(f"Mismatched type {_type['type']} and {_expr['type']}:{_line}")
+                  elif is_nullable_compatible_type(_expr['type'],_type['type']) == False:
+                        HascalError(f"Assign 'NULL' to non-nullable variable '{_name}':{_line}")
+                  elif _expr['type'].category == 'all-nullable' and _name['type'].is_ptr == False :
+                        HascalError(f"Converting to non-pointer type '{_type['type']}' from NULL")
+                  elif is_compatible_type(_expr['type'],_type['type']) == False :
+                        HascalError(f"Mismatched type {_type['type'].get_name_for_error()} and {_expr['type'].get_name_for_error()}:{_line}") 
                   else:
                         members = {}
                         if isinstance(_type['type'],Struct)  : members = _type['type'].members
@@ -315,23 +340,29 @@ class Generator(object):
                         }
                         return expr
             
-            # const <name> = <expr>
-            if node[0] == 'declare' and node[1] == "const":
+            # var <name> = <expr>
+            if node[0] == 'declare' and node[1] == "no_type":
                   _name = node[2]
                   _expr = self.walk(node[3])
-                  _type = _expr['type']
+                  _type = copy.deepcopy(_expr['type'])
                   _line = node[4]
 
-                  if (_name in self.vars or _name in self.consts) and self.scope == False :
+                  if (_name in self.vars or _name in self.consts) and self.scope == False: 
                         HascalError(f"'{_name}' exists, cannot redefine it:{_line}")
                   elif _name in self.types :
-                        HascalError(f"'{_name}' defined as a type, cannot redefine it as a constant:{_line}")   
+                        HascalError(f"'{_name}' defined as a type, cannot redefine it as a constant:{_line}")
+                  elif _expr['type'].category == 'all-nullable' :
+                        HascalError(f"Assign 'NULL' to non-typed variable '{_name}':{_line}")
                   else:
-                        self.consts[_name] = Const(_name,copy.deepcopy(self.types[_type]))
+                        members = {}
 
+                        if isinstance(_type,Struct) :
+                              members = _type.members
+                        self.vars[_name] = Const(_name,_type,members=members)
+                        res = "auto %s = %s;\n" % (_name,_expr['expr'])
                         expr = {
-                              'expr' : "const auto %s = %s ;\n" % (_name,_expr['expr']),
-                              'type' : copy.deepcopy(self.types[_type]),
+                              'expr' : res,
+                              'type' : _type,
                               'name' : _name,
                         }
                         return expr
@@ -362,9 +393,14 @@ class Generator(object):
                   _expr = self.walk(node[2])
                   _line = node[3]
 
-                  if is_compatible_type(_name['type'],_expr['type']) == False:
-                        HascalError(f"Mismatched type '{_name['type']}' and '{_expr['type']}':{_line}") 
-                  
+                  if is_nullable_compatible_type(_name['type'],_expr['type']) == False:
+                        HascalError(f"Assign 'NULL' to non-nullable variable '{_name['expr']}':{_line}")
+                  elif _expr['type'].category == 'all-nullable' and _name['type'].is_ptr == False :
+                        HascalError(f"Converting to non-pointer type '{_name['type']}' from NULL")
+                  elif is_compatible_type(_name['type'],_expr['type']) == False:
+                        HascalError(f"Mismatched type '{_name['type'].get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}") 
+                  elif _expr['type'].category == 'all-nullable':
+                        HascalWarning(f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}")
                   expr = {
                         'expr' : '%s = %s;' % (_name['expr'],_expr['expr']),
                         'type' : _name['type']
@@ -379,10 +415,17 @@ class Generator(object):
                   _line = node[4]
 
                   if not isinstance(_name['type'],Array) :
-                        HascalError(f"'{_name['type']}' is not subscriptable:{_line}")
+                        HascalError(f"'{_name['expr']}' is not subscriptable:{_line}")
 
-                  if is_compatible_type(_name['type'].type_obj,_expr['type']) == False:
-                        HascalError(f"Mismatched type '{_name['type'].type_obj}' and '{_expr['type']}':{_line}") 
+                  if is_nullable_compatible_type(_name['type'].type_obj,_expr['type']) == False:
+                        HascalError(f"Assign 'NULL' to non-nullable variable '{_name['expr']}':{_line}")
+                  elif _expr['type'].category == 'all-nullable' and _name['type'].is_ptr == False:
+                        HascalError(f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL")
+                  elif is_compatible_type(_name['type'].type_obj,_expr['type']) == False:
+                        HascalError(f"Mismatched type '{_name['type'].type_obj.get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}") 
+                  elif _expr['type'].category == 'all-nullable':
+                        HascalWarning(f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}")
+                  
                   expr = {
                         'expr' : '%s[%s] = %s;' % (_name['expr'],_index['expr'],_expr['expr']),
                         'type' : _name['type'].type_obj
@@ -398,17 +441,21 @@ class Generator(object):
                   _line = node[5]
 
                   if not isinstance(_name['type'],Array) :
-                        HascalError(f"'{_name['type']}' is not subscriptable:{_line}")
-                  
+                        HascalError(f"'{_name['expr']}' is not subscriptable:{_line}")
                   if not isinstance(_name['type'].type_obj,Struct) :
-                        HascalError(f"'{_name['type']}' is not a struct:{_line}")
-                  
+                        HascalError(f"'{_name['expr']}[{_index['expr']}]' is not a struct:{_line}")
                   if not _field in _name['type'].type_obj.members :
-                        HascalError(f"'{_name['type']}' has no field '{_field}':{_line}")
-
-                  if is_compatible_type(_name['type'].type_obj.members[_field],_expr['type']) == False:
-                        HascalError(f"Mismatched type '{_name['type'].type_obj.members[_field]}' and '{_expr['type']}':{_line}")
-
+                        HascalError(f"'{_name['expr']}[{_index['expr']}]' has no field '{_field}':{_line}")
+                  
+                  if is_nullable_compatible_type(_name['type'].type_obj.members[_field],_expr['type']) == False:
+                        HascalError(f"Assign 'NULL' to non-nullable variable '{_name['expr']}[{_index['expr']}].{_field}':{_line}")
+                  elif _expr['type'].category == 'all-nullable' and _name['type'].is_ptr == False :
+                        HascalError(f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL")
+                  elif is_compatible_type(_name['type'].type_obj.members[_field],_expr['type']) == False:
+                        HascalError(f"Mismatched type '{_name['type'].type_obj.members[_field].get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}")
+                  elif _expr['type'].category == 'all-nullable':
+                        HascalWarning(f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}")
+                  
                   expr = {
                         'expr' : '%s[%s].%s = %s;' % (_name['expr'],_index['expr'],_field,_expr['expr']),
                         'type' : _name['type'].type_obj.members[_field]
@@ -423,11 +470,19 @@ class Generator(object):
                   _line = node[3]
 
                   if not _type.is_ptr :
-                        HascalError(f"Invalid type argument of unary '*' (have '{_type['type']}'):{_line}")
+                        HascalError(f"Invalid type argument of unary '^' (have '{_type['type'].get_name_for_error()}'):{_line}")
                   _type.is_ptr = False
                   _type.ptr_str = ''
-                  if is_compatible_type(_type,_expr['type']) == False :
-                        HascalError(f"Mismatched type '{_type}' and '{_expr['type']}':{_line}")
+
+                  if is_nullable_compatible_type(_type,_expr['type']) == False:
+                        HascalError(f"Assign 'NULL' to non-nullable variable '{_name['expr']}':{_line}")
+                  elif _expr['type'].category == 'all-nullable' and _name['type'].is_ptr == False :
+                        HascalError(f"Converting to non-pointer type '{_type.get_name_for_error()}' from NULL")
+                  elif is_compatible_type(_type,_expr['type']) == False :
+                        HascalError(f"Mismatched type '{_type.get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}")
+                  elif _expr['type'].category == 'all-nullable':
+                        HascalWarning(f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}")
+                  
                   expr = {
                         'expr' : "*%s = %s;\n" % (_name['expr'],self.walk(node[2])['expr']),
                         'type' : _type,
@@ -845,8 +900,12 @@ class Generator(object):
                   _expr = self.walk(node[2])
                   _line = node[3]
 
+                  if is_nullable_compatible_type(_type['type'],_expr['type']) == False:
+                        HascalError(f"Assign 'NULL' to non-nullable variable:{_line}")
+                  elif _expr['type'].category == 'all-nullable' and _name['type'].is_ptr == False :
+                        HascalError(f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL")
                   if is_compatible_type(_type['type'],_expr['type']) == False:
-                        HascalError(f"Mismatched type '{_type['type']}' and '{_expr['type']}' in 'new' expression:{_line}")
+                        HascalError(f"Mismatched type '{_type['type'].get_name_for_error()}' and '{_expr['type'].get_name_for_error()}' in 'new' expression:{_line}")
                   
                   _type['type'].is_ptr = True
                   _type['type'].ptr_str += '*'
@@ -890,7 +949,7 @@ class Generator(object):
                   _line = node[2]
                   
                   if not _type.is_ptr :
-                        HascalError(f"Invalid type argument of unary '*' (have '{_type}'):{_line}")
+                        HascalError(f"Invalid type argument of unary '^' (have '{_type}'):{_line}")
                   
                   
                   _type.is_ptr = False
@@ -996,16 +1055,21 @@ class Generator(object):
                                     return expr
                   else :
                         HascalError(f"Function '{_name}' not defined:{_line}")
+            if node[0] == 'call_stmt' :
+                  _expr = self.walk(node[1])
+                  _expr['expr'] += ';\n'
+                  return _expr
             # --------------operators-----------------
-            # todo : error if string *-/ string
             # <expr> + <expr>
             if node[0] == 'add':
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
                   _line = node[3]
 
+                  if (_expr0['type'].category == 'all-nullable' or _expr1['type'].category == 'all-nullable') and (_expr0['type'].is_ptr != True or _expr0['type'].is_ptr != True) :
+                        HascalError(f"'NULL' used in arithmetic:{_line}")
                   if is_compatible_type(_expr0['type'],_expr1['type']) == False:
-                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        HascalError(f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}")
                         
                   expr = {
                         'expr' : '%s + %s' % (_expr0['expr'],_expr1['expr']),
@@ -1018,13 +1082,14 @@ class Generator(object):
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
                   _line = node[3]
-
+                  
+                  if (_expr0['type'].category == 'all-nullable' or _expr1['type'].category == 'all-nullable') and (_expr0['type'].is_ptr != True or _expr0['type'].is_ptr != True) :
+                        HascalError(f"'NULL' used in arithmetic:{_line}")
                   if is_compatible_type(_expr0['type'],_expr1['type']) == False:
-                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")  
-
+                        HascalError(f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}")  
                   if _expr0['type'].category != 'number' or _expr1['type'].category != 'number':
-                        HascalError(f"Cannot subtract {_expr0['type']} and {_expr1['type']}:{_line}")
-
+                        HascalError(f"Cannot subtract {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}")
+                  
                   expr = {
                         'expr' : '%s - %s' % (_expr0['expr'],_expr1['expr']),
                         'type' : _expr0['type'] # or : _expr1['type']
@@ -1037,8 +1102,11 @@ class Generator(object):
                   _expr1 = self.walk(node[2])
                   _line = node[3]
 
+                  if (_expr0['type'].category == 'all-nullable' or _expr1['type'].category == 'all-nullable') and (_expr0['type'].is_ptr != True or _expr0['type'].is_ptr != True):
+                        HascalError(f"'NULL' used in arithmetic:{_line}")
+                  
                   if is_compatible_type(_expr0['type'],_expr1['type']) == False:
-                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}") 
+                        HascalError(f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}") 
 
                   if _expr0['type'].category != 'number' or _expr1['type'].category != 'number':
                         HascalError(f"Cannot multiply non-number type:{_line}")
@@ -1055,8 +1123,11 @@ class Generator(object):
                   _expr1 = self.walk(node[2])
                   _line = node[3]
 
+                  if (_expr0['type'].category == 'all-nullable' or _expr1['type'].category == 'all-nullable') and (_expr0['type'].is_ptr != True or _expr0['type'].is_ptr != True):
+                        HascalError(f"'NULL' used in arithmetic:{_line}")
+                  
                   if is_compatible_type(_expr0['type'],_expr1['type']) == False:
-                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        HascalError(f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}")
                   
                   if _expr0['type'].category != 'number' or _expr1['type'].category != 'number':
                         HascalError(f"Cannot divide non-number type:{_line}")
@@ -1128,9 +1199,11 @@ class Generator(object):
                   _expr0 = self.walk(node[1])
                   _expr1 = self.walk(node[2])
                   _line = node[3]
-                  if is_compatible_type(_expr0['type'],_expr1['type']) == False:
-                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
-                  
+
+                  if is_nullable_compatible_type(_expr0['type'],_expr1['type']) == False:
+                        HascalError(f"'NULL' used in arithmetic:{_line}")
+                  elif is_nullable_compatible_type(_expr0['type'],_expr1['type']) == False and is_compatible_type(_expr0['type'],_expr1['type']) == False:
+                        HascalError(f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}")
                   else :
                         expr = {
                               'expr' : '%s == %s' % (_expr0['expr'],_expr1['expr']),
@@ -1145,7 +1218,7 @@ class Generator(object):
                   _line = node[3]
 
                   if is_compatible_type(_expr0['type'],_expr1['type']) == False:
-                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        HascalError(f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}")
                   # todo : check if type is int or bool else error  
                   else :
                         expr = {
@@ -1161,7 +1234,7 @@ class Generator(object):
                   _line = node[3]
 
                   if is_compatible_type(_expr0['type'],_expr1['type']) == False:
-                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        HascalError(f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}")
                   # todo : check if type is int or bool else error  
                   else :
                         expr = {
@@ -1177,7 +1250,7 @@ class Generator(object):
                   _line = node[3]
 
                   if is_compatible_type(_expr0['type'],_expr1['type']) == False:
-                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        HascalError(f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}")
                   # todo : check if type is int or bool else error  
                   else :
                         expr = {
@@ -1193,7 +1266,7 @@ class Generator(object):
                   _line = node[3]
 
                   if is_compatible_type(_expr0['type'],_expr1['type']) == False:
-                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        HascalError(f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}")
                   # todo : check if type is int or bool else error  
                   else :
                         expr = {
@@ -1209,7 +1282,7 @@ class Generator(object):
                   _line = node[3]
                   
                   if is_compatible_type(_expr0['type'],_expr1['type']) == False:
-                        HascalError(f"Mismatched type {_expr0['type']} and {_expr1['type']}:{_line}")
+                        HascalError(f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}")
                   # todo : check if type is int or bool else error    
                   else :
                         expr = {
@@ -1525,14 +1598,11 @@ class Generator(object):
                   }
                   return expr
             
-            # *<return_type>
+            # <return_type>^
             if node[0] == 'ptr_type':
                   _type = self.walk(node[1])
                   _line = node[2]
 
-                  if not _type['name'] in self.types:
-                        HascalError(f"{_type['name']} is not defined:{_line}")
-                  
                   if isinstance(_type['type'],Struct):
                         expr = {
                               'expr' : "%s*" % (_type['expr']),
@@ -1546,6 +1616,20 @@ class Generator(object):
                         'name' : _type['name'],
                   }
                   return expr
+            
+            # <return_type>?
+            if node[0] == 'nullable_type':
+                  _type = self.walk(node[1])
+                  _line = node[2]
+                  _type['type'].nullable = True
+
+                  expr = {
+                        'expr' : "%s" % (_type['expr']),
+                        'type' : _type['type'],
+                        'name' : _type['name'],
+                  }
+                  return expr
+
             #--------------------------------------------
             if node[0] == 'param_no' :
                   expr = {
@@ -1627,11 +1711,12 @@ class Generator(object):
                   return expr         
 
 class Var(object):
-      def __init__(self,name,type,is_array=False,members={}):
+      def __init__(self,name,type,is_array=False,members={},nullable=False):
             self.name = name
             self.type = type
             self.is_array = is_array
             self.members = members
+            self.nullable = nullable
 
 class Const(Var):
       ...
@@ -1643,13 +1728,14 @@ class Function(object):
             self.return_type = return_type
 
 class Struct(object):
-      def __init__(self,name,members,category='',is_ptr=False,ptr_str=''):
+      def __init__(self,name,members,category='',is_ptr=False,ptr_str='',nullable=False):
             self.name = name
             self.members = members
             self.stdtype = False
             self.is_ptr = is_ptr
             self.ptr_str = ptr_str
             self.category = name
+            self.nullable = nullable
       
       def __str__(self):
             return self.get_type_name()
@@ -1660,12 +1746,13 @@ class Enum(Struct):
       ...
 
 class Type(object):
-      def __init__(self,type_name,stdtype,category='',is_ptr=False,ptr_str=''):
+      def __init__(self,type_name,stdtype,category='',is_ptr=False,ptr_str='',nullable=False):
             self.type_name = type_name
             self.stdtype = stdtype
             self.is_ptr = is_ptr
             self.ptr_str = ptr_str
             self.category = category
+            self.nullable = nullable
       
       def __str__(self):
             return self.get_type_name()
@@ -1675,6 +1762,14 @@ class Type(object):
                   return '%s%s' % (self.type_name,self.ptr_str)
             else :
                   return self.type_name + self.ptr_str
+      
+      def get_name_for_error(self):
+            ptr_str = self.ptr_str.replace("*","^")
+
+            if self.is_ptr:
+                  return '%s%s' % (self.type_name,ptr_str)
+            else :
+                  return self.type_name + ptr_str
 class Array(Type):
       def __init__(self,type_obj,is_ptr=False,ptr_str=''):
             self.type_obj = type_obj
@@ -1690,7 +1785,13 @@ class Array(Type):
                   return "std::vector<%s>%s" % (self.ptr_str,self.get_type_name())
             elif isinstance(self.type_obj,Struct):
                   return "std::vector<%s>%s" % (str(self.type_obj),self.ptr_str)
+      def get_name_for_error(self):
+            ptr_str = self.ptr_str.replace("*","^")
 
+            if isinstance(self.type_obj,Type):
+                  return "[%s]%s" % (self.ptr_str,self.get_type_name())
+            elif isinstance(self.type_obj,Struct):
+                  return "[%s]%s" % (str(self.type_obj),self.ptr_str)
 def is_compatible_ptr(type_a,type_b):
       if type_a.is_ptr == type_b.is_ptr:
             return True
@@ -1698,10 +1799,12 @@ def is_compatible_ptr(type_a,type_b):
             return False
 
 
-def is_compatible_type(type_a,type_b):
+def is_compatible_type(type_a,type_b):    
       if type_a == type_b:
             return True
-      
+      if is_nullable_compatible_type(type_a,type_b):
+            return True
+
       if isinstance(type_a,Type) and isinstance(type_b,Type):
             if str(type_a.category) == str(type_b.category) and is_compatible_ptr(type_a,type_b):
                   return True
@@ -1715,3 +1818,16 @@ def is_compatible_type(type_a,type_b):
                   return False
 
       return False
+
+def is_nullable(type_obj):
+      if type_obj.nullable == True :
+            return True
+      return False
+
+def is_nullable_compatible_type(type_a,type_b):
+      if (is_nullable(type_a) == True and type_b.category == 'all-nullable') or (is_nullable(type_b) == True and type_a.category == 'all-nullable'):
+            return True
+      if (is_nullable(type_a) == False and type_b.category == 'all-nullable') or (is_nullable(type_b) == False and type_a.category == 'all-nullable'):
+            return False
+      
+      return True

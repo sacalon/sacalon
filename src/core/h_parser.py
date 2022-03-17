@@ -134,6 +134,19 @@ class Parser(Parser):
       def var_declare(self, p):
            return ('declare','const_no_type', p.NAME, p.expr,p.lineno)
       
+      # const <name> : <return_type>
+      @_('CONST NAME COLON return_type')
+      def var_declare(self, p):
+           return ('declare','const_no_expr', p.NAME, p.return_type,p.lineno)
+      # const <name> : <return_type>
+      @_('CONST NAME COLON return_type2')
+      def var_declare(self, p):
+           return ('declare','const_no_expr', p.NAME, p.return_type2,p.lineno)
+      # const <name> : <return_type>
+      @_('CONST NAME COLON return_type3')
+      def var_declare(self, p):
+           return ('declare','const_no_expr', p.NAME, p.return_type3,p.lineno)
+
       # const <name> : <return_type> = <expr>
       @_('CONST NAME COLON return_type ASSIGN expr')
       def var_declare(self, p):
@@ -146,27 +159,23 @@ class Parser(Parser):
       #-----------------------------------
       # <name> = <expr>
       @_('name ASSIGN expr')
-      def assign(self, p):
+      def in_statement(self, p):
             return ('assign', ('var', p.name[0],p.name[1]), p.expr,p.lineno)
       
       # <name>[<expr>] = <expr>
       @_('name LBRCK expr RBRCK ASSIGN expr')
-      def assign(self, p):
+      def in_statement(self, p):
             return ('assign_var_index', ('var', p.name[0],p.name[1]),p.expr0,p.expr1,p.lineno)
       
       # <name>[<expr>].<name> = <expr>
       @_('name LBRCK expr RBRCK DOT name ASSIGN expr')
-      def assign(self, p):
+      def in_statement(self, p):
             return ('assign_var_index_struct', ('var', p.name0[0],p.name0[1]),p.expr0,p.name1[0],p.expr1,p.lineno)
       
       # *<name> = <expr>
-      @_('TIMES name ASSIGN expr')
-      def assign(self, p):
-            return ('assign_ptr', ('var', p.name[0],p.name[1]), p.expr,p.lineno)
-      
-      @_('assign')
+      @_('POW name ASSIGN expr')
       def in_statement(self, p):
-            return p.assign
+            return ('assign_ptr',('var', p.name[0],p.name[1]),p.expr,p.lineno)
       #-----------------------------------
       @_('if_stmt')
       def in_statement(self, p):
@@ -380,9 +389,9 @@ class Parser(Parser):
       def in_statement(self, p):
             return p.delete
       #------------------------------------
-      @_('expr')
+      @_('call')
       def in_statement(self, p):
-            return ('expr', p.expr)
+            return ('call_stmt',p.call)
       
       @_('expr')
       def exprs(self, p):
@@ -430,13 +439,15 @@ class Parser(Parser):
 
       # <name>(<args>)
       @_('NAME LPAREN args RPAREN')
-      def expr(self, p):
+      def call(self, p):
             return ('call', p.NAME, p.args,p.lineno)
-      
       # <name>()
       @_('NAME LPAREN RPAREN')
-      def expr(self, p):
+      def call(self, p):
             return ('call', p.NAME, (),p.lineno)
+      @_('call')
+      def expr(self,p):
+            return p.call
       
       # <name>
       @_('name')
@@ -667,11 +678,24 @@ class Parser(Parser):
       def return_type2(self, p):
             return ('return_type_array',p.return_type,p.lineno)
       
-
+      
       # <return_type>*
-      @_('return_type TIMES')
+      @_('return_type POW')
       def return_type3(self, p):
             return ('ptr_type',p.return_type,p.lineno)
+      
+      # <return_type>?
+      @_('return_type QS')
+      def return_type(self, p):
+            return ('nullable_type',p.return_type,p.lineno)
+      # <return_type>?
+      @_('return_type2 QS')
+      def return_type(self, p):
+            return ('nullable_type',p.return_type2,p.lineno)
+      # <return_type>?
+      @_('return_type3 QS')
+      def return_type(self, p):
+            return ('nullable_type',p.return_type3,p.lineno)
       #------------------------------------------
       # (<return_type>) <expr>
       @_('LPAREN return_type RPAREN expr')
@@ -689,8 +713,8 @@ class Parser(Parser):
             return ('pass_by_ref',('var', p.name[0],p.name[1]),p.lineno)
       
       # *<name>
-      @_('TIMES name')
+      @_('POW name')
       def expr(self, p):
             return ('pass_by_ptr',('var', p.name[0],p.name[1]),p.lineno)
-      # support for this : var x : int**
+      # todo : int**,...
       #------------------------------------------

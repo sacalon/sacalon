@@ -1,0 +1,6 @@
+function main() : int {
+    var a : int = 1
+    a = NULL
+
+    return 0
+}

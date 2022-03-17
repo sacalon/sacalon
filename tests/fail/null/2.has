@@ -1,0 +1,6 @@
+function main() : int {
+    var y = NULL
+
+
+    return 0
+}

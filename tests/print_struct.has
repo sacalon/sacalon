@@ -2,7 +2,7 @@ struct point {
     var x : int
     var y : int
     var array : [int]
-    var self : point*
+    var self : point^
 }
 
 function main() : int {

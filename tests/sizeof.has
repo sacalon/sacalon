@@ -1,12 +1,12 @@
 function is_86():bool{
-    if sizeof(void*) == 4 {
+    if sizeof(void^) == 4 {
         return true
     }
     return false
 }
 
 function is_64():bool{
-    if sizeof(void*) == 8 {
+    if sizeof(void^) == 8 {
         return true
     }
     return false

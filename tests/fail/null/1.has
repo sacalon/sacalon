@@ -1,0 +1,9 @@
+function main() : int {
+    var x : int* = NULL
+
+    var y = NULL
+    var z : int = NULL
+
+
+    return 0
+}

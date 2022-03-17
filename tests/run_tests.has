@@ -69,5 +69,8 @@ function main():int {
 
     print("colorized_term.has:")
     system("hascal.py colorized_term.has")
+
+    print("null_in_arth.has:")
+    system("hascal.py null_in_arth.has")
     return 0
 }

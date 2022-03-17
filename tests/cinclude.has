@@ -1,4 +1,4 @@
-local cuse add
+cuse add
 
 function add(a:int,b:int):int // function definition
 

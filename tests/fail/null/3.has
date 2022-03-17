@@ -1,0 +1,5 @@
+function main() : int {
+    var z : int = NULL
+
+    return 0
+}
