@@ -15,7 +15,9 @@
   [AUR Package](https://aur.archlinux.org/packages/hascal-git)
 
   [![](https://img.shields.io/gitter/room/hascal/community?style=for-the-badge)](https://gitter.im/hascal/community)
-  
+  [![Pypi](https://img.shields.io/pypi/v/hascal)](hascal)
+  [![Downloads](https://pepy.tech/badge/hascal)](hascal)
+ 
 </div>
 
 **Hascal** is a general purpose and open source programming language designed to build optimal, maintainable, reliable and efficient software.
@@ -30,6 +32,12 @@
 - [x] Functional programming
 - [x] C++ on backend
 - [x] Compatible with C\C++\Obj-C
+
+## Install with pip
+```
+pip install hascal
+```
+Or [Build from source](docs/index.md)
 
 ## Examples
 Hello World :
