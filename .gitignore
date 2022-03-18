@@ -137,3 +137,10 @@ dmypy.json
 src/build/
 src/dist/
 src/hascal.spec
+
+# Example binery files
+examples/
+
+
+!*.has
+!*.bf
