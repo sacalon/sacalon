@@ -22,7 +22,7 @@ jobs:
       run: python -m build
     - name: Get version from file
       run: |
-        VER=$(cat version)
+        VER=$(cat VERISON)
         echo "VERSION=$VER" >> $GITHUB_ENV
     - name: Install locally to test
       run: python -m pip install ./dist/hascal-${{ env.VERSION }}.tar.gz
