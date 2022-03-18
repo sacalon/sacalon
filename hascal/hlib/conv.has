@@ -24,4 +24,4 @@ function to_float(val:double):float
 function to_char(val:int):char
 function to_char(val:char):char
 
-function to_cstr(val:string):char*
+function to_cstr(val:string):char^
