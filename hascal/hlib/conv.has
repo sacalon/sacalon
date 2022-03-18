@@ -11,7 +11,7 @@ function to_string(val:int):string
 function to_string(val:float):string
 function to_string(val:bool):string
 function to_string(val:char):string
-function to_string(val:char*):string
+function to_string(val:char^):string
 function to_string(val:string):string
 
 function to_float(val:int):float
