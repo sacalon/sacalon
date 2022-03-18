@@ -3,6 +3,7 @@ import platform
 HASCAL_COMPILER_VERSION = "1.3.8"
 HASCAL_GITHUB_REPO = "https://github.com/hascal/hascal"
 
+
 def help_all():
     output_message = [
         f"Hascal Compiler {HASCAL_COMPILER_VERSION} {str(platform.system()).lower()}/{str(platform.machine()).lower()}",
@@ -19,6 +20,7 @@ def help_all():
     ]
     for line in output_message:
         print(line)
+
 
 def help_short():
     output_message = [
