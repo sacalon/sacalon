@@ -12,8 +12,10 @@
 
   [IDE Integration](docs/ide.md) |
   [Library Index](https://github.com/hascal/libs)
-  
-  [![Gitter](https://img.shields.io/gitter/room/hascal/community?style=for-the-badge)](https://gitter.im/hascal/community)
+  [AUR Package](https://aur.archlinux.org/packages/hascal-git)
+
+  [![Gitter](https://img.shields.io/gitter/room/hascal/community?style=for-the-badge)]
+  (https://gitter.im/hascal/community)
   
 </div>
 
