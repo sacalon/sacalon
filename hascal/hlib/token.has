@@ -1,6 +1,0 @@
-// a small library for make a tokenizer
-struct Token {
-    var type : string
-    var value : string
-}
-// soon
