@@ -2,32 +2,11 @@
 [Hascal](https://hascal.github.io) is a general-purpose open source programming language that makes it easy to build simple,optimal, reliable, and efficient software. 
 
 ## Installation
-Prequistes :
 
-- python v3.8 or higher
-- pyinstaller 
-- GCC/G++>=8.0.0 on your `$PATH`
 
-First clone Hascal's source :
+```bash
+python setup.py install
 ```
-$ git clone https://github.com/hascal/hascal
-```
-
-Install prequistes(not gcc only python libs,if you already installed prequistes, skip this part):
-```
-$ make deps
-```
-
-Build hascal excutable file :
-
-  - On POSIX(Linux,MacOS,BSDs) :
-  ```
-  $ make
-  ```
-  - On Windows :
-  ```
-  $ make windows
-  ```
 
 ***Now your Hascal compiler is ready to use in `src/dist` folder!!!***
 NOTE: But you can add Hascal to `$PATH` for easily use.
