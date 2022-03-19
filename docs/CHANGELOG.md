@@ -3,15 +3,19 @@
 <summary>v1.3.8</summary>
 
 #### New features
+- non-nullable and nullable variables
 
 #### Changes
+- change pointer unary from `*` to `^`
 - improve importing system
 
 #### Bug fixes
-- fix repetitious imports
-
+- fix repetitious imports bug
+- fix #29 bug(by [@mmdbalkhi](https://github.com/mmdbalkhi))
+  
 #### Removed
-
+- remove `token` library
+  
 </details>
 
 <details>
