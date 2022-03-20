@@ -1,2 +1,8 @@
 include hascal/hlib/*/**
 include hascal/hlib/**
+include LICENSE
+include README.md
+graft docs
+graft examples
+graft tests
+global-exclude *.pyc

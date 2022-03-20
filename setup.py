@@ -1,9 +1,9 @@
 import setuptools
+from hascal import version
 
-print(setuptools.find_packages())
 setuptools.setup(
     name="hascal",
-    version="1.3.8",
+    version=version,
     author="Hascal Foundation",
     description="Hascal is a general purpose and open source programming language designed to build optimal, maintainable, reliable and efficient software.",
     packages=setuptools.find_packages(),
