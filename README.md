@@ -37,7 +37,6 @@
 ```
 pip install hascal
 ```
-Or [Build from source](docs/index.md)
 
 ## Examples
 Hello World :
