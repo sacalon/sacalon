@@ -25,10 +25,10 @@
 
 ## Features
 - [x] Easy to use and easy to learn
-- [x] Fast and powerful like C++
+- [x] Fast and powerful
 - [x] Inspired by Swift, Pascal and a bit Haskell
 - [x] Multi-paradigm
-- [x] Null safety by default
+- [x] Null safety by default[WIP]
 - [x] C++ on backend
 - [x] Compatible with C\C++\Obj-C
 
