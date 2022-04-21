@@ -316,7 +316,7 @@ class Generator(object):
             else:
                 self.consts[_name] = Const(_name, _type["type"])
                 expr = {
-                    "expr": "const %s %s = %s ;\n" % (_type, _name, _expr["expr"]),
+                    "expr": "const %s %s = %s ;\n" % (_type["type"], _name, _expr["expr"]),
                     "type": _type["type"],
                     "name": _name,
                 }

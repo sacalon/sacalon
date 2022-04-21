@@ -1,11 +1,11 @@
-var x : int
+var x : int?
 var y : int = 1
 var h : bool = true
 var z : [int] = [1,2]
 const pi : float = 3.14
 
 struct MyStruct {
-	var y : int
+	var y : int?
 }
 
 function main(argv:[string]) : int {
