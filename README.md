@@ -60,17 +60,10 @@ function main() : int {
     var z = 3
 
     var sum = plus(
-        plus(
-            x,
-            y
-        ),
-        z
+        plus(x,y),z
     )
 
-    var avg = divide(
-        sum,
-        3
-    )
+    var avg = divide(sum,3)
 
     print("Sum :",sum)
     print("Average :",avg)
@@ -91,6 +84,7 @@ Any contribution is welcome :)
 
 <!-- [![graph](https://contrib.rocks/image?repo=hascal/hascal)](https://github.com/hascal/hascal/graphs/contributors)
 -->
+
 ## License
 The compiler and standard libraries are licensed under the **"MIT License"**,
 Read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more information.
