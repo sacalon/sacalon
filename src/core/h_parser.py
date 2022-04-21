@@ -1,5 +1,5 @@
-from hascal.core.sly import Parser
-from hascal.core.h_lexer import Lexer
+from .sly import Parser
+from .h_lexer import Lexer
 
 
 class Parser(Parser):

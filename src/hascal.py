@@ -7,7 +7,7 @@
 # all rights reserved.
 
 from sys import argv
-from hascal.core.h_builder import HascalCompiler
+from core.h_builder import HascalCompiler
 import pathlib
 
 

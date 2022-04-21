@@ -1,8 +1,8 @@
-from hascal.core.h_lexer import Lexer  # hascal lexer
-from hascal.core.h_parser import Parser  # hascal parser
-from hascal.core.h_compiler import Generator, HLIB_BASE_DIR  # hascal to d compiler
-from hascal.core.h_error import HascalError  # hascal excpetion handling
-from hascal.core.h_help import *  # hascal compiler information
+from .h_lexer import Lexer  # hascal lexer
+from .h_parser import Parser  # hascal parser
+from .h_compiler import Generator, HLIB_BASE_DIR  # hascal to d compiler
+from .h_error import HascalError  # hascal excpetion handling
+from .h_help import *  # hascal compiler information
 
 from os.path import isfile
 from subprocess import DEVNULL, STDOUT, PIPE, check_call, Popen

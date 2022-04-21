@@ -1,5 +1,5 @@
-from hascal.core.sly import Lexer
-from hascal.core.h_error import HascalError
+from .sly import Lexer
+from .h_error import HascalError
 from sys import exit
 
 

@@ -1,6 +1,6 @@
-from hascal.core.h_lexer import Lexer
-from hascal.core.h_parser import Parser
-from hascal.core.h_error import HascalError, HascalWarning
+from .h_lexer import Lexer
+from .h_parser import Parser
+from .h_error import HascalError, HascalWarning
 from sys import platform
 from os.path import isfile
 from pathlib import Path
