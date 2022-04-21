@@ -28,7 +28,7 @@
 - [x] Fast and powerful
 - [x] Inspired by Swift, Pascal and a bit Haskell
 - [x] Multi-paradigm
-- [x] Null safety by default[WIP]
+- [x] Null safety by default
 - [x] C++ on backend
 - [x] Compatible with C\C++\Obj-C
 
