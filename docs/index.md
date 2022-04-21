@@ -70,16 +70,21 @@ function main() : int {
 
 ### Non nullable and nullable
 Hascal's variables and constants are non-nullable by default(i.e. they can't be `NULL`), but you can make them nullable by using `?` at the end of the type :
+
 ```typescript
 var foo : int = 1 // non-nullable
 var bar : int? = 1 // nullable
 ```
+
 so you can use `NULL` to set a variable to `NULL` :
+
 ```typescript
 foo = NULL // error
 bar = NULL // ok
 ```
+
 Also, you can make pointers to nullable variables :
+
 ```typescript
 var foo : int^ = NULL // error
 var bar : int^? = NULL // ok
