@@ -7,9 +7,6 @@ from os.path import isfile
 from pathlib import Path
 import copy
 
-HLIB_BASE_DIR = str(Path(__file__).parents[1])
-
-
 class Generator(object):
     LDFLAGS = []
 

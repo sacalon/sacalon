@@ -1,6 +1,6 @@
 from .h_lexer import Lexer  # hascal lexer
 from .h_parser import Parser  # hascal parser
-from .h_compiler import Generator, HLIB_BASE_DIR  # hascal to d compiler
+from .h_compiler import Generator  # hascal to c++ compiler
 from .h_error import HascalError  # hascal excpetion handling
 from .h_help import *  # hascal compiler information
 
@@ -163,22 +163,8 @@ class HascalCompiler(object):
 
     # hascal to c++ compiler function
     def compile(self):
-        tokens = self.lexer.tokenize(self.code)
-        tree = self.parser.parse(tokens)
-        output = self.generator.generate(tree)
-        HLIB_BASE_DIR = (
-            self.BASE_DIR + "\\hlib\\"
-            if sys.platform == "win32"
-            else self.BASE_DIR + "/hlib/"
-        )
-
         tmp0 = self.argv[1]
         outname = self.argv[2] if len(self.argv) > 2 else tmp0[:-4]
-
-        # write output c++ code in a file
-        with open(outname + ".cc", "w") as fout:
-            fout.write(output)
-
         ARGS = {
             "compiler": "g++",
             "optimize": "",
@@ -186,8 +172,8 @@ class HascalCompiler(object):
             "no_check_gcc_g++": 1,
             "ccfile": outname + ".cc",
             "c++_version": "c++17",
-            "g++_out": 0,
-            "c++_code": 0,
+            "g++_out": False,
+            "c++_code": False,
         }
 
         for flag in self.generator.get_flags():
@@ -208,9 +194,19 @@ class HascalCompiler(object):
                     ARGS["no_check_gcc_g++"] = config["no_check_gcc_g++"]
                 if "g++_out" in config:
                     ARGS["g++_out"] = config["g++_out"]
+                if "c++_code" in config:
+                    ARGS["c++_code"] = config["c++_code"]
+        
+        tokens = self.lexer.tokenize(self.code)
+        tree = self.parser.parse(tokens)
+        output = self.generator.generate(tree)
 
+        # write output c++ code in a file
+        with open(outname + ".cc", "w") as fout:
+            fout.write(output)
+        
         # user may use other compiler instead of gcc\g++ for compiling hascal programs
-        if ARGS["no_check_gcc_g++"] == 1:
+        if ARGS["no_check_gcc_g++"] == True:
             # check if gcc installed
             try:
                 check_call(["g++", "--version"], stdout=DEVNULL, stderr=STDOUT)
@@ -251,7 +247,7 @@ class HascalCompiler(object):
         except:
             HascalError("Unknown error in compile file")
 
-        if ARGS["c++_code"] == 1:
+        if ARGS["c++_code"] == True:
             ...
         else:
             try:
