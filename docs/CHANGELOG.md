@@ -5,7 +5,7 @@
 #### New features
 
 #### Changes
-- add `download`,`upload` function to `http` library
+- add `download`,`upload`,`post` function to `http` library
 - `https` support for `http` library
 
 #### Bug fixes
