@@ -1,0 +1,8 @@
+use http
+
+function main() : int {
+    print(get("https://www.google.com"))
+    download("https://www.google.com","index.html")
+    post("https://postit.example.com/","name=Mohamamd&age=23")
+    return 0
+}
