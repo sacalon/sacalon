@@ -1,4 +1,4 @@
-**.has linguist-language=Pascal text=go
+**.has linguist-language=Pascal text=typescript
 examples/*.has linguist-documentation=false
 tests/**.has linguist-documentation=false
 sly/ linguist-detectable=false
