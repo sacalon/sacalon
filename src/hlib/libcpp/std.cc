@@ -240,4 +240,15 @@ std::ostream& operator<< (std::ostream& out, const std::vector<T>& v) {
   return out;
 }
 
+struct HascalException : public std::exception
+{
+	std::string msg;
+	HascalException(std::string msg){
+		this->msg = msg;
+	}
+	const char * what () const throw ()
+    {
+    	return this->msg.c_str();
+    }
+};
 // exit()

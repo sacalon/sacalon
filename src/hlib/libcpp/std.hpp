@@ -8,3 +8,4 @@
 #include <typeinfo>
 #include <unordered_map>
 #include <string_view>
+#include <exception>

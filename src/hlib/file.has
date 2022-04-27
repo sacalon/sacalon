@@ -6,7 +6,7 @@ std::string read_file(std::string path){
 	std::ifstream file;
 	file.open(path.c_str());
 	if(!file.good()){
-		throw std::runtime_error(std::string("File not found or access is denied"));
+		throw HascalException(std::string("File not found or access is denied"));
 	}
 	while(getline(file,tmp)){
 		res += tmp + "\n";
@@ -23,7 +23,7 @@ bool write_file(std::string path,std::string text){
 		file.close();
 		return true;
 	}catch (int x){
-		throw std::runtime_error(std::string("Cannot write the file"));
+		return false;
 	}
 	return false;
 }
