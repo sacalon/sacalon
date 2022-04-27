@@ -7,6 +7,7 @@ from os.path import isfile
 from pathlib import Path
 import copy
 
+
 class Generator(object):
     LDFLAGS = []
 
@@ -14,6 +15,7 @@ class Generator(object):
         self.BASE_DIR = BASE_DIR
         self.src_includes = ""
         self.src_pre_main = ""
+
         # init standard types
         self.types = {
             "int": Type("int", True, category="number"),
@@ -82,7 +84,7 @@ class Generator(object):
             return f"{runtime_h}\n{runtime}\n{self.src_includes}\n{self.src_pre_main}\n{result}\n"
 
     def get_flags(self):
-        return self.LDFLAGS
+        return self.LDFLAGS.copy()
 
     def exists(self, name):
         if name in self.funcs:
@@ -98,6 +100,9 @@ class Generator(object):
     def add_to_output(self, cpp_code, hpp_code):
         self.src_includes += "\n" + hpp_code + "\n"
         self.src_pre_main += "\n" + cpp_code + "\n"
+
+    def add_to_flags(self,flags):
+        self.LDFLAGS += flags
 
     def walk(self, node):
         # {
@@ -432,7 +437,7 @@ class Generator(object):
 
                 self.imported.append(name)
                 self.add_to_output(result["cpp_code"], result["header_code"])
-                self.LDFLAGS += result["LDFLAGS"]
+                self.add_to_flags(result["LDFLAGS"])
 
             return {"expr": "", "type": ""}
         # -------------------------------------

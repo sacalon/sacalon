@@ -176,10 +176,6 @@ class HascalCompiler(object):
             "c++_code": False,
         }
 
-        for flag in self.generator.get_flags():
-            if not flag in ARGS["flags"]:
-                ARGS["flags"].append(flag)
-
         if os.path.isfile("config.json"):
             with open("config.json", "r") as f:
                 config = json.loads(f.read())
@@ -201,6 +197,10 @@ class HascalCompiler(object):
         tree = self.parser.parse(tokens)
         output = self.generator.generate(tree)
 
+        for flag in self.generator.get_flags():
+            if not flag in ARGS["flags"]:
+                ARGS["flags"].append(flag)
+        
         # write output c++ code in a file
         with open(outname + ".cc", "w") as fout:
             fout.write(output)

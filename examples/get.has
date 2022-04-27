@@ -1,6 +1,6 @@
 use http
 
 function main() : int {
-    print(get("http://google.com"))
+    print(get("https://www.google.com"))
     return 0
 }

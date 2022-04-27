@@ -1,1 +1,1 @@
--lcurl
+-lcurl,-llibssl
