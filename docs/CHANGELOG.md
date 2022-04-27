@@ -5,6 +5,7 @@
 #### New features
 
 #### Changes
+- `https` support for `http` library
 
 #### Bug fixes
   
