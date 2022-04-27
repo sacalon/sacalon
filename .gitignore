@@ -141,6 +141,3 @@ src/hascal.spec
 # Example binery files
 examples/
 
-
-!*.has
-!*.bf

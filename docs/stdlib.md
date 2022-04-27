@@ -82,7 +82,11 @@ Work with strings
 
 ## `http`
 HTTP client-server library
-- `get(url:string) : string` : get content from url(only support http)
+- `get(url:string) : string` : get content from given url
+- `post(url:string,post_data:string):string` : post content to given url
+- `download(url:string,path:string):bool` : download and save a url to storage
+- `upload(url:string,path:string):bool` : upload a file to a url
+[See Example for http library]()
 
 ## `random`
 Random number generator
