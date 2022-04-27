@@ -10,6 +10,7 @@
 #### Changes
 - add `download`,`upload`,`post` function to `http` library
 - `https` support for `http` library
+- some changes in `termcolor` library
 
 #### Bug fixes
   
