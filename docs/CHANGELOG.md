@@ -2,6 +2,9 @@
 <details>
 <summary>v1.3.9</summary>
 
+<details>
+<summary>v1.3.9-alpha.1</summary>
+
 #### New features
 
 #### Changes
@@ -11,6 +14,8 @@
 #### Bug fixes
   
 #### Removed
+
+</details>
 
 </details>
 
