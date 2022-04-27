@@ -4,7 +4,6 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
     return size * nmemb;
 }
 
-// todo : support https
 string get(string url){
     CURL *curl;
     CURLcode res;
@@ -27,4 +26,9 @@ string get(string url){
     }else {
         return "Error";
     }
+}
+
+void download(string url,string path){
+    auto res = get(url);
+    write_file(path,res);
 }

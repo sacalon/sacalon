@@ -1,6 +1,0 @@
-use http
-
-function main() : int {
-    print(get("https://www.google.com"))
-    return 0
-}
