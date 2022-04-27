@@ -86,7 +86,7 @@ HTTP client-server library
 - `post(url:string,post_data:string):string` : post content to given url
 - `download(url:string,path:string):bool` : download and save a url to storage
 - `upload(url:string,path:string):bool` : upload a file to a url
-[See Example for http library]()
+[See Example for http library](https://github.com/hascal/hascal/blob/main/examples/net.has)
 
 ## `random`
 Random number generator
