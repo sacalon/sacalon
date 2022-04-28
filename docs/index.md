@@ -36,7 +36,7 @@ Save this snippet into a file named `hello.has`. Now do: `hascal hello.has`.
 
 Congratulations - you just wrote and executed your first Hascal program!
 
-As in many other languages (such as C++ and Rust), `main` is the entry point of your program.
+As in many other languages (such as C++ and Rust), `main` is the entry point of your program and it should return `int`.
 
 `print` is one of the few built-in functions. It prints the value passed to it to standard output.
 
