@@ -10,6 +10,8 @@
 #### Changes
 - add `download`,`upload`,`post` function to `http` library
 - `https` support for `http` library
+- add `windows` library(that includes `windows.h`)
+- add `browser` library to open urls in default browser(now only supports windows)
 
 #### Bug fixes
   
