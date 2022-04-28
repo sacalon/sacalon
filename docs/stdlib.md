@@ -51,6 +51,7 @@ print(listdir("C:\\"));
 
 ## `time`
 Work with time/date
+
 - `get_year():int` : Get current year
 - `get_month():int` : Get current month
 - `get_day():int` : Get current day
@@ -61,6 +62,7 @@ Work with time/date
 
 ## `math`
 Math Functions
+
 - `sin(val:float):float` : Returns sine of x
 - `cos(val:float):float` : Returns cosine of x
 - `tan(val:float):float` : Returns tangent of x
@@ -73,6 +75,7 @@ Math Functions
 
 ## `strings`
 Work with strings
+
 - `is_alpha(c:char): bool` : check if char is alphabetic
 - `is_alphanum(c:char): bool` : check if char is alphanumeric
 - `is_number(c:char): bool` : check if char is number
@@ -82,6 +85,7 @@ Work with strings
 
 ## `http`
 HTTP client-server library
+
 - `get(url:string) : string` : get content from given url
 - `post(url:string,post_data:string):string` : post content to given url
 - `download(url:string,path:string):bool` : download and save a url to storage
@@ -90,18 +94,22 @@ HTTP client-server library
 
 ## `random`
 Random number generator
+
 - `random_int(max:int):int` : Returns a random integer between 0 and max
 
 ## `libcinfo`
 Get information about libc
+
 - `libc_name() : string` : get name of libc
 
 ## `termcolor`
 Colorize text
+
 - `cprint(txt:string,color:string)` : print text in color
 - `reset_color()` : reset color
 
 Colors :
+
 - `red`
 - `green`
 - `yellow`
@@ -111,6 +119,14 @@ Colors :
 - `white`
 - `black`
 
+## `windows`
+
+## `browser`
+NOTE : Only supports windwos!
+
+- `open_newtab(url:string)` : open urls in new tab with default browser
+
 ## `crypto.sha256`
 SHA256 hash
+
 - `generate_sha256(data:string) : string` : return sha256 hash of string
