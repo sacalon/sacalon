@@ -14,7 +14,8 @@
 - add `browser` library to open urls in default browser(now only supports windows)
 
 #### Bug fixes
-  
+- fix linker flag import bug in `cuse` statement
+
 #### Removed
 
 </details>
