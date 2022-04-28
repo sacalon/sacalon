@@ -1,0 +1,5 @@
+use windows
+
+function open_newtab(url:string){
+    cuse "ShellExecute(NULL, "open",url.c_str(),NULL, NULL, SW_SHOWNORMAL);"
+}
