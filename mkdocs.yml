@@ -2,7 +2,7 @@ site_name: Hascal Documentation
 site_url: https://hascal.github.io
 nav:
     - Home Page : 'https://hascal.github.io'
-    - Hascal Documentation: index.md
+    - Language Documentation: index.md
     - Standard Library: stdlib.md
     - Interfacing to C\C++: interfacing.md
     - Library Mangaer: libmanager.md
