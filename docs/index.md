@@ -2,14 +2,30 @@
 [Hascal](https://hascal.github.io) is a general-purpose open source programming language that makes it easy to build simple,optimal, reliable, and efficient software. 
 
 ## Installation
+Requirments :
+- python>=3.7
+- gcc>=8(or any c++ compiler that supports c++17)
+- `libcurl`,`libssl`,`libcrypt`
 
-
+*Nix :
 ```bash
-python setup.py install
+git clone https://github.com/hascal/hascal.git
+cd hascal
+make deps
+make build
+```
+
+Windows : 
+```
+git clone https://github.com/hascal/hascal.git
+cd hascal
+make deps-windows
+make windows
 ```
 
 ***Now your Hascal compiler is ready to use in `src/dist` folder!!!***
-NOTE: But you can add Hascal to `$PATH` for easily use.
+
+NOTE: But you can add Hascal to `$PATH` for using easily.
 
 ## Hello World
 ```typescript
