@@ -23,9 +23,7 @@ make deps-windows
 make windows
 ```
 
-***Now your Hascal compiler is ready to use in `src/dist` folder!!!***
-
-NOTE: But you can add Hascal to `$PATH` for using easily.
+***Now your Hascal compiler is ready to use in `src/dist` folder, you can add it to `$PATH`.***
 
 ## Hello World
 ```typescript
