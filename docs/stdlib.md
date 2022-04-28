@@ -97,11 +97,6 @@ Random number generator
 
 - `random_int(max:int):int` : Returns a random integer between 0 and max
 
-## `libcinfo`
-Get information about libc
-
-- `libc_name() : string` : get name of libc
-
 ## `termcolor`
 Colorize text
 
