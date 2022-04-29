@@ -3,9 +3,21 @@
 <summary>v1.3.9</summary>
 
 <details>
-<summary>v1.3.9-alpha.1</summary>
+<summary>v1.3.9-alpha.2</summary>
 
 #### New features
+- add `only_compile` config option
+
+#### Changes
+
+#### Bug fixes
+
+#### Removed
+
+</details>
+
+<details>
+<summary>v1.3.9-alpha.1</summary>
 
 #### Changes
 - add `download`,`upload`,`post` functions to `http` library
@@ -15,8 +27,6 @@
 
 #### Bug fixes
 - fix linker flag import bug in `cuse` statement
-
-#### Removed
 
 </details>
 
