@@ -11,9 +11,8 @@
   [Roadmap](docs/ROADMAP.md)
 
   [IDE Integration](docs/ide.md) |
-  [Library Index](https://github.com/hascal/libs) |
-  [AUR Package](https://aur.archlinux.org/packages/hascal-git)
-
+  [Library Index](https://github.com/hascal/libs)
+  
   [![](https://img.shields.io/gitter/room/hascal/community?style=for-the-badge)](https://gitter.im/hascal/community)
  
 </div>
