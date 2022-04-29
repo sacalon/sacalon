@@ -7,6 +7,6 @@ function add(a:int, b:int) : int {
 }
 
 function main():int {
-    print(runner(&add))
+    print(runner(add))
     return 0
 }
