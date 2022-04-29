@@ -169,7 +169,7 @@ class HascalCompiler(object):
             "compiler": "g++",
             "optimize": "",
             "flags": ["-o", outname],
-            "no_check_gcc_g++": 1,
+            "no_check_g++": 1,
             "ccfile": outname + ".cc",
             "c++_version": "c++17",
             "g++_out": False,
@@ -186,12 +186,15 @@ class HascalCompiler(object):
                     ARGS["optimize"] = config["optimize"]
                 if "flags" in config:
                     ARGS["flags"] += config["flags"]
-                if "no_check_gcc_g++" in config:
-                    ARGS["no_check_gcc_g++"] = config["no_check_gcc_g++"]
                 if "g++_out" in config:
                     ARGS["g++_out"] = config["g++_out"]
                 if "c++_code" in config:
                     ARGS["c++_code"] = config["c++_code"]
+                if "only_compile" in config :
+                    ARGS["only_compile"] = config["only_compile"]
+                if ARGS["compiler"] != "g++" :
+                    ARGS["no_check_gcc_g++"] = False
+                
         
         tokens = self.lexer.tokenize(self.code)
         tree = self.parser.parse(tokens)
@@ -206,7 +209,7 @@ class HascalCompiler(object):
             fout.write(output)
         
         # user may use other compiler instead of gcc\g++ for compiling hascal programs
-        if ARGS["no_check_gcc_g++"] == True:
+        if ARGS["no_check_g++"] == True:
             # check if gcc installed
             try:
                 check_call(["g++", "--version"], stdout=DEVNULL, stderr=STDOUT)
@@ -228,6 +231,10 @@ class HascalCompiler(object):
         if int(out.split(".")[0]) < 8:
             HascalError("C++ compiler doesn't support c++17")
 
+        if ARGS["only_compile"] == True :
+            ARGS["flags"][1] += ".o"
+            ARGS["flags"].append("-c")
+        
         # compile to binary
         try:
             compargs = [
@@ -236,6 +243,7 @@ class HascalCompiler(object):
                 ARGS["optimize"],
                 ARGS["ccfile"],
             ] + ARGS["flags"]
+
             for i in range(len(compargs) - 1):
                 if compargs[i] == "":
                     compargs.pop(i)
