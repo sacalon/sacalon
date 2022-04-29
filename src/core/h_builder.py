@@ -174,6 +174,7 @@ class HascalCompiler(object):
             "c++_version": "c++17",
             "g++_out": False,
             "c++_code": False,
+            "only_compile" : False,
         }
 
         if os.path.isfile("config.json"):

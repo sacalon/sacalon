@@ -719,6 +719,8 @@ class Generator(object):
             if len(params) != 1:
                 for i in range(len(params_name)):
                     _params[params_name[i]] = params_type[i]
+                    if isinstance(params_type[i],Function):
+                        self.funcs[params_name[i]] = params_type[i]
                     self.vars[params_name[i]] = Var(params_name[i], params_type[i])
 
             if params["expr"].endswith(","):
@@ -1155,7 +1157,6 @@ class Generator(object):
             _name = self.walk(node[1])
             _type = _name["type"]
             _line = node[2]
-
             type_ = None
             if isinstance(_type, Struct):
                 type_ = Struct(
@@ -1164,6 +1165,12 @@ class Generator(object):
                     is_ptr=True,
                     ptr_str="&",
                     category=_type.category,
+                )
+            if isinstance(_type, Function):
+                type_ = Function(
+                    _type.name,
+                    _type.params,
+                    _type.return_type
                 )
             else:
                 type_ = Type(
@@ -1633,7 +1640,7 @@ class Generator(object):
                 elif _name in self.funcs:
                     expr = {
                         "expr": "%s" % (_name),
-                        "type": "",  # todo : return function
+                        "type": Function(_name,copy.deepcopy(self.funcs[_name].params),copy.deepcopy(self.funcs[_name].return_type)),
                         "obj": self.funcs[_name],
                     }
                     return expr
@@ -1959,6 +1966,27 @@ class Generator(object):
             }
             return expr
 
+        # Function[<type>,...]<return_type>
+        if node[0] == "funtion_type":
+            params = node[1]
+            i = 0 # parameter index
+            function_params = {}
+            _type = ""
+            for param in params :
+                function_param = self.walk(param)
+
+                i += 1
+                function_params["p" + str(i)] = function_param['type']
+                _type += str(function_param['type']) + ","
+            if _type.endswith(","):
+                _type = _type[:-1]
+            _return_type = self.walk(node[2])
+
+            expr = {
+                'expr' : 'std::function<%s(%s)>' % (_return_type['type'],_type),
+                'type' : Function("", function_params, _return_type['type']),
+            }
+            return expr
         # --------------------------------------------
         if node[0] == "param_no":
             expr = {
@@ -1972,7 +2000,6 @@ class Generator(object):
             _name = node[1]
             _return_type = self.walk(node[2])
             _type = _return_type["expr"]
-            _type_name = _return_type["name"]
             _line = node[3]
 
             expr = {

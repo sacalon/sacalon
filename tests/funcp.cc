@@ -1,3 +1,16 @@
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <cstdarg>
+#include <cstring>
+#include <type_traits>
+#include <typeinfo>
+// #include <unordered_map>
+#include <string_view>
+#include <exception>
+#include <functional>
+
 typedef std::string string;
 
 // should support all compilers(todo)
@@ -252,3 +265,19 @@ struct HascalException : public std::exception
     }
 };
 // exit()
+
+
+ int runner( std::function<int(int,int)> func) {
+return func(1, 2);
+
+}
+ int add( int a, int b) {
+return a + b;
+
+}
+ int main() {
+std::cout << runner(&add) << std::endl;
+return 0;
+
+}
+

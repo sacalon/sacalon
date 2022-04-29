@@ -921,6 +921,31 @@ class Parser(Parser):
     def return_type(self, p):
         return ("nullable_type", p.return_type3, p.lineno)
 
+    # Function[<type>,...]<return_type>
+    @_('FUNCTION_TYPE LBRCK return_types RBRCK return_type')
+    def return_type3(self,p):
+        return ('funtion_type',p.return_types,p.return_type)
+
+
+    @_("return_type")
+    def return_types_(self, p):
+        return p.return_type
+
+    @_("return_type2")
+    def return_types_(self, p):
+        return p.return_type2
+
+    @_("return_type3")
+    def return_types_(self, p):
+        return p.return_type3
+
+    @_("return_types_")
+    def return_types(self, p):
+        return [p.return_types_]
+    
+    @_("return_types COMMA return_types_")
+    def return_types(self, p):
+        return p.return_types + [p.return_types_]
     # ------------------------------------------
     # (<return_type>) <expr>
     @_("LPAREN return_type RPAREN expr")

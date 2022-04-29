@@ -51,7 +51,7 @@ class Lexer(Lexer):
         VAR,
         CONST,
         USE,
-        FUNCTION,
+        FUNCTION, FUNCTION_TYPE,
         BREAK,
         CONTINUE,
         CUSE,
@@ -106,6 +106,7 @@ class Lexer(Lexer):
     NAME["bool"] = BOOLVAR
     NAME["float"] = FLOATVAR
     NAME["void"] = VOIDVAR
+    NAME["Function"] = FUNCTION_TYPE
 
     NAME["not"] = NOT
     NAME["and"] = AND
