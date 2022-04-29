@@ -6,6 +6,17 @@
 <summary>v1.3.9-alpha.2</summary>
 
 #### New features
+- passing functions as arguments
+```typescript
+function f(x: int): int {
+    return x + 1
+}
+
+function g(func:Function[int]int): int {
+    return func(1)
+}
+```
+
 - add `only_compile` config option
 
 #### Changes
