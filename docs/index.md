@@ -138,6 +138,24 @@ function main(): int {
 ```
 Again, the type comes after `:` and `:` comes after the argument's name.
 
+### Passing function as argument
+You can pass a function as an argument to another function.
+
+```typescript
+function runner(func: Function[int, int]int) : int{
+    return func(1,2)
+}
+
+function add(a:int, b:int) : int {
+    return a+b
+}
+
+function main():int {
+    print(runner(add))
+    return 0
+}
+```
+
 ## Hascal Types
 
 ### Primitive types
