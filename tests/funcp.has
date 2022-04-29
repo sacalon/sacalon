@@ -1,8 +1,8 @@
-function runner(func:Function[int,int]int):int{
+function runner(func: Function[int, int]int) : int{
     return func(1,2)
 }
 
-function add(a:int,b:int):int {
+function add(a:int, b:int) : int {
     return a+b
 }
 
