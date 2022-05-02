@@ -76,7 +76,7 @@ function main() : int {
 > You can see more Hascal examples in [examples folder](https://github.com/hascal/hascal/tree/main/examples).
 
 ## Documentation
-> You can find Hascal's documentation, [Here](https://hascal.github.io/docs)
+> You can find Hascal's documentation, [Here](https://hascal.github.io/docs/latest)
 
 ## Contributions
 Any contribution is welcome :)
