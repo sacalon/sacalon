@@ -81,7 +81,7 @@ function main() : int {
 ## Contributions
 Any contribution is welcome :)
 
-[See our roadmap](docs/roadmap.md)
+[See our roadmap](docs/ROADMAP.md)
 
 <!-- [![graph](https://contrib.rocks/image?repo=hascal/hascal)](https://github.com/hascal/hascal/graphs/contributors)
 -->
