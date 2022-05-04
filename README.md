@@ -14,10 +14,10 @@
   [Library Index](https://github.com/hascal/libs)
   <!-- [AUR Package](https://aur.archlinux.org/packages/hascal-git) -->
   [![](https://img.shields.io/github/v/tag/hascal/hascal)](https://github.com/hascal/hascal/releases)
-  
+  [![](https://img.shields.io/gitter/room/hascal/community)](https://gitter.im/hascal/community)
+
   [![](https://img.shields.io/aur/version/hascal-git?label=AUR%20Package&logo=linux&style=for-the-badge)](https://aur.archlinux.org/packages/hascal-git)
 
-  [![](https://img.shields.io/gitter/room/hascal/community?style=for-the-badge)](https://gitter.im/hascal/community)
 
 </div>
 
