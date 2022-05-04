@@ -81,12 +81,14 @@ function main() : int {
 > You can find Hascal's documentation, [Here](https://hascal.github.io/docs/latest)
 
 ## Contributions
-Any contribution is welcome :)
+You can contribute to Hascal by [opening an issue](https://github.com/hascal/hascal/issues/new/choose) or [forking](https://github.com/hascal/hascal/fork) the repository and [contribute to Hascal's documentation](https://github.com/hascal/hascal/tree/main/docs).
+
+You can also [join the Hascal community](https://gitter.im/hascal/community) and ask questions.
 
 [See our roadmap](docs/ROADMAP.md)
 
-<!-- [![graph](https://contrib.rocks/image?repo=hascal/hascal)](https://github.com/hascal/hascal/graphs/contributors)
--->
+<!-- [![graph](https://contrib.rocks/image?repo=hascal/hascal)](https://github.com/hascal/hascal/graphs/contributors) -->
+
 
 ## License
 The compiler and standard libraries are licensed under the **"MIT License"**,
