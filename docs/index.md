@@ -15,6 +15,11 @@ make deps
 make build
 ```
 
+Arch Users :
+```bash
+pacman -S hascal-git
+```
+
 Windows : 
 ```
 git clone https://github.com/hascal/hascal.git
