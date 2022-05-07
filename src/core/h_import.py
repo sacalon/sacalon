@@ -2,7 +2,7 @@ from .h_lexer import Lexer
 from .h_parser import Parser
 from .h_error import HascalError, HascalWarning
 from sys import platform
-from os.path import isfile
+from os.path import isfile, isdir
 from pathlib import Path
 
 
@@ -22,6 +22,8 @@ def use(gen_class, path_, BASE_DIR, filename=None):
         final_path = final_path / x
         final_path_local = final_path_local / x
 
+    package_path = final_path / "_.has"
+    package_path_local = final_path_local / "_.has"
     final_path = str(final_path) + ".has"
     final_path_local = str(final_path_local) + ".has"
 
@@ -38,6 +40,29 @@ def use(gen_class, path_, BASE_DIR, filename=None):
             return result
     elif isfile(final_path_local):
         with open(final_path_local, "r") as f:
+            parser = Parser()
+            tree = parser.parse(Lexer().tokenize(f.read()))
+
+            generator = gen_class(BASE_DIR)
+            output_cpp = generator.generate(tree, True)
+
+            result["generator"] = generator
+            result["output_cpp"] = output_cpp
+            return result
+    
+    elif isfile(package_path):
+        with open(package_path, "r") as f:
+            parser = Parser()
+            tree = parser.parse(Lexer().tokenize(f.read()))
+
+            generator = gen_class(BASE_DIR)
+            output_cpp = generator.generate(tree, True)
+
+            result["generator"] = generator
+            result["output_cpp"] = output_cpp
+            return result
+    elif isfile(package_path_local):
+        with open(package_path_local, "r") as f:
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
