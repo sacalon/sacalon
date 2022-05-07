@@ -7,6 +7,7 @@
 - redesign logo
 - js backend(`hascal2js`)
 - static variables
+- use `mdbook` instead of `mkdocs` for documentation generation
 
 ### Language
 - lambdas :
