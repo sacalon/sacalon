@@ -4,7 +4,6 @@
 <summary>v1.3.x</summary>
 
 ### Base
-- signals
 - redesign logo
 - js backend(`hascal2js`)
 - static variables
