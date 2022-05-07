@@ -16,10 +16,10 @@ function g(func:Function[int]int): int {
     return func(1)
 }
 ```
-
 - add `only_compile` config option
 
 #### Changes
+- upgrade importing system
 
 #### Bug fixes
 
