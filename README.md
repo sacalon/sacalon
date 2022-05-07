@@ -14,7 +14,7 @@
   [Library Index](https://github.com/hascal/libs)
   <!-- [AUR Package](https://aur.archlinux.org/packages/hascal-git) -->
   [![](https://img.shields.io/github/v/tag/hascal/hascal)](https://github.com/hascal/hascal/releases)
-  [![Hascal Discord](https://img.shields.io/discord/932745959190978683)](https://discord.gg/yjv8QqPR)
+  [![Hascal Discord](https://img.shields.io/discord/932745959190978683?label=Discord)](https://discord.gg/yjv8QqPR)
   [![](https://img.shields.io/gitter/room/hascal/community)](https://gitter.im/hascal/community)
   [![](https://img.shields.io/aur/version/hascal-git?label=AUR%20Package&logo=linux)](https://aur.archlinux.org/packages/hascal-git)
 
