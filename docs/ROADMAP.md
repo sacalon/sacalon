@@ -18,7 +18,7 @@ var mythread = thread(@(1000,true){
 ```
 
 ### Standard Library
-- `json`, `thread` library
+- `thread` library
 
 ### Library Manager
 - unistall library option
