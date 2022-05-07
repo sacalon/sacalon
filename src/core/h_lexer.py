@@ -18,6 +18,7 @@ class Lexer(Lexer):
         BOOLVAR,
         FLOATVAR,
         VOIDVAR,
+        STATIC,
         NUMBER,
         STRING,
         CHAR,
@@ -107,6 +108,7 @@ class Lexer(Lexer):
     NAME["float"] = FLOATVAR
     NAME["void"] = VOIDVAR
     NAME["Function"] = FUNCTION_TYPE
+    NAME["static"] = STATIC
 
     NAME["not"] = NOT
     NAME["and"] = AND

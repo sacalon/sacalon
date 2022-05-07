@@ -715,9 +715,11 @@ class Generator(object):
             params = self.walk(node[3])
             params_type = params["type"]
             params_name = params["name"]
-
             if len(params) != 1:
                 for i in range(len(params_name)):
+                    if params["static"][i] :
+                        HascalError(f"Static variable '{params_name[i]}' cannot be used as parameter:{_line}")
+                    
                     _params[params_name[i]] = params_type[i]
                     if isinstance(params_type[i],Function):
                         self.funcs[params_name[i]] = params_type[i]
@@ -1987,12 +1989,26 @@ class Generator(object):
                 'type' : Function("", function_params, _return_type['type']),
             }
             return expr
+        
+        # static <return_type>
+        if node[0] == "static_type":
+            _type = self.walk(node[1])
+            _line = node[2]
+
+            expr = {
+                "expr": "static %s" % (_type["expr"]),
+                "type": _type["type"],
+                "name": _type["name"],
+                "static": True,
+            }
+            return expr
         # --------------------------------------------
         if node[0] == "param_no":
             expr = {
                 "expr": "",
                 "type": [],
                 "name": [],
+                "static" : []
             }
             return expr
 
@@ -2006,6 +2022,7 @@ class Generator(object):
                 "expr": "%s %s," % (_type, _name),
                 "type": _return_type["type"],
                 "name": _name,
+                "static" : _return_type.get("static", False),
             }
             return expr
 
@@ -2017,6 +2034,7 @@ class Generator(object):
                 "expr": "%s %s" % (_params["expr"], _param["expr"]),
                 "type": _params["type"] + [_param["type"]],
                 "name": _params["name"] + [_param["name"]],
+                "static": _params["static"] + [_param["static"]],
             }
             return expr
         # --------------------------------------------

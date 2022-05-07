@@ -1,0 +1,8 @@
+function foo(x: static int){
+    print(x)
+}
+
+function main():int {
+    foo(1)
+    return 0
+}

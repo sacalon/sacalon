@@ -136,6 +136,16 @@ class Parser(Parser):
     @_("VAR NAME COLON return_type3 ASSIGN expr")
     def var_declare(self, p):
         return ("declare_ptr", "equal2", p.return_type3, p.NAME, p.expr, p.lineno)
+    
+    # var <name> : <return_type>
+    @_("VAR NAME COLON return_type4")
+    def var_declare(self, p):
+        return ("declare", "no_equal", p.return_type4, p.NAME, p.lineno)
+
+    # var <name> : <return_type> = <expr>
+    @_("VAR NAME COLON return_type4 ASSIGN expr")
+    def var_declare(self, p):
+        return ("declare", "equal2", p.return_type4, p.NAME, p.expr, p.lineno)
 
     # const <name> = <expr>
     @_("CONST NAME ASSIGN expr")
@@ -924,8 +934,20 @@ class Parser(Parser):
     # Function[<type>,...]<return_type>
     @_('FUNCTION_TYPE LBRCK return_types RBRCK return_type')
     def return_type3(self,p):
-        return ('funtion_type',p.return_types,p.return_type)
+        return ('funtion_type',p.return_types,p.return_type,p.lineno)
 
+    # static <return_type>
+    @_('STATIC return_type')
+    def return_type4(self,p):
+        return ('static_type',p.return_type,p.lineno)
+    # static <return_type>
+    @_('STATIC return_type2')
+    def return_type4(self,p):
+        return ('static_type',p.return_type2,p.lineno)
+    # static <return_type>
+    @_('STATIC return_type3')
+    def return_type4(self,p):
+        return ('static_type',p.return_type3,p.lineno)
 
     @_("return_type")
     def return_types_(self, p):
