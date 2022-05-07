@@ -1,39 +1,58 @@
-# Interfacing to C/C++
-You can use C and C++ in Hascal.
-For example, we want to write a function for print abs of a value in c++ and use it in hascal, first create a folder with `cpp` name and create `absprint.cc` and `absprint.hpp` in created folder.
+# Interfacing with C++
+Hascal is based on C++, so you can use C++ functions and classes in your program.
 
-`absprint.cc` :
-```c++
-void absprint(int a){
-   std::cout << abs(a);
+## Inline C++ Code
+You can use inline c++ code in Hascal with `cuse` keyword :
+```typescript
+cuse '#include <cstdio>'
+cuse 'int main(){printf("%d",1);return 0;}'
+// output : 1
+```
+
+Or you can use multiline c++ code, like following:
+```typescript
+cuse """
+#include <cstdio>
+
+int main(){
+    printf("%d",1);
+    return 0;
+}
+"""
+```
+
+## Externing functions
+For using C++ functions in your program, you should at first declare them with following syntax:
+```typescript
+function <name>(<args...>) : <return type>
+```
+
+## Include C++ headers
+Also Hascal can include C++ headers in your program.
+We need two files, one for including macros and one for main part of the header. You should put including macros in `your_cpp_lib.hpp` and main part in `your_cpp_lib.cc`. The specified files should exist in the same folder.
+
+See the example below:
+
+`add.cc` :
+```cpp
+void cpp_print(int x){
+    printf("%d",x);
 }
 ```
-For use `abs()` function we should import it from c++ stdlib, for this purpose import it in `absprint.hpp` :
-`absprint.hpp`
-```c++
-#include <cmath>
-```
-Now can import this code in hascal, write this code in root folder of your project:
-```typescript
-local use cpp.absprint
-function absprint(a:int) : int
 
-function main() : int {
-   absprint(-68) # output : 68
-}
+`add.hpp` :
+```cpp
+#include <cstdio>
 ```
-You can write inline function,structs,... defines, in an external hascal file and import it in main file :
-`absprint.has` :
-```typescript
-local use cpp.absprint
 
-function absprint(a:int) : int
-```
 `main.has` :
-```
-local use absprint
+```typescript
+cuse add 
+
+function cpp_print(x:int)
 
 function main() : int {
-   absprint(-68) # output : 68
+    cpp_print(12)
+    return 0
 }
 ```
