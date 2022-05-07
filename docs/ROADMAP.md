@@ -5,7 +5,6 @@
 
 ### Base
 - signals
-- null safety
 - redesign logo
 - js backend(`hascal2js`)
 - static variables
