@@ -3,7 +3,7 @@
 <summary>v1.3.9</summary>
 
 <details>
-<summary>v1.3.9-alpha.2</summary>
+<summary>v1.3.9-beta</summary>
 
 #### New features
 - passing functions as arguments
@@ -16,6 +16,7 @@ function g(func:Function[int]int): int {
     return func(1)
 }
 ```
+- add static variables, [See this example](https://github.com/hascal/hascal/blob/main/tests/static.has)
 - add `only_compile` config option
 
 #### Changes
