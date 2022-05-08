@@ -101,7 +101,7 @@ class Generator(object):
         self.src_includes += "\n" + hpp_code + "\n"
         self.src_pre_main += "\n" + cpp_code + "\n"
 
-    def add_to_flags(self,flags):
+    def add_to_flags(self, flags):
         self.LDFLAGS += flags
 
     def walk(self, node):
@@ -318,7 +318,8 @@ class Generator(object):
             else:
                 self.consts[_name] = Const(_name, _type["type"])
                 expr = {
-                    "expr": "const %s %s = %s ;\n" % (_type["type"], _name, _expr["expr"]),
+                    "expr": "const %s %s = %s ;\n"
+                    % (_type["type"], _name, _expr["expr"]),
                     "type": _type["type"],
                     "name": _name,
                 }
@@ -717,11 +718,13 @@ class Generator(object):
             params_name = params["name"]
             if len(params) != 1:
                 for i in range(len(params_name)):
-                    if params["static"][i] :
-                        HascalError(f"Static variable '{params_name[i]}' cannot be used as parameter:{_line}")
-                    
+                    if params["static"][i]:
+                        HascalError(
+                            f"Static variable '{params_name[i]}' cannot be used as parameter:{_line}"
+                        )
+
                     _params[params_name[i]] = params_type[i]
-                    if isinstance(params_type[i],Function):
+                    if isinstance(params_type[i], Function):
                         self.funcs[params_name[i]] = params_type[i]
                     self.vars[params_name[i]] = Var(params_name[i], params_type[i])
 
@@ -1169,11 +1172,7 @@ class Generator(object):
                     category=_type.category,
                 )
             if isinstance(_type, Function):
-                type_ = Function(
-                    _type.name,
-                    _type.params,
-                    _type.return_type
-                )
+                type_ = Function(_type.name, _type.params, _type.return_type)
             else:
                 type_ = Type(
                     _type.type_name,
@@ -1642,7 +1641,11 @@ class Generator(object):
                 elif _name in self.funcs:
                     expr = {
                         "expr": "%s" % (_name),
-                        "type": Function(_name,copy.deepcopy(self.funcs[_name].params),copy.deepcopy(self.funcs[_name].return_type)),
+                        "type": Function(
+                            _name,
+                            copy.deepcopy(self.funcs[_name].params),
+                            copy.deepcopy(self.funcs[_name].return_type),
+                        ),
                         "obj": self.funcs[_name],
                     }
                     return expr
@@ -1971,25 +1974,25 @@ class Generator(object):
         # Function[<type>,...]<return_type>
         if node[0] == "funtion_type":
             params = node[1]
-            i = 0 # parameter index
+            i = 0  # parameter index
             function_params = {}
             _type = ""
-            for param in params :
+            for param in params:
                 function_param = self.walk(param)
 
                 i += 1
-                function_params["p" + str(i)] = function_param['type']
-                _type += str(function_param['type']) + ","
+                function_params["p" + str(i)] = function_param["type"]
+                _type += str(function_param["type"]) + ","
             if _type.endswith(","):
                 _type = _type[:-1]
             _return_type = self.walk(node[2])
 
             expr = {
-                'expr' : 'std::function<%s(%s)>' % (_return_type['type'],_type),
-                'type' : Function("", function_params, _return_type['type']),
+                "expr": "std::function<%s(%s)>" % (_return_type["type"], _type),
+                "type": Function("", function_params, _return_type["type"]),
             }
             return expr
-        
+
         # static <return_type>
         if node[0] == "static_type":
             _type = self.walk(node[1])
@@ -2004,12 +2007,7 @@ class Generator(object):
             return expr
         # --------------------------------------------
         if node[0] == "param_no":
-            expr = {
-                "expr": "",
-                "type": [],
-                "name": [],
-                "static" : []
-            }
+            expr = {"expr": "", "type": [], "name": [], "static": []}
             return expr
 
         if node[0] == "param":
@@ -2022,7 +2020,7 @@ class Generator(object):
                 "expr": "%s %s," % (_type, _name),
                 "type": _return_type["type"],
                 "name": _name,
-                "static" : _return_type.get("static", False),
+                "static": _return_type.get("static", False),
             }
             return expr
 
