@@ -136,7 +136,7 @@ class Parser(Parser):
     @_("VAR NAME COLON return_type3 ASSIGN expr")
     def var_declare(self, p):
         return ("declare_ptr", "equal2", p.return_type3, p.NAME, p.expr, p.lineno)
-    
+
     # var <name> : <return_type>
     @_("VAR NAME COLON return_type4")
     def var_declare(self, p):
@@ -932,22 +932,24 @@ class Parser(Parser):
         return ("nullable_type", p.return_type3, p.lineno)
 
     # Function[<type>,...]<return_type>
-    @_('FUNCTION_TYPE LBRCK return_types RBRCK return_type')
-    def return_type3(self,p):
-        return ('funtion_type',p.return_types,p.return_type,p.lineno)
+    @_("FUNCTION_TYPE LBRCK return_types RBRCK return_type")
+    def return_type3(self, p):
+        return ("funtion_type", p.return_types, p.return_type, p.lineno)
 
     # static <return_type>
-    @_('STATIC return_type')
-    def return_type4(self,p):
-        return ('static_type',p.return_type,p.lineno)
+    @_("STATIC return_type")
+    def return_type4(self, p):
+        return ("static_type", p.return_type, p.lineno)
+
     # static <return_type>
-    @_('STATIC return_type2')
-    def return_type4(self,p):
-        return ('static_type',p.return_type2,p.lineno)
+    @_("STATIC return_type2")
+    def return_type4(self, p):
+        return ("static_type", p.return_type2, p.lineno)
+
     # static <return_type>
-    @_('STATIC return_type3')
-    def return_type4(self,p):
-        return ('static_type',p.return_type3,p.lineno)
+    @_("STATIC return_type3")
+    def return_type4(self, p):
+        return ("static_type", p.return_type3, p.lineno)
 
     @_("return_type")
     def return_types_(self, p):
@@ -964,10 +966,11 @@ class Parser(Parser):
     @_("return_types_")
     def return_types(self, p):
         return [p.return_types_]
-    
+
     @_("return_types COMMA return_types_")
     def return_types(self, p):
         return p.return_types + [p.return_types_]
+
     # ------------------------------------------
     # (<return_type>) <expr>
     @_("LPAREN return_type RPAREN expr")

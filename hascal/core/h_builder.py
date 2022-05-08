@@ -174,7 +174,7 @@ class HascalCompiler(object):
             "c++_version": "c++17",
             "g++_out": False,
             "c++_code": False,
-            "only_compile" : False,
+            "only_compile": False,
         }
 
         if os.path.isfile("config.json"):
@@ -191,12 +191,11 @@ class HascalCompiler(object):
                     ARGS["g++_out"] = config["g++_out"]
                 if "c++_code" in config:
                     ARGS["c++_code"] = config["c++_code"]
-                if "only_compile" in config :
+                if "only_compile" in config:
                     ARGS["only_compile"] = config["only_compile"]
-                if ARGS["compiler"] != "g++" :
+                if ARGS["compiler"] != "g++":
                     ARGS["no_check_gcc_g++"] = False
-                
-        
+
         tokens = self.lexer.tokenize(self.code)
         tree = self.parser.parse(tokens)
         output = self.generator.generate(tree)
@@ -204,11 +203,11 @@ class HascalCompiler(object):
         for flag in self.generator.get_flags():
             if not flag in ARGS["flags"]:
                 ARGS["flags"].append(flag)
-        
+
         # write output c++ code in a file
         with open(outname + ".cc", "w") as fout:
             fout.write(output)
-        
+
         # user may use other compiler instead of gcc\g++ for compiling hascal programs
         if ARGS["no_check_g++"] == True:
             # check if gcc installed
@@ -232,10 +231,10 @@ class HascalCompiler(object):
         if int(out.split(".")[0]) < 8:
             HascalError("C++ compiler doesn't support c++17")
 
-        if ARGS["only_compile"] == True :
+        if ARGS["only_compile"] == True:
             ARGS["flags"][1] += ".o"
             ARGS["flags"].append("-c")
-        
+
         # compile to binary
         try:
             compargs = [
