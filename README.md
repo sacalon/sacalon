@@ -7,10 +7,10 @@
 
   [Website](https://hascal.github.io) |
   [Docs](https://hascal.github.io/docs/latest) |
-  [Changelog](docs/CHANGELOG.md) |
-  [Roadmap](docs/ROADMAP.md)
+  [Changelog](docs/src/CHANGELOG.md) |
+  [Roadmap](docs/src/ROADMAP.md)
 
-  [IDE Integration](docs/ide.md) |
+  [IDE Integration](docs/src/ide.md) |
   [Library Index](https://github.com/hascal/libs)
   <!-- [AUR Package](https://aur.archlinux.org/packages/hascal-git) -->
   [![](https://img.shields.io/github/v/tag/hascal/hascal)](https://github.com/hascal/hascal/releases)
@@ -86,7 +86,7 @@ You can contribute to Hascal by [opening an issue](https://github.com/hascal/has
 
 You can also [join the Hascal community](https://gitter.im/hascal/community) and ask questions.
 
-[See our roadmap](docs/ROADMAP.md)
+[See our roadmap](docs/src/ROADMAP.md)
 
 <!-- [![graph](https://contrib.rocks/image?repo=hascal/hascal)](https://github.com/hascal/hascal/graphs/contributors) -->
 
