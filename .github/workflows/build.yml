@@ -1,0 +1,6 @@
+name: Build
+
+on:
+  push:
+    tags:
+      - 'v*'
