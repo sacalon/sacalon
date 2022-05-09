@@ -2,8 +2,8 @@ name: Build excutable files and release
 
 on:
   push:
-    tag:
-      - 'v*'
+    branches:
+      - master
 
 jobs:
 
@@ -21,6 +21,8 @@ jobs:
         release_name: ${{ github.ref }}
         draft: false
         prerelease: false
+        owner: ${{ github.repository.owner }}
+
     - name: Output Release URL File
       run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
     - name: Save Release URL File for publish
