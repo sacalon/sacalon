@@ -41,8 +41,8 @@ jobs:
                 cp -r src/hlib dist/	
                 cp -r examples/ dist/
                 zip -r dist/hascal.zip dist/
-                cp dist/hascal.zip hascal-${{ github.ref }}-macos.zip
-            OUT_FILE_NAME: hascal-${{ github.ref }}-macos.zip
+                cp dist/hascal.zip hascal-${{ github.ref.split("/")[2] }}-macos.zip
+            OUT_FILE_NAME: hascal-${{ github.ref.split("/")[2]}}-macos.zip
             ASSET_MIME: application/zip
           - os: windows-latest
             TARGET: windows
@@ -51,8 +51,8 @@ jobs:
                 xcopy src\hlib dist\hlib /E /H /C /I
                 xcopy examples dist\examples /E /H /C /I
                 zip -r dist\hascal.zip dist\hlib dist\examples
-                cp dist\hascal.zip hascal-${{ github.ref }}-windows.zip
-            OUT_FILE_NAME: hascal-${{ github.ref }}-windows.zip
+                cp dist\hascal.zip hascal-${{ github.ref.split("/")[2] }}-windows.zip
+            OUT_FILE_NAME: hascal-${{ github.ref.split("/")[2] }}-windows.zip
             ASSET_MIME: application/zip
           - os: ubuntu-latest
             TARGET: ubuntu
@@ -61,8 +61,8 @@ jobs:
                 cp -r src/hlib dist/	
                 cp -r examples/ dist/
                 zip -r dist/hascal.zip dist/
-                cp dist/hascal.zip hascal-${{ github.ref }}-ubuntu.zip
-            OUT_FILE_NAME: hascal-${{ github.ref }}-ubuntu.zip
+                cp dist/hascal.zip hascal-${{ github.ref.split("/")[2] }}-ubuntu.zip
+            OUT_FILE_NAME: hascal-${{ github.ref.split("/")[2] }}-ubuntu.zip
             ASSET_MIME: application/zip
 
     steps:
