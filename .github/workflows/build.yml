@@ -1,4 +1,4 @@
-name: Build automation
+name: Build excutable files and release
 
 on:
   push:
