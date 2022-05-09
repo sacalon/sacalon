@@ -49,7 +49,7 @@ def use(gen_class, path_, BASE_DIR, filename=None):
             result["generator"] = generator
             result["output_cpp"] = output_cpp
             return result
-
+    
     elif isfile(package_path):
         with open(package_path, "r") as f:
             parser = Parser()
