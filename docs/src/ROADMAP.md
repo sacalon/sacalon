@@ -3,13 +3,9 @@
 <details>
 <summary>v1.3.x</summary>
 
-### Base
-- redesign logo
-- js backend(`hascal2js`)
-- static variables
-- use `mdbook` instead of `mkdocs` for documentation generation
-
 ### Language
+- js backend(`hascal2js`)
+
 - lambdas :
 ```
 var mythread = thread(@(1000,true){
@@ -22,5 +18,8 @@ var mythread = thread(@(1000,true){
 
 ### Library Manager
 - unistall library option
+
+### Other
+- redesign logo
 
 </details>
