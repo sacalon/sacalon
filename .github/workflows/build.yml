@@ -6,32 +6,30 @@ on:
       - v*
 
 jobs:
-  createrelease:
-    name: Create Release
-    runs-on: [ubuntu-latest]
+  release_url:
+    name: Build release binary
+    runs-on: ubuntu-latest
     steps:
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: ${{ github.ref }}
-        draft: false
-        prerelease: false
-        # owner: ${{ github.repository.owner }}
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Output Release URL File
-      run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
-    - name: Save Release URL File for publish
-      uses: actions/upload-artifact@v1
-      with:
-        name: release_url
-        path: release_url.txt
+      - name: Get release
+        id: get_release
+        uses: bruceadams/get-release@v1.2.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+      - name:  Output Release URL File
+        uses: actions/upload-release-asset@v1.0.2
+        run: echo "${{ steps.get_release.outputs.upload_url }}" > release_url.txt
+      - name: Save Release URL File for publish
+        uses: actions/upload-artifact@v1
+        with:
+          name: release_url
+          path: release_url.txt
+
   build:
     name: Build packages
-    needs: createrelease
+    needs: release_url
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
