@@ -39,7 +39,7 @@ jobs:
           - os: macos-latest
             TARGET: macos
             CMD_BUILD: >
-                python3 -m pyinstaller --noconfirm --onefile --console --name "hascal"  "src/hascal.py"
+                pyinstaller --noconfirm --onefile --console --name "hascal"  "src/hascal.py"
                 cp -r src/hlib dist/	
                 cp -r examples/ dist/
                 zip -r dist/hascal.zip dist/
@@ -49,7 +49,7 @@ jobs:
           - os: windows-latest
             TARGET: windows
             CMD_BUILD: >
-                python -m pyinstaller --noconfirm --onefile --console --name "hascal"  "src/hascal.py"
+                pyinstaller --noconfirm --onefile --console --name "hascal"  "src/hascal.py"
                 xcopy src\hlib dist\hlib /E /H /C /I
                 xcopy examples dist\examples /E /H /C /I
                 zip -r dist\hascal.zip dist\hlib dist\examples
@@ -59,7 +59,7 @@ jobs:
           - os: ubuntu-latest
             TARGET: ubuntu
             CMD_BUILD: >
-                python3 -m pyinstaller --noconfirm --onefile --console --name "hascal"  "src/hascal.py"
+                pyinstaller --noconfirm --onefile --console --name "hascal"  "src/hascal.py"
                 cp -r src/hlib dist/	
                 cp -r examples/ dist/
                 zip -r dist/hascal.zip dist/
@@ -75,7 +75,6 @@ jobs:
         python-version: 3.8
     - name: Install dependencies
       run: |
-        pip install pip==18.1
         python -m pip install pyinstaller
         pip install -r requirements.txt
     - name: Build with pyinstaller for ${{matrix.TARGET}}
