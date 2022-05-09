@@ -1,8 +1,9 @@
 name: Build excutable files and release
 
 on:
-  release:
-    types: [published]
+  push:
+    tag:
+      - 'v*'
 
 jobs:
 
@@ -75,7 +76,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install pip==18.1
-        python3 -m pip install pyinstaller
+        python -m pip install pyinstaller
         pip install -r requirements.txt
     - name: Build with pyinstaller for ${{matrix.TARGET}}
       run: ${{matrix.CMD_BUILD}}
