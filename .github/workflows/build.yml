@@ -1,14 +1,11 @@
 name: Build excutable files and release
 
 on:
-  push:
-    branches:
-      - master
+  release:
     tags:
       - v*
 
 jobs:
-
   createrelease:
     name: Create Release
     runs-on: [ubuntu-latest]
@@ -32,7 +29,6 @@ jobs:
       with:
         name: release_url
         path: release_url.txt
-  
   build:
     name: Build packages
     needs: createrelease
