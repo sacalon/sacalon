@@ -39,16 +39,34 @@ jobs:
           - os: macos-latest
             TARGET: macos
             CMD_BUILD: >
-                pyinstaller -F -w -n clipster -i resources/clipster.icns cli.py &&
-                cd dist/ &&
-                zip -r9 clipster clipster.app/
-            OUT_FILE_NAME: clipster.zip
+                pyinstaller --noconfirm --onefile --console --name "hascal"  "src/hascal.py"
+	              cp -r src/hlib dist/	
+	              cp -r examples/ dist/
+                zip -r dist/hascal.zip dist/
+                cp dist/hascal.zip hascal-${{ github.ref }}-macos.zip
+            OUT_FILE_NAME: hascal-${{ github.ref }}-macos.zip
             ASSET_MIME: application/zip
           - os: windows-latest
             TARGET: windows
-            CMD_BUILD: pyinstaller -F -w -n clipster -i resources/clipster.ico cli.py
-            OUT_FILE_NAME: clipster.exe
-            ASSET_MIME: application/vnd.microsoft.portable-executable
+            CMD_BUILD: >
+                pyinstaller --noconfirm --onefile --console --name "hascal"  "src/hascal.py"
+                xcopy src\hlib dist\hlib /E /H /C /I
+	              xcopy examples dist\examples /E /H /C /I
+                zip -r dist\hascal.zip dist\hlib dist\examples
+                cp dist\hascal.zip hascal-${{ github.ref }}-windows.zip
+            OUT_FILE_NAME: hascal-${{ github.ref }}-windows.zip
+            ASSET_MIME: application/zip
+          - os: ubuntu-latest
+            TARGET: ubuntu
+            CMD_BUILD: >
+                pyinstaller --noconfirm --onefile --console --name "hascal"  "src/hascal.py"
+	              cp -r src/hlib dist/	
+	              cp -r examples/ dist/
+                zip -r dist/hascal.zip dist/
+                cp dist/hascal.zip hascal-${{ github.ref }}-ubunto.zip
+            OUT_FILE_NAME: hascal-${{ github.ref }}-ubuntu.zip
+            ASSET_MIME: application/zip
+
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3.8
