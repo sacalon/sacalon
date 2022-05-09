@@ -38,20 +38,20 @@ jobs:
         include:
           - os: macos-latest
             TARGET: macos
-            CMD_BUILD: |
+            CMD_BUILD: >
                 pyinstaller --noconfirm --onefile --console --name "hascal"  "src/hascal.py"
-	              cp -r src/hlib dist/	
-	              cp -r examples/ dist/
+                cp -r src/hlib dist/	
+                cp -r examples/ dist/
                 zip -r dist/hascal.zip dist/
                 cp dist/hascal.zip hascal-${{ github.ref }}-macos.zip
             OUT_FILE_NAME: hascal-${{ github.ref }}-macos.zip
             ASSET_MIME: application/zip
           - os: windows-latest
             TARGET: windows
-            CMD_BUILD: |
+            CMD_BUILD: >
                 pyinstaller --noconfirm --onefile --console --name "hascal"  "src/hascal.py"
                 xcopy src\hlib dist\hlib /E /H /C /I
-	              xcopy examples dist\examples /E /H /C /I
+                xcopy examples dist\examples /E /H /C /I
                 zip -r dist\hascal.zip dist\hlib dist\examples
                 cp dist\hascal.zip hascal-${{ github.ref }}-windows.zip
             OUT_FILE_NAME: hascal-${{ github.ref }}-windows.zip
@@ -60,8 +60,8 @@ jobs:
             TARGET: ubuntu
             CMD_BUILD: >
                 pyinstaller --noconfirm --onefile --console --name "hascal"  "src/hascal.py"
-	              cp -r src/hlib dist/	
-	              cp -r examples/ dist/
+                cp -r src/hlib dist/	
+                cp -r examples/ dist/
                 zip -r dist/hascal.zip dist/
                 cp dist/hascal.zip hascal-${{ github.ref }}-ubunto.zip
             OUT_FILE_NAME: hascal-${{ github.ref }}-ubuntu.zip
