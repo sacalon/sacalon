@@ -62,7 +62,7 @@ jobs:
                 cp -r src/hlib dist/	
                 cp -r examples/ dist/
                 zip -r dist/hascal.zip dist/
-                cp dist/hascal.zip hascal-${{ github.ref }}-ubunto.zip
+                cp dist/hascal.zip hascal-${{ github.ref }}-ubuntu.zip
             OUT_FILE_NAME: hascal-${{ github.ref }}-ubuntu.zip
             ASSET_MIME: application/zip
 
