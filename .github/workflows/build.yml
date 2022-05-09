@@ -3,7 +3,9 @@ name: Build excutable files and release
 on:
   push:
     branches:
-      - master
+      - release
+    tags:
+      - '*'
 
 jobs:
 
