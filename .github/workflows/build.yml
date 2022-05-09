@@ -1,9 +1,8 @@
 name: Build excutable files and release
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
+  release:
+    types: [published]
 
 jobs:
 
