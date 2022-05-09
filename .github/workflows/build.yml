@@ -2,6 +2,10 @@ name: Build excutable files and release
 
 on:
   release:
+    branches:
+      - master
+    types:
+      - tag
     tags:
       - v*
 
