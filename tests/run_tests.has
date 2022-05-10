@@ -72,5 +72,14 @@ function main():int {
 
     print("null_in_arth.has:")
     system("hascal.py null_in_arth.has")
+
+    print("funcp.has:")
+    system("hascal.py funcp.has")
+
+    print("static.has:")
+    system("hascal.py static.has")
+
+    print("typeof.has:")
+    system("hascal.py typeof.has")
     return 0
 }
