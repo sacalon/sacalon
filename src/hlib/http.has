@@ -1,4 +1,5 @@
 use file
+use os
 cuse libcpp.http
 
 function get(url:string) : string

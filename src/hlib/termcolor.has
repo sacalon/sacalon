@@ -1,4 +1,4 @@
-// todo : fully implement in hascal
+cuse libcpp.termcolor
 
 function cprint(text:string,color:string)
 function reset_color()
