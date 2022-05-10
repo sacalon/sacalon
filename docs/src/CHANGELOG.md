@@ -23,6 +23,7 @@ function g(func:Function[int]int): int {
 - upgrade importing system
 
 #### Bug fixes
+- fix pyinstaller build issue
 
 #### Removed
 
