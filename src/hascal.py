@@ -7,6 +7,7 @@
 # all rights reserved.
 
 import sys
+import os
 from core.h_builder import HascalCompiler
 import pathlib
 
