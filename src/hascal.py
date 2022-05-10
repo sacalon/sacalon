@@ -10,11 +10,9 @@ from sys import argv
 from core.h_builder import HascalCompiler
 import pathlib
 
-
 def main():
-    BASE_DIR = str(pathlib.Path(__file__).parent.resolve())
+    BASE_DIR = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
     HascalCompiler(argv, BASE_DIR)
-
 
 if __name__ == "__main__":
     main()
