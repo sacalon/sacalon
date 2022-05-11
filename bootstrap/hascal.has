@@ -7,7 +7,7 @@ use os
 use file
 local use lexer
 
-var VERSION = "1.3.9"
+var VERSION = "1.3.9-beta"
 
 function show_help(){
     print(format("Hascal Compiler v{} {}",VERSION,os_name()))

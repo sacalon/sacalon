@@ -1,6 +1,6 @@
 import platform
 
-HASCAL_COMPILER_VERSION = "1.3.9-alpha.1"
+HASCAL_COMPILER_VERSION = "1.3.9-beta"
 HASCAL_GITHUB_REPO = "https://github.com/hascal/hascal"
 
 
