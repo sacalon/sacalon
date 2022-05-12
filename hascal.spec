@@ -8,7 +8,7 @@ added_files = [
 ]
 
 a = Analysis(
-    ['src\\hascal.py'],
+    ['src/hascal.py'],
     pathex=[],
     binaries=[],
     datas=added_files,
