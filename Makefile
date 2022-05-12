@@ -5,7 +5,7 @@ build :
 	cp -r src/hlib dist/	
 	cp -r examples/ dist/	
 windows :
-	pyinstaller hascal.spec
+	pyinstaller hascal-win.spec
 	xcopy src\hlib dist\hlib /E /H /C /I
 	xcopy examples dist\examples /E /H /C /I
 deps :
