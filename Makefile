@@ -1,11 +1,11 @@
  # Makefile for Hascal
 
 build :
-	pyinstaller hascal.spec
+	pyinstaller --add-data src/hlib:hlib "src/hascal.py" --name "hascal" --noconfirm --onefile --console
 	cp -r src/hlib dist/	
 	cp -r examples/ dist/	
 windows :
-	pyinstaller hascal-win.spec
+	pyinstaller --add-data src\hlib;hlib "src\hascal.py" --name "hascal" --noconfirm --onefile --console
 	xcopy src\hlib dist\hlib /E /H /C /I
 	xcopy examples dist\examples /E /H /C /I
 deps :
