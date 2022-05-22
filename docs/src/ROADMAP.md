@@ -12,6 +12,7 @@ var mythread = thread(@(1000,true){
     print("hi")
 })
 ```
+- generate html doc from a code
 
 ### Standard Library
 - `thread` library
