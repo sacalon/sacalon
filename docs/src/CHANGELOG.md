@@ -3,6 +3,18 @@
 <summary>v1.3.9</summary>
 
 <details>
+<summary>v1.3.9-rc</summary>
+
+#### Changes
+- Rewrite package manager
+
+#### Bug fixes
+- fix `http` library bug
+- fix cpp importing bug
+
+</details>
+
+<details>
 <summary>v1.3.9-beta</summary>
 
 #### New features

@@ -84,7 +84,7 @@ bool upload(string url,string path){
         /* tell it to "upload" to the URL */
         curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
 
-        string osname = os_name()
+        string osname = os_name();
         if(osname == "win32" || osname == "win64")
             curl_easy_setopt(curl, CURLOPT_READFUNCTION, fd);
         curl_easy_setopt(curl, CURLOPT_READDATA, fd);

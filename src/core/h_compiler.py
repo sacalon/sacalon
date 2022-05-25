@@ -77,7 +77,7 @@ class Generator(object):
         for e in _expr:
             result += e["expr"]
         if use:
-            return f"\n{self.src_includes}\n{self.src_pre_main}\n{result}"
+            return f"\n{self.src_pre_main}\n{result}"
         else:
             runtime = open(self.BASE_DIR + "/hlib/libcpp/std.cc").read()
             runtime_h = open(self.BASE_DIR + "/hlib/libcpp/std.hpp").read()
@@ -432,8 +432,8 @@ class Generator(object):
         # cuse <lib_name>
         if node[0] == "cinclude":
             name = ".".join(name for name in node[1])
-            if name not in self.imported:
-                result = cuse(Generator, node[1], self.BASE_DIR)
+            if not name in self.imported:
+                result = cuse(node[1], self.BASE_DIR)
 
                 self.imported.append(name)
                 self.add_to_output(result["cpp_code"], result["header_code"])

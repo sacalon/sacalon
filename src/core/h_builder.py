@@ -3,8 +3,9 @@ from .h_parser import Parser  # hascal parser
 from .h_compiler import Generator  # hascal to c++ compiler
 from .h_error import HascalError  # hascal excpetion handling
 from .h_help import *  # hascal compiler information
+from .h_git import * # git related functions
 
-from os.path import isfile
+from os.path import isfile,isdir,islink
 from subprocess import DEVNULL, STDOUT, PIPE, check_call, Popen
 import sys
 import os
@@ -12,7 +13,7 @@ import requests
 import json
 import zipfile
 import platform
-
+import shutil
 
 def show_help(all=False):
     if all:
@@ -38,107 +39,51 @@ class HascalCompiler(object):
             elif self.argv[1] == "version":
                 # show version
                 print(f"Hascal {HASCAL_COMPILER_VERSION} --- {sys.platform}")
-            # START : Library Manager
-            elif self.argv[1] in "install":
+            # START : Package Manager
+            elif self.argv[1] == "get":
+                mod_name = self.argv[2]
+                if len(self.argv) == 4 :
+                    mod_name = self.argv[3]
+
                 if len(argv) < 3:
                     HascalError(
-                        "You must give one library name to install\nusage :\n\thascal install <library_name>"
+                        "You must give one package name to install\nusage :\n\thascal install <package_name>"
                     )
+
                 print(f"Installing '{self.argv[2]}'...")
-                if os.path.isfile(self.BASE_DIR + "/hlib/index.json"):
-                    print("Update Libraries Index...")
-                    index = get_index()
-                    with open(self.BASE_DIR + "/hlib/index.json", "w") as f:
-                        f.write(json.dumps(index))
-                    if not self.argv[2] in index:
-                        HascalError(f"Library {self.argv[2]} not found")
-                    # dowload zip file
-                    r = requests.get(
-                        f"{BASE_URL}/{self.argv[2]}/{index[self.argv[2]]['zip']}"
-                    )
-                    # write zip file to disk
-                    with open(self.BASE_DIR + "/hlib/tmp.zip", "wb") as f:
-                        f.write(r.content)
-                    # extract downloaded zip file to hlib folder
-                    with zipfile.ZipFile(
-                        self.BASE_DIR + "/hlib/tmp.zip", "r"
-                    ) as zip_ref:
-                        zip_ref.extractall(self.BASE_DIR + "/hlib/")
-                    # remove downloaded zip file
-                    os.remove(self.BASE_DIR + "/hlib/tmp.zip")
+                if isdir(f"{self.BASE_DIR}/hlib/{self.argv[2]}"):
+                    HascalError(f"Package '{self.argv[2]}' already installed, for update use 'hascal update'")
+                
+                # check if git is installed
+                check_if_git_installed()
 
-                else:
-                    print("Get Libraries Index")
-                    index = get_index()
-                    with open(self.BASE_DIR + "/hlib/index.json", "w") as f:
-                        f.write(json.dumps(index))
-                    if not self.argv[2] in index:
-                        HascalError(f"Library {self.argv[2]} not found")
+                # check if git repository exist
+                check_if_git_repo_exist(self.argv[2])
 
-                    # dowload zip file
-                    r = requests.get(
-                        f"{BASE_URL}/{self.argv[2]}/{index[self.argv[2]]['zip']}"
-                    )
-                    # write zip file to disk
-                    with open(self.BASE_DIR + "/hlib/tmp.zip", "wb") as f:
-                        f.write(r.content)
-                    # extract downloaded zip file to hlib folder
-                    with zipfile.ZipFile(
-                        self.BASE_DIR + "/hlib/tmp.zip", "r"
-                    ) as zip_ref:
-                        zip_ref.extractall(self.BASE_DIR + "/hlib/")
-                    # remove downloaded zip file
-                    os.remove(self.BASE_DIR + "/hlib/tmp.zip")
-                print(f"'{self.argv[2]}' library installed successfully!")
-
-            elif self.argv[1] == "uninstall":  # todo
-                HascalError("Uninstalling library is not implemented in this version.")
-
+                # clone repository
+                clone_repo(self.argv[2], f"{self.BASE_DIR}/hlib/{mod_name}")
+                
+                print(f"Module '{self.argv[2]}' installed successfully!")
+            
             elif self.argv[1] == "update":
-                if len(argv) < 3:
-                    HascalError(
-                        "You must give one library name to update\nusage :\n\thascal update <library_name>"
-                    )
-                if not os.path.isfile(self.BASE_DIR + "/hlib/index.json"):
-                    HascalError(
-                        "Library index file(index.json) not found in 'hlib' folder"
-                    )
-                print(f"Updating '{self.argv[2]}'...")
-                if os.path.isfile(self.BASE_DIR + "/hlib/index.json"):
-                    print("Update Libraries Index...")
-                    index = get_index()
-                    with open(self.BASE_DIR + "/hlib/index.json", "w") as f:
-                        f.write(json.dumps(index))
-                    if not self.argv[2] in index:
-                        HascalError(
-                            f"Library {self.argv[2]} is deleted from server, you have currently latest version."
-                        )
-                    # dowload zip file
-                    r = requests.get(
-                        f"{BASE_URL}/{self.argv[2]}/{index[self.argv[2]]['zip']}"
-                    )
-                    # write zip file to disk
-                    with open(self.BASE_DIR + "/hlib/tmp.zip", "wb") as f:
-                        f.write(r.content)
-                    # extract downloaded zip file to hlib folder
-                    with zipfile.ZipFile(
-                        self.BASE_DIR + "/hlib/tmp.zip", "r"
-                    ) as zip_ref:
-                        zip_ref.extractall(self.BASE_DIR + "/hlib/")
-                    # remove downloaded zip file
-                    os.remove(self.BASE_DIR + "/hlib/tmp.zip")
+                mod_name = self.argv[2]
+                if not isdir(f"{self.BASE_DIR}/hlib/{mod_name}"):
+                    HascalError(f"Module '{mod_name}' is not installed, use 'hascal get' to install it")
+                print(f"Updating '{mod_name}'...")
 
-                print(f"'{self.argv[2]}' library updated successfully!")
-            elif self.argv[1] == "export":
-                if len(argv) < 3:
-                    HascalError(
-                        "You must give one zip file name to export library(only name not extension)\nusage :\n\thascal export <zip_file_name>"
-                    )
-                current_dir = os.getcwd()
-                zipf = zipfile.ZipFile(self.argv[2] + ".zip", "w", zipfile.ZIP_DEFLATED)
-                zipdir(current_dir, zipf)
-                zipf.close()
-            # END : Library Manager
+                
+                # check if git is installed
+                check_if_git_installed()
+
+                # check if git repository exist
+                check_if_git_repo_exist(self.argv[2])
+
+                # update repository
+                update_repo(f"{self.BASE_DIR}/hlib/{mod_name}")
+
+                print(f"Module '{self.argv[2]}' updated successfully!")
+            # END : Package Manager
+            
             elif self.argv[1] == "--verbose":  # print ast
                 if len(self.argv) == 3:
                     self.read_file(self.argv[2])
@@ -270,23 +215,3 @@ class HascalCompiler(object):
                 self.code = fin.read()
         except FileNotFoundError:
             HascalError(f"File '{file_name}' not found")
-
-
-BASE_URL = "https://raw.githubusercontent.com/hascal/libs/main"
-
-
-def get_index():
-    r = requests.get(f"{BASE_URL}/index.json")
-    if r:
-        return r.json()
-    else:
-        HascalError("Cannot download libraries index")
-
-
-def zipdir(path, ziph):
-    length = len(path)
-    # ziph is zipfile handle
-    for root, dirs, files in os.walk(path):
-        folder = root[length:]  # path without "parent"
-        for file in files:
-            ziph.write(os.path.join(root, file), os.path.join(folder, file))

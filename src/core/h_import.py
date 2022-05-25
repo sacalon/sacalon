@@ -76,7 +76,7 @@ def use(gen_class, path_, BASE_DIR, filename=None):
         HascalError(f"cannot found '{name}' library. Are you missing a library ?")
 
 
-def cuse(gen_class, path_, BASE_DIR, filename=None):
+def cuse(path_, BASE_DIR, filename=None):
     result = {}
     path = path_
     if type(path_) == str:
@@ -91,6 +91,8 @@ def cuse(gen_class, path_, BASE_DIR, filename=None):
     for x in path:
         final_path = final_path / x
         final_path_local = final_path_local / x
+    package_path = final_path
+    package_path_local = final_path_local
 
     final_path = str(final_path)
     final_path_local = str(final_path_local)
@@ -104,6 +106,14 @@ def cuse(gen_class, path_, BASE_DIR, filename=None):
     final_path_local_cc = final_path_local + ".cc"
     final_path_local_ld = final_path_local + ".ld"
     # final_path_local_wld = final_path_local + ".wld"
+
+    package_path_cc = package_path / "_.cc"
+    package_path_hpp = package_path / "_.hpp"
+    package_path_ld = package_path / "_.ld"
+
+    package_path_local_cc = package_path_local / "_.cc"
+    package_path_local_hpp = package_path_local / "_.hpp"
+    package_path_local_ld = package_path_local / "_.ld"
 
     if isfile(final_path_cc):
         with open(final_path_cc, "r") as fd:
@@ -127,7 +137,6 @@ def cuse(gen_class, path_, BASE_DIR, filename=None):
     elif isfile(final_path_local_cc):
         with open(final_path_local_cc, "r") as fd:
             result["cpp_code"] = fd.read()
-
             # read header file
             if isfile(final_path_local_h):
                 with open(final_path_local_h, "r") as fd:
@@ -137,6 +146,41 @@ def cuse(gen_class, path_, BASE_DIR, filename=None):
 
             if isfile(final_path_local_ld):
                 with open(final_path_local_ld, "r") as fd:
+                    result["LDFLAGS"] = list(fd.read().split(","))
+            else:
+                result["LDFLAGS"] = []
+
+        return result
+    elif isfile(package_path_cc):
+        with open(package_path_cc, "r") as fd:
+            result["cpp_code"] = fd.read()
+
+            # read header file
+            if isfile(package_path_hpp):
+                with open(package_path_hpp, "r") as fd:
+                    result["header_code"] = fd.read()
+            else:
+                result["header_code"] = ""
+
+            if isfile(package_path_ld):
+                with open(package_path_ld, "r") as fd:
+                    result["LDFLAGS"] = list(fd.read().split(","))
+            else:
+                result["LDFLAGS"] = []
+        return result
+    elif isfile(package_path_local_cc):
+        with open(package_path_local_cc, "r") as fd:
+            result["cpp_code"] = fd.read()
+
+            # read header file
+            if isfile(package_path_local_hpp):
+                with open(package_path_local_hpp, "r") as fd:
+                    result["header_code"] = fd.read()
+            else:
+                result["header_code"] = ""
+
+            if isfile(package_path_local_ld):
+                with open(package_path_local_ld, "r") as fd:
                     result["LDFLAGS"] = list(fd.read().split(","))
             else:
                 result["LDFLAGS"] = []

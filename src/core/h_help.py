@@ -1,6 +1,6 @@
 import platform
 
-HASCAL_COMPILER_VERSION = "1.3.9-beta"
+HASCAL_COMPILER_VERSION = "1.3.9-rc"
 HASCAL_GITHUB_REPO = "https://github.com/hascal/hascal"
 
 
@@ -9,14 +9,13 @@ def help_all():
         f"Hascal Compiler {HASCAL_COMPILER_VERSION} {str(platform.system()).lower()}/{str(platform.machine()).lower()}",
         "Copyright (c) 2019-2022 Hascal Foundation,",
         "All rights reserved.",
-        "\nEnter following command for compile a Hascal program :",
+        "\nEnter following command to compile a Hascal program :",
         "\thascal <inputfile.has> [output file name]",
         "other commands:",
         "\thelp: show help",
         "\tversion : show version",
-        "\tinstall <library_name> : install a library",
-        "\tupdate <library_name> : update a library",
-        "\tuninstall <library_name> : uninstall a library(not implemented)",
+        "\get <package url(git repository)> : install a package",
+        "\tupdate <package url(git repository)> : update a package",
     ]
     for line in output_message:
         print(line)
@@ -27,9 +26,9 @@ def help_short():
         f"Hascal Compiler {HASCAL_COMPILER_VERSION} {str(platform.system()).lower()}/{str(platform.machine()).lower()}",
         "Copyright (c) 2019-2022 Hascal Foundation,",
         "All rights reserved.",
-        "\nEnter following command for compile a Hascal program :",
+        "\nEnter following command to compile a Hascal program :",
         "\thascal <inputfile.has> [output file name]",
-        "for show other commands:",
+        "to show other commands enter following command :",
         "\thascal help",
     ]
     for line in output_message:
