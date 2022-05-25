@@ -44,7 +44,7 @@ class HascalCompiler(object):
                 mod_name = self.argv[2]
                 if len(self.argv) == 4 :
                     mod_name = self.argv[3]
-
+                mod_name = mod_name.replace(".","/")
                 if len(argv) < 3:
                     HascalError(
                         "You must give one package name to install\nusage :\n\thascal install <package_name>"
@@ -67,6 +67,7 @@ class HascalCompiler(object):
             
             elif self.argv[1] == "update":
                 mod_name = self.argv[2]
+                mod_name = mod_name.replace(".","/")
                 if not isdir(f"{self.BASE_DIR}/hlib/{mod_name}"):
                     HascalError(f"Module '{mod_name}' is not installed, use 'hascal get' to install it")
                 print(f"Updating '{mod_name}'...")
