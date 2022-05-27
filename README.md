@@ -8,8 +8,7 @@
   [Website](https://hascal.github.io) |
   [Docs](https://hascal.github.io/docs/latest) |
   [Changelog](docs/src/CHANGELOG.md) |
-  [Roadmap](docs/src/ROADMAP.md) |
-  [IDE Integration](docs/src/ide.md)
+  [Roadmap](docs/src/ROADMAP.md)
   
   <!-- [AUR Package](https://aur.archlinux.org/packages/hascal-git) -->
   [![](https://img.shields.io/github/v/tag/hascal/hascal)](https://github.com/hascal/hascal/releases)
