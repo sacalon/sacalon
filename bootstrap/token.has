@@ -1,5 +1,5 @@
 struct Token {
-    var type : string
-    var value : string
-    var line : int
+    var type : string = ""
+    var value : string = ""
+    var line : int = 0
 }

@@ -2,13 +2,6 @@
 //
 // Copyright (c) 2019-2022 Hascal Foundation
 // all rights reserved.
-//
-// A parser is a compiler or interpreter component that breaks data into smaller elements for 
-// easy translation into another language. A parser takes input in the form of a sequence of tokens, 
-// interactive commands, or program instructions and breaks them up into parts that can be used by other components in programming.
-//
-// A parser usually checks all data provided to ensure it is sufficient to build a data structure in 
-// the form of a parse tree or an abstract syntax tree.
 
 struct node_t {
     var node_type : string

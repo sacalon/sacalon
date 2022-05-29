@@ -5,7 +5,7 @@
 
 use os
 use file
-local use lexer
+use lexer
 
 var VERSION = "1.3.9-rc"
 
@@ -13,7 +13,7 @@ function show_help(){
     print(format("Hascal Compiler v{} {}",VERSION,os_name()))
     print("Copyright (c) 2019-2022 Hascal Development Team")
     print("All rights reserved.")
-    print("\nEnter following command for compile a Hascal program :")
+    print("\nEnter following command to compile a Hascal program :")
     print("hascal <inputfile.has> [output file name]")
     print("other commands:")
     print("\t--help,-h : show help")

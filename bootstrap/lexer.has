@@ -2,26 +2,18 @@
 //
 // Copyright (c) 2019-2022 Hascal Foundation
 // all rights reserved.
-//
-// wikipedia :
-// In computer science, lexical analysis, lexing or tokenization is the process of 
-// converting a sequence of characters (such as in a computer program or web page) into 
-// a sequence of _tokens (strings with an assigned and thus identified meaning). 
-// A program that performs lexical analysis may be termed a lexer, tokenizer,[1] or scanner,
-// although scanner is also a term for the first stage of a lexer. 
-// A lexer is generally combined with a parser, which together analyze the syntax of programming languages, 
-// web pages, and so forth.
 
 use strings
-local use keywords
-local use token
+use keywords
+use token
+use conv
 
 var _lexme = "" // current lexeme
 var current = -1 // current character
 var _source = "" // source code
 var line = 1 // current line
 
-var _tokens : [Token]
+var _tokens : [Token]?
 
 // check if current character is at the end of the source code
 function isAtEnd() : bool {
@@ -53,7 +45,7 @@ function lexer_error(filename:string, msg:string,line:int) {
 // scan next token
 function scan_Token(filename:string){
     var c = advance()
-    var tok : Token
+    var tok : Token?
 
     // skip whitespace
     if c == ' ' {
