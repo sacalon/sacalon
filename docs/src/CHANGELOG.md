@@ -70,6 +70,7 @@ function g(func:Function[int]int): int {
 
 </details>
 
+<hr>
 
 <details>
 <summary>v1.3.8</summary>
@@ -89,6 +90,8 @@ function g(func:Function[int]int): int {
 - remove `token` library
 
 </details>
+
+<hr>
 
 <details>
 <summary>v1.3.7</summary>
@@ -115,6 +118,8 @@ function g(func:Function[int]int): int {
 - `local use` statement removed
 
 </details>
+
+<hr>
 
 <details>
 <summary>v1.3.6</summary>
@@ -154,6 +159,7 @@ struct bar {
 
 </details>
 
+<hr>
 
 <details>
 <summary>v1.3.5</summary>
@@ -176,6 +182,8 @@ struct bar {
 - Fix incomplete type defination bug
 
 </details>
+
+<hr>
 
 <details>
 <summary>v1.3.4</summary>
@@ -204,6 +212,8 @@ struct bar {
 
 </details>
 
+<hr>
+
 <details>
 <summary>v1.3.2</summary>
 
@@ -221,6 +231,8 @@ struct bar {
 - `for to` and `for downto` statement removed
 
 </details>
+
+<hr>
 
 <details>
 <summary>v1.3.1</summary>
