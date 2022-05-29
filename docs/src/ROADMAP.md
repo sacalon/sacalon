@@ -1,8 +1,5 @@
 # Hascal's Roadmap 
 
-<details>
-<summary>v1.3.x</summary>
-
 ### Language
 - js backend(`hascal2js`)
 
@@ -12,15 +9,51 @@ var mythread = thread(@(1000,true){
     print("hi")
 })
 ```
+
 - generate html doc from a code
+
+- generics
+```typescript
+function f<T>(x: T): T {
+    return x
+}
+```
+
+- classes
+```typescript
+class C : T {
+    var foo : string
+    var bar = 1
+
+    // constructor
+    C(foo: string){
+        this.foo = foo
+    }
+
+    public f(x: string): string {
+        return x
+    }
+
+    private f2(x: string): string {
+        return x
+    }
+
+    new(foo: string): C {
+        return new C(foo)
+    }
+
+    delete(foo: string): C {
+        delete this.foo
+        delete this.bar
+        return this
+    }
+}
+```
 
 ### Standard Library
 - `thread` library
 
-### Library Manager
-- unistall library option
+### Package Manager
 
 ### Other
 - redesign logo
-
-</details>
