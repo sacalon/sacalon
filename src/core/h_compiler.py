@@ -11,7 +11,8 @@ import copy
 class Generator(object):
     LDFLAGS = []
 
-    def __init__(self, BASE_DIR):
+    def __init__(self, BASE_DIR,imported=[],
+                    imported_funcs={}, imported_types={}, imported_vars={}, imported_consts={}):
         self.BASE_DIR = BASE_DIR
         self.src_includes = ""
         self.src_pre_main = ""
@@ -64,7 +65,11 @@ class Generator(object):
         }
 
         # list of imported libraries
-        self.imported = []
+        self.imported = imported
+        self.imported_vars = imported_vars
+        self.imported_funcs = imported_funcs
+        self.imported_types = imported_types
+        self.imported_consts = imported_consts
 
         # list of decorators
         self.decorators = {"extern": 'extern "C"', "static": "static"}
@@ -104,6 +109,9 @@ class Generator(object):
     def add_to_flags(self,flags):
         self.LDFLAGS += flags
 
+    def add_to_importeds(self, lib):
+        self.imported.append(lib)
+    
     def walk(self, node):
         # {
         #     <statements>
@@ -641,17 +649,35 @@ class Generator(object):
         # use <name>
         if node[0] == "use":
             name = ".".join(name for name in node[1])
-            if name not in self.imported:
-                result = use(Generator, node[1], self.BASE_DIR)
+            if name in self.imported:
+                print(self.imported,"\n",name)
+
+                self.funcs.update(self.imported_funcs[name])
+                self.types.update(self.imported_types[name])
+                self.vars.update(self.imported_vars[name])
+                self.consts.update(self.imported_consts[name])
+            else :
+                result = use(Generator, node[1], self.BASE_DIR,imported=self.imported)
 
                 self.imported.append(name)
-                self.imported += result["generator"].imported
+                imported_ = result["generator"].imported
+                if imported_ != []:
+                    for i in imported_:
+                        if i not in self.imported:
+                            self.imported.append(i)
+                
                 self.add_to_output(
                     result["output_cpp"], result["generator"].src_includes
                 )
                 self.funcs.update(result["generator"].funcs)
                 self.types.update(result["generator"].types)
                 self.vars.update(result["generator"].vars)
+
+                self.imported_funcs[name] = result["generator"].funcs
+                self.imported_types[name] = result["generator"].types
+                self.imported_vars[name] = result["generator"].vars
+                self.imported_consts[name] = result["generator"].consts
+
             return {"expr": "", "type": ""}
 
         # use <name>, <name>,...

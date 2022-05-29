@@ -1,0 +1,13 @@
+use os
+
+var VERSION = "1.3.9-rc"
+
+function short_help(){
+    print(format("Hascal Compiler v{} {}/{}",VERSION,os_name(),arch()))
+    print("Copyright (c) 2019-2022 Hascal Foundation,")
+    print("All rights reserved.")
+    print("\nEnter following command to compile a Hascal program :")
+    print("hascal <inputfile.has> [output file name]")
+    print("to show other commands enter following command :")
+    print("\thascal help")
+}

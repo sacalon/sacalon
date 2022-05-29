@@ -5,25 +5,17 @@
 
 use os
 use file
+
 use lexer
+use help
 
-var VERSION = "1.3.9-rc"
-
-function show_help(){
-    print(format("Hascal Compiler v{} {}",VERSION,os_name()))
-    print("Copyright (c) 2019-2022 Hascal Development Team")
-    print("All rights reserved.")
-    print("\nEnter following command to compile a Hascal program :")
-    print("hascal <inputfile.has> [output file name]")
-    print("other commands:")
-    print("\t--help,-h : show help")
-    print("\t--version,-v : show version")
-    print("\t--verbose : verbose")
-}
 
 function main(argv:[string]) : int {
-    if len(argv) == 1 or argv[1] == "--help" or argv[1] == "-h" {
-        show_help()
+    if len(argv) == 1 {
+        short_help()
+        exit(0)
+    } else if len(argv) == 2 and (argv[1] == "--help" or argv[1] == "-h") {
+        // long_help()
         exit(0)
     } else if argv[1] == "version" {
         print(format("Hascal Compiler v{} {}",VERSION,os_name()))

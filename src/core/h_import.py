@@ -6,7 +6,8 @@ from os.path import isfile, isdir
 from pathlib import Path
 
 
-def use(gen_class, path_, BASE_DIR, filename=None):
+def use(gen_class, path_, BASE_DIR, filename=None,imported=[],
+                imported_funcs={}, imported_types={}, imported_vars={}, imported_consts={}):
     result = {}
     path = path_
     if type(path_) == str:
@@ -32,7 +33,9 @@ def use(gen_class, path_, BASE_DIR, filename=None):
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
-            generator = gen_class(BASE_DIR)
+            generator = gen_class(BASE_DIR,imported=imported, imported_funcs=imported_funcs,
+                                    imported_types=imported_types, imported_vars=imported_vars,
+                                    imported_consts=imported_consts)
             output_cpp = generator.generate(tree, True)
 
             result["generator"] = generator
