@@ -36,72 +36,75 @@ function peek() : char {
     }
     return _source[current + 1]
 }
+function peek(ahead : int) : char {
+    if isAtEnd() {
+        return '\0'
+    }
+    return _source[current + ahead]
+}
+
+// match current character with the given character
+// and advance if they match
+function match(c : char) : bool {
+    if isAtEnd() {
+        return false
+    }
+    if _source[current] == c {
+        current = current + 1
+        return true
+    }
+    return false
+}
 
 // lexer error
 function lexer_error(filename:string, msg:string,line:int) {
-    var fmt_msg = format("{}: Illegal character '{}':{}", filename, msg, to_string(line))
+    var fmt_msg = format("{}: {} ::{}", filename, msg, to_string(line))
 }
 
 // scan next token
-function scan_Token(filename:string){
+function scanToken(filename:string){
     var c = advance()
     var tok : Token?
 
-    // skip whitespace
-    if c == ' ' {
-        scan_Token(filename)
-    } 
-    // skip newline(lines saved as a token, we need it in parser phase)
-    else if c == '\n' {
-        tok = Token("NEWLINE", "", line)
-        append(_tokens,tok)
-        line = line + 1
-    } 
-
-    else if c == '(' {
-        tok = Token("LPAREN","(",line)
+    if c == '(' {
+        tok = Token("LEFT_PAREN","(",line)
         append(_tokens,tok)
     } else if c == ')' {
-        tok = Token("RPAREN",")",line)
+        tok = Token("RIGHT_PAREN",")",line)
         append(_tokens,tok)
     } 
-    
-    else if is_alpha(c) or c == '_' {
-        _lexme = to_string(c)
-        c = advance()
-        while (isAtEnd() == false) and (is_alpha(c) or is_number(c) or c == '_') {
-            _lexme = _lexme + to_string(c)
-            c = advance()
-        }
+    else if c == '{' {
+        tok = Token("LEFT_BRACE", "{", line)
+        append(_tokens,tok)
+    }
+    else if c == '}' {
+        tok = Token("RIGHT_BRACE", "}", line)
+        append(_tokens,tok)
+    }
+    else if c == '[' {
+        tok = Token("LEFT_BRACKET", "[", line)
+        append(_tokens,tok)
+    }
+    else if c == ']' {
+        tok = Token("RIGHT_BRACKET", "]", line)
+        append(_tokens,tok)
+    }
 
-        if check_keyword(_lexme) {
-            tok = Token(_lexme,_lexme,line)
-        } else {
-            tok = Token("NAME",_lexme,line)
-        }
-        append(_tokens,tok)
-    } 
 
-    else if is_number(c) {
-        _lexme = to_string(c)
-        while not isAtEnd() and is_number(c) {
-            c = advance()
-            _lexme = _lexme + to_string(c) 
-        }
-        tok = Token("NUMBER", _lexme, line)
+    else if c == ',' {
+        tok = Token("COMMA", ",", line)
+        append(_tokens,tok)
+    }
+    else if c == '.' {
+        tok = Token("DOT", ".", line)
         append(_tokens,tok)
     } 
-    else if c == '"' {
-        _lexme = to_string(c)
-        while not isAtEnd() and c != '"' {
-            _lexme = _lexme + to_string(c)
-            c = advance()
-        }
-        c = advance()
-        tok = Token("STRING", _lexme, line)
+    else if c == ':' {
+        tok = Token("COLON", ":", line)
         append(_tokens,tok)
-    } 
-    
+    }
+
+
     else if c == '+' {
         tok = Token("PLUS", "+", line)
         append(_tokens,tok)
@@ -115,112 +118,159 @@ function scan_Token(filename:string){
         append(_tokens,tok)
     } 
     else if c == '/' {
-        c = advance()
-        // skip single line comments
-        if c == '/' {
-            while not isAtEnd() and c != '\n' {
-                c = advance()
+        if match('/') {
+            while peek() != '\n' and (not isAtEnd()) {
+                advance()
             }
-        }
-        // skip multi line comments
-        else if c == '*' {
-            while not isAtEnd() and c != '*' and c != '/' {
-                c = advance()
-            }
-            c = advance()
-        }
-        // else it's a division
-        else {
-            tok = Token("DIV", "/", line)
-            append(_tokens,tok)
-        }
-    }
-
-    else if c == '=' {
-        c = peek()
-
-        // check if it's a assign or equal
-        if c == '=' {
-            tok = Token("EQUAL", "==", line)
-            append(_tokens,tok)
         } else {
-            tok = Token("ASSIGN","=",line)
+            tok = Token("SLASH", "/", line)
             append(_tokens,tok)
         }
     }
-    else if c == '<' {
-        c = peek()
+    else if c == '^' {
+        tok = Token("POWER", "^", line)
+        append(_tokens,tok)
+    }
+    else if c == '&' {
+        tok = Token("AMPERSAND", "&", line)
+        append(_tokens,tok)
+    }
+    else if c == '@' {
+        tok = Token("AT", "@", line)
+        append(_tokens,tok)
+    }
 
-        // check if it's a less than or less than equal
-        if c == '=' {
-            tok = Token("LESSEQ", "<=", line)
-            append(_tokens,tok)
-        } else {
-            tok = Token("LESS","<",line)
-            append(_tokens,tok)
-        }
-    }
-    else if c == '>' {
-        c = peek()
 
-        // check if it's a greater than or greater than equal
-        if c == '=' {
-            tok = Token("GREATEREQ", ">=", line)
-            append(_tokens,tok)
-        } else {
-            tok = Token("GREATER",">",line)
-            append(_tokens,tok)
-        }
-    }
     else if c == '!' {
-        c = peek()
-
-        // check if it's a greater than or greater than equal
-        if c == '=' {
-            tok = Token("GREATEREQ", ">=", line)
+        if match('=') {
+            tok = Token("BANG_EQUAL", "!=", line)
             append(_tokens,tok)
         } else {
-            lexer_error(filename,to_string(c),line)
-            exit(1)
+            tok = Token("BANG", "!", line)
+            append(_tokens,tok)
         }
-    }
-
-    else if c == '.' {
-        tok = Token("DOT", ".", line)
-        append(_tokens,tok)
     } 
-    else if c == ':' {
-        tok = Token("COLON", ":", line)
-        append(_tokens,tok)
-    }
-    else if c == ',' {
-        tok = Token("COMMA", ",", line)
-        append(_tokens,tok)
-    }
+    else if c == '=' {
+        if match('=') {
+            tok = Token("EQUAL_EQUAL", "==", line)
+            append(_tokens,tok)
+        } else {
+            tok = Token("EQUAL", "=", line)
+            append(_tokens,tok)
+        }
+    } 
+    else if c == '<' {
+        if match('=') {
+            tok = Token("LESS_EQUAL", "<=", line)
+            append(_tokens,tok)
+        } else {
+            tok = Token("LESS", "<", line)
+            append(_tokens,tok)
+        }
+    } 
+    else if c == '>' {
+        if match('=') {
+            tok = Token("GREATER_EQUAL", ">=", line)
+            append(_tokens,tok)
+        } else {
+            tok = Token("GREATER", ">", line)
+            append(_tokens,tok)
+        }
+    } 
 
-    else if c == '{' {
-        tok = Token("LBC", "{", line)
-        append(_tokens,tok)
-    }
-    else if c == '}' {
-        tok = Token("RBC", "}", line)
-        append(_tokens,tok)
-    }
+    // single line string
+    else if c == '"' {
+        var value = ""
 
-    else if c == '[' {
-        tok = Token("LBRCK", "[", line)
+        while peek() != '"' and (not isAtEnd()) {
+            value = value + advance()
+        }
+        if isAtEnd() {
+            lexer_error(filename, "Unterminated string", line)
+        }
+        // the closing "
+        advance()
+
+        tok = Token("STRING", value, line)
         append(_tokens,tok)
     }
-    else if c == ']' {
-        tok = Token("RBRCK", "]", line)
+    // multi-line string
+    else if c == '"' and peek() == '"' and peek(2) == '"' {
+        var value = ""
+
+        while peek() != '"' and peek(2) != '"' and peek(3) != '"' and (not isAtEnd()) {
+            value = value + advance()
+        }
+        if isAtEnd() {
+            lexer_error(filename, "Unterminated string", line)
+        }
+        
+        // skip closing """
+        if peek() == '"' and peek(2) == '"' and peek(3) == '"' {
+            advance()
+        }else {
+            lexer_error(filename, "Unterminated string", line)
+        }
+
+        tok = Token("STRING", value, line)
+        append(_tokens,tok)
+    }
+    else if c == '\'' {
+        var value = ""
+        while peek() != '\'' and (not isAtEnd()) {
+            value = value + advance()
+        }
+        if isAtEnd() {
+            lexer_error(filename, "Unterminated string", line)
+        }
+        // the closing '
+        advance()
+
+        tok = Token("CHAR", value, line)
         append(_tokens,tok)
     }
     
+    else if is_alpha(c) {
+        var value = to_string(c)
+        while is_alpha(peek()) {
+            value = value + advance()
+        }
+        if check_keyword(value) {
+            tok = Token(value, value, line)
+            append(_tokens,tok)
+        } else {
+            tok = Token("NAME", value, line)
+            append(_tokens,tok)
+        }
+    } 
+    else if is_number(c) {
+        var value = to_string(c)
+        while is_number(peek()) {
+            value = value + advance()
+        }
+        tok = Token("INT", value, line)
+        append(_tokens,tok)
+    }
+
+
+    else if c == ' ' or c == '\r' or c == '\t' {
+        scanToken(filename)
+    } 
+    else if c == '\n' {
+        tok = Token("NEWLINE", "", line)
+        append(_tokens,tok)
+        line = line + 1
+    }
+    
+
+
+    
 }
+
 function tokenizer(filename:string,src:string): [Token] {
     _source = src
     while isAtEnd() == false {
-        scan_Token(filename)
+        scanToken(filename)
     }
     return _tokens
 }
