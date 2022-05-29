@@ -14,7 +14,7 @@ make build
 
 Arch Users :
 ```bash
-pacman -S hascal-git
+yay -S hascal-git
 ```
 
 Windows : 
