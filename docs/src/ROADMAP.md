@@ -1,17 +1,34 @@
 # Hascal's Roadmap 
 
+<details>
+<summary>v1.3.x</summary>
+
 ### Language
-- js backend(`hascal2js`)
+- js backend
 
 - lambdas :
-```
-var mythread = thread(@(1000,true){
-    print("hi")
+```typescript
+var mythread = thread(@(x:int,y:int){
+    print(x*y)
 })
 ```
 
 - generate html doc from a code
 
+### Standard Library
+
+### Package Manager
+
+### Other
+- rebranding
+
+</details>
+
+<details>
+<summary>v1.4.x</summary>
+
+### Language
+- rewrite compiler in hascal 
 - generics
 ```typescript
 function f<T>(x: T): T {
@@ -19,6 +36,20 @@ function f<T>(x: T): T {
 }
 ```
 
+### Standard Library
+- `thread` library
+
+### Package Manager
+
+### Other
+
+</details>
+
+
+<details>
+<summary>v1.5.x</summary>
+
+### Language
 - classes
 ```typescript
 class C : T {
@@ -45,15 +76,14 @@ class C : T {
     delete(foo: string): C {
         delete this.foo
         delete this.bar
-        return this
     }
 }
 ```
 
 ### Standard Library
-- `thread` library
 
 ### Package Manager
 
 ### Other
-- redesign logo
+
+</details>
