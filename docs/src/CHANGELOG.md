@@ -198,6 +198,8 @@ struct bar {
 
 </details>
 
+<hr>
+
 <details>
 <summary>v1.3.3</summary>
 
