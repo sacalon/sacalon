@@ -1,6 +1,19 @@
 # Hascal's Changelog
 <details>
-<summary>v1.3.9</summary>
+<summary>v1.3.9x</summary>
+
+<details>
+<summary>v1.3.9-rc.1</summary>
+
+#### Changes
+- upgrade importing system
+- some changes in self hosted compiler(NOTE: self hosted compiler is not ready yet)
+
+#### Bug fixes
+- fix import bug when importing one package in multiple files
+- fix self hosted bugs
+
+</details>
 
 <details>
 <summary>v1.3.9-rc</summary>
