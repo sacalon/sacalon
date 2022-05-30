@@ -4,6 +4,7 @@
 <summary>v1.3.x</summary>
 
 ### Language
+- llvm backend
 - js backend
 
 - lambdas :
