@@ -11,7 +11,8 @@ import copy
 class Generator(object):
     LDFLAGS = []
 
-    def __init__(self, BASE_DIR,imported=[],
+    def __init__(self, BASE_DIR, filename="",
+                    imported=[],
                     imported_funcs={}, imported_types={}, imported_vars={}, imported_consts={}):
         self.BASE_DIR = BASE_DIR
         self.src_includes = ""
@@ -70,6 +71,8 @@ class Generator(object):
         self.imported_funcs = imported_funcs
         self.imported_types = imported_types
         self.imported_consts = imported_consts
+
+        self.filename = filename
 
         # list of decorators
         self.decorators = {"extern": 'extern "C"', "static": "static"}
@@ -143,13 +146,13 @@ class Generator(object):
             _line = node[4]
 
             if (_name in self.vars or _name in self.consts) and self.scope == False:
-                HascalError(f"'{_name}' exists, cannot redefine it:{_line}")
+                HascalError(f"'{_name}' exists, cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
                 HascalError(
-                    f"'{_name}' defined as a type, cannot redefine it as a variable:{_line}"
+                    f"'{_name}' defined as a type, cannot redefine it as a variable:{_line}",filename=self.filename
                 )
             elif _expr["type"].category == "all-nullable":
-                HascalError(f"Assign 'NULL' to non-typed variable '{_name}':{_line}")
+                HascalError(f"Assign 'NULL' to non-typed variable '{_name}':{_line}",filename=self.filename)
             else:
                 members = {}
 
@@ -171,14 +174,14 @@ class Generator(object):
             _line = node[4]
 
             if (_name in self.vars or _name in self.consts) and self.scope == False:
-                HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
+                HascalError(f"'{_name}' exists ,cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
                 HascalError(
-                    f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}"
+                    f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}",filename=self.filename
                 )
             elif is_nullable(_type["type"]) == False:
                 HascalError(
-                    f"The non-nullable variable '{_name}' must be initialized.\nTry adding an initializer expression:{_line}"
+                    f"The non-nullable variable '{_name}' must be initialized.\nTry adding an initializer expression:{_line}",filename=self.filename
                 )
             else:
                 members = {}
@@ -202,23 +205,23 @@ class Generator(object):
             _line = node[5]
 
             if (_name in self.vars or _name in self.consts) and self.scope == False:
-                HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
+                HascalError(f"'{_name}' exists ,cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
                 HascalError(
-                    f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}"
+                    f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}",filename=self.filename
                 )
             elif is_nullable_compatible_type(_expr["type"], _type["type"]) == False:
-                HascalError(f"Assign 'NULL' to non-nullable variable '{_name}':{_line}")
+                HascalError(f"Assign 'NULL' to non-nullable variable '{_name}':{_line}",filename=self.filename)
             elif (
                 _expr["type"].category == "all-nullable"
                 and _name["type"].is_ptr == False
             ):
                 HascalError(
-                    f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL"
+                    f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL",filename=self.filename
                 )
             elif is_compatible_type(_expr["type"], _type["type"]) == False:
                 HascalError(
-                    f"Mismatched type {_type['type'].get_name_for_error()} and {_expr['type'].get_name_for_error()}:{_line}"
+                    f"Mismatched type {_type['type'].get_name_for_error()} and {_expr['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
             else:
                 members = {}
@@ -240,10 +243,10 @@ class Generator(object):
             _line = node[4]
 
             if (_name in self.vars or _name in self.consts) and self.scope == False:
-                HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
+                HascalError(f"'{_name}' exists ,cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
                 HascalError(
-                    f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}"
+                    f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}",filename=self.filename
                 )
             else:
                 self.vars[_name] = Var(_name, Array(_type["type"]), is_array=True)
@@ -262,23 +265,23 @@ class Generator(object):
             _line = node[5]
 
             if (_name in self.vars or _name in self.consts) and self.scope == False:
-                HascalError(f"'{_name}' exists, cannot redefine it:{_line}")
+                HascalError(f"'{_name}' exists, cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
                 HascalError(
-                    f"'{_name}' defined as a type, cannot redefine it as a variable:{_line}"
+                    f"'{_name}' defined as a type, cannot redefine it as a variable:{_line}",filename=self.filename
                 )
             elif is_nullable_compatible_type(_expr["type"], _type["type"]) == False:
-                HascalError(f"Assign 'NULL' to non-nullable variable '{_name}':{_line}")
+                HascalError(f"Assign 'NULL' to non-nullable variable '{_name}':{_line}",filename=self.filename)
             elif (
                 _expr["type"].category == "all-nullable"
                 and _name["type"].is_ptr == False
             ):
                 HascalError(
-                    f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL"
+                    f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL",filename=self.filename
                 )
             elif is_compatible_type(_expr["type"], Array(_type["type"])) == False:
                 HascalError(
-                    f"Mismatched type {Array(_type['type']).get_name_for_error()} and {_expr['type'].get_name_for_error()}:{_line}"
+                    f"Mismatched type {Array(_type['type']).get_name_for_error()} and {_expr['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
             else:
                 self.vars[_name] = Var(_name, Array(_type["type"]), is_array=True)
@@ -295,7 +298,7 @@ class Generator(object):
             _name = node[3]
             _line = node[5]
 
-            HascalError(f"Uninitialized const '{_name}'")
+            HascalError(f"Uninitialized const '{_name}'",filename=self.filename)
 
         # const <name> : <return_type> = <expr>
         if node[0] == "declare" and node[1] == "const":
@@ -305,23 +308,23 @@ class Generator(object):
             _line = node[5]
 
             if (_name in self.vars or _name in self.consts) and self.scope == False:
-                HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
+                HascalError(f"'{_name}' exists ,cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
                 HascalError(
-                    f"'{_name}' defined as a type ,cannot redefine it as a constant:{_line}"
+                    f"'{_name}' defined as a type ,cannot redefine it as a constant:{_line}",filename=self.filename
                 )
             elif is_nullable_compatible_type(_expr["type"], _type["type"]) == False:
-                HascalError(f"Assign 'NULL' to non-nullable const '{_name}':{_line}")
+                HascalError(f"Assign 'NULL' to non-nullable const '{_name}':{_line}",filename=self.filename)
             elif (
                 _expr["type"].category == "all-nullable"
                 and _name["type"].is_ptr == False
             ):
                 HascalError(
-                    f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL"
+                    f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL",filename=self.filename
                 )
             elif is_compatible_type(_expr["type"], _type["type"]) == False:
                 HascalError(
-                    f"Mismatched type {_type['type'].get_name_for_error()} and {_expr['type'].get_name_for_error()}:{_line}"
+                    f"Mismatched type {_type['type'].get_name_for_error()} and {_expr['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
             else:
                 self.consts[_name] = Const(_name, _type["type"])
@@ -338,14 +341,14 @@ class Generator(object):
             _type = self.walk(node[2])
             _line = node[4]
             if (_name in self.vars or _name in self.consts) and self.scope == False:
-                HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
+                HascalError(f"'{_name}' exists ,cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
                 HascalError(
-                    f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}"
+                    f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}",filename=self.filename
                 )
             elif is_nullable(_type["type"]) == False:
                 HascalError(
-                    f"The non-nullable variable '{_name}' must be initialized.\nTry adding an initializer expression:{_line}"
+                    f"The non-nullable variable '{_name}' must be initialized.\nTry adding an initializer expression:{_line}",filename=self.filename
                 )
             else:
                 members = {}
@@ -369,23 +372,23 @@ class Generator(object):
             _line = node[5]
 
             if (_name in self.vars or _name in self.consts) and self.scope == False:
-                HascalError(f"'{_name}' exists ,cannot redefine it:{_line}")
+                HascalError(f"'{_name}' exists ,cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
                 HascalError(
-                    f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}"
+                    f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}",filename=self.filename
                 )
             elif is_nullable_compatible_type(_expr["type"], _type["type"]) == False:
-                HascalError(f"Assign 'NULL' to non-nullable variable '{_name}':{_line}")
+                HascalError(f"Assign 'NULL' to non-nullable variable '{_name}':{_line}",filename=self.filename)
             elif (
                 _expr["type"].category == "all-nullable"
                 and _name["type"].is_ptr == False
             ):
                 HascalError(
-                    f"Converting to non-pointer type '{_type['type']}' from NULL"
+                    f"Converting to non-pointer type '{_type['type']}' from NULL",filename=self.filename
                 )
             elif is_compatible_type(_expr["type"], _type["type"]) == False:
                 HascalError(
-                    f"Mismatched type {_type['type'].get_name_for_error()} and {_expr['type'].get_name_for_error()}:{_line}"
+                    f"Mismatched type {_type['type'].get_name_for_error()} and {_expr['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
             else:
                 members = {}
@@ -408,13 +411,13 @@ class Generator(object):
             _line = node[4]
 
             if (_name in self.vars or _name in self.consts) and self.scope == False:
-                HascalError(f"'{_name}' exists, cannot redefine it:{_line}")
+                HascalError(f"'{_name}' exists, cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
                 HascalError(
-                    f"'{_name}' defined as a type, cannot redefine it as a constant:{_line}"
+                    f"'{_name}' defined as a type, cannot redefine it as a constant:{_line}",filename=self.filename
                 )
             elif _expr["type"].category == "all-nullable":
-                HascalError(f"Assign 'NULL' to non-typed variable '{_name}':{_line}")
+                HascalError(f"Assign 'NULL' to non-typed variable '{_name}':{_line}",filename=self.filename)
             else:
                 members = {}
 
@@ -457,22 +460,22 @@ class Generator(object):
 
             if is_nullable_compatible_type(_name["type"], _expr["type"]) == False:
                 HascalError(
-                    f"Assign 'NULL' to non-nullable variable '{_name['expr']}':{_line}"
+                    f"Assign 'NULL' to non-nullable variable '{_name['expr']}':{_line}",filename=self.filename
                 )
             elif (
                 _expr["type"].category == "all-nullable"
                 and _name["type"].is_ptr == False
             ):
                 HascalError(
-                    f"Converting to non-pointer type '{_name['type']}' from NULL"
+                    f"Converting to non-pointer type '{_name['type']}' from NULL",filename=self.filename
                 )
             elif is_compatible_type(_name["type"], _expr["type"]) == False:
                 HascalError(
-                    f"Mismatched type '{_name['type'].get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}"
+                    f"Mismatched type '{_name['type'].get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}",filename=self.filename
                 )
             elif _expr["type"].category == "all-nullable":
                 HascalWarning(
-                    f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}"
+                    f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}",filename=self.filename
                 )
             expr = {
                 "expr": "%s = %s;" % (_name["expr"], _expr["expr"]),
@@ -488,29 +491,29 @@ class Generator(object):
             _line = node[4]
 
             if not isinstance(_name["type"], Array):
-                HascalError(f"'{_name['expr']}' is not subscriptable:{_line}")
+                HascalError(f"'{_name['expr']}' is not subscriptable:{_line}",filename=self.filename)
 
             if (
                 is_nullable_compatible_type(_name["type"].type_obj, _expr["type"])
                 == False
             ):
                 HascalError(
-                    f"Assign 'NULL' to non-nullable variable '{_name['expr']}':{_line}"
+                    f"Assign 'NULL' to non-nullable variable '{_name['expr']}':{_line}",filename=self.filename
                 )
             elif (
                 _expr["type"].category == "all-nullable"
                 and _name["type"].is_ptr == False
             ):
                 HascalError(
-                    f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL"
+                    f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL",filename=self.filename
                 )
             elif is_compatible_type(_name["type"].type_obj, _expr["type"]) == False:
                 HascalError(
-                    f"Mismatched type '{_name['type'].type_obj.get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}"
+                    f"Mismatched type '{_name['type'].type_obj.get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}",filename=self.filename
                 )
             elif _expr["type"].category == "all-nullable":
                 HascalWarning(
-                    f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}"
+                    f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}",filename=self.filename
                 )
 
             expr = {
@@ -528,14 +531,14 @@ class Generator(object):
             _line = node[5]
 
             if not isinstance(_name["type"], Array):
-                HascalError(f"'{_name['expr']}' is not subscriptable:{_line}")
+                HascalError(f"'{_name['expr']}' is not subscriptable:{_line}",filename=self.filename)
             if not isinstance(_name["type"].type_obj, Struct):
                 HascalError(
-                    f"'{_name['expr']}[{_index['expr']}]' is not a struct:{_line}"
+                    f"'{_name['expr']}[{_index['expr']}]' is not a struct:{_line}",filename=self.filename
                 )
             if not _field in _name["type"].type_obj.members:
                 HascalError(
-                    f"'{_name['expr']}[{_index['expr']}]' has no field '{_field}':{_line}"
+                    f"'{_name['expr']}[{_index['expr']}]' has no field '{_field}':{_line}",filename=self.filename
                 )
 
             if (
@@ -545,14 +548,14 @@ class Generator(object):
                 == False
             ):
                 HascalError(
-                    f"Assign 'NULL' to non-nullable variable '{_name['expr']}[{_index['expr']}].{_field}':{_line}"
+                    f"Assign 'NULL' to non-nullable variable '{_name['expr']}[{_index['expr']}].{_field}':{_line}",filename=self.filename
                 )
             elif (
                 _expr["type"].category == "all-nullable"
                 and _name["type"].is_ptr == False
             ):
                 HascalError(
-                    f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL"
+                    f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL",filename=self.filename
                 )
             elif (
                 is_compatible_type(
@@ -561,11 +564,11 @@ class Generator(object):
                 == False
             ):
                 HascalError(
-                    f"Mismatched type '{_name['type'].type_obj.members[_field].get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}"
+                    f"Mismatched type '{_name['type'].type_obj.members[_field].get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}",filename=self.filename
                 )
             elif _expr["type"].category == "all-nullable":
                 HascalWarning(
-                    f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}"
+                    f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}",filename=self.filename
                 )
 
             expr = {
@@ -584,29 +587,29 @@ class Generator(object):
 
             if not _type.is_ptr:
                 HascalError(
-                    f"Invalid type argument of unary '^' (have '{_type['type'].get_name_for_error()}'):{_line}"
+                    f"Invalid type argument of unary '^' (have '{_type['type'].get_name_for_error()}'):{_line}",filename=self.filename
                 )
             _type.is_ptr = False
             _type.ptr_str = ""
 
             if is_nullable_compatible_type(_type, _expr["type"]) == False:
                 HascalError(
-                    f"Assign 'NULL' to non-nullable variable '{_name['expr']}':{_line}"
+                    f"Assign 'NULL' to non-nullable variable '{_name['expr']}':{_line}",filename=self.filename
                 )
             elif (
                 _expr["type"].category == "all-nullable"
                 and _name["type"].is_ptr == False
             ):
                 HascalError(
-                    f"Converting to non-pointer type '{_type.get_name_for_error()}' from NULL"
+                    f"Converting to non-pointer type '{_type.get_name_for_error()}' from NULL",filename=self.filename
                 )
             elif is_compatible_type(_type, _expr["type"]) == False:
                 HascalError(
-                    f"Mismatched type '{_type.get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}"
+                    f"Mismatched type '{_type.get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}",filename=self.filename
                 )
             elif _expr["type"].category == "all-nullable":
                 HascalWarning(
-                    f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}"
+                    f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}",filename=self.filename
                 )
 
             expr = {
@@ -621,7 +624,7 @@ class Generator(object):
             _line = node[2]
 
             if _expr["expr"] in self.types:
-                HascalError(f"Cannot return a type '{_expr['expr']}':{_line}")
+                HascalError(f"Cannot return a type '{_expr['expr']}':{_line}",filename=self.filename)
 
             expr = {
                 "expr": "return %s;\n" % _expr["expr"],
@@ -657,7 +660,14 @@ class Generator(object):
                 self.vars.update(self.imported_vars[name])
                 self.consts.update(self.imported_consts[name])
             else :
-                result = use(Generator, node[1], self.BASE_DIR,imported=self.imported)
+                result = use(Generator, node[1], self.BASE_DIR,
+                                filename=name,
+                                imported=self.imported,
+                                imported_funcs=self.imported_funcs,
+                                imported_types=self.imported_types,
+                                imported_vars=self.imported_vars,
+                                imported_consts=self.imported_consts
+                            )
 
                 self.imported.append(name)
                 imported_ = result["generator"].imported
@@ -744,7 +754,7 @@ class Generator(object):
             if len(params) != 1:
                 for i in range(len(params_name)):
                     if params["static"][i] :
-                        HascalError(f"Static variable '{params_name[i]}' cannot be used as parameter:{_line}")
+                        HascalError(f"Static variable '{params_name[i]}' cannot be used as parameter:{_line}",filename=self.filename)
                     
                     _params[params_name[i]] = params_type[i]
                     if isinstance(params_type[i],Function):
@@ -771,7 +781,7 @@ class Generator(object):
 
             if _return_type != "void" and len(_expr) < 1:
                 HascalError(
-                    f"Function '{_name}' must return a value at end of function block:{_line}"
+                    f"Function '{_name}' must return a value at end of function block:{_line}",filename=self.filename
                 )
             if (
                 _return_type != "void"
@@ -779,10 +789,10 @@ class Generator(object):
                 and _expr[-1].get("return") != True
             ):
                 HascalError(
-                    f"Function '{_name}' should return a value at end of function block:{_line}"
+                    f"Function '{_name}' should return a value at end of function block:{_line}",filename=self.filename
                 )
             if _return_type != "int" and _name == "main":
-                HascalError(f"Function 'main' must return 'int'")
+                HascalError(f"Function 'main' must return 'int'",filename=self.filename)
 
             for e in _expr:
                 _res += e["expr"]
@@ -825,7 +835,7 @@ class Generator(object):
 
             if len(params["name"]) > 1 and _name == "main":
                 HascalError(
-                    f"Function 'main' takes only zero or one arguments(with string array type):{_line}"
+                    f"Function 'main' takes only zero or one arguments(with string array type):{_line}",filename=self.filename
                 )
             if (
                 len(params["name"]) == 1
@@ -839,7 +849,7 @@ class Generator(object):
                 and _name == "main"
             ):
                 HascalError(
-                    f"Function 'main' takes only zero or one arguments(with struct type):{_line}"
+                    f"Function 'main' takes only zero or one arguments(with struct type):{_line}",filename=self.filename
                 )
             if (
                 len(params["name"]) == 1
@@ -848,7 +858,7 @@ class Generator(object):
                 and _params[_params_keys[0]].type_obj.type_name != "string"
             ):
                 HascalError(
-                    f"Function 'main' takes only zero or one arguments(with string array type):{_line}"
+                    f"Function 'main' takes only zero or one arguments(with string array type):{_line}",filename=self.filename
                 )
 
             expr = {
@@ -898,7 +908,7 @@ class Generator(object):
             res = ""
             for e in _body:
                 if str(e["type"]) == _name:
-                    HascalError(f"Incomplete type definition '{_name}':{_line}")
+                    HascalError(f"Incomplete type definition '{_name}':{_line}",filename=self.filename)
 
                 if e.get("cuse") == None:
                     _members[e["name"]] = e["type"]
@@ -951,13 +961,13 @@ class Generator(object):
             if self.types.get(_i_name) != None:
                 _members = copy.deepcopy(self.types[_i_name].members)
             else:
-                HascalError(f"Cannot found struct '{_i_name}'")
+                HascalError(f"Cannot found struct '{_i_name}'",filename=self.filename)
 
             # generate output code and member
             res = ""
             for e in _body:
                 if str(e["type"]) == _name:
-                    HascalError(f"Incomplete type definition '{_name}':{_line}")
+                    HascalError(f"Incomplete type definition '{_name}':{_line}",filename=self.filename)
 
                 if e.get("cuse") == None:
                     _members[e["name"]] = e["type"]
@@ -979,11 +989,11 @@ class Generator(object):
             _members = node[2].split(",")
 
             if _name in self.types:
-                HascalError(f"Redefinition of type '{_name}'")
+                HascalError(f"Redefinition of type '{_name}'",filename=self.filename)
             if _name in self.vars:
-                HascalError(f"Redefinition of variable '{_name}'")
+                HascalError(f"Redefinition of variable '{_name}'",filename=self.filename)
             if _name in self.funcs:
-                HascalError(f"Redefinition of function '{_name}'")
+                HascalError(f"Redefinition of function '{_name}'",filename=self.filename)
 
             members = {}
             for i in range(len(_members) - 1):
@@ -1076,10 +1086,10 @@ class Generator(object):
             current_vars = self.vars.copy()
 
             if not (_name2 in self.vars or _name2 in self.consts):
-                HascalError(f"'{_name2}' not defined:{_line}")
+                HascalError(f"'{_name2}' not defined:{_line}",filename=self.filename)
 
             if not isinstance(self.vars[_name2].type, Array):
-                HascalError(f"'{_name2}' is not iterable:{_line}")
+                HascalError(f"'{_name2}' is not iterable:{_line}",filename=self.filename)
 
             self.vars[_name] = Var(_name, self.vars[_name2].type.type_obj)
             body = self.walk(node[3])
@@ -1113,17 +1123,17 @@ class Generator(object):
             _line = node[3]
 
             if is_nullable_compatible_type(_type["type"], _expr["type"]) == False:
-                HascalError(f"Assign 'NULL' to non-nullable variable:{_line}")
+                HascalError(f"Assign 'NULL' to non-nullable variable:{_line}",filename=self.filename)
             elif (
                 _expr["type"].category == "all-nullable"
                 and _name["type"].is_ptr == False
             ):
                 HascalError(
-                    f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL"
+                    f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL",filename=self.filename
                 )
             if is_compatible_type(_type["type"], _expr["type"]) == False:
                 HascalError(
-                    f"Mismatched type '{_type['type'].get_name_for_error()}' and '{_expr['type'].get_name_for_error()}' in 'new' expression:{_line}"
+                    f"Mismatched type '{_type['type'].get_name_for_error()}' and '{_expr['type'].get_name_for_error()}' in 'new' expression:{_line}",filename=self.filename
                 )
 
             _type["type"].is_ptr = True
@@ -1140,10 +1150,10 @@ class Generator(object):
             _line = node[2]
 
             if not _name in self.vars:
-                HascalError(f"'{_name}' not defined:{_line}")
+                HascalError(f"'{_name}' not defined:{_line}",filename=self.filename)
 
             if self.vars[_name].type.is_ptr == False:
-                HascalError(f"'{_name}' is not a pointer:{_line}")
+                HascalError(f"'{_name}' is not a pointer:{_line}",filename=self.filename)
 
             expr = {
                 "expr": "delete %s;\n" % (_name),
@@ -1169,7 +1179,7 @@ class Generator(object):
 
             if not _type.is_ptr:
                 HascalError(
-                    f"Invalid type argument of unary '^' (have '{_type}'):{_line}"
+                    f"Invalid type argument of unary '^' (have '{_type}'):{_line}",filename=self.filename
                 )
 
             _type.is_ptr = False
@@ -1291,7 +1301,7 @@ class Generator(object):
                             counter += 1
                     if _name in self.types:
                         if not isinstance(self.types[_name], Struct):
-                            HascalError(f"Cannot call type {_name}:{_line}")
+                            HascalError(f"Cannot call type {_name}:{_line}",filename=self.filename)
 
                         expr = {
                             "expr": "%s{%s}"
@@ -1327,7 +1337,7 @@ class Generator(object):
                         }
                         return expr
             else:
-                HascalError(f"Function '{_name}' not defined:{_line}")
+                HascalError(f"Function '{_name}' not defined:{_line}",filename=self.filename)
         if node[0] == "call_stmt":
             _expr = self.walk(node[1])
             _expr["expr"] += ";\n"
@@ -1343,10 +1353,10 @@ class Generator(object):
                 _expr0["type"].category == "all-nullable"
                 or _expr1["type"].category == "all-nullable"
             ) and (_expr0["type"].is_ptr != True or _expr0["type"].is_ptr != True):
-                HascalError(f"'NULL' used in arithmetic:{_line}")
+                HascalError(f"'NULL' used in arithmetic:{_line}",filename=self.filename)
             if is_compatible_type(_expr0["type"], _expr1["type"]) == False:
                 HascalError(
-                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}"
+                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
 
             expr = {
@@ -1365,17 +1375,17 @@ class Generator(object):
                 _expr0["type"].category == "all-nullable"
                 or _expr1["type"].category == "all-nullable"
             ) and (_expr0["type"].is_ptr != True or _expr0["type"].is_ptr != True):
-                HascalError(f"'NULL' used in arithmetic:{_line}")
+                HascalError(f"'NULL' used in arithmetic:{_line}",filename=self.filename)
             if is_compatible_type(_expr0["type"], _expr1["type"]) == False:
                 HascalError(
-                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}"
+                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
             if (
                 _expr0["type"].category != "number"
                 or _expr1["type"].category != "number"
             ):
                 HascalError(
-                    f"Cannot subtract {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}"
+                    f"Cannot subtract {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
 
             expr = {
@@ -1394,18 +1404,18 @@ class Generator(object):
                 _expr0["type"].category == "all-nullable"
                 or _expr1["type"].category == "all-nullable"
             ) and (_expr0["type"].is_ptr != True or _expr0["type"].is_ptr != True):
-                HascalError(f"'NULL' used in arithmetic:{_line}")
+                HascalError(f"'NULL' used in arithmetic:{_line}",filename=self.filename)
 
             if is_compatible_type(_expr0["type"], _expr1["type"]) == False:
                 HascalError(
-                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}"
+                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
 
             if (
                 _expr0["type"].category != "number"
                 or _expr1["type"].category != "number"
             ):
-                HascalError(f"Cannot multiply non-number type:{_line}")
+                HascalError(f"Cannot multiply non-number type:{_line}",filename=self.filename)
 
             expr = {
                 "expr": "%s * %s" % (_expr0["expr"], _expr1["expr"]),
@@ -1423,18 +1433,18 @@ class Generator(object):
                 _expr0["type"].category == "all-nullable"
                 or _expr1["type"].category == "all-nullable"
             ) and (_expr0["type"].is_ptr != True or _expr0["type"].is_ptr != True):
-                HascalError(f"'NULL' used in arithmetic:{_line}")
+                HascalError(f"'NULL' used in arithmetic:{_line}",filename=self.filename)
 
             if is_compatible_type(_expr0["type"], _expr1["type"]) == False:
                 HascalError(
-                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}"
+                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
 
             if (
                 _expr0["type"].category != "number"
                 or _expr1["type"].category != "number"
             ):
-                HascalError(f"Cannot divide non-number type:{_line}")
+                HascalError(f"Cannot divide non-number type:{_line}",filename=self.filename)
 
             else:
                 expr = {
@@ -1502,13 +1512,13 @@ class Generator(object):
             _line = node[3]
 
             if is_nullable_compatible_type(_expr0["type"], _expr1["type"]) == False:
-                HascalError(f"'NULL' used in arithmetic:{_line}")
+                HascalError(f"'NULL' used in arithmetic:{_line}",filename=self.filename)
             elif (
                 is_nullable_compatible_type(_expr0["type"], _expr1["type"]) == False
                 and is_compatible_type(_expr0["type"], _expr1["type"]) == False
             ):
                 HascalError(
-                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}"
+                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
             else:
                 expr = {
@@ -1525,7 +1535,7 @@ class Generator(object):
 
             if is_compatible_type(_expr0["type"], _expr1["type"]) == False:
                 HascalError(
-                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}"
+                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
             # todo : check if type is int or bool else error
             else:
@@ -1543,7 +1553,7 @@ class Generator(object):
 
             if is_compatible_type(_expr0["type"], _expr1["type"]) == False:
                 HascalError(
-                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}"
+                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
             # todo : check if type is int or bool else error
             else:
@@ -1561,7 +1571,7 @@ class Generator(object):
 
             if is_compatible_type(_expr0["type"], _expr1["type"]) == False:
                 HascalError(
-                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}"
+                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
             # todo : check if type is int or bool else error
             else:
@@ -1579,7 +1589,7 @@ class Generator(object):
 
             if is_compatible_type(_expr0["type"], _expr1["type"]) == False:
                 HascalError(
-                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}"
+                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
             # todo : check if type is int or bool else error
             else:
@@ -1597,7 +1607,7 @@ class Generator(object):
 
             if is_compatible_type(_expr0["type"], _expr1["type"]) == False:
                 HascalError(
-                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}"
+                    f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
             # todo : check if type is int or bool else error
             else:
@@ -1673,7 +1683,7 @@ class Generator(object):
                     }
                     return expr
                 else:
-                    HascalError(f"'{_name}' is not reachable or not defined:{_line}")
+                    HascalError(f"'{_name}' is not reachable or not defined:{_line}",filename=self.filename)
             else:
                 _full_name = ""
 
@@ -1763,7 +1773,7 @@ class Generator(object):
                     if isinstance(self.types[str(self.vars[_name].type)], Struct):
                         # if struct has no member show error else set current member to _current_member
                         if self.types[self.consts[_name].type].members == {}:
-                            HascalError(f"Struct '{_name}' has no member:{_line}")
+                            HascalError(f"Struct '{_name}' has no member:{_line}",filename=self.filename)
                         _members = copy.deepcopy(
                             self.types[self.consts[_name].type]
                         ).members
@@ -1845,7 +1855,7 @@ class Generator(object):
                     name = node[1]
                     name.pop(0)
                     if len(name) > 1:
-                        HascalError(f"Request for nested enum in '{_name}' :{_line}")
+                        HascalError(f"Request for nested enum in '{_name}' :{_line}",filename=self.filename)
 
                     if not name[0] in self.types[_name].members:
                         HascalError(
@@ -1858,7 +1868,7 @@ class Generator(object):
                     }
                     return expr
                 else:
-                    HascalError(f"'{_name}' is not reachable or not defined:{_line}")
+                    HascalError(f"'{_name}' is not reachable or not defined:{_line}",filename=self.filename)
         # ---------------------------------------
         # <name>[<expr>]
         if node[0] == "var_index":
@@ -1879,7 +1889,7 @@ class Generator(object):
                 }
                 return expr
             else:
-                HascalError(f"'{_name['expr']}' is not subscriptable:{_line}")
+                HascalError(f"'{_name['expr']}' is not subscriptable:{_line}",filename=self.filename)
         # -------------------------------------------
         # <expr>, <expr>
         if node[0] == "exprs":
@@ -1929,7 +1939,7 @@ class Generator(object):
             _line = node[2]
 
             if not _type_name in self.types:
-                HascalError(f"{_type_name} is not defined:{_line}")
+                HascalError(f"{_type_name} is not defined:{_line}",filename=self.filename)
 
             expr = {
                 "expr": _type_name,
@@ -2069,7 +2079,7 @@ class Generator(object):
             _line = node[2]
 
             if not _name in self.decorators:
-                HascalError(f"{_name} is not defined:{_line}")
+                HascalError(f"{_name} is not defined:{_line}",filename=self.filename)
 
             expr = {
                 "expr": self.decorators[_name] + " ",

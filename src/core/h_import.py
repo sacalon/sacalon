@@ -6,7 +6,7 @@ from os.path import isfile, isdir
 from pathlib import Path
 
 
-def use(gen_class, path_, BASE_DIR, filename=None,imported=[],
+def use(gen_class, path_, BASE_DIR, filename="",imported=[],
                 imported_funcs={}, imported_types={}, imported_vars={}, imported_consts={}):
     result = {}
     path = path_
@@ -32,8 +32,7 @@ def use(gen_class, path_, BASE_DIR, filename=None,imported=[],
         with open(final_path, "r") as f:
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
-
-            generator = gen_class(BASE_DIR,imported=imported, imported_funcs=imported_funcs,
+            generator = gen_class(BASE_DIR,filename=filename,imported=imported, imported_funcs=imported_funcs,
                                     imported_types=imported_types, imported_vars=imported_vars,
                                     imported_consts=imported_consts)
             output_cpp = generator.generate(tree, True)
@@ -46,7 +45,9 @@ def use(gen_class, path_, BASE_DIR, filename=None,imported=[],
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
-            generator = gen_class(BASE_DIR)
+            generator = gen_class(BASE_DIR,filename=filename,imported=imported, imported_funcs=imported_funcs,
+                                    imported_types=imported_types, imported_vars=imported_vars,
+                                    imported_consts=imported_consts)
             output_cpp = generator.generate(tree, True)
 
             result["generator"] = generator
@@ -58,7 +59,9 @@ def use(gen_class, path_, BASE_DIR, filename=None,imported=[],
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
-            generator = gen_class(BASE_DIR)
+            generator = gen_class(BASE_DIR,filename=filename,imported=imported, imported_funcs=imported_funcs,
+                                    imported_types=imported_types, imported_vars=imported_vars,
+                                    imported_consts=imported_consts)
             output_cpp = generator.generate(tree, True)
 
             result["generator"] = generator
@@ -69,7 +72,9 @@ def use(gen_class, path_, BASE_DIR, filename=None,imported=[],
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
-            generator = gen_class(BASE_DIR)
+            generator = gen_class(BASE_DIR,filename=filename,imported=imported, imported_funcs=imported_funcs,
+                                    imported_types=imported_types, imported_vars=imported_vars,
+                                    imported_consts=imported_consts)
             output_cpp = generator.generate(tree, True)
 
             result["generator"] = generator

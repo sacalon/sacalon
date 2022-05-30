@@ -28,7 +28,7 @@ class HascalCompiler(object):
         self.code = ""
         self.lexer = Lexer()
         self.parser = Parser()
-        self.generator = Generator(self.BASE_DIR)
+        self.generator = None
         self.argv = argv
         # arguments checking
         if len(self.argv) > 1:
@@ -101,6 +101,7 @@ class HascalCompiler(object):
                     # show file extension error
                     HascalError(f"The specified file is not a hascal(.has) file")
                 else:
+                    self.generator = Generator(self.BASE_DIR,filename=self.argv[1])
                     self.read_file(self.argv[1])
                     self.compile()
         else:
