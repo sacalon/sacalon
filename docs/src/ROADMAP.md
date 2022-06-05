@@ -36,6 +36,7 @@ function f<T>(x: T): T {
     return x
 }
 ```
+- const correctness
 
 ### Standard Library
 - `thread` library
