@@ -1,3 +1,4 @@
+from .h_compiler_utils import *
 from .h_error import HascalError, HascalWarning
 from .h_lexer import Lexer
 from .h_parser import Parser
@@ -14,11 +15,25 @@ class Generator(object):
     def __init__(self, BASE_DIR, filename="",
                     imported=[],
                     imported_funcs={}, imported_types={}, imported_vars={}, imported_consts={}):
+        """
+        Initialize the compiler
+
+        Args:
+            BASE_DIR (str): The base directory of the project/file
+            filename (str): The name of the file(to show in error messages)
+            imported (list): The list of imported libraries(if exists no need to import)
+            imported_funcs (dict): The imported functions(if exists no need to import)
+            imported_types (dict): The imported types(if exists no need to import)
+            imported_vars (dict): The imported variables(if exists no need to import)
+            imported_consts (dict): The imported constants(if exists no need to import)
+        """
+
         self.BASE_DIR = BASE_DIR
         self.src_includes = ""
         self.src_pre_main = ""
 
         # init standard types
+        # these types are defined in src/hlib/std.cc
         self.types = {
             "int": Type("int", True, category="number"),
             "int8": Type("int8", True, category="number"),
@@ -38,12 +53,16 @@ class Generator(object):
             "void": Type("void", True),
         }
 
-        self.vars = {}  # global vars
+        # this dict contains all variables
+        self.vars = {}
+
+        # this dict contains all functions
         self.consts = {
             "NULL": Const("NULL", Type("NULL", True, category="all-nullable"))
-        }  # global consts
+        }
 
-        # functions
+        # this dict contains all functions
+        # builtin functions implemented in src/hlib/std.cc
         self.funcs = {
             "print": Function("print", {"...": "..."}, "void"),
             "ReadStr": Function("ReadStr", {}, self.types["string"]),
@@ -65,36 +84,67 @@ class Generator(object):
             "typeof": Function("typeof", {"T": "T"}, self.types["string"]),
         }
 
-        # list of imported libraries
+        # this dicts contains all imported packages, functions, types, variables, constants
         self.imported = imported
         self.imported_vars = imported_vars
         self.imported_funcs = imported_funcs
         self.imported_types = imported_types
         self.imported_consts = imported_consts
 
+        # file name
         self.filename = filename
 
         # list of decorators
         self.decorators = {"extern": 'extern "C"', "static": "static"}
 
+        # this variable used to remove conflict between global variables and local variables
         self.scope = False
 
     def generate(self, tree, use=False):
+        """
+        Convert the AST to C++ code
+        
+        Args:
+            tree (AST): The AST to convert
+            use (bool): When True, function not return runtime codes(use it when you want to using a package)
+        """
+
+        # walk the AST
         _expr = self.walk(tree)
+
+        # generate the C++ code
         result = ""
         for e in _expr:
             result += e["expr"]
+        
         if use:
             return f"\n{self.src_pre_main}\n{result}"
         else:
+            # load the runtime code
             runtime = open(self.BASE_DIR + "/hlib/libcpp/std.cc").read()
             runtime_h = open(self.BASE_DIR + "/hlib/libcpp/std.hpp").read()
+
             return f"{runtime_h}\n{runtime}\n{self.src_includes}\n{self.src_pre_main}\n{result}\n"
 
     def get_flags(self):
+        """
+        Get neccessary linker flags to compiling(it used in src/core/h_builder.py to get flags)
+
+        Returns:
+            list: The list of linker flags
+        """
         return self.LDFLAGS.copy()
 
     def exists(self, name):
+        """
+        Check if the name exists
+
+        Args:
+            name (str): The name to check
+
+        Returns:
+            bool: True if the name exists, False otherwise
+        """
         if name in self.funcs:
             return True
         elif name in self.types:
@@ -106,16 +156,45 @@ class Generator(object):
         return False
 
     def add_to_output(self, cpp_code, hpp_code):
+        """
+        Add the C++ code to the output
+
+        Args:
+            cpp_code (str): The C++ code
+            hpp_code (str): The C++ header code
+        """
         self.src_includes += "\n" + hpp_code + "\n"
         self.src_pre_main += "\n" + cpp_code + "\n"
 
     def add_to_flags(self,flags):
+        """
+        Add the flags to the LDFLAGS
+
+        Args:
+            flags (list): The flags to add
+        """
         self.LDFLAGS += flags
 
-    def add_to_importeds(self, lib):
-        self.imported.append(lib)
+    def add_to_importeds(self, package_name):
+        """
+        Add imported package name to the imported list
+
+        Args:
+            package_name (str): The name of the package
+        """
+        self.imported.append(package_name)
     
     def walk(self, node):
+        """
+        Walk the AST and generate the C++ code
+
+        Args:
+            node (list): The AST to walk(output of the parser)
+
+        Returns:
+            dict : Contains the C++ code and the type of the expression
+        """
+
         # {
         #     <statements>
         # }
@@ -2119,168 +2198,3 @@ class Generator(object):
                 "type": copy.deepcopy(self.types[node[0]]),
             }
             return expr
-
-def return_null_according_to_type(type_, expr,name_,decl=True,array_decl=False):
-    # Check if variable is literal or pointer and expr is null : set variable to `nullptr`
-    if (
-        expr["type"].category == "all-nullable"
-        and str(type_["type"]) == "string"
-    ):
-        expr_ = "%s = nullptr;" % (name_)
-    # Check if variable is vector and expr is null : set variable to `nullptr`
-    elif (
-        expr["type"].category == "all-nullable"
-        and isinstance(type_["type"],Array)
-    ):
-        return "%s = nullptr;" % (name)
-    else :
-        if decl :
-            return "%s %s = %s;" % ("std::vector<"+str(type_["type"])+">" if array_decl else type_["type"], name_, expr["expr"]) 
-        return "%s = %s;\n" % (name_, expr["expr"])
-
-class Var(object):
-    def __init__(self, name, type, is_array=False, members={}, nullable=False):
-        self.name = name
-        self.type = type
-        self.is_array = is_array
-        self.members = members
-        self.nullable = nullable
-
-
-class Const(Var):
-    ...
-
-
-class Function(object):
-    def __init__(self, name, params, return_type):
-        self.name = name
-        self.params = params  # type : dict
-        self.return_type = return_type
-
-
-class Struct(object):
-    def __init__(
-        self, name, members, category="", is_ptr=False, ptr_str="", nullable=False
-    ):
-        self.name = name
-        self.members = members
-        self.stdtype = False
-        self.is_ptr = is_ptr
-        self.ptr_str = ptr_str
-        self.category = name
-        self.nullable = nullable
-
-    def __str__(self):
-        return self.get_type_name()
-
-    def get_type_name(self):
-        return self.name + self.ptr_str
-
-
-class Enum(Struct):
-    ...
-
-
-class Type(object):
-    def __init__(
-        self, type_name, stdtype, category="", is_ptr=False, ptr_str="", nullable=False
-    ):
-        self.type_name = type_name
-        self.stdtype = stdtype
-        self.is_ptr = is_ptr
-        self.ptr_str = ptr_str
-        self.category = category
-        self.nullable = nullable
-
-    def __str__(self):
-        return self.get_type_name()
-
-    def get_type_name(self):
-        if self.is_ptr:
-            return "%s%s" % (self.type_name, self.ptr_str)
-        else:
-            return self.type_name + self.ptr_str
-
-    def get_name_for_error(self):
-        ptr_str = self.ptr_str.replace("*", "^")
-
-        if self.is_ptr:
-            return "%s%s" % (self.type_name, ptr_str)
-        else:
-            return self.type_name + ptr_str
-
-
-class Array(Type):
-    def __init__(self, type_obj, is_ptr=False, ptr_str=""):
-        self.type_obj = type_obj
-        self.is_ptr = is_ptr
-        self.ptr_str = ptr_str
-        if isinstance(type_obj, Type):
-            super().__init__(type_obj.type_name, type_obj.stdtype)
-        elif isinstance(type_obj, Struct):
-            super().__init__(type_obj.name, type_obj.members)
-
-    def __str__(self):
-        if isinstance(self.type_obj, Type):
-            return "std::vector<%s>%s" % (self.ptr_str, self.get_type_name())
-        elif isinstance(self.type_obj, Struct):
-            return "std::vector<%s>%s" % (str(self.type_obj), self.ptr_str)
-
-    def get_name_for_error(self):
-        ptr_str = self.ptr_str.replace("*", "^")
-
-        if isinstance(self.type_obj, Type):
-            return "[%s]%s" % (self.ptr_str, self.get_type_name())
-        elif isinstance(self.type_obj, Struct):
-            return "[%s]%s" % (str(self.type_obj), self.ptr_str)
-
-
-def is_compatible_ptr(type_a, type_b):
-    if type_a.is_ptr == type_b.is_ptr:
-        return True
-    else:
-        return False
-
-
-def is_compatible_type(type_a, type_b):
-    if type_a == type_b:
-        return True
-    if is_nullable_compatible_type(type_a, type_b):
-        return True
-
-    if isinstance(type_a, Type) and isinstance(type_b, Type):
-        if str(type_a.category) == str(type_b.category) and is_compatible_ptr(
-            type_a, type_b
-        ):
-            return True
-        else:
-            return False
-
-    if isinstance(type_a, Struct) and isinstance(type_b, Struct):
-        if str(type_a.category) == str(type_b.category) and is_compatible_ptr(
-            type_a, type_b
-        ):
-            return True
-        else:
-            return False
-
-    return False
-
-
-def is_nullable(type_obj):
-    if type_obj.nullable == True:
-        return True
-    return False
-
-
-def is_nullable_compatible_type(type_a, type_b):
-    if (is_nullable(type_a) == True and type_b.category == "all-nullable") or (
-        is_nullable(type_b) == True and type_a.category == "all-nullable"
-    ):
-        return True
-    if (is_nullable(type_a) == False and type_b.category == "all-nullable") or (
-        is_nullable(type_b) == False and type_a.category == "all-nullable"
-    ):
-        return False
-
-    return True
