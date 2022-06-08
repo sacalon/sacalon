@@ -203,7 +203,7 @@ class Generator(object):
             _type = self.walk(node[2])
             _expr = self.walk(node[4])
             _line = node[5]
-
+            
             if (_name in self.vars or _name in self.consts) and self.scope == False:
                 HascalError(f"'{_name}' exists ,cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
@@ -230,7 +230,7 @@ class Generator(object):
                 self.vars[_name] = Var(_name, _type["type"], members=members)
 
                 expr = {
-                    "expr": "%s %s = %s;\n" % (_type["expr"], _name, _expr["expr"]),
+                    "expr": return_null_according_to_type(_type,_expr,_name),
                     "type": _type["type"],
                     "name": _name,
                 }
@@ -287,8 +287,7 @@ class Generator(object):
                 self.vars[_name] = Var(_name, Array(_type["type"]), is_array=True)
 
                 expr = {
-                    "expr": "std::vector<%s> %s = %s ;\n"
-                    % (_type["expr"], _name, _expr["expr"]),
+                    "expr": return_null_according_to_type(_type, _expr, _name,array_decl=True),
                     "type": Array(_type["type"]),
                     "name": _name,
                 }
@@ -397,7 +396,7 @@ class Generator(object):
                 self.vars[_name] = Var(_name, _type["type"], members=members)
 
                 expr = {
-                    "expr": "%s %s = %s;\n" % (_type["type"], _name, _expr["expr"]),
+                    "expr": return_null_according_to_type(_type, _expr, _name),
                     "type": _type["type"],
                     "name": _name,
                 }
@@ -477,8 +476,9 @@ class Generator(object):
                 HascalWarning(
                     f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}",filename=self.filename
                 )
+            
             expr = {
-                "expr": "%s = %s;" % (_name["expr"], _expr["expr"]),
+                "expr": return_null_according_to_type(_name, _expr, _name["expr"], decl=False),
                 "type": _name["type"],
             }
             return expr
@@ -2120,6 +2120,23 @@ class Generator(object):
             }
             return expr
 
+def return_null_according_to_type(type_, expr,name_,decl=True,array_decl=False):
+    # Check if variable is literal or pointer and expr is null : set variable to `nullptr`
+    if (
+        expr["type"].category == "all-nullable"
+        and str(type_["type"]) == "string"
+    ):
+        expr_ = "%s = nullptr;" % (name_)
+    # Check if variable is vector and expr is null : set variable to `nullptr`
+    elif (
+        expr["type"].category == "all-nullable"
+        and isinstance(type_["type"],Array)
+    ):
+        return "%s = nullptr;" % (name)
+    else :
+        if decl :
+            return "%s %s = %s;" % ("std::vector<"+str(type_["type"])+">" if array_decl else type_["type"], name_, expr["expr"]) 
+        return "%s = %s;\n" % (name_, expr["expr"])
 
 class Var(object):
     def __init__(self, name, type, is_array=False, members={}, nullable=False):

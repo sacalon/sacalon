@@ -7,7 +7,7 @@ class HascalError:
         if filename == "" :
             sys.stderr.write(colorama.Fore.RED + "Error : ")
         else :
-            sys.stderr.write(colorama.Back.BLUE + colorama.Fore.WHITE + filename + ".has::" 
+            sys.stderr.write(colorama.Back.BLUE + colorama.Fore.WHITE + filename + "::" 
                                 + colorama.Style.RESET_ALL 
                                 + colorama.Fore.RED + "\nError : ")
         sys.stderr.write(colorama.Style.RESET_ALL)
@@ -31,7 +31,7 @@ class HascalWarning:
                 colorama.Back.BLUE
                 + colorama.Fore.WHITE 
                 + filename 
-                + ".has::" 
+                + "::" 
                 + colorama.Style.RESET_ALL 
                 + colorama.Fore.YELLOW
                 + "\nWarning : "
