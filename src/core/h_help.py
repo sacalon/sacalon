@@ -14,7 +14,7 @@ def help_all():
         "other commands:",
         "\thelp: show help",
         "\tversion : show version",
-        "\get <package url(git repository)> : install a package",
+        "\tget <package url(git repository)> : install a package",
         "\tupdate <package url(git repository)> : update a package",
     ]
     for line in output_message:

@@ -1,20 +1,16 @@
 use os
 use file
-
 use lexer
 use help
 
-
 function main(argv:[string]) : int {
     if len(argv) == 1 {
-        short_help()
-        exit(0)
+        show_short_help()
     } else if len(argv) == 2 and (argv[1] == "--help" or argv[1] == "-h") {
-        // long_help()
-        exit(0)
+        show_long_help()
     } else if argv[1] == "version" {
-        print(format("Hascal Compiler v{} {}",VERSION,os_name()))
-        exit(0)
+        show_version()
+        
     } else if len(argv) == 2 {
         var source = read_file(argv[1])
         var tokens = tokenizer(argv[1],source)
