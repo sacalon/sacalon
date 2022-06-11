@@ -2158,7 +2158,7 @@ class Generator(object):
             _line = node[2]
 
             if not _name in self.decorators:
-                HascalError(f"{_name} is not defined:{_line}",filename=self.filename)
+                HascalError(f"Decorator '{_name}' is not defined:{_line}",filename=self.filename)
 
             expr = {
                 "expr": self.decorators[_name] + " ",
@@ -2169,7 +2169,7 @@ class Generator(object):
         if node[0] == "decorator_no":
             expr = {
                 "expr": "",
-                "type": self.types["void"],
+                "type": copy.deepcopy(self.types["void"]),
             }
             return expr
         # --------------------------------------------
