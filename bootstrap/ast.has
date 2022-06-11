@@ -2,7 +2,7 @@ local use tokens
 
 struct Node {
 	var type : string
-	var children : [Node] // TODO: Should this be a slice of pointers of Nodes?
+	var children : Node^
 	var token_start : Token
 	// var symbol_table : SymbolTable
 }
