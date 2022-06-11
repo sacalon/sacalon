@@ -3,6 +3,16 @@
 <summary>v1.3.9x</summary>
 
 <details>
+<summary>v1.3.9-rc.2</summary>
+
+#### Changes
+
+#### Bug fixes
+- fix assigning `NULL` to arrays and pointers bug, #36.
+
+</details>
+
+<details>
 <summary>v1.3.9-rc.1</summary>
 
 #### Changes
