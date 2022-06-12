@@ -5,6 +5,9 @@
 <details>
 <summary>v1.3.9-rc.2</summary>
 
+#### New features
+- added `hascal list` command to list all available packages
+ 
 #### Changes
 
 #### Bug fixes
