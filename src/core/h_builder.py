@@ -15,13 +15,6 @@ import zipfile
 import platform
 import shutil
 
-def show_help(all=False):
-    if all:
-        help_all()
-    else:
-        help_short()
-
-
 class HascalCompiler(object):
     def __init__(self, argv, BASE_DIR):
         self.BASE_DIR = BASE_DIR
@@ -33,9 +26,8 @@ class HascalCompiler(object):
         # arguments checking
         if len(self.argv) > 1:
             if self.argv[1] == "help":
-                # show help
-                show_help(True)
-                sys.exit()
+                # show help(full)
+                help_all()
             elif self.argv[1] == "version":
                 # show version
                 print(f"Hascal {HASCAL_COMPILER_VERSION} --- {sys.platform}")
@@ -105,8 +97,7 @@ class HascalCompiler(object):
                     self.read_file(self.argv[1])
                     self.compile()
         else:
-            show_help()
-            sys.exit()
+            help_short()
 
     # hascal to c++ compiler function
     def compile(self):

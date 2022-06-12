@@ -19,6 +19,7 @@ def help_all():
     ]
     for line in output_message:
         print(line)
+    exit(0)
 
 
 def help_short():
@@ -33,3 +34,4 @@ def help_short():
     ]
     for line in output_message:
         print(line)
+    exit(0)
