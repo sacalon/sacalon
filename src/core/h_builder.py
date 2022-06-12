@@ -75,6 +75,23 @@ class HascalCompiler(object):
                 update_repo(f"{self.BASE_DIR}/hlib/{mod_name}")
 
                 print(f"Module '{self.argv[2]}' updated successfully!")
+            
+            elif self.argv[1] == "list":
+                print("List of installed packages :")
+                for root, dirs, files in os.walk(f"{self.BASE_DIR}/hlib"):
+                    for dir in dirs:
+                        print(f" - {dir}")
+                    for file in files:
+                        if file.endswith(".has"):
+                            print(f" - {file[:-4]}")
+            elif len(self.argv) == 3 and self.argv[1] == "list" :
+                print(f"list of packages in '{self.argv[2]}' :")
+                for root, dirs, files in os.walk(f"{self.BASE_DIR}/hlib/{self.argv[2]}"):
+                    for dir in dirs:
+                        print(f" - {dir}")
+                    for file in files:
+                        if file.endswith(".has"):
+                            print(f" - {file[:-4]}")
             # END : Package Manager
             
             elif self.argv[1] == "--verbose":  # print ast
