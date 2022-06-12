@@ -85,7 +85,7 @@ class HascalCompiler(object):
                         if file.endswith(".has"):
                             print(f" - {file[:-4]}")
             elif len(self.argv) == 3 and self.argv[1] == "list" :
-                print(f"list of packages in '{self.argv[2]}' :")
+                print(f"list of all subpackages in '{self.argv[2]}' :")
                 for root, dirs, files in os.walk(f"{self.BASE_DIR}/hlib/{self.argv[2]}"):
                     for dir in dirs:
                         print(f" - {dir}")

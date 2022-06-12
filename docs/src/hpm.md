@@ -36,6 +36,6 @@ hascal list <package name>
 For example :
 ```
 $ hascal list crypto
-list all subpackages of crypto :
+list of all subpackages in crypto :
 - sha256
 ```
