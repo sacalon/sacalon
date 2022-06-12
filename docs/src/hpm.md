@@ -20,3 +20,21 @@ To update a package, you can use the `update` command :
 ```
 hascal update <package name ot git url>
 ```
+
+## Listing packages
+To list all packages, you can use the `list` command :
+```
+hascal list
+```
+
+if you want to list all subpackages of a package, you can use the `list` command with name of the package :
+```
+hascal list <package name>
+```
+
+For example :
+```
+$ hascal list crypto
+list all subpackages of crypto :
+- sha256
+```
