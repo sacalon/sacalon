@@ -31,6 +31,7 @@ if you want to list all subpackages of a package, you can use the `list` command
 ```
 hascal list <package name>
 ```
+- `<package name>` is the name of the package you want to list subpackages
 
 For example :
 ```
