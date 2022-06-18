@@ -1,57 +1,14 @@
 # Hascal's Roadmap 
 
-<details>
-<summary>v1.3.x</summary>
-
 ### Language
-- llvm backend
 - js backend
-
 - lambdas :
 ```typescript
 var mythread = thread(@(x:int,y:int){
     print(x*y)
 })
 ```
-
 - generate html doc from a code
-
-### Standard Library
-
-### Package Manager
-
-### Other
-- rebranding
-
-</details>
-
-<details>
-<summary>v1.4.x</summary>
-
-### Language
-- rewrite compiler in hascal 
-- generics
-```typescript
-function f<T>(x: T): T {
-    return x
-}
-```
-- const correctness
-
-### Standard Library
-- `thread` library
-
-### Package Manager
-
-### Other
-
-</details>
-
-
-<details>
-<summary>v1.5.x</summary>
-
-### Language
 - classes
 ```typescript
 class C : T {
@@ -81,11 +38,25 @@ class C : T {
     }
 }
 ```
+- generics #26
+```typescript
+function f<T>(x: T): T {
+    return x
+}
+```
+- rewrite compiler in hascal 
+- generics
+```typescript
+function f<T>(x: T): T {
+    return x
+}
+```
+- const correctness
 
 ### Standard Library
+- `thread` library
 
 ### Package Manager
 
 ### Other
-
-</details>
+- rebranding
