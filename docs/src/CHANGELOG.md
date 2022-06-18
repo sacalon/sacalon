@@ -8,6 +8,7 @@
 #### New features
 - add `hascal list` command to list all available packages
 - add `string_reverse(str:string)` function to `strings` module
+- add `assert` function to runtime library
 
 #### Changes
 
