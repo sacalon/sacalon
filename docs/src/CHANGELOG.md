@@ -3,7 +3,7 @@
 <summary>v1.3.9x</summary>
 
 <details>
-<summary>v1.3.9-rc.2</summary>
+<summary>v1.3.9-rc.3</summary>
 
 #### New features
 - add `hascal list` command to list all available packages
@@ -14,6 +14,14 @@
 
 #### Bug fixes
 - fix assigning `NULL` to arrays and pointers bug, #36.
+
+</details>
+
+<details>
+<summary>v1.3.9-rc.2</summary>
+
+#### Bug fixes
+- fix a critical bug in importing system
 
 </details>
 
