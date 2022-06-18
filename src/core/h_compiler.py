@@ -82,6 +82,10 @@ class Generator(object):
             "append": Function("append", {"vec": "T", "val": "T"}, self.types["int"]),
             "sizeof": Function("sizeof", {"T": "T"}, self.types["int"]),
             "typeof": Function("typeof", {"T": "T"}, self.types["string"]),
+            "assert": [
+                Function("assert", {"cond": "bool", "err_msg": "string"}, self.types["void"]),
+                Function("assert", {"cond": "bool",}, self.types["void"]),
+            ],
         }
 
         # this dicts contains all imported packages, functions, types, variables, constants
@@ -2175,13 +2179,13 @@ class Generator(object):
         # --------------------------------------------
         if node[0] == "string":
             expr = {
-                "expr": 'std::string("%s")' % node[1],
+                "expr": 'string("%s")' % node[1],
                 "type": copy.deepcopy(self.types[node[0]]),
             }
             return expr
         if node[0] == "multiline_string":
             expr = {
-                "expr": 'std::string(R"(%s)")' % node[1],
+                "expr": 'string(R"(%s)")' % node[1],
                 "type": copy.deepcopy(self.types["string"]),
             }
             return expr

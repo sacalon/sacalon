@@ -252,3 +252,6 @@ struct HascalException : public std::exception
     }
 };
 // exit()
+
+// builtin assert()
+#define assert(cond) if(!(cond)){throw HascalException("Assertion failed: " #cond);}
