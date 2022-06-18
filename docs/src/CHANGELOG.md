@@ -6,8 +6,9 @@
 <summary>v1.3.9-rc.2</summary>
 
 #### New features
-- added `hascal list` command to list all available packages
- 
+- add `hascal list` command to list all available packages
+- add `string_reverse(str:string)` function to `strings` module
+
 #### Changes
 
 #### Bug fixes

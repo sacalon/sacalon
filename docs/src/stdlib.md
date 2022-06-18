@@ -82,6 +82,7 @@ Work with strings
 - `is_space(c:char): bool` : check if char is space
 - `is_lower(c:char): bool` : check if char is lowercase
 - `is_upper(c:char): bool` : check if char is uppercase
+- `string_reverse(s:string): string` : reverse a string
 
 ## `http`
 HTTP client-server library

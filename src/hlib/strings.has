@@ -1,39 +1,4 @@
-cuse """
-#include <cctype>
-bool is_alpha(char c){
-    return std::isalpha(c);
-}
-
-bool is_alphanum(char c){
-    return std::isalpha(c) || std::isdigit(c);
-}
-
-bool is_space(char c){
-    return std::isspace(c);
-}
-
-bool is_number(char c){
-    return std::isdigit(c);
-}
-
-string to_lower(string str){
-    string temp;
-    for (char c : str)
-    {
-        temp += std::tolower(c);
-    }
-    return temp;
-}
-
-string to_upper(string str){
-    string temp;
-    for (char c : str)
-    {
-        temp += std::toupper(c);
-    }
-    return temp;
-}
-"""
+cuse libcpp.strings
 
 function is_alpha(c:char): bool
 function is_alphanum(c:char): bool
@@ -41,3 +6,14 @@ function is_space(c:char): bool
 function is_number(c:char): bool
 function to_lower(str:string): string
 function to_upper(str:string): string
+
+function string_reverse(str:string): string {
+    var i = 0
+    var r:string?
+    
+    while i < len(str) {
+        r = str[i] + r
+        i = i + 1
+    }
+    return r
+}

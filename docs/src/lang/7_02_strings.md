@@ -51,3 +51,13 @@ The following escape sequences are supported:
 - `\_____` : arbitrary octal value 
 
 Note: `_____` means you should specify the id of the character you want to print.
+
+#### Reverse a string
+You can reverse a string by using the `string_reverse` function in the `strings` package:
+```typescript
+use strings
+
+function main() {
+    var foo : string = "Hello World"
+    print(string_reverse(foo)) // dlroW olleH
+}
