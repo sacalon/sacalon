@@ -1,4 +1,4 @@
-**.has linguist-language=objc text=objc
+**.has linguist-language=typescript text=typescript
 examples/*.has linguist-documentation=false
 tests/**.has linguist-documentation=false
 sly/ linguist-detectable=false
