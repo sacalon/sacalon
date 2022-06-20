@@ -28,11 +28,11 @@ class C : T {
         return x
     }
 
-    new(foo: string): C {
+    __new__(foo: string): C {
         return new C(foo)
     }
 
-    delete(foo: string): C {
+    __delete__(foo: string): C {
         delete this.foo
         delete this.bar
     }
