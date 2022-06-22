@@ -63,30 +63,35 @@ class Generator(object):
 
         # this dict contains all functions
         # builtin functions implemented in src/hlib/std.cc
-        self.funcs = {
-            "print": Function("print", {"...": "..."}, "void"),
-            "ReadStr": Function("ReadStr", {}, self.types["string"]),
-            "ReadInt": Function("ReadInt", {}, self.types["int"]),
-            "ReadFloat": Function("ReadFloat", {}, self.types["float"]),
-            "ReadChar": Function("ReadChar", {}, self.types["char"]),
-            "ReadBool": Function("ReadBool", {}, self.types["bool"]),
-            "format": Function("format", {"...": "..."}, self.types["string"]),
-            "split": Function(
-                "split", {"str": "string", "sep": "string"}, self.types["string"]
-            ),
-            "exit": Function("exit", {"exit_code": "int"}, self.types["void"]),
-            "panic": Function("panic", {"err_msg": "string"}, self.types["string"]),
-            "error": Function("error", {"errmsg": "string"}, self.types["void"]),
-            "len": Function("len", {"s": "string"}, self.types["int"]),
-            "len": Function("len", {"vec": "T"}, self.types["int"]),
-            "append": Function("append", {"vec": "T", "val": "T"}, self.types["int"]),
-            "sizeof": Function("sizeof", {"T": "T"}, self.types["int"]),
-            "typeof": Function("typeof", {"T": "T"}, self.types["string"]),
-            "assert": [
-                Function("assert", {"cond": "bool", "err_msg": "string"}, self.types["void"]),
-                Function("assert", {"cond": "bool",}, self.types["void"]),
-            ],
-        }
+        if not no_std :
+            self.funcs = {
+                "print": Function("print", {"...": "..."}, "void"),
+                "ReadStr": Function("ReadStr", {}, self.types["string"]),
+                "ReadInt": Function("ReadInt", {}, self.types["int"]),
+                "ReadFloat": Function("ReadFloat", {}, self.types["float"]),
+                "ReadChar": Function("ReadChar", {}, self.types["char"]),
+                "ReadBool": Function("ReadBool", {}, self.types["bool"]),
+                "format": Function("format", {"...": "..."}, self.types["string"]),
+                "split": Function(
+                    "split", {"str": "string", "sep": "string"}, self.types["string"]
+                ),
+                "exit": Function("exit", {"exit_code": "int"}, self.types["void"]),
+                "panic": Function("panic", {"err_msg": "string"}, self.types["string"]),
+                "error": Function("error", {"errmsg": "string"}, self.types["void"]),
+                "len": [
+                    Function("len", {"s": "string"}, self.types["int"]),
+                    Function("len", {"vec": "T"}, self.types["int"]),
+                ],
+                "append": Function("append", {"vec": "T", "val": "T"}, self.types["int"]),
+                "sizeof": Function("sizeof", {"T": "T"}, self.types["int"]),
+                "typeof": Function("typeof", {"T": "T"}, self.types["string"]),
+                "assert": [
+                    Function("assert", {"cond": "bool", "err_msg": "string"}, self.types["void"]),
+                    Function("assert", {"cond": "bool",}, self.types["void"]),
+                ],
+            }
+        else :
+            self.funcs = { }
 
         # this dicts contains all imported packages, functions, types, variables, constants
         self.imported = imported
@@ -127,11 +132,24 @@ class Generator(object):
         if use:
             return f"\n{self.src_pre_main}\n{result}"
         else:
-            # load the runtime code
-            runtime = open(self.BASE_DIR + "/hlib/libcpp/std.cc").read()
-            runtime_h = open(self.BASE_DIR + "/hlib/libcpp/std.hpp").read()
+            # return generated c++ code
+            std = self.BASE_DIR + "/hlib/libcpp/std.cc"
+            std_h = self.BASE_DIR + "/hlib/libcpp/std.hpp"
+            no_std = self.BASE_DIR + "/hlib/libcpp/no_std.cc"
 
-            return f"{runtime_h}\n{runtime}\n{self.src_includes}\n{self.src_pre_main}\n{result}\n"
+            if self.no_std :
+                if isfile(no_std):
+                    with open(no_std) as no_stdf :
+                        return f"{no_stdf.read()}\n{self.src_includes}\n{self.src_pre_main}\n{result}\n"
+                else :
+                    no_std = Path(no_std)
+                    HascalError(f"Could not find `no_std` runtime file:`{no_std}`")
+            elif isfile(std) and isfile(std_h) :
+                with open(std) as stdf:
+                    with open(std_h) as std_hf:
+                        return f"{std_hf.read()}\n{stdf.read()}\n{self.src_includes}\n{self.src_pre_main}\n{result}\n"
+            else :
+                HascalError(f"Could not find standard runtime file(s): `{std}`,`{std_h}`")
 
     def get_flags(self):
         """

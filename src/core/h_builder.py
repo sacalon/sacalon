@@ -21,7 +21,6 @@ class HascalCompiler(object):
         self.code = ""
         self.lexer = Lexer()
         self.parser = Parser()
-        self.generator = None
         self.argv = argv
         # arguments checking
         if len(self.argv) > 1:
@@ -110,7 +109,7 @@ class HascalCompiler(object):
                     # show file extension error
                     HascalError(f"The specified file is not a hascal(.has) file")
                 else:
-                    self.generator = Generator(self.BASE_DIR,filename=self.argv[1])
+                    self.filename = self.argv[1]
                     self.read_file(self.argv[1])
                     self.compile()
         else:
@@ -130,6 +129,7 @@ class HascalCompiler(object):
             "g++_out": False,
             "c++_code": False,
             "only_compile" : False,
+            "no_std" : False
         }
 
         if os.path.isfile("config.json"):
@@ -146,6 +146,8 @@ class HascalCompiler(object):
                     ARGS["g++_out"] = config["g++_out"]
                 if "c++_code" in config:
                     ARGS["c++_code"] = config["c++_code"]
+                if "no_std" in config:
+                    ARGS["no_std"] = config["no_std"]
                 if "only_compile" in config :
                     ARGS["only_compile"] = config["only_compile"]
                 if ARGS["compiler"] != "g++" :
@@ -154,9 +156,11 @@ class HascalCompiler(object):
         
         tokens = self.lexer.tokenize(self.code)
         tree = self.parser.parse(tokens)
-        output = self.generator.generate(tree)
 
-        for flag in self.generator.get_flags():
+        generator = Generator(self.BASE_DIR,filename=self.filename,no_std=ARGS["no_std"])
+        output = generator.generate(tree)
+
+        for flag in generator.get_flags():
             if not flag in ARGS["flags"]:
                 ARGS["flags"].append(flag)
         
