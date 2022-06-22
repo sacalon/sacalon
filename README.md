@@ -82,7 +82,7 @@ function main() : int {
 ## Contributions
 You can contribute to Hascal by [opening an issue](https://github.com/hascal/hascal/issues/new/choose) or [forking](https://github.com/hascal/hascal/fork) the repository and [contributing to Hascal's documentation](https://github.com/hascal/hascal/tree/main/docs).
 
-You can also [join the Hascal community](https://gitter.im/hascal/community) and ask questions.
+You can also [join the Hascal community](https://gitter.im/hascal/community) and ask & answer questions.
 
 [See our roadmap](docs/src/ROADMAP.md)
 
