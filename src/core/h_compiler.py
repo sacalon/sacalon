@@ -13,7 +13,7 @@ class Generator(object):
     LDFLAGS = []
 
     def __init__(self, BASE_DIR, filename="",
-                    imported=[],
+                    imported=[],no_std=False,
                     imported_funcs={}, imported_types={}, imported_vars={}, imported_consts={}):
         """
         Initialize the compiler
@@ -98,6 +98,9 @@ class Generator(object):
         # file name
         self.filename = filename
 
+        # no_std compiler option, true => standard runtime will not add to code
+        self.no_std = no_std
+        
         # list of decorators
         self.decorators = {"extern": 'extern "C"', "static": "static"}
 
