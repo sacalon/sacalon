@@ -151,7 +151,7 @@ class HascalCompiler(object):
                 if "only_compile" in config :
                     ARGS["only_compile"] = config["only_compile"]
                 if ARGS["compiler"] != "g++" :
-                    ARGS["no_check_gcc_g++"] = False
+                    ARGS["check_g++"] = False
                 
         
         tokens = self.lexer.tokenize(self.code)
@@ -169,7 +169,7 @@ class HascalCompiler(object):
             fout.write(output)
         
         # user may use other compiler instead of gcc\g++ for compiling hascal programs
-        if ARGS["no_check_g++"] == True:
+        if ARGS["check_g++"] == True:
             # check if gcc installed
             try:
                 check_call(["g++", "--version"], stdout=DEVNULL, stderr=STDOUT)
