@@ -123,6 +123,10 @@ def cuse(path_, BASE_DIR, filename=None):
     package_path_local_hpp = package_path_local / "_.hpp"
     package_path_local_ld = package_path_local / "_.ld"
 
+    package_path_nested_local_cc = Path(filename[:-4]) / package_path_local / "_.cc"
+    package_path_nested_local_hpp = Path(filename[:-4]) / package_path_local / "_.hpp"
+    package_path_nested_local_ld = Path(filename[:-4]) / package_path_local / "_.ld"
+    
     if isfile(final_path_cc):
         with open(final_path_cc, "r") as fd:
             result["cpp_code"] = fd.read()
@@ -189,6 +193,24 @@ def cuse(path_, BASE_DIR, filename=None):
 
             if isfile(package_path_local_ld):
                 with open(package_path_local_ld, "r") as fd:
+                    result["LDFLAGS"] = list(fd.read().split(","))
+            else:
+                result["LDFLAGS"] = []
+
+        return result
+    elif isfile(package_path_nested_local_cc):
+        with open(package_path_nested_local_cc, "r") as fd:
+            result["cpp_code"] = fd.read()
+
+            # read header file
+            if isfile(package_path_nested_local_hpp):
+                with open(package_path_nested_local_hpp, "r") as fd:
+                    result["header_code"] = fd.read()
+            else:
+                result["header_code"] = ""
+
+            if isfile(package_path_nested_local_ld):
+                with open(package_path_nested_local_ld, "r") as fd:
                     result["LDFLAGS"] = list(fd.read().split(","))
             else:
                 result["LDFLAGS"] = []

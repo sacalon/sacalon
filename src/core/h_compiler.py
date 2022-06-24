@@ -547,7 +547,7 @@ class Generator(object):
         if node[0] == "cinclude":
             name = ".".join(name for name in node[1])
             if not name in self.imported:
-                result = cuse(node[1], self.BASE_DIR)
+                result = cuse(node[1], self.BASE_DIR,filename=self.filename)
 
                 self.imported.append(name)
                 self.add_to_output(result["cpp_code"], result["header_code"])

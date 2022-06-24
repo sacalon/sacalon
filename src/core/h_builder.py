@@ -123,7 +123,7 @@ class HascalCompiler(object):
             "compiler": "g++",
             "optimize": "",
             "flags": ["-o", outname],
-            "no_check_g++": 1,
+            "check_g++": 1,
             "ccfile": outname + ".cc",
             "c++_version": "c++17",
             "g++_out": False,
@@ -188,7 +188,7 @@ class HascalCompiler(object):
         )
         out, err = compiler_process.communicate()
         out = out.decode("utf-8")
-        if int(out.split(".")[0]) < 8:
+        if int(out.split(".")[0]) < 7:
             HascalError("C++ compiler doesn't support c++17")
 
         if ARGS["only_compile"] == True :
