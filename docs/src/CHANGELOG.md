@@ -9,11 +9,15 @@
 - add `hascal list` command to list all available packages
 - add `string_reverse(str:string)` function to `strings` module
 - add `assert` function to runtime library
+- add `no_std` compiler option
 
 #### Changes
+- change emitting `std::string` for strings to `string`(because in showing assertion errors, `std::string` illusory.
+- use `sys.exit` instead of `exit` in `src/core/h_help.py`
 
 #### Bug fixes
 - fix assigning `NULL` to arrays and pointers bug, #36.
+- fix `check_g++` config option bugs
 
 </details>
 
