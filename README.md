@@ -29,7 +29,7 @@
 - [x] Multi-paradigm
 - [x] Null safety by default
 - [x] Fast and powerful
-- [x] Inspired by Swift, Pascal and a bit Haskell
+- [x] Inspired by Swift, Pascal
 - [x] C++ on backend
 - [x] Compatible with C\C++\Obj-C
 
