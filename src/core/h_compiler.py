@@ -786,6 +786,7 @@ class Generator(object):
                 self.funcs.update(result["generator"].funcs)
                 self.types.update(result["generator"].types)
                 self.vars.update(result["generator"].vars)
+                self.consts.update(result["generator"].consts)
 
                 self.imported_funcs[name] = result["generator"].funcs
                 self.imported_types[name] = result["generator"].types
