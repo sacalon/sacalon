@@ -18,6 +18,7 @@
 #### Bug fixes
 - fix assigning `NULL` to arrays and pointers bug, #36.
 - fix `check_g++` config option bugs
+- fix not defined consts when importing packages
 
 </details>
 
