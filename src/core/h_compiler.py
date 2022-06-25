@@ -757,8 +757,6 @@ class Generator(object):
         if node[0] == "use":
             name = ".".join(name for name in node[1])
             if name in self.imported:
-                print(self.imported,"\n",name)
-
                 self.funcs.update(self.imported_funcs[name])
                 self.types.update(self.imported_types[name])
                 self.vars.update(self.imported_vars[name])
