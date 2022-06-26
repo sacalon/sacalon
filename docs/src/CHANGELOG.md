@@ -12,7 +12,7 @@
 - add `no_std` compiler option
 
 #### Changes
-- change emitting `std::string` for strings to `string`(because in showing assertion errors, `std::string` illusory.
+- change emitting `std::string` for strings to `string`(because in showing assertion errors, `std::string` is illusory).
 - use `sys.exit` instead of `exit` in `src/core/h_help.py`
 
 #### Bug fixes
