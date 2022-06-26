@@ -96,7 +96,23 @@ class HascalCompiler(object):
             # create new config.json file
             elif self.argv[1] == "init" :
                 with open("config.json","w") as f :
-                    f.write(json.dumps({"flags":[]}))
+                    f.write(json.dumps({
+                        "main_file" : "app.has",
+                        "flags":[],
+                    }))
+
+                if not isdir("src") :
+                    os.mkdir("src")
+                with open("src/app.has","w") as f :
+                    f.write("function main():int{\n\t//...\n\treturn 0\n}")
+
+                with open(".gitignore","w") as f :
+                    ignores = ["/build",
+                        "**.exe", "**.out",
+                        "**.dll","**.o", "**.a"
+                    ]
+                    for ignore in ignores :
+                        f.write(ignore)
 
             elif self.argv[1] == "--verbose":  # print ast
                 if len(self.argv) == 3:
@@ -141,6 +157,10 @@ class HascalCompiler(object):
             with open("config.json", "r") as f:
                 config = json.loads(f.read())
 
+                if "filename" in config :
+                    if "filename" != self.filename :
+                        self.filename = config["filename"]
+                        self.read_file(self.filename)
                 if "compiler" in config:
                     ARGS["compiler"] = config["compiler"]
                 if "optimize" in config:
