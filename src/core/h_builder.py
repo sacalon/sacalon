@@ -92,7 +92,12 @@ class HascalCompiler(object):
                         if file.endswith(".has"):
                             print(f" - {file[:-4]}")
             # END : Package Manager
-            
+
+            # create new config.json file
+            elif self.argv[1] == "init" :
+                with open("config.json","w") as f :
+                    f.write(json.dumps({"flags":[]}))
+
             elif self.argv[1] == "--verbose":  # print ast
                 if len(self.argv) == 3:
                     self.read_file(self.argv[2])
