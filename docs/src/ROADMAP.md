@@ -57,6 +57,3 @@ function f<T>(x: T): T {
 - `thread` library
 
 ### Package Manager
-
-### Other
-- rebranding
