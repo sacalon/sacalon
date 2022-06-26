@@ -15,9 +15,11 @@ def help_all():
         "other commands:",
         "\thelp: show help",
         "\tversion : show version",
+        "\tinit : create new config.json file",
+        "\tbuild : build project",
         "\tget <package url(git repository)> : install a package",
         "\tupdate <package url(git repository)> : update a package",
-        "\tinit : create new config.json file",
+        
     ]
     for line in output_message:
         print(line)

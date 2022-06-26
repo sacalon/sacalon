@@ -8,6 +8,7 @@
 #### New features
 - add `hascal list` command to list all available packages
 - add `hascal init` command to create a new project, that generates `config.json`, `.gitignore` and `src/app.has`
+- add `hascal build` command to build project
 - add `string_reverse(str:string)` function to `strings` module
 - add `assert` function to runtime library
 - add `no_std` compiler option

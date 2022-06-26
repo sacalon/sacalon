@@ -19,6 +19,7 @@ class HascalCompiler(object):
     def __init__(self, argv, BASE_DIR):
         self.BASE_DIR = BASE_DIR
         self.code = ""
+        self.filename = ""
         self.lexer = Lexer()
         self.parser = Parser()
         self.argv = argv
@@ -97,7 +98,8 @@ class HascalCompiler(object):
             elif self.argv[1] == "init" :
                 with open("config.json","w") as f :
                     f.write(json.dumps({
-                        "main_file" : "app.has",
+                        "filename" : "src/app.has",
+                        "outfile" : "build/app",
                         "flags":[],
                     }))
 
@@ -124,6 +126,8 @@ class HascalCompiler(object):
                     HascalError(
                         "You must give one file name to print ast\nusage :\n\thascal --verbose <file_name>"
                     )
+            elif self.argv[1] == "build" :
+                self.compile(from_config=True)
             else:
                 # check file extension
                 if not self.argv[1].endswith(".has"):
@@ -137,15 +141,16 @@ class HascalCompiler(object):
             help_short()
 
     # hascal to c++ compiler function
-    def compile(self):
+    def compile(self,from_config=False):
         tmp0 = self.argv[1]
         outname = self.argv[2] if len(self.argv) > 2 else tmp0[:-4]
         ARGS = {
+            "filename" : self.filename,
             "compiler": "g++",
             "optimize": "",
-            "flags": ["-o", outname],
+            "flags": [],
             "check_g++": 1,
-            "ccfile": outname + ".cc",
+            "ccfile": "",
             "c++_version": "c++17",
             "g++_out": False,
             "c++_code": False,
@@ -159,14 +164,25 @@ class HascalCompiler(object):
 
                 if "filename" in config :
                     if "filename" != self.filename :
+                        if not config["filename"].endswith(".has"):
+                            HascalError(f"The specified file is not a hascal(.has) file")
                         self.filename = config["filename"]
                         self.read_file(self.filename)
+                elif from_config :
+                    HascalError("When you use `build` command, your config file should have `filename` field.")
+                
                 if "compiler" in config:
                     ARGS["compiler"] = config["compiler"]
                 if "optimize" in config:
                     ARGS["optimize"] = config["optimize"]
                 if "flags" in config:
-                    ARGS["flags"] += config["flags"]
+                    if self.filename.startswith("src/") or self.filename.startswith("src\\") :
+                        if not isdir("build/"):
+                            os.mkdir("build")
+                        ARGS["flags"] = ["-o","build/"+self.filename[4:-4]] + config["flags"]
+                    else :
+                        ARGS["flags"] = ["-o",self.filename[:-4]] + config["flags"]
+                    ARGS["ccfile"] = self.filename[:-4]+".cc"
                 if "g++_out" in config:
                     ARGS["g++_out"] = config["g++_out"]
                 if "c++_code" in config:
@@ -190,7 +206,7 @@ class HascalCompiler(object):
                 ARGS["flags"].append(flag)
         
         # write output c++ code in a file
-        with open(outname + ".cc", "w") as fout:
+        with open(self.filename[:-4]+".cc", "w") as fout:
             fout.write(output)
         
         # user may use other compiler instead of gcc\g++ for compiling hascal programs
@@ -244,7 +260,7 @@ class HascalCompiler(object):
             ...
         else:
             try:
-                os.remove(outname + ".cc")
+                os.remove(self.filename[:-4]+".cc")
             except:
                 ...
 
