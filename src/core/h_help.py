@@ -17,6 +17,7 @@ def help_all():
         "\tversion : show version",
         "\tinit : create new config.json file",
         "\tbuild : build project",
+        "\trun : run project",
         "\tget <package url(git repository)> : install a package",
         "\tupdate <package url(git repository)> : update a package",
         

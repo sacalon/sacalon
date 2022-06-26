@@ -5,15 +5,12 @@ from .h_error import HascalError  # hascal excpetion handling
 from .h_help import *  # hascal compiler information
 from .h_git import * # git related functions
 
-from os.path import isfile,isdir,islink
+from os.path import isfile,isdir
+from pathlib import Path
 from subprocess import DEVNULL, STDOUT, PIPE, check_call, Popen
 import sys
 import os
-import requests
 import json
-import zipfile
-import platform
-import shutil
 
 class HascalCompiler(object):
     def __init__(self, argv, BASE_DIR):
@@ -116,7 +113,7 @@ class HascalCompiler(object):
                     for ignore in ignores :
                         f.write(ignore)
 
-            elif self.argv[1] == "--verbose":  # print ast
+            elif self.argv[1] == "verbose":  # print ast
                 if len(self.argv) == 3:
                     self.read_file(self.argv[2])
                     tokens = self.lexer.tokenize(self.code)
@@ -128,6 +125,13 @@ class HascalCompiler(object):
                     )
             elif self.argv[1] == "build" :
                 self.compile(from_config=True)
+            elif self.argv[1] == "run" :
+                if len(self.argv) == 3 :
+                    self.filename = self.argv[2]
+                    self.read_file(self.argv[2])
+                    self.compile(run=True)
+                else :
+                    self.compile(from_config=True,run=True)
             else:
                 # check file extension
                 if not self.argv[1].endswith(".has"):
@@ -141,22 +145,22 @@ class HascalCompiler(object):
             help_short()
 
     # hascal to c++ compiler function
-    def compile(self,from_config=False):
-        tmp0 = self.argv[1]
-        outname = self.argv[2] if len(self.argv) > 2 else tmp0[:-4]
+    def compile(self,from_config=False,run=False):
         ARGS = {
             "filename" : self.filename,
             "compiler": "g++",
             "optimize": "",
-            "flags": [],
+            "flags": ["-o",self.filename[:-4]],
             "check_g++": 1,
-            "ccfile": "",
+            "ccfile": self.filename[:-4]+".cc",
             "c++_version": "c++17",
             "g++_out": False,
             "c++_code": False,
             "only_compile" : False,
             "no_std" : False
         }
+
+        
 
         if os.path.isfile("config.json"):
             with open("config.json", "r") as f:
@@ -176,12 +180,11 @@ class HascalCompiler(object):
                 if "optimize" in config:
                     ARGS["optimize"] = config["optimize"]
                 if "flags" in config:
-                    if self.filename.startswith("src/") or self.filename.startswith("src\\") :
-                        if not isdir("build/"):
-                            os.mkdir("build")
-                        ARGS["flags"] = ["-o","build/"+self.filename[4:-4]] + config["flags"]
+                    if from_config :
+                        filename = Path(self.filename)
+                        ARGS["flags"] = ["-o","build/"+filename.name[:-4]] + config["flags"]
                     else :
-                        ARGS["flags"] = ["-o",self.filename[:-4]] + config["flags"]
+                        ARGS["flags"] += config["flags"]
                     ARGS["ccfile"] = self.filename[:-4]+".cc"
                 if "g++_out" in config:
                     ARGS["g++_out"] = config["g++_out"]
@@ -193,7 +196,6 @@ class HascalCompiler(object):
                     ARGS["only_compile"] = config["only_compile"]
                 if ARGS["compiler"] != "g++" :
                     ARGS["check_g++"] = False
-                
         
         tokens = self.lexer.tokenize(self.code)
         tree = self.parser.parse(tokens)
@@ -263,6 +265,25 @@ class HascalCompiler(object):
                 os.remove(self.filename[:-4]+".cc")
             except:
                 ...
+        
+        if run :
+            prefix = "build/" if from_config else ""
+            filename = Path(self.filename).name[:-4] if from_config else self.filename[:-4]
+
+            if sys.platform.startswith("win"):
+                if isfile(prefix + filename+".exe"):
+                    check_call([prefix + filename+".exe"])
+                else :
+                    HascalError(f"Excutable file not found, make sure `only_compile` in your config file is'nt `true`")
+            else :
+                if isfile("./" + prefix + filename):
+                    check_call(["./"+ prefix +filename])
+                elif isfile("./" + prefix + filename+".out"):
+                    check_call(["./"+ prefix + +filename+".out"])
+                else :
+                    HascalError(f"Excutable file not found, make sure `only_compile` in your config file is'nt `true`")
+
+
 
     def read_file(self, file_name):
         try:
