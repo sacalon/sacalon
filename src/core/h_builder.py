@@ -97,13 +97,12 @@ class HascalCompiler(object):
                     f.write(json.dumps({
                         "filename" : "src/app.has",
                         "outfile" : "build/app",
-                        "flags":[],
                     }))
 
                 if not isdir("src") :
                     os.mkdir("src")
                 with open("src/app.has","w") as f :
-                    f.write("function main():int{\n\t//...\n\treturn 0\n}")
+                    f.write("function main():int{\n\tprint(\"Hello World!\")\n\treturn 0\n}")
 
                 with open(".gitignore","w") as f :
                     ignores = ["/build",

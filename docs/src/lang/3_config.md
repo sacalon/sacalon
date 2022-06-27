@@ -1,4 +1,4 @@
-# Configure the compiler
+# Builtin Project Manager
 You can use `config.json` file to configure your Hascal compiler.
 
 The following configuration options are available:

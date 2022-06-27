@@ -1,10 +1,11 @@
 # Summary
 
 - [Overview](./index.md)
-- [Language Documentation](./lang/0_lang_doc.md)
-    - [Installation](./lang/1_install.md)
-    - [Configure the compiler](./lang/2_config.md)
-    - [Hello World](./lang/3_hello_world.md)
+- [Language Documentation](./lang/0_install.md)
+    - [Installation](./lang/0_install.md)
+    - [Hello World!](./lang/1_hello_world.md)
+    - [Project Manager](./lang/2_project_manager.md)
+    - [Configure the compiler](./lang/3_config.md)
     - [Build a guessing game](./lang/4_guessing_game.md)
     - [Comments](./lang/5_comments.md)
     - [Types](./lang/6_types.md)
