@@ -20,20 +20,25 @@ class HascalCompiler(object):
         self.lexer = Lexer()
         self.parser = Parser()
         self.argv = argv
+
         # arguments checking
         if len(self.argv) > 1:
             if self.argv[1] == "help":
-                # show help(full)
+                # show full help
                 help_all()
+            
             elif self.argv[1] == "version":
                 # show version
                 print(f"Hascal {HASCAL_COMPILER_VERSION} --- {sys.platform}")
+            
             # START : Package Manager
+
             elif self.argv[1] == "get":
                 mod_name = self.argv[2]
                 if len(self.argv) == 4 :
                     mod_name = self.argv[3]
                 mod_name = mod_name.replace(".","/")
+
                 if len(argv) < 3:
                     HascalError(
                         "You must give one package name to install\nusage :\n\thascal install <package_name>"
@@ -57,6 +62,7 @@ class HascalCompiler(object):
             elif self.argv[1] == "update":
                 mod_name = self.argv[2]
                 mod_name = mod_name.replace(".","/")
+
                 if not isdir(f"{self.BASE_DIR}/hlib/{mod_name}"):
                     HascalError(f"Module '{mod_name}' is not installed, use 'hascal get' to install it")
                 print(f"Updating '{mod_name}'...")
@@ -81,6 +87,7 @@ class HascalCompiler(object):
                     for file in files:
                         if file.endswith(".has"):
                             print(f" - {file[:-4]}")
+            
             elif len(self.argv) == 3 and self.argv[1] == "list" :
                 print(f"list of all subpackages in '{self.argv[2]}' :")
                 for root, dirs, files in os.walk(f"{self.BASE_DIR}/hlib/{self.argv[2]}"):
@@ -89,9 +96,12 @@ class HascalCompiler(object):
                     for file in files:
                         if file.endswith(".has"):
                             print(f" - {file[:-4]}")
+            
             # END : Package Manager
 
-            # create new config.json file
+            # START : Project Manager
+
+            # create new project
             elif self.argv[1] == "init" :
                 with open("config.json","w") as f :
                     f.write(json.dumps({
@@ -111,19 +121,12 @@ class HascalCompiler(object):
                     ]
                     for ignore in ignores :
                         f.write(ignore)
-
-            elif self.argv[1] == "verbose":  # print ast
-                if len(self.argv) == 3:
-                    self.read_file(self.argv[2])
-                    tokens = self.lexer.tokenize(self.code)
-                    tree = self.parser.parse(tokens)
-                    print(tree)
-                else:
-                    HascalError(
-                        "You must give one file name to print ast\nusage :\n\thascal --verbose <file_name>"
-                    )
+            
+            # build project
             elif self.argv[1] == "build" :
                 self.compile(from_config=True)
+            
+            # build and run project
             elif self.argv[1] == "run" :
                 if len(self.argv) == 3 :
                     self.filename = self.argv[2]
@@ -131,6 +134,21 @@ class HascalCompiler(object):
                     self.compile(run=True)
                 else :
                     self.compile(from_config=True,run=True)
+            
+            # END : Project Manager
+
+            # print ast
+            elif self.argv[1] == "verbose":  
+                if len(self.argv) == 3:
+                    self.read_file(self.argv[2])
+                    tokens = self.lexer.tokenize(self.code)
+                    tree = self.parser.parse(tokens)
+                    print(tree)
+                else:
+                    HascalError(
+                        "You must give one file name to print ast\nusage :\n\thascal verbose <file_name>"
+                    )
+            
             else:
                 # check file extension
                 if not self.argv[1].endswith(".has"):
@@ -145,27 +163,35 @@ class HascalCompiler(object):
 
     # hascal to c++ compiler function
     def compile(self,from_config=False,run=False):
+        """
+        Compile Hascal code to C++ code
+
+        Args :
+            from_config(bool,optional) : build code from project's config
+            run(bool,optional) : run code after build
+        """
+
+        # Hascal always builds code from a builtin config
         ARGS = {
-            "filename" : self.filename,
-            "compiler": "g++",
-            "optimize": "",
-            "flags": ["-o",self.filename[:-4]],
-            "check_g++": 1,
-            "ccfile": self.filename[:-4]+".cc",
-            "c++_version": "c++17",
-            "g++_out": False,
-            "c++_code": False,
-            "only_compile" : False,
-            "no_std" : False
+            "filename" : self.filename, # main filename that contains entry function(main)
+            "compiler": "g++", # compiler name
+            "optimize": "", # optimize level
+            "flags": ["-o",self.filename[:-4]], # flags to pass to c++ compiler
+            "ccfile": self.filename[:-4]+".cc", # output c++ code
+            "c++_version": "c++17", # c++ standard version>=c++17
+            "compiler_output": False, # compiler output
+            "c++_code": False, # generate c++ code, if it is false, generated c++ code will delete after compiling
+            "only_compile" : False, # only compile, not link
+            "no_std" : False, # not link runtime library to code
         }
 
-        
-
+        # read config file
         if os.path.isfile("config.json"):
             with open("config.json", "r") as f:
                 config = json.loads(f.read())
 
                 if "filename" in config :
+                    # check if the filename field points to a Hascal file
                     if "filename" != self.filename :
                         if not config["filename"].endswith(".has"):
                             HascalError(f"The specified file is not a hascal(.has) file")
@@ -176,8 +202,10 @@ class HascalCompiler(object):
                 
                 if "compiler" in config:
                     ARGS["compiler"] = config["compiler"]
+                
                 if "optimize" in config:
                     ARGS["optimize"] = config["optimize"]
+                
                 if "flags" in config:
                     if from_config :
                         filename = Path(self.filename)
@@ -185,23 +213,31 @@ class HascalCompiler(object):
                     else :
                         ARGS["flags"] += config["flags"]
                     ARGS["ccfile"] = self.filename[:-4]+".cc"
-                if "g++_out" in config:
-                    ARGS["g++_out"] = config["g++_out"]
+                
+                if "compiler_output" in config:
+                    ARGS["compiler_output"] = config["compiler_output"]
+                
                 if "c++_code" in config:
                     ARGS["c++_code"] = config["c++_code"]
+                
                 if "no_std" in config:
                     ARGS["no_std"] = config["no_std"]
+                
                 if "only_compile" in config :
                     ARGS["only_compile"] = config["only_compile"]
-                if ARGS["compiler"] != "g++" :
-                    ARGS["check_g++"] = False
         
+        # tokenize input code
         tokens = self.lexer.tokenize(self.code)
+
+        # parse tokens
         tree = self.parser.parse(tokens)
 
+        # generate c++ code from ast
         generator = Generator(self.BASE_DIR,filename=self.filename,no_std=ARGS["no_std"])
         output = generator.generate(tree)
 
+        # get flags from generator(some times, when you using a libray, 
+        # it needs some extra flags for compiling such as `http` library)
         for flag in generator.get_flags():
             if not flag in ARGS["flags"]:
                 ARGS["flags"].append(flag)
@@ -209,14 +245,6 @@ class HascalCompiler(object):
         # write output c++ code in a file
         with open(self.filename[:-4]+".cc", "w") as fout:
             fout.write(output)
-        
-        # user may use other compiler instead of gcc\g++ for compiling hascal programs
-        if ARGS["check_g++"] == True:
-            # check if gcc installed
-            try:
-                check_call(["g++", "--version"], stdout=DEVNULL, stderr=STDOUT)
-            except:
-                HascalError("GCC/G++ is not installed")
 
         # check if c++ compiler installed
         try:
@@ -225,13 +253,19 @@ class HascalCompiler(object):
             HascalError("C++ compiler is not installed")
 
         # check if c++ compiler supports ARGS["c++_version"]
-        compiler_process = Popen(
-            [ARGS["compiler"], "-dumpversion"], stdout=PIPE, stderr=STDOUT
-        )
-        out, err = compiler_process.communicate()
+        if ARGS["compiler"] in ["g++","gcc","clang++","clang","avr-gcc","avr-g++"] :
+            compiler_process = Popen(
+                [ARGS["compiler"], "-dumpversion"], stdout=PIPE, stderr=STDOUT
+            )
+        # TODO : Support more compilers(msvc,icc,apple clang,...)
+
+        out, _ = compiler_process.communicate()
         out = out.decode("utf-8")
-        if int(out.split(".")[0]) < 7:
-            HascalError("C++ compiler doesn't support c++17")
+
+        # check c++ compiler version that supports c++17 or greater
+        if (ARGS["compiler"] in ["clang","clang++"] and int(out.split(".")[0]) < 10)  \
+            or (ARGS["compiler"] in ["gcc","g++"] and int(out.split(".")[0]) < 7):
+                HascalError("C++ compiler doesn't support c++17")
 
         if ARGS["only_compile"] == True :
             ARGS["flags"][1] += ".o"
@@ -250,21 +284,21 @@ class HascalCompiler(object):
                 if compargs[i] == "":
                     compargs.pop(i)
 
-            if ARGS["g++_out"] == 1:
+            if ARGS["compiler_output"] == 1:
                 check_call(compargs)
             else:
                 check_call(compargs, stdout=DEVNULL, stderr=STDOUT)
         except:
             HascalError("Unknown error in compile file")
 
+
         if ARGS["c++_code"] == True:
             ...
         else:
-            try:
-                os.remove(self.filename[:-4]+".cc")
-            except:
-                ...
+            try: os.remove(self.filename[:-4]+".cc")
+            except:...
         
+        # run generated excutable
         if run :
             prefix = "build/" if from_config else ""
             filename = Path(self.filename).name[:-4] if from_config else self.filename[:-4]

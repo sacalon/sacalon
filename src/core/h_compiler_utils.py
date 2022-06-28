@@ -191,7 +191,7 @@ def return_null_according_to_type(type_, expr,name_,decl=True,array_decl=False):
         expr["type"].category == "all-nullable"
         and isinstance(type_["type"],Array)
     ):
-        return "%s = nullptr;" % (name)
+        return "%s = nullptr;" % (name_)
     else :
         if decl :
             return "%s %s = %s;" % ("std::vector<"+str(type_["type"])+">" if array_decl else type_["type"], name_, expr["expr"]) 
