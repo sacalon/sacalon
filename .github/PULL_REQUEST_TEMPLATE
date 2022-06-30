@@ -1,12 +1,13 @@
 <!--
 
-Please title your PR as follows: `src : fix foo bar`.
+Please title your PR as follows: `<directory> : fix foo bar`, if your PR changed files in multiple directories title your PR as follows : `fix foo bar`.
+
 Always start with the thing you are fixing, then describe the fix.
 Don't use past tense (e.g. "fixed foo bar").
 
 Explain what your PR does and why.
 
-If you are fixing a bug, please add a test that covers it.
+If you are fixing a bug, please add a test that covers it to `tests` directory.
 
 Applying labels to PRs is not needed.
 
