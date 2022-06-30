@@ -24,6 +24,7 @@
 - fix `check_g++` config option bugs
 - fix not defined consts when importing packages
 - fix `random` library bug
+- fix `browser` library bug
 
 #### Removed
 - remove `winodws` library
