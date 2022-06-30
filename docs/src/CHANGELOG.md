@@ -17,7 +17,7 @@
 
 #### Changes
 - change emitting `std::string` for strings to `string`(because in showing assertion errors, `std::string` is illusory).
-- use `sys.exit` instead of `exit` in `src/core/h_help.py`
+- use `sys.exit` instead of `exit` in `src/core/h_help.py`(@mmdbalkhi)
 
 #### Bug fixes
 - fix assigning `NULL` to arrays and pointers bug, #36.
