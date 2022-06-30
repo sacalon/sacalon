@@ -97,7 +97,7 @@ HTTP client-server library
 ## `random`
 Random number generator
 
-- `random_int(max:int):int` : Returns a random integer between 0 and max
+- `random_int(min:int ,sadsdfddfmax:int):int` : Returns a random integer between 0 and max
 
 ## `termcolor`
 Colorize text
@@ -115,8 +115,6 @@ Colors :
 - `cyan`
 - `white`
 - `black`
-
-## `windows`
 
 ## `browser`
 NOTE : Only supports windwos!
