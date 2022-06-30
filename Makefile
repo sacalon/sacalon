@@ -2,8 +2,8 @@
 
 build :
 	pyinstaller --add-data src/hlib:hlib "src/hascal.py" --name "hascal" --noconfirm --onefile --console
-	cp -r src/hlib dist/	
-	cp -r examples/ dist/	
+	cp -r src/hlib dist/
+	cp -r examples/ dist/
 windows :
 	pyinstaller --add-data src\hlib;hlib "src\hascal.py" --name "hascal" --noconfirm --onefile --console
 	xcopy src\hlib dist\hlib /E /H /C /I
