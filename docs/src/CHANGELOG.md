@@ -27,8 +27,7 @@
 - fix `browser` library bug
 
 #### Removed
-- remove `winodws` library
-
+- remove `windows`,`browser` libraries
 </details>
 
 <details>
