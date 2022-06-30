@@ -1,0 +1,6 @@
+use random
+
+function main(): int {
+    print(random_int(10,100))
+    return 0
+}

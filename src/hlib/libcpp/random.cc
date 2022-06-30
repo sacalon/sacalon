@@ -1,4 +1,5 @@
-int RandInt(int max){
-    srand((unsigned) time(0));
-    return (rand() % max) + 1;
+int random_int(int max, int min)
+{
+    srand(time(NULL));
+    return rand() % max + min;
 }
