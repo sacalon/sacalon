@@ -25,8 +25,12 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
 
     package_path = final_path / "_.has"
     package_path_local = final_path_local / "_.has"
+
     final_path = str(final_path) + ".has"
     final_path_local = str(final_path_local) + ".has"
+    final_path2_local = str(Path(filename[:-4]).parent / final_path_local)
+
+    package_path_nested_local = Path(filename[:-4]).parent / package_path_local
 
     if isfile(final_path):
         with open(final_path, "r") as f:
@@ -42,6 +46,19 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
             return result
     elif isfile(final_path_local):
         with open(final_path_local, "r") as f:
+            parser = Parser()
+            tree = parser.parse(Lexer().tokenize(f.read()))
+
+            generator = gen_class(BASE_DIR,filename=filename+".has",imported=imported, imported_funcs=imported_funcs,
+                                    imported_types=imported_types, imported_vars=imported_vars,
+                                    imported_consts=imported_consts)
+            output_cpp = generator.generate(tree, True)
+
+            result["generator"] = generator
+            result["output_cpp"] = output_cpp
+            return result
+    elif isfile(final_path2_local):
+        with open(final_path2_local, "r") as f:
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
@@ -69,6 +86,19 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
             return result
     elif isfile(package_path_local):
         with open(package_path_local, "r") as f:
+            parser = Parser()
+            tree = parser.parse(Lexer().tokenize(f.read()))
+
+            generator = gen_class(BASE_DIR,filename=filename+".has",imported=imported, imported_funcs=imported_funcs,
+                                    imported_types=imported_types, imported_vars=imported_vars,
+                                    imported_consts=imported_consts)
+            output_cpp = generator.generate(tree, True)
+
+            result["generator"] = generator
+            result["output_cpp"] = output_cpp
+            return result
+    elif isfile(package_path_nested_local):
+        with open(package_path_nested_local, "r") as f:
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 

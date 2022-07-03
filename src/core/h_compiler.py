@@ -763,7 +763,7 @@ class Generator(object):
                 self.consts.update(self.imported_consts[name])
             else :
                 result = use(Generator, node[1], self.BASE_DIR,
-                                filename=name,
+                                filename=self.filename,
                                 imported=self.imported,
                                 imported_funcs=self.imported_funcs,
                                 imported_types=self.imported_types,

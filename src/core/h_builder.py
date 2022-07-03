@@ -176,13 +176,14 @@ class HascalCompiler(object):
             "filename" : self.filename, # main filename that contains entry function(main)
             "compiler": "g++", # compiler name
             "optimize": "", # optimize level
-            "flags": ["-o",self.filename[:-4]], # flags to pass to c++ compiler
+            "flags": [], # flags to pass to c++ compiler
             "ccfile": self.filename[:-4]+".cc", # output c++ code
             "c++_version": "c++17", # c++ standard version>=c++17
             "compiler_output": False, # compiler output
             "c++_code": False, # generate c++ code, if it is false, generated c++ code will delete after compiling
             "only_compile" : False, # only compile, not link
             "no_std" : False, # not link runtime library to code
+            "outfile" : self.filename[:-4],
         }
 
         # read config file
@@ -197,6 +198,7 @@ class HascalCompiler(object):
                             HascalError(f"The specified file is not a hascal(.has) file")
                         self.filename = config["filename"]
                         self.read_file(self.filename)
+                    ARGS["ccfile"] = self.filename[:-4]+".cc"
                 elif from_config :
                     HascalError("When you use `build` command, your config file should have `filename` field.")
                 
@@ -212,8 +214,6 @@ class HascalCompiler(object):
                         ARGS["flags"] = ["-o","build/"+filename.name[:-4]] + config["flags"]
                     else :
                         ARGS["flags"] += config["flags"]
-                    ARGS["ccfile"] = self.filename[:-4]+".cc"
-                
                 if "compiler_output" in config:
                     ARGS["compiler_output"] = config["compiler_output"]
                 
@@ -225,7 +225,8 @@ class HascalCompiler(object):
                 
                 if "only_compile" in config :
                     ARGS["only_compile"] = config["only_compile"]
-        
+                if "outfile" in config :
+                    ARGS["outfile"] = config["outfile"]
         # tokenize input code
         tokens = self.lexer.tokenize(self.code)
 
@@ -271,6 +272,9 @@ class HascalCompiler(object):
             ARGS["flags"][1] += ".o"
             ARGS["flags"].append("-c")
         
+        # create outfile dir
+        if not isdir(Path(ARGS["outfile"]).parent) :
+            os.makedirs(Path(ARGS["outfile"]).parent)
         # compile to binary
         try:
             compargs = [
@@ -278,7 +282,7 @@ class HascalCompiler(object):
                 f'-std={ARGS["c++_version"]}',
                 ARGS["optimize"],
                 ARGS["ccfile"],
-            ] + ARGS["flags"]
+            ] + ARGS["flags"] + ["-o",ARGS["outfile"]]
 
             for i in range(len(compargs) - 1):
                 if compargs[i] == "":
@@ -301,7 +305,7 @@ class HascalCompiler(object):
         # run generated excutable
         if run :
             prefix = "build/" if from_config else ""
-            filename = Path(self.filename).name[:-4] if from_config else self.filename[:-4]
+            filename = ARGS["outfile"] if from_config else self.filename[:-4]
 
             if sys.platform.startswith("win"):
                 if isfile(prefix + filename+".exe"):
