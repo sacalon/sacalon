@@ -1,6 +1,7 @@
  # Makefile for Hascal
-
-build :
+clean:
+	rm -rf dict build
+build: clean
 	pyinstaller --add-data src/hlib:hlib "src/hascal.py" --name "hascal" --noconfirm --onefile --console
 	cp -r src/hlib dist/
 	cp -r examples/ dist/

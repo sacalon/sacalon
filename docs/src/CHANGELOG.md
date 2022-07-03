@@ -19,7 +19,7 @@
 - change emitting `std::string` for strings to `string`(because in showing assertion errors, `std::string` is illusory).
 - use `sys.exit` instead of `exit` in `src/core/h_help.py`(@mmdbalkhi)
 - fix importing system bugs
-
+- remove file extension (`.has`) checking #42
 #### Bug fixes
 - fix assigning `NULL` to arrays and pointers bug, #36.
 - fix `check_g++` config option bugs

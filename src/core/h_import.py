@@ -28,9 +28,9 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
 
     final_path = str(final_path) + ".has"
     final_path_local = str(final_path_local) + ".has"
-    final_path2_local = str(Path(filename[:-4]).parent / final_path_local)
+    final_path2_local = str(Path(filename+".o").parent / final_path_local)
 
-    package_path_nested_local = Path(filename[:-4]).parent / package_path_local
+    package_path_nested_local = Path(filename+".o").parent / package_path_local
 
     if isfile(final_path):
         with open(final_path, "r") as f:
@@ -153,9 +153,9 @@ def cuse(path_, BASE_DIR, filename=None):
     package_path_local_hpp = package_path_local / "_.hpp"
     package_path_local_ld = package_path_local / "_.ld"
 
-    package_path_nested_local_cc = Path(filename[:-4]) / package_path_local / "_.cc"
-    package_path_nested_local_hpp = Path(filename[:-4]) / package_path_local / "_.hpp"
-    package_path_nested_local_ld = Path(filename[:-4]) / package_path_local / "_.ld"
+    package_path_nested_local_cc = Path(filename) / package_path_local / "_.cc"
+    package_path_nested_local_hpp = Path(filename) / package_path_local / "_.hpp"
+    package_path_nested_local_ld = Path(filename) / package_path_local / "_.ld"
     
     if isfile(final_path_cc):
         with open(final_path_cc, "r") as fd:

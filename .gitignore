@@ -141,4 +141,12 @@ src/build/
 src/dist/
 src/hascal.spec
 
-# Example binery files
+hascal.spec
+
+examples/
+!examples/**/*.has
+!examples/**/*.cc
+!examples/**/*.json
+!examples/**/*.bf
+
+*.o
