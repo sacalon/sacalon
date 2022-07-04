@@ -217,6 +217,24 @@ std::string typeof(T val) {
 	if (res == "std::__cxx11::basic_string<char>")
 		return "string";
 	
+	// replace `*` with `^`
+	std::ostringstream oss;
+    std::size_t pos = 0;
+    std::size_t prevPos = pos;
+
+    while (true) {
+        prevPos = pos;
+        pos = res.find("*", pos);
+        if (pos == std::string::npos)
+            break;
+        oss << res.substr(prevPos, pos - prevPos);
+        oss << "^";
+        pos += std::string("*").size();
+    }
+
+    oss << res.substr(prevPos);
+    res = oss.str();
+
 	return res;
 }
 
