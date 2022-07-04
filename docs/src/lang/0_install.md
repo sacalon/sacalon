@@ -6,23 +6,23 @@ Requirments :
 
 *Nix :
 ```bash
-git clone https://github.com/hascal/hascal.git
-cd hascal
-make deps
-make build
+$ git clone https://github.com/hascal/hascal.git
+$ cd hascal
+$ make deps
+$ make build
 ```
 
 Arch Users :
 ```bash
-yay -S hascal-git
+$ yay -S hascal-git
 ```
 
 Windows : 
 ```
-git clone https://github.com/hascal/hascal.git
-cd hascal
-make deps-windows
-make windows
+> git clone https://github.com/hascal/hascal.git
+> cd hascal
+> make deps-windows
+> make windows
 ```
 
 ***Now your Hascal compiler is ready to use in `src/dist` folder, you can add it to `$PATH`.***
