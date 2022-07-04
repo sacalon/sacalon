@@ -7,7 +7,7 @@ from .h_git import * # git related functions
 
 from os.path import isfile,isdir
 from pathlib import Path
-from subprocess import DEVNULL, STDOUT, PIPE, check_call, Popen
+from subprocess import DEVNULL, STDOUT, PIPE, check_call, Popen, CalledProcessError
 import sys
 import os
 import json
@@ -304,19 +304,21 @@ class HascalCompiler(object):
         
         # run generated excutable
         if run :
-            prefix = "build/" if from_config else ""
             filename = ARGS["outfile"] if from_config else self.filename[:-4]
 
             if sys.platform.startswith("win"):
                 if isfile(filename+".exe"):
-                    check_call([filename+".exe"])
+                    try : check_call([filename+".exe"])
+                    except CalledProcessError as e :...
                 else :
                     HascalError(f"Excutable file not found, make sure `only_compile` in your config file is'nt `true`")
             else :
                 if isfile("./" + filename):
-                    check_call(["./"+ prefix +filename])
-                elif isfile("./" + filename+".out"):
-                    check_call(["./"+ +filename+".out"])
+                    try :check_call(["./" +filename])
+                    except CalledProcessError as e :...
+                elif isfile("./" + filename + ".out"):
+                    try : check_call(["./"+ + filename + ".out"])
+                    except CalledProcessError as e :...
                 else :
                     HascalError(f"Excutable file not found, make sure `only_compile` in your config file is'nt `true`")
 
