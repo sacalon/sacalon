@@ -1,4 +1,4 @@
-# Builtin Project Manager
+# Project Manager
 Hascal has a builtin build system and project manager. This tool builds and runs your project, installs dependencies.
 
 ## Creating a new project
