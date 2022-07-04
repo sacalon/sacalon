@@ -85,7 +85,8 @@ class HascalCompiler(object):
                     for dir in dirs:
                         print(f" - {dir}")
                     for file in files:
-                        print(f" - {file}")
+                        if file.endswith(".has"):
+                            print(f" - {file[:-4]}")
             
             elif len(self.argv) == 3 and self.argv[1] == "list" :
                 print(f"list of all subpackages in '{self.argv[2]}' :")
@@ -93,7 +94,8 @@ class HascalCompiler(object):
                     for dir in dirs:
                         print(f" - {dir}")
                     for file in files:
-                        print(f" - {file}")
+                        if file.endswith(".has"):
+                            print(f" - {file[:-4]}")
             
             # END : Package Manager
 
@@ -148,9 +150,14 @@ class HascalCompiler(object):
                     )
             
             else:
-                self.filename = self.argv[1]
-                self.read_file(self.argv[1])
-                self.compile()
+                # check file extension
+                if not self.argv[1].endswith(".has"):
+                    # show file extension error
+                    HascalError(f"The specified file is not a hascal(.has) file")
+                else:
+                    self.filename = self.argv[1]
+                    self.read_file(self.argv[1])
+                    self.compile()
         else:
             help_short()
 
@@ -170,13 +177,13 @@ class HascalCompiler(object):
             "compiler": "g++", # compiler name
             "optimize": "", # optimize level
             "flags": [], # flags to pass to c++ compiler
-            "ccfile": self.filename+".cc", # output c++ code
+            "ccfile": self.filename[:-4]+".cc", # output c++ code
             "c++_version": "c++17", # c++ standard version>=c++17
             "compiler_output": False, # compiler output
             "c++_code": False, # generate c++ code, if it is false, generated c++ code will delete after compiling
             "only_compile" : False, # only compile, not link
             "no_std" : False, # not link runtime library to code
-            "outfile" : self.filename+".o",
+            "outfile" : self.filename[:-4],
         }
 
         # read config file
@@ -187,9 +194,11 @@ class HascalCompiler(object):
                 if "filename" in config :
                     # check if the filename field points to a Hascal file
                     if "filename" != self.filename :
+                        if not config["filename"].endswith(".has"):
+                            HascalError(f"The specified file is not a hascal(.has) file")
                         self.filename = config["filename"]
                         self.read_file(self.filename)
-                    ARGS["ccfile"] = self.filename+".cc"
+                    ARGS["ccfile"] = self.filename[:-4]+".cc"
                 elif from_config :
                     HascalError("When you use `build` command, your config file should have `filename` field.")
                 
@@ -202,7 +211,7 @@ class HascalCompiler(object):
                 if "flags" in config:
                     if from_config :
                         filename = Path(self.filename)
-                        ARGS["flags"] = ["-o","build/"+filename.name] + config["flags"]
+                        ARGS["flags"] = ["-o","build/"+filename.name[:-4]] + config["flags"]
                     else :
                         ARGS["flags"] += config["flags"]
                 if "compiler_output" in config:
@@ -235,7 +244,7 @@ class HascalCompiler(object):
                 ARGS["flags"].append(flag)
         
         # write output c++ code in a file
-        with open(self.filename+".cc", "w") as fout:
+        with open(self.filename[:-4]+".cc", "w") as fout:
             fout.write(output)
 
         # check if c++ compiler installed
@@ -290,24 +299,24 @@ class HascalCompiler(object):
         if ARGS["c++_code"] == True:
             ...
         else:
-            try: os.remove(self.filename+".cc")
+            try: os.remove(self.filename[:-4]+".cc")
             except:...
         
         # run generated excutable
         if run :
             prefix = "build/" if from_config else ""
-            filename = ARGS["outfile"] if from_config else self.filename + ".o"
+            filename = ARGS["outfile"] if from_config else self.filename[:-4]
 
             if sys.platform.startswith("win"):
-                if isfile(prefix + filename+".exe"):
-                    check_call([prefix + filename+".exe"])
+                if isfile(filename+".exe"):
+                    check_call([filename+".exe"])
                 else :
                     HascalError(f"Excutable file not found, make sure `only_compile` in your config file is'nt `true`")
             else :
-                if isfile("./" + prefix + filename):
+                if isfile("./" + filename):
                     check_call(["./"+ prefix +filename])
-                elif isfile("./" + prefix + filename+".out"):
-                    check_call(["./"+ prefix + +filename+".out"])
+                elif isfile("./" + filename+".out"):
+                    check_call(["./"+ +filename+".out"])
                 else :
                     HascalError(f"Excutable file not found, make sure `only_compile` in your config file is'nt `true`")
 
