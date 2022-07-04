@@ -26,10 +26,14 @@ For using C++ functions in your program, you should at first declare them with f
 ```typescript
 function <name>(<args...>) : <return type>
 ```
+Example :
+```typescript
+function system(command:char^):int
+```
 
 ## Include C++ headers
 Also Hascal can include C++ headers in your program.
-We need two files, one for including macros and one for main part of the header. You should put including macros in `your_cpp_lib.hpp` and main part in `your_cpp_lib.cc`. The specified files should exist in the same folder.
+We need two files, one for headers and one for main part of the library. You should put `#include`,... in `your_cpp_lib.hpp` and main part of library in `your_cpp_lib.cc`. The specified files should exist in the same folder.
 
 See the example below:
 
@@ -56,3 +60,7 @@ function main() : int {
     return 0
 }
 ```
+
+Also you can put the C++ files in a folder and rename they to `_.cc` and `_.hpp`.
+
+**Note that do'nt include local headers in `*.hpp` file.**
