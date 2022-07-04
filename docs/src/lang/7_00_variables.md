@@ -50,11 +50,13 @@ Finally, you can use the `^` operator to access the value stored in a pointer:
 var foo : int^ = (int^)1
 print(^foo) // 1
 ```
+**NOTE**: We we recommend you to always allocate pointers with `new` keyword and deallocate with `delete` keyword, for more information go to [Memory management chapter](13_memory_management.md).
 
 NOTE: Currently only one level of pointers are supported.
 
 ## Static variables
 Static variables are variables that are declared outside of a function and are accessible from anywhere in the program.
+
 Static variables are declared using the `static` keyword before the type:
 ```typescript
 var foo : static int = 1
