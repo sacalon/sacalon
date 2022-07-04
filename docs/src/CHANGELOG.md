@@ -3,7 +3,7 @@
 <summary>v1.3.9x</summary>
 
 <details>
-<summary>v1.3.9-rc.3</summary>
+<summary>v1.3.9</summary>
 
 #### New features
 - add `hascal list` command to list all available packages
