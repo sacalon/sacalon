@@ -1,7 +1,7 @@
 # Tests
 Tests to testing the compiler features
 
-## How to test ?
+## Running tests
 ```
 hascal run run_tests.has
 ```
