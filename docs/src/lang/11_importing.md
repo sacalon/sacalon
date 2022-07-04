@@ -46,6 +46,7 @@ function main() : int {
 
 #### Creating foldered modules
 Module files can be placed in a folder, for creating a foldered module you should first create the folder and then create the `_.has` file inside it.
+
 The `_.has` file is the main file of the module and compiler will look for it.
 You can also import submodules in `_.has` file.
 
