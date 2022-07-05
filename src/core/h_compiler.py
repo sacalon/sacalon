@@ -112,6 +112,8 @@ class Generator(object):
         # this variable used to remove conflict between global variables and local variables
         self.scope = False
 
+        self.scope_not_deleted_vars = {}
+
     def generate(self, tree, use=False):
         """
         Convert the AST to C++ code
@@ -227,11 +229,21 @@ class Generator(object):
             result = []  # list of exprs and statements
             for statement in node[1:]:
                 result.append(self.walk(statement))
+            
+            for var in self.scope_not_deleted_vars :
+                HascalError(f"Variable '{var}' did not deleted at end of scope:{self.scope_not_deleted_vars[var]}")
+
+            self.scope_not_deleted_vars = {}
             return result
         if node[0] == "in_block":
             result = []  # list of exprs and statements
             for statement in node[1:]:
                 result.append(self.walk(statement))
+            
+            for var in self.scope_not_deleted_vars :
+                HascalError(f"Variable '{var}' did not deleted at end of scope:{self.scope_not_deleted_vars[var]}")
+
+            self.scope_not_deleted_vars = {}
             return result
         if node[0] == "block_struct":
             current_vars = self.vars
@@ -262,6 +274,9 @@ class Generator(object):
 
                 if isinstance(_type, Struct):
                     members = _type.members
+                # check if variable allocated with `new` keyword, append it to undeleted vars
+                if _expr.get("new",False):
+                    self.scope_not_deleted_vars[_name] = _line
                 self.vars[_name] = Var(_name, _type, members=members)
                 res = "auto %s = %s;\n" % (_name, _expr["expr"])
                 expr = {
@@ -497,40 +512,14 @@ class Generator(object):
                 members = {}
                 if isinstance(_type["type"], Struct):
                     members = _type["type"].members
+                # check if variable allocated with `new` keyword, append it to undeleted vars
+                if _type.get("new",False):
+                    self.scope_not_deleted_vars[_name] = _line
                 self.vars[_name] = Var(_name, _type["type"], members=members)
 
                 expr = {
                     "expr": return_null_according_to_type(_type, _expr, _name),
                     "type": _type["type"],
-                    "name": _name,
-                }
-                return expr
-
-        # var <name> = <expr>
-        if node[0] == "declare" and node[1] == "no_type":
-            _name = node[2]
-            _expr = self.walk(node[3])
-            _type = copy.deepcopy(_expr["type"])
-            _line = node[4]
-
-            if (_name in self.vars or _name in self.consts) and self.scope == False:
-                HascalError(f"'{_name}' exists, cannot redefine it:{_line}",filename=self.filename)
-            elif _name in self.types:
-                HascalError(
-                    f"'{_name}' defined as a type, cannot redefine it as a constant:{_line}",filename=self.filename
-                )
-            elif _expr["type"].category == "all-nullable":
-                HascalError(f"Assign 'NULL' to non-typed variable '{_name}':{_line}",filename=self.filename)
-            else:
-                members = {}
-
-                if isinstance(_type, Struct):
-                    members = _type.members
-                self.vars[_name] = Const(_name, _type, members=members)
-                res = "auto %s = %s;\n" % (_name, _expr["expr"])
-                expr = {
-                    "expr": res,
-                    "type": _type,
                     "name": _name,
                 }
                 return expr
@@ -1246,6 +1235,7 @@ class Generator(object):
             expr = {
                 "expr": "new %s(%s)" % (_type["expr"], _expr["expr"]),
                 "type": _type["type"],
+                "new" : True, # this field being used to check if a variable did not freed, compiler shows an error
             }
             return expr
         # ---------------------------------------
@@ -1259,6 +1249,8 @@ class Generator(object):
             if self.vars[_name].type.is_ptr == False:
                 HascalError(f"'{_name}' is not a pointer:{_line}",filename=self.filename)
 
+            if _name in self.scope_not_deleted_vars :
+                self.scope_not_deleted_vars.pop(_name,None)
             expr = {
                 "expr": "delete %s;\n" % (_name),
                 "type": copy.deepcopy(self.vars[_name].type),
