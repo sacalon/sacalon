@@ -1,4 +1,22 @@
 # Hascal's Changelog
+
+<details>
+<summary>v1.3.10x</summary>
+
+<details>
+<summary>v1.3.10-rc.1</summary>
+
+#### New features
+
+#### Changes
+
+#### Bug fixes
+
+#### Removed
+
+</details>
+</details>
+
 <details>
 <summary>v1.3.9x</summary>
 
