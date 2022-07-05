@@ -47,12 +47,6 @@ function f<T>(x: T): T {
 }
 ```
 - rewrite compiler in hascal 
-- generics
-```typescript
-function f<T>(x: T): T {
-    return x
-}
-```
 - const correctness
 
 ### Standard Library
