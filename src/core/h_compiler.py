@@ -14,7 +14,8 @@ class Generator(object):
 
     def __init__(self, BASE_DIR, filename="",
                     imported=[],no_std=False,
-                    imported_funcs={}, imported_types={}, imported_vars={}, imported_consts={}):
+                    imported_funcs={}, imported_types={}, imported_vars={}, imported_consts={},
+                    use_gc=False):
         """
         Initialize the compiler
 
@@ -26,6 +27,7 @@ class Generator(object):
             imported_types (dict): The imported types(if exists no need to import)
             imported_vars (dict): The imported variables(if exists no need to import)
             imported_consts (dict): The imported constants(if exists no need to import)
+            use_gc(bool): Use garbage collection to manage memory
         """
 
         self.BASE_DIR = BASE_DIR
