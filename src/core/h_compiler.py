@@ -14,8 +14,7 @@ class Generator(object):
 
     def __init__(self, BASE_DIR, filename="",
                     imported=[],no_std=False,
-                    imported_funcs={}, imported_types={}, imported_vars={}, imported_consts={},
-                    use_gc=False):
+                    imported_funcs={}, imported_types={}, imported_vars={}, imported_consts={}):
         """
         Initialize the compiler
 
@@ -27,7 +26,6 @@ class Generator(object):
             imported_types (dict): The imported types(if exists no need to import)
             imported_vars (dict): The imported variables(if exists no need to import)
             imported_consts (dict): The imported constants(if exists no need to import)
-            use_gc(bool): Use garbage collection to manage memory
         """
 
         self.BASE_DIR = BASE_DIR
@@ -922,6 +920,7 @@ class Generator(object):
                 and _params[_params_keys[0]].type_obj.type_name == "string"
             ):
                 res = (
+                    "%s %s %s(int argc,char** args) {\nstd::vector<std::string> %s;for(int i=0;i<argc;i++){%s.push_back(args[i]);}\n%s\n}\n" if self.use_gc else \
                     "%s %s %s(int argc,char** args) {\nstd::vector<std::string> %s;for(int i=0;i<argc;i++){%s.push_back(args[i]);}\n%s\n}\n"
                     % (
                         _decorator,
