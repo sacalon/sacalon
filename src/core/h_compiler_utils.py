@@ -49,10 +49,11 @@ class Struct(object):
         is_ptr (bool): Whether the struct is a pointer
         ptr_str (str): Pointer string of the struct
         nullable (bool): Whether the struct is nullable
+        with_new(bool): variable allocated with `new` keyword
     """
 
     def __init__(
-        self, name, members, category="", is_ptr=False, ptr_str="", nullable=False
+        self, name, members, category="", is_ptr=False, ptr_str="", nullable=False,with_new=False
     ):
         self.name = name
         self.members = members
@@ -61,6 +62,7 @@ class Struct(object):
         self.ptr_str = ptr_str
         self.category = name
         self.nullable = nullable
+        self.with_new = with_new
 
     def __str__(self):
         return self.get_type_name()
@@ -84,9 +86,10 @@ class Type(object):
         is_ptr (bool): Whether the type is a pointer
         ptr_str (str): Pointer string of the type
         nullable (bool): Whether the type is nullable
+        with_new(bool): variable allocated with `new` keyword
     """
     def __init__(
-        self, type_name, stdtype, category="", is_ptr=False, ptr_str="", nullable=False
+        self, type_name, stdtype, category="", is_ptr=False, ptr_str="", nullable=False,with_new=False
     ):
         self.type_name = type_name
         self.stdtype = stdtype
@@ -94,6 +97,7 @@ class Type(object):
         self.ptr_str = ptr_str
         self.category = category
         self.nullable = nullable
+        self.with_new = with_new
 
     def __str__(self):
         return self.get_type_name()

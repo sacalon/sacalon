@@ -1231,6 +1231,7 @@ class Generator(object):
 
             _type["type"].is_ptr = True
             _type["type"].ptr_str += "*"
+            _type["type"].with_new = True
 
             expr = {
                 "expr": "new %s(%s)" % (_type["expr"], _expr["expr"]),
@@ -1245,10 +1246,10 @@ class Generator(object):
 
             if not _name in self.vars:
                 HascalError(f"'{_name}' not defined:{_line}",filename=self.filename)
-
-            if self.vars[_name].type.is_ptr == False:
+            elif self.vars[_name].type.is_ptr == False:
                 HascalError(f"'{_name}' is not a pointer:{_line}",filename=self.filename)
-
+            elif not self.vars[_name].type.with_new:
+                HascalError(f"Cannot delete a pointer that not allocated with `new` keyword:{_line}")
             if _name in self.scope_not_deleted_vars :
                 self.scope_not_deleted_vars.pop(_name,None)
             expr = {
