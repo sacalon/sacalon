@@ -40,12 +40,7 @@ class C : T {
     }
 }
 ```
-- generics [#26](https://github.com/hascal/hascal/issues/26)
-```typescript
-function f<T>(x: T): T {
-    return x
-}
-```
+- generics [#26](https://github.com/hascal/hascal/issues/26)s
 - rewrite compiler in hascal 
 - const correctness
 
