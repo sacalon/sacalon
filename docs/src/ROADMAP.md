@@ -28,10 +28,12 @@ class C : T {
         return x
     }
 
+    // allocator
     __new__(foo: string): C {
         return new C(foo)
     }
 
+    // deallocator
     __delete__(foo: string): C {
         delete this.foo
         delete this.bar
