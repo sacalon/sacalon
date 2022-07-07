@@ -254,13 +254,14 @@ class HascalCompiler(object):
             HascalError("C++ compiler is not installed")
 
         # check if c++ compiler supports ARGS["c++_version"]
-        if ARGS["compiler"] in ["g++","gcc","clang++","clang","avr-gcc","avr-g++"] :
+        out = ""
+        if ARGS["compiler"] in ["g++","gcc","clang++","clang","avr-gcc","avr-g++",
+                                "x86_64-elf-gcc","x86_64-elf-g++"] :
             compiler_process = Popen(
                 [ARGS["compiler"], "-dumpversion"], stdout=PIPE, stderr=STDOUT
             )
+            out, _ = compiler_process.communicate()
         # TODO : Support more compilers(msvc,icc,apple clang,...)
-
-        out, _ = compiler_process.communicate()
         out = out.decode("utf-8")
 
         # check c++ compiler version that supports c++17 or greater

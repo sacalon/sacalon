@@ -576,23 +576,32 @@ class Generator(object):
             }
             return expr
 
-        # <name>[<expr>] = <expr>;
+        # <name>[<expr>] = <expr>
         if node[0] == "assign_var_index":
             _name = self.walk(node[1])
             _index = self.walk(node[2])
             _expr = self.walk(node[3])
             _line = node[4]
 
-            if not isinstance(_name["type"], Array):
+            if not isinstance(_name["type"], Array) and str(_name["type"]) != "string" and not _name["type"].is_ptr:
                 HascalError(f"'{_name['expr']}' is not subscriptable:{_line}",filename=self.filename)
 
             if (
-                is_nullable_compatible_type(_name["type"].type_obj, _expr["type"])
-                == False
+                isinstance(_name["type"], Array) and
+                is_nullable_compatible_type(_name["type"].type_obj, _expr["type"]) == False
             ):
                 HascalError(
                     f"Assign 'NULL' to non-nullable variable '{_name['expr']}':{_line}",filename=self.filename
                 )
+            
+            if (
+                str(_name["type"]) == "string" and
+                is_nullable_compatible_type(copy.deepcopy(self.types["char"]), _expr["type"]) == False
+            ):
+                HascalError(
+                    f"Assign 'NULL' to non-nullable variable '{_name['expr']}':{_line}",filename=self.filename
+                )
+
             elif (
                 _expr["type"].category == "all-nullable"
                 and _name["type"].is_ptr == False
@@ -600,10 +609,18 @@ class Generator(object):
                 HascalError(
                     f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL",filename=self.filename
                 )
-            elif is_compatible_type(_name["type"].type_obj, _expr["type"]) == False:
+            
+
+            elif isinstance(_name["type"], Array) and is_compatible_type(_name["type"].type_obj, _expr["type"]) == False:
                 HascalError(
                     f"Mismatched type '{_name['type'].type_obj.get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}",filename=self.filename
                 )
+            elif str(_name["type"]) == "string" and is_compatible_type(copy.deepcopy(self.types["char"]), _expr["type"]) == False:
+                HascalError(
+                    f"Mismatched type '{_name['type'].type_obj.get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}",filename=self.filename
+                )
+
+
             elif _expr["type"].category == "all-nullable":
                 HascalWarning(
                     f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}",filename=self.filename
@@ -611,7 +628,7 @@ class Generator(object):
 
             expr = {
                 "expr": "%s[%s] = %s;" % (_name["expr"], _index["expr"], _expr["expr"]),
-                "type": _name["type"].type_obj,
+                "type": _name["type"].type_obj if isinstance(_name["type"], Array) else _name["type"] ,
             }
             return expr
 
@@ -623,7 +640,7 @@ class Generator(object):
             _expr = self.walk(node[4])
             _line = node[5]
 
-            if not isinstance(_name["type"], Array):
+            if not isinstance(_name["type"], Array) or not str(_name["type"]) == "string":
                 HascalError(f"'{_name['expr']}' is not subscriptable:{_line}",filename=self.filename)
             if not isinstance(_name["type"].type_obj, Struct):
                 HascalError(
@@ -1263,6 +1280,12 @@ class Generator(object):
             _expr = self.walk(node[2])
             _line = node[3]
 
+            if self.no_std :
+                expr = {
+                    "expr": "(%s)%s" % (_return_type["type"], _expr["expr"]),
+                    "type": _return_type["type"],
+                }
+                return expr
             expr = {
                 "expr": "static_cast<%s>(%s)" % (_return_type["type"], _expr["expr"]),
                 "type": _return_type["type"],
