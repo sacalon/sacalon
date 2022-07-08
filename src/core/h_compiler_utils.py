@@ -169,12 +169,40 @@ class Array(Type):
         elif isinstance(self.type_obj, Struct):
             return "[%s]%s" % (str(self.type_obj), self.ptr_str)
 
-def return_null_according_to_type(type_, expr,name_,decl=True,array_decl=False):
+def return_null_according_to_type(type_, expr,name,decl=True,array_decl=False):
     """
     Return null according to type
 
     Args:
         type_ (dict): type
+        expr (dict): expression
+        name (string): name
+        decl (bool, optional): is declarator. Defaults to True.
+        array_decl (bool, optional): is array declarator. Defaults to False.
+
+    Returns:
+        str: generated code
+    """
+
+    # Check if variable is literal or pointer and expr is null : set variable to `nullptr`
+    if (
+        expr["type"].category == "all-nullable"
+        and (str(index["type"]) == "string" or isinstance(type_["type"],Array) or index["type"].is_ptr)
+    ):
+        return "%s = nullptr;" % (name)
+    else :
+        if decl :
+            return "%s %s = %s;" % ("std::vector<"+str(type_["type"])+">" if array_decl else type_["type"], name, expr["expr"]) 
+        return "%s = %s;\n" % (name, expr["expr"])
+    return ""
+
+def return_null_according_to_type_index(name,index,expr):
+    """
+    Return null according to type
+
+    Args:
+        name (dict): variable
+        index(dict): index value
         expr (dict): expression
         name_ (string): name
         decl (bool, optional): is declarator. Defaults to True.
@@ -187,19 +215,11 @@ def return_null_according_to_type(type_, expr,name_,decl=True,array_decl=False):
     # Check if variable is literal or pointer and expr is null : set variable to `nullptr`
     if (
         expr["type"].category == "all-nullable"
-        and str(type_["type"]) == "string"
+        and (str(index["type"]) == "string" or isinstance(index["type"],Array) or index["type"].is_ptr)
     ):
-        expr_ = "%s = nullptr;" % (name_)
-    # Check if variable is vector and expr is null : set variable to `nullptr`
-    elif (
-        expr["type"].category == "all-nullable"
-        and isinstance(type_["type"],Array)
-    ):
-        return "%s = nullptr;" % (name_)
+        return "%s[%s] = nullptr;" % (name["expr"],index["expr"])
     else :
-        if decl :
-            return "%s %s = %s;" % ("std::vector<"+str(type_["type"])+">" if array_decl else type_["type"], name_, expr["expr"]) 
-        return "%s = %s;\n" % (name_, expr["expr"])
+        return "%s[%s] = %s;\n" % (name["expr"],index["expr"], expr["expr"])
     return ""
 
 def is_compatible_ptr(type_a, type_b):

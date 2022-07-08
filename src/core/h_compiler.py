@@ -627,7 +627,7 @@ class Generator(object):
                 )
 
             expr = {
-                "expr": "%s[%s] = %s;" % (_name["expr"], _index["expr"], _expr["expr"]),
+                "expr": return_null_according_to_type_index(_name, _index, _expr),
                 "type": _name["type"].type_obj if isinstance(_name["type"], Array) else _name["type"] ,
             }
             return expr
