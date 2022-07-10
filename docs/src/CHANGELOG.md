@@ -7,7 +7,7 @@
 <summary>v1.3.10-rc.1</summary>
 
 #### New features
-- show error undeleted variable from heap
+- show error for undeleted variable from heap
 
 #### Changes
 
