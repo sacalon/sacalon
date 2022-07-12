@@ -37,14 +37,14 @@ function greaterThan(a:float, b:float): bool {
     return false
 }
 
-function lessThanOrEqual(a:float, b:float): bool {
+function lessThanEqual(a:float, b:float): bool {
     if (a <= b) {
         return true
     }
     return false
 }
 
-function greaterThanOrEqual(a:float, b:float): bool {
+function greaterThanEqual(a:float, b:float): bool {
     if (a >= b) {
         return true
     }
