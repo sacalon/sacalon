@@ -32,6 +32,7 @@
 - [x] Inspired by Swift, Pascal
 - [x] C++ on backend
 - [x] Compatible with C\C++\Obj-C
+- [x] Built-in HTTP Library
 
 ## Examples
 Hello World :
@@ -42,12 +43,12 @@ function main() : int {
 }
 ```
 
-Formatting Strings :
+HTTP Request:
 ```typescript
+use http
 function main() : int {
-    var name = ReadStr("Enter your name :")
-    var fmt_str = format("Hi,{}",name)
-    print(fmt_str)
+    var content = get("https://www.google.com")
+    print(content)
     return 0
 }
 ```
