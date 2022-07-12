@@ -7,6 +7,7 @@
 
   [Website](https://hascal.github.io) |
   [Docs](https://hascal.github.io/docs/latest) |
+  [Coding Style](https://hascal.github.io/style.html) |
   [Changelog](docs/src/CHANGELOG.md) |
   [Roadmap](docs/src/ROADMAP.md)
   
