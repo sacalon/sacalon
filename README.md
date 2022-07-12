@@ -30,7 +30,7 @@
 - [x] Null safety by default
 - [x] Fast and powerful
 - [x] Inspired by Swift, Pascal
-- [x] C++ on backend
+- [x] Compiles to C++
 - [x] Compatible with C\C++\Obj-C
 - [x] Built-in HTTP Library
 
