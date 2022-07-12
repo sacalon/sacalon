@@ -16,7 +16,7 @@ int to_int(int s){
 }
 
 int to_int(char s){
-	return (int)s-48; // ASCII chars starts with 48
+	return (int)s-48; // ASCII chars start with 48
 }
 
 string to_string(int s){
