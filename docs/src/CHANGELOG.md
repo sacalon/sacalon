@@ -11,7 +11,8 @@
 
 #### Changes
 - improve `math` library
-
+- in `functional` library : change `lessThanOrEqual` to `lessThanEqual`, `greaterThanOrEqual` to `greaterThanEqual`
+ 
 #### Bug fixes
 
 #### Removed
