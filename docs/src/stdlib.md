@@ -42,13 +42,13 @@ print(listdir("C:\\"));
 ``` -->
 
 ## `os`
-- `os_name() : string` : Return OS name
-- `system()` : Execute a command
-- `compiler_name() : string` : Return compiler name
-- `arch() : string` : Return architecture
-- `is_x86() : bool` : Return true if architecture is x86
-- `is_x64() : bool` : Return true if architecture is x64
-- `getenv(name:string) : string` : Return environment variable
+- `os_name() : string` : Returns OS name
+- `system()` : Executes a command
+- `compiler_name() : string` : Returns compiler name
+- `arch() : string` : Returns architecture
+- `is_x86() : bool` : Returns true if architecture is x86
+- `is_x64() : bool` : Returns true if architecture is x64
+- `getenv(name:string) : string` : Returns environment variable
 
 ## `time`
 Work with time/date
