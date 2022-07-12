@@ -10,9 +10,9 @@
 - show error for undeleted variables from heap
 
 #### Changes
-- improve `math` library
+- improve `math`,`os` library
 - in `functional` library : change `lessThanOrEqual` to `lessThanEqual`, `greaterThanOrEqual` to `greaterThanEqual`
- 
+
 #### Bug fixes
 
 #### Removed
