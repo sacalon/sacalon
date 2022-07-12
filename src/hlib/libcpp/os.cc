@@ -81,7 +81,7 @@ string arch()
         #elif _M_IX86
         return "intel32";
         #elif _M_IA64
-        return "ia64"; // also supports by intel c++ : __itanium__
+        return "itanium";
         #elif _M_PPC
         return "powerpc";
         #else
@@ -103,7 +103,11 @@ string arch()
         #else
         return "unknown";
         #endif
+    }else if(comname == "icc"){
+        #ifdef __itanium__
+        return "itanium";
+        // TODO : Add support for more compilers
+        #endif
     }
-    // todo : support intel c++
     return "unknown";
 }
