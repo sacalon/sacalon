@@ -116,11 +116,6 @@ Colors :
 - `white`
 - `black`
 
-## `browser`
-NOTE : Only supports windwos!
-
-- `open_newtab(url:string)` : open urls in new tab with default browser
-
 ## `crypto.sha256`
 SHA256 hash
 
