@@ -10,6 +10,7 @@
 - show error for undeleted variables from heap
 
 #### Changes
+- improve `math` library
 
 #### Bug fixes
 
