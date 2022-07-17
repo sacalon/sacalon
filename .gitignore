@@ -149,4 +149,13 @@ examples/
 !examples/**/*.json
 !examples/**/*.bf
 
+tests/
+!tests/README.md
+!tests/Makefile
+!tests/**/*.has
+!tests/**/*.cc
+!tests/**/*.json
+!tests/**/*.bf
+!tests/**/*.py
+
 *.o

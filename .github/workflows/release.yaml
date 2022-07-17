@@ -1,0 +1,47 @@
+name: release
+on:
+  release:
+    types:
+      - created
+env:
+  api_key: ${{ secrets.GITHUB_TOKEN }}
+  release_name: ${{ github.event.release.name }}
+
+jobs:
+  publish:
+    name: publish ${{ matrix.os }} / ${{ matrix.architecture }} 🤖
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        architecture: [x64, x86]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: [3.10]
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+      - name: Set up Python 3 🐍
+        uses: actions/setup-python@v4
+        with:
+          architecture: ${{ matrix.architecture }}
+      - name: Update PIP ✨
+        run: pip install -U wheel pip setuptools
+      - name: Install requirements ⚙️
+        run: |
+          pip install -r requirements.txt pyGithub
+      - name: Build 🏗️
+        run: |
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+              make windows
+          else
+            make build
+          fi
+      - name: Publish 📦
+        run: |
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            mv dist\hascal dict\hascal-$Env:github.event.release.name-$Env:matrix.architecture-windows
+            python .github\workflows\publish.py
+          else
+            mv dist/hascal dict/hascal-${{ github.event.release.name }}-${{ matrix.architecture }}-${{ matrix.os }}
+            python .github/workflows/publish.py
+          fi
