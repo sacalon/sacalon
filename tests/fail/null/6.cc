@@ -6,8 +6,11 @@
 #include <cstring>
 #include <type_traits>
 #include <typeinfo>
-#include <unordered_map>
+// #include <unordered_map>
 #include <string_view>
+#include <exception>
+#include <functional>
+
 typedef std::string string;
 
 // should support all compilers(todo)
@@ -29,7 +32,7 @@ typedef unsigned short uint16;
 typedef unsigned char uint8;
 typedef char int8;
 
-#define dict std::unordered_map
+// #define dict std::unordered_map
 
 void error(string err_msg){
 	std::cerr << err_msg << std::endl ;
@@ -227,6 +230,24 @@ std::string typeof(T val) {
 	if (res == "std::__cxx11::basic_string<char>")
 		return "string";
 	
+	// replace `*` with `^`
+	std::ostringstream oss;
+    std::size_t pos = 0;
+    std::size_t prevPos = pos;
+
+    while (true) {
+        prevPos = pos;
+        pos = res.find("*", pos);
+        if (pos == std::string::npos)
+            break;
+        oss << res.substr(prevPos, pos - prevPos);
+        oss << "^";
+        pos += std::string("*").size();
+    }
+
+    oss << res.substr(prevPos);
+    res = oss.str();
+
 	return res;
 }
 
@@ -250,7 +271,26 @@ std::ostream& operator<< (std::ostream& out, const std::vector<T>& v) {
   return out;
 }
 
+struct HascalException : public std::exception
+{
+	std::string msg;
+	HascalException(std::string msg){
+		this->msg = msg;
+	}
+	const char * what () const throw ()
+    {
+    	return this->msg.c_str();
+    }
+};
 // exit()
 
+// builtin assert()
+#define assert(cond) if(!(cond)){throw HascalException("Assertion failed: " #cond);}
 
+
+ int main() {
+int* a = new int(1);a = 1;
+return 0;
+
+}
 

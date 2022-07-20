@@ -1,0 +1,21 @@
+name: test
+on: [push, pull_request]
+jobs:
+  test:
+    name: Run Tests 🧪
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+      - name: Set up Python 3 🐍
+        uses: actions/setup-python@v4
+        with:
+          architecture: x64
+      - name: Update PIP ✨
+        run: pip install -U wheel pip setuptools
+      - name: Install requirements ⚙️
+        run: |
+          pip install -r requirements.txt pytest
+      - name: Build and Test 🧪
+        run: |
+          make tests
