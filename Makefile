@@ -1,6 +1,9 @@
- # Makefile for Hascal
+# Makefile for Hascal
 clean:
 	rm -rf dist build
+clean-windows:
+	del dist
+	del build
 deps :
 	python3 --version
 	pip3 --version
@@ -13,7 +16,7 @@ build: deps
 	pyinstaller --add-data src/hlib:hlib "src/hascal.py" --name "hascal" --noconfirm --onefile --console
 	cp -r src/hlib dist/
 	cp -r examples/ dist/
-windows: deps-windows clean
+windows: deps-windows clean-windows
 	pyinstaller --add-data src\hlib;hlib "src\hascal.py" --name "hascal" --noconfirm --onefile --console
 	xcopy src\hlib dist\hlib /E /H /C /I
 	xcopy examples dist\examples /E /H /C /I
