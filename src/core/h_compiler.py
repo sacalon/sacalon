@@ -926,7 +926,6 @@ class Generator(object):
                 and _params[_params_keys[0]].type_obj.type_name == "string"
             ):
                 res = (
-                    "%s %s %s(int argc,char** args) {\nstd::vector<std::string> %s;for(int i=0;i<argc;i++){%s.push_back(args[i]);}\n%s\n}\n" if self.use_gc else \
                     "%s %s %s(int argc,char** args) {\nstd::vector<std::string> %s;for(int i=0;i<argc;i++){%s.push_back(args[i]);}\n%s\n}\n"
                     % (
                         _decorator,

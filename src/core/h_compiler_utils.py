@@ -187,7 +187,7 @@ def return_null_according_to_type(type_, expr,name,decl=True,array_decl=False):
     # Check if variable is literal or pointer and expr is null : set variable to `nullptr`
     if (
         expr["type"].category == "all-nullable"
-        and (str(index["type"]) == "string" or isinstance(type_["type"],Array) or index["type"].is_ptr)
+        and (str(expr["type"]) == "string" or isinstance(type_["type"],Array) or expr["type"].is_ptr)
     ):
         return "%s = nullptr;" % (name)
     else :
