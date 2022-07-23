@@ -56,22 +56,11 @@ function main() : int {
 
 Functional Programming :
 ```typescript
-use functional
+use regex
 
-function main() : int {
-    var x = 1
-    var y = 2
-    var z = 3
-
-    var sum = plus(
-        plus(x,y),z
-    )
-
-    var avg = divide(sum,3)
-
-    print("Sum :",sum)
-    print("Average :",avg)
-
+function main(): int {
+    var matched : bool = regex("subject","(sub)(.*)")
+    print(matched) // Output : 1
     return 0
 }
 ```
