@@ -1,0 +1,8 @@
+// this is only a concept and current compiler cannot parse this.
+
+<T> function add(a:T,b:T){
+    return a + b
+}
+
+// call
+add<int>(1,2)
