@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
 api_key = os.getenv("api_key", None)
 current_date = datetime.today().strftime("%Y-%m-%d")
-path = glob(r"/__w/hascal/hascal/dict/hascal*")[
+path = glob(r"/__w/hascal/hascal/dist/hascal*")[
     0
 ]  # edit this if your not use in workflow
 repo_name = os.getenv("name", None)

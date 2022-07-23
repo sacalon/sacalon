@@ -39,9 +39,9 @@ jobs:
       - name: Publish 📦
         run: |
           if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            mv dist\hascal dict\hascal-$Env:github.event.release.name-$Env:matrix.architecture-windows
+            mv dist\hascal dist\hascal-$Env:github.event.release.name-$Env:matrix.architecture-windows
             python .github\workflows\publish.py
           else
-            mv dist/hascal dict/hascal-${{ github.event.release.name }}-${{ matrix.architecture }}-${{ matrix.os }}
+            mv dist/hascal dist/hascal-${{ github.event.release.name }}-${{ matrix.architecture }}-${{ matrix.os }}
             python .github/workflows/publish.py
           fi
