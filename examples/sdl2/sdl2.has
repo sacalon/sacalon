@@ -3,40 +3,40 @@
 
 cuse """
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_image.h>
+// #include <SDL2/SDL_ttf.h>
+// #include <SDL2/SDL_image.h>
 #undef main
 #define SDL_MAIN_HANDLED
 """
 
 struct sdl2_rect{
-    var x: int
-    var y: int
-    var w: int
-    var h: int
+    var x: int?
+    var y: int?
+    var w: int?
+    var h: int?
 }
 
 struct sdl2_color{
-    var r: int
-    var g: int
-    var b: int
-    var a: int
+    var r: int?
+    var g: int?
+    var b: int?
+    var a: int?
 }
 
 struct sdl2_event {
     cuse "SDL_Event event_obj;"
-    var type : int
+    var type : int?
 }
 
 struct sdl2_window {
     cuse "SDL_Window *window_obj;"
-    var title : string
-    var x : int
-    var y : int
+    var title : string?
+    var x : int?
+    var y : int?
 }
 
 function sdl2_new_window(title:string,x:int,y:int): sdl2_window{
-    var window : sdl2_window
+    var window : sdl2_window?
     cuse """
     window.window_obj = SDL_CreateWindow(title.c_str(),SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,x,y,SDL_WINDOW_OPENGL);
     """
@@ -51,7 +51,7 @@ function sdl2_set_window_title(window:sdl2_window,title:string){
 }
 
 function sdl2_poll_event(event:sdl2_event): bool{
-    var ret : bool
+    var ret : bool?
     cuse """
     ret = SDL_PollEvent(&event.event_obj);
     """
@@ -59,7 +59,7 @@ function sdl2_poll_event(event:sdl2_event): bool{
 }
 
 function sdl2_exit(): int{
-    var ret : int
+    var ret : int?
     cuse """
     ret = EXIT_SUCCESS;
     """
