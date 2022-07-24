@@ -28,7 +28,7 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
 
     final_path = str(final_path) + ".has"
     final_path_local = str(final_path_local) + ".has"
-    final_path2_local = str(Path(filename+".o").parent / final_path_local)
+    final_path2_local = str(Path(filename+".o").parent / Path(final_path_local))
 
     package_path_nested_local = Path(filename+".o").parent / package_path_local
 
@@ -76,7 +76,7 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
-            generator = gen_class(BASE_DIR,filename=filename+".has",imported=imported, imported_funcs=imported_funcs,
+            generator = gen_class(BASE_DIR,filename=filename+"/_.has",imported=imported, imported_funcs=imported_funcs,
                                     imported_types=imported_types, imported_vars=imported_vars,
                                     imported_consts=imported_consts)
             output_cpp = generator.generate(tree, True)
@@ -89,7 +89,7 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
-            generator = gen_class(BASE_DIR,filename=filename+".has",imported=imported, imported_funcs=imported_funcs,
+            generator = gen_class(BASE_DIR,filename=filename+"/_.has",imported=imported, imported_funcs=imported_funcs,
                                     imported_types=imported_types, imported_vars=imported_vars,
                                     imported_consts=imported_consts)
             output_cpp = generator.generate(tree, True)
@@ -153,10 +153,10 @@ def cuse(path_, BASE_DIR, filename=None):
     package_path_local_hpp = package_path_local / "_.hpp"
     package_path_local_ld = package_path_local / "_.ld"
 
-    package_path_nested_local_cc = Path(filename) / package_path_local / "_.cc"
-    package_path_nested_local_hpp = Path(filename) / package_path_local / "_.hpp"
-    package_path_nested_local_ld = Path(filename) / package_path_local / "_.ld"
-    
+    package_path_nested_local_cc = Path(filename).parent / package_path_local / "_.cc"
+    package_path_nested_local_hpp = Path(filename).parent / package_path_local / "_.hpp"
+    package_path_nested_local_ld = Path(filename).parent / package_path_local / "_.ld"
+
     if isfile(final_path_cc):
         with open(final_path_cc, "r") as fd:
             result["cpp_code"] = fd.read()

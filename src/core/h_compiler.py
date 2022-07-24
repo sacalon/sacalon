@@ -534,14 +534,16 @@ class Generator(object):
 
         # cuse <lib_name>
         if node[0] == "cinclude":
+            filename = copy.copy(self.filename)
             name = ".".join(name for name in node[1])
             if not name in self.imported:
-                result = cuse(node[1], self.BASE_DIR,filename=self.filename)
+                result = cuse(node[1], self.BASE_DIR,
+                                filename=str(Path(self.filename).parent / Path(name.replace(".","/"))))
 
                 self.imported.append(name)
                 self.add_to_output(result["cpp_code"], result["header_code"])
                 self.add_to_flags(result["LDFLAGS"])
-
+                self.filename = filename
             return {"expr": "", "type": ""}
         # -------------------------------------
         # <name> = <expr>
@@ -761,6 +763,7 @@ class Generator(object):
         # -----------------------------------------
         # use <name>
         if node[0] == "use":
+            filename = copy.copy(self.filename)
             name = ".".join(name for name in node[1])
             if name in self.imported:
                 self.funcs.update(self.imported_funcs[name])
@@ -769,7 +772,7 @@ class Generator(object):
                 self.consts.update(self.imported_consts[name])
             else :
                 result = use(Generator, node[1], self.BASE_DIR,
-                                filename=self.filename,
+                                filename=str(Path(self.filename).parent / Path(name.replace(".","/"))),
                                 imported=self.imported,
                                 imported_funcs=self.imported_funcs,
                                 imported_types=self.imported_types,
@@ -796,7 +799,7 @@ class Generator(object):
                 self.imported_types[name] = result["generator"].types
                 self.imported_vars[name] = result["generator"].vars
                 self.imported_consts[name] = result["generator"].consts
-
+                self.filename = filename
             return {"expr": "", "type": ""}
 
         # use <name>, <name>,...
