@@ -453,7 +453,7 @@ class Generator(object):
                 }
                 return expr
 
-        # var <name> : <return_type>*
+        # var <name> : <return_type>^
         if node[0] == "declare_ptr" and node[1] == "no_equal":
             _name = node[3]
             _type = self.walk(node[2])
@@ -515,6 +515,7 @@ class Generator(object):
                 # check if variable allocated with `new` keyword, append it to undeleted vars
                 if _type.get("new",False):
                     self.scope_not_deleted_vars[_name] = _line
+                _type["type"].with_new = _expr["type"].with_new
                 self.vars[_name] = Var(_name, _type["type"], members=members)
 
                 expr = {
