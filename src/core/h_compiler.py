@@ -1319,6 +1319,7 @@ class Generator(object):
             _type = _name["type"]
             _line = node[2]
             type_ = None
+
             if isinstance(_type, Struct):
                 type_ = Struct(
                     _type.name,
@@ -1327,7 +1328,7 @@ class Generator(object):
                     ptr_str="&",
                     category=_type.category,
                 )
-            if isinstance(_type, Function):
+            elif isinstance(_type, Function):
                 type_ = Function(
                     _type.name,
                     _type.params,
