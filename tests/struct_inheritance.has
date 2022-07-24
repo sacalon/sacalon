@@ -1,5 +1,5 @@
 struct a {
-    var b : int
+    var b : int?
 }
 
 struct b : a {
@@ -8,5 +8,5 @@ struct b : a {
 
 function main() : int {
     var foo : b = b(1)
-   
+    return 0
 }
