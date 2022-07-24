@@ -10,9 +10,6 @@ function main():int {
     print("func_overload.has :")
     system("python ../src/hascal.py func_overload.has")
 
-    print("nested_struct.has :")
-    system("python ../src/hascal.py nested_struct.has")
-
     print("test.has :")
     system("python ../src/hascal.py test.has")
 

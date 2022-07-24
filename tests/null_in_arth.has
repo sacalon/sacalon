@@ -5,6 +5,6 @@ function main() : int{
     if x == NULL { // use null in arithmetic expression, OK
         return 1
     }
-
+    delete x
     return 0
 }
