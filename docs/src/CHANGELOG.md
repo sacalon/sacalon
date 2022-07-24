@@ -14,6 +14,8 @@
 - in `functional` library : change `lessThanOrEqual` to `lessThanEqual`, `greaterThanOrEqual` to `greaterThanEqual`
 
 #### Bug fixes
+- fix `math` library bug
+- fix import package bug with `_.*` name
 
 #### Removed
 
