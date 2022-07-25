@@ -54,7 +54,3 @@ if not hascal_path.exists():
 def test_hascal(case):
     assert subprocess.Popen(f"{hascal_path} {base_path}/tests/{case}", shell=True).wait() == 0
 
-
-@pytest.mark.parametrize("case", [])
-def test_examples(case):
-    assert subprocess.Popen(f"{hascal_path} {base_path}/examples/{case}", shell=True).wait() == 0
