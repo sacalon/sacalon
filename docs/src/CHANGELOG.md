@@ -19,6 +19,7 @@
 - fix `crypto.sha256` library bug
 
 #### Removed
+- remove `libtcc` from stdlib
 
 </details>
 </details>
