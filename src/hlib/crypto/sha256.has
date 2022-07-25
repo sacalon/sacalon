@@ -1,7 +1,7 @@
-use libcpp.sha256
+cuse libcpp.sha256
 
 function generate_sha256(data:string):string {
-    var hash_hex : string 
+    var hash_hex : string?
     cuse "picosha2::hash256_hex_string(data, hash_hex);"
     return hash_hex
 }
