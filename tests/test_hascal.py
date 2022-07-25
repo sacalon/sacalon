@@ -19,7 +19,7 @@ if not hascal_path.exists():
         "func.has",
         "func_overload.has",
         "funcp.has",
-        "get.has",
+        # "get.has",
         "hello.has",
         "linear_regression.has",
         "mem.has",
