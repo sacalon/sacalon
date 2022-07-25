@@ -16,6 +16,7 @@
 #### Bug fixes
 - fix `math` library bug
 - fix import package bug with `_.*` name
+- fix `crypto.sha256` library bug
 
 #### Removed
 
