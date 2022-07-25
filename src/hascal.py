@@ -16,4 +16,5 @@ def main():
     HascalCompiler(sys.argv, BASE_DIR)
 
 if __name__ == "__main__":
-    main()
+    try : main()
+    except KeyboardInterrupt : ...
