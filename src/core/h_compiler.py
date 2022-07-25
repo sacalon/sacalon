@@ -1168,6 +1168,11 @@ class Generator(object):
             return expr
         if node[0] == "if_else":
             cuurent_vars = self.vars.copy()
+            scope_not_deleted_vars = copy.deepcopy(self.scope_not_deleted_vars)
+            top_scope_not_deleted_vars = copy.deepcopy(self.top_scope_not_deleted_vars)
+            
+            self.top_scope_not_deleted_vars = copy.deepcopy(self.scope_not_deleted_vars)
+
             cond = self.walk(node[1])
             body = self.walk(node[2])
             body2 = self.walk(node[3])
@@ -1180,6 +1185,9 @@ class Generator(object):
                 res2 += e["expr"]
 
             self.vars = cuurent_vars
+            self.scope_not_deleted_vars = scope_not_deleted_vars
+            self.top_scope_not_deleted_vars = top_scope_not_deleted_vars
+
             expr = {
                 "expr": "if(%s){\n%s\n}else {\n%s\n}\n" % (cond["expr"], res, res2),
                 "type": "",
@@ -1187,6 +1195,11 @@ class Generator(object):
             return expr
         if node[0] == "if_else2":
             cuurent_vars = self.vars.copy()
+            scope_not_deleted_vars = copy.deepcopy(self.scope_not_deleted_vars)
+            top_scope_not_deleted_vars = copy.deepcopy(self.top_scope_not_deleted_vars)
+            
+            self.top_scope_not_deleted_vars = copy.deepcopy(self.scope_not_deleted_vars)
+
             cond = self.walk(node[1])
             body = self.walk(node[2])
             body2 = self.walk(node[3])
@@ -1195,6 +1208,8 @@ class Generator(object):
                 res += e["expr"]
 
             self.vars = cuurent_vars
+            self.scope_not_deleted_vars = scope_not_deleted_vars
+            self.top_scope_not_deleted_vars = top_scope_not_deleted_vars
             expr = {
                 "expr": "if(%s){\n%s\n}else %s\n" % (cond["expr"], res, body2["expr"]),
                 "type": "",
@@ -1210,6 +1225,10 @@ class Generator(object):
             _line = node[4]
             res = ""
             current_vars = self.vars.copy()
+            scope_not_deleted_vars = copy.deepcopy(self.scope_not_deleted_vars)
+            top_scope_not_deleted_vars = copy.deepcopy(self.top_scope_not_deleted_vars)
+            
+            self.top_scope_not_deleted_vars = copy.deepcopy(self.scope_not_deleted_vars)
 
             if not (_name2 in self.vars or _name2 in self.consts):
                 HascalError(f"'{_name2}' not defined:{_line}",filename=self.filename)
@@ -1219,9 +1238,14 @@ class Generator(object):
 
             self.vars[_name] = Var(_name, self.vars[_name2].type.type_obj)
             body = self.walk(node[3])
+
             for e in body:
                 res += e["expr"]
+            
             self.vars = current_vars
+            self.scope_not_deleted_vars = scope_not_deleted_vars
+            self.top_scope_not_deleted_vars = top_scope_not_deleted_vars
+
             expr = {
                 "expr": "for(auto %s : %s){\n%s\n}\n" % (_name, _name2, res),
                 "type": "",
@@ -1232,11 +1256,19 @@ class Generator(object):
         #     <block>
         # }
         if node[0] == "while":
+            current_vars = self.vars.copy()
+            scope_not_deleted_vars = copy.deepcopy(self.scope_not_deleted_vars)
+            top_scope_not_deleted_vars = copy.deepcopy(self.top_scope_not_deleted_vars)
+            
             cond = self.walk(node[1])
             body = self.walk(node[2])
             res = ""
             for e in body:
                 res += e["expr"]
+            
+            self.vars = current_vars
+            self.scope_not_deleted_vars = scope_not_deleted_vars
+            self.top_scope_not_deleted_vars = top_scope_not_deleted_vars
             expr = {
                 "expr": "while(%s){\n%s\n}\n" % (cond["expr"], res),
                 "type": "",
