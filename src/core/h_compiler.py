@@ -113,6 +113,8 @@ class Generator(object):
         self.scope = False
 
         self.scope_not_deleted_vars = {}
+        self.top_scope_not_deleted_vars = {}
+
 
     def generate(self, tree, use=False):
         """
@@ -231,9 +233,11 @@ class Generator(object):
                 result.append(self.walk(statement))
             
             for var in self.scope_not_deleted_vars :
-                HascalError(f"Variable '{var}' did not deleted at end of scope:{self.scope_not_deleted_vars[var]}")
+                if not var in self.top_scope_not_deleted_vars : 
+                    HascalError(f"Variable '{var}' did not deleted at end of scope:{self.scope_not_deleted_vars[var]}")
 
-            self.scope_not_deleted_vars = {}
+            self.scope_not_deleted_vars = copy.copy(self.top_scope_not_deleted_vars)
+            self.top_scope_not_deleted_vars = {}
             return result
         if node[0] == "in_block":
             result = []  # list of exprs and statements
@@ -241,9 +245,11 @@ class Generator(object):
                 result.append(self.walk(statement))
             
             for var in self.scope_not_deleted_vars :
-                HascalError(f"Variable '{var}' did not deleted at end of scope:{self.scope_not_deleted_vars[var]}")
+                if not var in self.top_scope_not_deleted_vars : 
+                    HascalError(f"Variable '{var}' did not deleted at end of scope:{self.scope_not_deleted_vars[var]}")
 
-            self.scope_not_deleted_vars = {}
+            self.scope_not_deleted_vars = copy.copy(self.top_scope_not_deleted_vars)
+            self.top_scope_not_deleted_vars = {}
             return result
         if node[0] == "block_struct":
             current_vars = self.vars
@@ -1140,6 +1146,11 @@ class Generator(object):
         # }
         if node[0] == "if":
             cuurent_vars = self.vars.copy()
+            scope_not_deleted_vars = copy.deepcopy(self.scope_not_deleted_vars)
+            top_scope_not_deleted_vars = copy.deepcopy(self.top_scope_not_deleted_vars)
+            
+            self.top_scope_not_deleted_vars = copy.deepcopy(self.scope_not_deleted_vars)
+
             cond = self.walk(node[1])
             body = self.walk(node[2])
 
@@ -1148,6 +1159,8 @@ class Generator(object):
                 res += e["expr"]
 
             self.vars = cuurent_vars
+            self.scope_not_deleted_vars = scope_not_deleted_vars
+            self.top_scope_not_deleted_vars = top_scope_not_deleted_vars
             expr = {
                 "expr": "if(%s){\n%s\n}\n" % (cond["expr"], res),
                 "type": "",
@@ -1271,6 +1284,7 @@ class Generator(object):
             elif not self.vars[_name].type.with_new:
                 HascalError(f"Cannot delete a pointer that not allocated with `new` keyword:{_line}")
             if _name in self.scope_not_deleted_vars :
+                
                 self.scope_not_deleted_vars.pop(_name,None)
             expr = {
                 "expr": "delete %s;\n" % (_name),
