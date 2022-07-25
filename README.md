@@ -54,7 +54,7 @@ function main() : int {
 }
 ```
 
-Functional Programming :
+Easy to use regex:
 ```typescript
 use regex
 
