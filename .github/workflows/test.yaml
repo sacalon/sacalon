@@ -1,5 +1,11 @@
 name: test
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - "src/**"
+      - "tests/**"
+      - ".github/workflows/test.yaml"
+      - "Makefile"
 jobs:
   test:
     name: Run Tests 🧪
