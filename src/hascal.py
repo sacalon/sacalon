@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
 
-# The Hascal Application
-#
-# The Hascal Programming Language
-# Copyright 2019-2022 Hascal Development Team,
-# all rights reserved.
-
 import sys
 import os
 from core.h_builder import HascalCompiler
