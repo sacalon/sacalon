@@ -1645,6 +1645,8 @@ class Generator(object):
         # not <condition>
         if node[0] == "not":
             _expr0 = self.walk(node[1])
+            if not is_compatible_type(_expr0["type"],self.types["int"]):
+                HascalError(f"`not` condition expression type should be boolean or numerical:{_line}",filename=self.filename)
 
             expr = {
                 "expr": "!%s" % (_expr0["expr"]),  # may have bug
@@ -1658,6 +1660,9 @@ class Generator(object):
             _expr1 = self.walk(node[2])
             _line = node[3]
 
+            if not (is_compatible_type(_expr0["type"],self.types["int"]) or is_compatible_type(_expr1["type"],self.types["int"])):
+                HascalError(f"`and` condition expression type should be boolean or numerical:{_line}",filename=self.filename)
+
             expr = {
                 "expr": "%s && %s" % (_expr0["expr"], _expr1["expr"]),
                 "type": copy.deepcopy(self.types["bool"]),
@@ -1669,6 +1674,10 @@ class Generator(object):
             _expr0 = self.walk(node[1])
             _expr1 = self.walk(node[2])
             _line = node[3]
+
+            if not (is_compatible_type(_expr0["type"],self.types["int"]) or is_compatible_type(_expr1["type"],self.types["int"])):
+                HascalError(f"`or` condition expression type should be boolean or numerical:{_line}",filename=self.filename)
+
             expr = {
                 "expr": "%s || %s" % (_expr0["expr"], _expr1["expr"]),
                 "type": copy.deepcopy(self.types["bool"]),
@@ -1815,6 +1824,10 @@ class Generator(object):
         # not <expr>
         if node[0] == "not_cond":
             _expr0 = self.walk(node[1])
+
+            if not is_compatible_type(_expr0["type"],self.types["int"]):
+                HascalError(f"`not` condition expression type should be boolean or numerical:{_line}",filename=self.filename)
+
             expr = {
                 "expr": "!%s" % (_expr0["expr"]),  # may have bug
                 "type": copy.deepcopy(self.types["bool"]),
@@ -1829,6 +1842,9 @@ class Generator(object):
         # <expr>
         if node[0] == "expr_cond":
             _expr = self.walk(node[1])
+
+            if not is_compatible_type(_expr0["type"],self.types["int"]):
+                HascalError("Condition expression type should be boolean or numerical")
             expr = {
                 "expr": "%s" % (_expr["expr"]),  # may have bug
                 "type": copy.deepcopy(self.types["bool"]),

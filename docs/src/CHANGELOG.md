@@ -12,7 +12,7 @@
 #### Changes
 - improve `math`,`os` library
 - in `functional` library : change `lessThanOrEqual` to `lessThanEqual`, `greaterThanOrEqual` to `greaterThanEqual`
-- show error for comparing two arrays or structs
+- improve error handler for conditions
 - `pytest` based test runner(@mmdbalkhi)
 
 #### Bug fixes
