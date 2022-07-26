@@ -33,6 +33,7 @@
 - [x] Inspired by Swift, Pascal
 - [x] Compiles to C++
 - [x] Compatible with C\C++\Obj-C
+- [x] Builtin FFI system
 - [x] Built-in HTTP Library
 
 ## Examples
