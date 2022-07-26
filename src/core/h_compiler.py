@@ -1690,6 +1690,11 @@ class Generator(object):
                 HascalError(
                     f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
+            elif isinstance(_expr0["type"],Array) or isinstance(_expr1["type"],Array):
+                HascalError(f"Cannot compare two arrays:{_line}",filename=self.filename)
+            elif isinstance(_expr0["type"],Struct) or isinstance(_expr1["type"],Struct) :
+                HascalError(f"Cannot compare two struct based types:{_line}",filename=self.filename)
+            
             else:
                 expr = {
                     "expr": "%s == %s" % (_expr0["expr"], _expr1["expr"]),
@@ -1707,7 +1712,11 @@ class Generator(object):
                 HascalError(
                     f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
-            # todo : check if type is int or bool else error
+            elif isinstance(_expr0["type"],Array) or isinstance(_expr1["type"],Array):
+                HascalError(f"Cannot compare two arrays:{_line}",filename=self.filename)
+            elif isinstance(_expr0["type"],Struct) or isinstance(_expr1["type"],Struct) :
+                HascalError(f"Cannot compare two struct based types:{_line}",filename=self.filename)
+            
             else:
                 expr = {
                     "expr": "%s != %s" % (_expr0["expr"], _expr1["expr"]),
@@ -1725,7 +1734,11 @@ class Generator(object):
                 HascalError(
                     f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
-            # todo : check if type is int or bool else error
+            elif isinstance(_expr0["type"],Array) or isinstance(_expr1["type"],Array):
+                HascalError(f"Cannot compare two arrays:{_line}",filename=self.filename)
+            elif isinstance(_expr0["type"],Struct) or isinstance(_expr1["type"],Struct) :
+                HascalError(f"Cannot compare two struct based types:{_line}",filename=self.filename)
+            
             else:
                 expr = {
                     "expr": "%s >= %s" % (_expr0["expr"], _expr1["expr"]),
@@ -1743,7 +1756,11 @@ class Generator(object):
                 HascalError(
                     f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
-            # todo : check if type is int or bool else error
+            elif isinstance(_expr0["type"],Array) or isinstance(_expr1["type"],Array):
+                HascalError(f"Cannot compare two arrays:{_line}",filename=self.filename)
+            elif isinstance(_expr0["type"],Struct) or isinstance(_expr1["type"],Struct) :
+                HascalError(f"Cannot compare two struct based types:{_line}",filename=self.filename)
+            
             else:
                 expr = {
                     "expr": "%s <= %s" % (_expr0["expr"], _expr1["expr"]),
@@ -1761,7 +1778,11 @@ class Generator(object):
                 HascalError(
                     f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
-            # todo : check if type is int or bool else error
+            elif isinstance(_expr0["type"],Array) or isinstance(_expr1["type"],Array):
+                HascalError(f"Cannot compare two arrays:{_line}",filename=self.filename)
+            elif isinstance(_expr0["type"],Struct) or isinstance(_expr1["type"],Struct) :
+                HascalError(f"Cannot compare two struct based types:{_line}",filename=self.filename)
+            
             else:
                 expr = {
                     "expr": "%s > %s" % (_expr0["expr"], _expr1["expr"]),
@@ -1779,7 +1800,11 @@ class Generator(object):
                 HascalError(
                     f"Mismatched type {_expr0['type'].get_name_for_error()} and {_expr1['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
-            # todo : check if type is int or bool else error
+            elif isinstance(_expr0["type"],Array) or isinstance(_expr1["type"],Array):
+                HascalError(f"Cannot compare two arrays:{_line}",filename=self.filename)
+            elif isinstance(_expr0["type"],Struct) or isinstance(_expr1["type"],Struct) :
+                HascalError(f"Cannot compare two struct based types:{_line}",filename=self.filename)
+            
             else:
                 expr = {
                     "expr": "%s < %s" % (_expr0["expr"], _expr1["expr"]),
