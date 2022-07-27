@@ -68,8 +68,8 @@ class Struct(object):
         return self.get_type_name()
 
     def get_type_name(self):
-        return self.name + self.ptr_str
-
+        return "__hascal__" + self.name + self.ptr_str
+    # todo : get_type_name_for_error()
 
 class Enum(Struct):
     ...
@@ -100,7 +100,7 @@ class Type(object):
         self.with_new = with_new
 
     def __str__(self):
-        return self.get_type_name()
+        return "__hascal__%s" % (self.get_type_name())
 
     def get_type_name(self):
         """
@@ -109,7 +109,6 @@ class Type(object):
         Returns:
             str: Type name of the type
         """
-
         if self.is_ptr:
             return "%s%s" % (self.type_name, self.ptr_str)
         else:
@@ -124,11 +123,11 @@ class Type(object):
         """
 
         ptr_str = self.ptr_str.replace("*", "^")
-
+        type_name = self.type_name.replace("__hascal__","")
         if self.is_ptr:
-            return "%s%s" % (self.type_name, ptr_str)
+            return "%s%s" % (type_name, ptr_str)
         else:
-            return self.type_name + ptr_str
+            return type_name + ptr_str
 
 
 class Array(Type):
@@ -192,7 +191,7 @@ def return_null_according_to_type(type_, expr,name,decl=True,array_decl=False):
         return "%s = nullptr;" % (name)
     else :
         if decl :
-            return "%s %s = %s;" % ("std::vector<"+str(type_["type"])+">" if array_decl else type_["type"], name, expr["expr"]) 
+            return "%s __hascal__%s = %s;" % ("std::vector<"+str(type_["type"])+">" if array_decl else type_["type"], name, expr["expr"]) 
         return "%s = %s;\n" % (name, expr["expr"])
     return ""
 

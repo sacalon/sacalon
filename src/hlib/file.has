@@ -1,6 +1,6 @@
 cuse """
 #include <fstream>
-std::string read_file(std::string path){
+std::string __hascal__read_file(std::string path){
 	std::string tmp;
 	std::string res;
 	std::ifstream file;
@@ -15,7 +15,7 @@ std::string read_file(std::string path){
 	return res;
 }
 
-bool write_file(std::string path,std::string text){
+bool __hascal__write_file(std::string path,std::string text){
 	try {
 		std::ofstream file;
 		file.open(path.c_str());

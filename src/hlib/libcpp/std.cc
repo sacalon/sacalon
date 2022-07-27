@@ -1,4 +1,5 @@
 typedef std::string string;
+typedef std::string __hascal__string;
 
 // should support all compilers(todo)
 // #if __GNUC__ || __clang__
@@ -6,91 +7,99 @@ typedef std::string string;
 // #else
 // typedef __int128_t int128;
 // #endif
+typedef int __hascal__int;
+typedef bool __hascal__bool;
+typedef float __hascal__float;
+typedef double __hascal__double;
+typedef char __hascal__char;
+typedef void __hascal__void;
 
-typedef long long int64;
-typedef unsigned long long uint64;
+typedef int __hascal__int;
+typedef long long __hascal__int64;
+typedef unsigned long long __hascal__uint64;
 
-typedef unsigned int uint;
-typedef unsigned long long uint64;
+typedef unsigned int __hascal__uint;
+typedef unsigned long long __hascal__uint64;
 
-typedef short int16;
-typedef unsigned short uint16;
+typedef short __hascal__int16;
+typedef unsigned short __hascal__uint16;
 
-typedef unsigned char uint8;
-typedef char int8;
+typedef unsigned char __hascal__uint8;
+typedef char __hascal__int8;
 
+#define __hascal__NULL NULL
 // #define dict std::unordered_map
 
-void error(string err_msg){
+void __hascal__error(string err_msg){
 	std::cerr << err_msg << std::endl ;
 }
 
-void panic(string err_msg){
-	error(err_msg);
+void __hascal__panic(string err_msg){
+	__hascal__error(err_msg);
 	exit(1);
 }
 
 
-string ReadStr(){
+string __hascal__ReadStr(){
 	string res;
 	std::cin >> res;
 	return res;
 }
 
-string ReadStr(string p){
+string __hascal__ReadStr(string p){
 	std::cout << p;
 	string res;
 	std::cin >> res;
 	return res;
 }
 
-char ReadChar(){
+char __hascal__ReadChar(){
 	char res;
 	std::cin >> res;
 	return res;
 }
 
-char ReadChar(string p){
+char __hascal__ReadChar(string p){
 	std::cout << p;
 	char res;
 	std::cin >> res;
 	return res;
 }
 
-bool ReadBool(){
-	string tmp = ReadStr();
+bool __hascal__ReadBool(){
+	string tmp = __hascal__ReadStr();
 	if(tmp == "0" || tmp == "true")
 		return true;
 	return false;
 }
 
-bool ReadBool(string p){
-	string tmp = ReadStr(p);
+bool __hascal__ReadBool(string p){
+	string tmp = __hascal__ReadStr(p);
 	if(tmp == "0" || tmp == "true")
 		return true;
 	return false;
 }
 
-int ReadInt(){
+int __hascal__ReadInt(){
 	int res;
 	std::cin >> res;
 	return res;
 }
 
-int ReadInt(string p){
+int __hascal__ReadInt(string p){
 	std::cout << p;
 	int res;
 	std::cin >> res;
 	return res;
 }
 
-float ReadFloat(){
+float __hascal__ReadFloat(){
 	float res;
 	std::cin >> res;
 	return res;
 }
 
-float ReadFloat(string p){
+float __hascal__ReadFloat(string p){
 	std::cout << p;
 	float res;
 	std::cin >> res;
@@ -107,29 +116,29 @@ struct is_specialization<Ref<Args...>, Ref>: std::true_type {};
 
 // this function is used to get length of a vector
 template <typename T>
-int len(std::vector<T> v){
+int __hascal__len(std::vector<T> v){
 	return v.size();
 }
 
 // this function is used to get length of a string
-int len(string s){
+int __hascal__len(string s){
 	return s.length();
 }
 
 // this function is used to append a value to a vector
 template <typename T>
-void append(std::vector<T>& v, T val){
+void __hascal__append(std::vector<T>& v, T val){
 	v.push_back(val);
 }
 
-string input(){
-	return ReadStr();
+string __hascal__input(){
+	return __hascal__ReadStr();
 }
-string input(string text){
-	return ReadStr(text);
+string __hascal__input(string text){
+	return __hascal__ReadStr(text);
 }
 
-std::vector<std::string> split(std::string str,std::string sep){
+std::vector<std::string> __hascal__split(std::string str,std::string sep){
     char* cstr=const_cast<char*>(str.c_str());
     char* current;
     std::vector<std::string> arr;
@@ -143,11 +152,11 @@ std::vector<std::string> split(std::string str,std::string sep){
 
 // format function -> e.g : format("Hi, {}",name)
 template <typename T, typename ... ARGS>
-string format(T text,ARGS... args){
+string __hascal__format(T text,ARGS... args){
 	string res;
 
 	std::vector<string> fmt_list = { args... };
-  	std::vector<string> points = split(text,"{}");
+  	std::vector<string> points = __hascal__split(text,"{}");
 
   	int fmt_size = fmt_list.size();
   	int points_size = points.size();
@@ -159,33 +168,33 @@ string format(T text,ARGS... args){
 }
 
 template <typename T>
-T* mem_new(T val){
+T* __hascal__mem_new(T val){
 	T* res = new T(val);
 	return res;
 }
 template <typename T>
-T* mem_realloc(T* ptr, T val){
+T* __hascal__mem_realloc(T* ptr, T val){
 	delete ptr;
 	T* res = new T(val);
 	return res;
 }
 template <typename T>
-void mem_delete(T* ptr){
+void __hascal__mem_delete(T* ptr){
 	delete ptr;
 }
 template <typename T>
-std::vector<T>* mem_new(){
+std::vector<T>* __hascal__mem_new(){
 	auto res = new std::vector<T>();
 	return res;
 }
 template <typename T>
-std::vector<T>* mem_renew(std::vector<T>* ptr,std::vector<T> val){
+std::vector<T>* __hascal__mem_renew(std::vector<T>* ptr,std::vector<T> val){
 	delete ptr;
 	auto res = new std::vector<T>(val);
 	return res;
 }
 template <typename T>
-void mem_delete(std::vector<T>* ptr){
+void __hascal__mem_delete(std::vector<T>* ptr){
 	delete ptr;
 }
 
@@ -212,14 +221,14 @@ constexpr auto __hascal___type_name() {
 }
 
 template <typename T>
-std::string typeof(T val) {
+std::string __hascal__typeof(T val) {
 	std::string res(__hascal___type_name<decltype(val)>());
 	if (res == "std::__cxx11::basic_string<char>")
 		return "string";
 	
 	// replace `*` with `^`
 	std::ostringstream oss;
-    std::size_t pos = 0;
+    std::size_t pos = __hascal__len("__hascal__");
     std::size_t prevPos = pos;
 
     while (true) {
@@ -242,9 +251,9 @@ template <typename T>
 std::ostream& operator<< (std::ostream& out, const std::vector<T>& v) {
 	out << "[";
   for (auto it = v.begin(); it != v.end(); ++it) {
-	if (typeof(*it) == "string"){
+	if (__hascal__typeof(*it) == "string"){
 		out << "\"" << *it << "\"";
-	} else if(typeof(*it) == "char"){
+	} else if(__hascal__typeof(*it) == "char"){
 		out << "'" << *it << "'";		
 	}else {
 		out << *it;
@@ -269,7 +278,10 @@ struct HascalException : public std::exception
     	return this->msg.c_str();
     }
 };
-// exit()
+
+void __hascal__exit(int code){
+	exit(code);
+}
 
 // builtin assert()
-#define assert(cond) if(!(cond)){throw HascalException("Assertion failed: " #cond);}
+#define __hascal__assert(cond) if(!(cond)){throw HascalException("Assertion failed: " #cond);}

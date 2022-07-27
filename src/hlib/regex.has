@@ -4,7 +4,7 @@ cuse """
 
 function regex(regex_string:string ,str:string):bool{
     cuse """
-    if(std::regex_match(regex_string, std::regex(str) ))
+    if(std::regex_match(__hascal__regex_string, std::regex(__hascal__str) ))
         return true;
     """
     return false

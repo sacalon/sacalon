@@ -9,7 +9,7 @@
 #define CYAN    "\033[36m"      /* Cyan */
 #define WHITE   "\033[37m"      /* White */
 
-void cprint(string txt, string color) {
+void __hascal__cprint(string txt, string color) {
     string text = txt + "\n";
     
     #ifdef _WIN32 || _WIN64
@@ -73,7 +73,7 @@ void cprint(string txt, string color) {
     #endif
 }
 
-void reset_color() {
+void __hascal__reset_color() {
     #ifdef _WIN32 || _WIN64
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE);
     #else

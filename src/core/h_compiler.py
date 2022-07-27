@@ -284,7 +284,7 @@ class Generator(object):
                 if _expr.get("new",False):
                     self.scope_not_deleted_vars[_name] = _line
                 self.vars[_name] = Var(_name, _type, members=members)
-                res = "auto %s = %s;\n" % (_name, _expr["expr"])
+                res = "auto __hascal__%s = %s;\n" % (_name, _expr["expr"])
                 expr = {
                     "expr": res,
                     "type": _type,
@@ -313,7 +313,7 @@ class Generator(object):
                 if isinstance(_type["type"], Struct):
                     members = _type["type"].members
                 self.vars[_name] = Var(_name, _type["type"], members=members)
-                res = "%s %s ;\n" % (_type["expr"], _name)
+                res = "%s __hascal__%s ;\n" % (_type["expr"], _name)
 
                 expr = {
                     "expr": res,
@@ -376,7 +376,7 @@ class Generator(object):
             else:
                 self.vars[_name] = Var(_name, Array(_type["type"]), is_array=True)
                 expr = {
-                    "expr": "std::vector<%s> %s;\n" % (_type["expr"], _name),
+                    "expr": "std::vector<%s> __hascal__%s;\n" % (_type["expr"], _name),
                     "type": Array(_type["type"]),
                     "name": _name,
                 }
@@ -453,7 +453,7 @@ class Generator(object):
             else:
                 self.consts[_name] = Const(_name, _type["type"])
                 expr = {
-                    "expr": "const %s %s = %s ;\n" % (_type["type"], _name, _expr["expr"]),
+                    "expr": "const %s __hascal__%s = %s ;\n" % (_type["type"], _name, _expr["expr"]),
                     "type": _type["type"],
                     "name": _name,
                 }
@@ -479,7 +479,7 @@ class Generator(object):
                 if isinstance(_type["type"], Struct):
                     members = _type["type"].members
                 self.vars[_name] = Var(_name, _type["type"], members=members)
-                res = "%s %s ;\n" % (_type["expr"], _name)
+                res = "%s __hascal__%s ;\n" % (_type["expr"], _name)
 
                 expr = {
                     "expr": res,
@@ -508,7 +508,7 @@ class Generator(object):
                 and _name["type"].is_ptr == False
             ):
                 HascalError(
-                    f"Converting to non-pointer type '{_type['type']}' from NULL",filename=self.filename
+                    f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL",filename=self.filename
                 )
             elif is_compatible_type(_expr["type"], _type["type"]) == False:
                 HascalError(
@@ -560,23 +560,26 @@ class Generator(object):
             _line = node[3]
 
             if is_nullable_compatible_type(_name["type"], _expr["type"]) == False:
+                name = _name['expr'].replace("__hascal__","")
                 HascalError(
-                    f"Assign 'NULL' to non-nullable variable '{_name['expr']}':{_line}",filename=self.filename
+                    f"Assign 'NULL' to non-nullable variable '{name}':{_line}",filename=self.filename
                 )
             elif (
                 _expr["type"].category == "all-nullable"
                 and _name["type"].is_ptr == False
             ):
+                name = _name['expr'].replace("__hascal__","")
                 HascalError(
-                    f"Converting to non-pointer type '{_name['type']}' from NULL",filename=self.filename
+                    f"Converting to non-pointer type '{name}' from NULL",filename=self.filename
                 )
             elif is_compatible_type(_name["type"], _expr["type"]) == False:
                 HascalError(
                     f"Mismatched type '{_name['type'].get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}",filename=self.filename
                 )
             elif _expr["type"].category == "all-nullable":
+                name = _name['expr'].replace("__hascal__","")
                 HascalWarning(
-                    f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}",filename=self.filename
+                    f"Assign 'NULL' to nullable variable '{name}':{_line}",filename=self.filename
                 )
             
             expr = {
@@ -593,22 +596,25 @@ class Generator(object):
             _line = node[4]
 
             if not isinstance(_name["type"], Array) and str(_name["type"]) != "string" and not _name["type"].is_ptr:
-                HascalError(f"'{_name['expr']}' is not subscriptable:{_line}",filename=self.filename)
+                name = _name['expr'].replace("__hascal__","")
+                HascalError(f"'{name}' is not subscriptable:{_line}",filename=self.filename)
 
             if (
                 isinstance(_name["type"], Array) and
                 is_nullable_compatible_type(_name["type"].type_obj, _expr["type"]) == False
             ):
+                name = _name['expr'].replace("__hascal__","")
                 HascalError(
-                    f"Assign 'NULL' to non-nullable variable '{_name['expr']}':{_line}",filename=self.filename
+                    f"Assign 'NULL' to non-nullable variable '{name}':{_line}",filename=self.filename
                 )
             
             if (
                 str(_name["type"]) == "string" and
                 is_nullable_compatible_type(copy.deepcopy(self.types["char"]), _expr["type"]) == False
             ):
+                name = _name['expr'].replace("__hascal__","")
                 HascalError(
-                    f"Assign 'NULL' to non-nullable variable '{_name['expr']}':{_line}",filename=self.filename
+                    f"Assign 'NULL' to non-nullable variable '{name}':{_line}",filename=self.filename
                 )
 
             elif (
@@ -631,8 +637,9 @@ class Generator(object):
 
 
             elif _expr["type"].category == "all-nullable":
+                name = _name['expr'].replace("__hascal__","")
                 HascalWarning(
-                    f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}",filename=self.filename
+                    f"Assign 'NULL' to nullable variable '{name}':{_line}",filename=self.filename
                 )
 
             expr = {
@@ -649,15 +656,20 @@ class Generator(object):
             _expr = self.walk(node[4])
             _line = node[5]
 
-            if not isinstance(_name["type"], Array) or not str(_name["type"]) == "string":
-                HascalError(f"'{_name['expr']}' is not subscriptable:{_line}",filename=self.filename)
+            if not isinstance(_name["type"], Array) or not _name["type"].get_type_name() == "string":
+                name = _name['expr'].replace("__hascal__","")
+                HascalError(f"'{name}' is not subscriptable:{_line}",filename=self.filename)
             if not isinstance(_name["type"].type_obj, Struct):
+                name = _name['expr'].replace("__hascal__","")
+                index = _index['expr'].replace("__hascal__","")
                 HascalError(
-                    f"'{_name['expr']}[{_index['expr']}]' is not a struct:{_line}",filename=self.filename
+                    f"'{name}[{index}]' is not a struct:{_line}",filename=self.filename
                 )
             if not _field in _name["type"].type_obj.members:
+                name = _name['expr'].replace("__hascal__","")
+                index = _index['expr'].replace("__hascal__","")
                 HascalError(
-                    f"'{_name['expr']}[{_index['expr']}]' has no field '{_field}':{_line}",filename=self.filename
+                    f"'{name}[{index}]' has no field '{_field}':{_line}",filename=self.filename
                 )
 
             if (
@@ -666,8 +678,10 @@ class Generator(object):
                 )
                 == False
             ):
+                name = _name['expr'].replace("__hascal__","")
+                index = _index['expr'].replace("__hascal__","")
                 HascalError(
-                    f"Assign 'NULL' to non-nullable variable '{_name['expr']}[{_index['expr']}].{_field}':{_line}",filename=self.filename
+                    f"Assign 'NULL' to non-nullable variable '{name}[{index}].{_field}':{_line}",filename=self.filename
                 )
             elif (
                 _expr["type"].category == "all-nullable"
@@ -686,12 +700,13 @@ class Generator(object):
                     f"Mismatched type '{_name['type'].type_obj.members[_field].get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}",filename=self.filename
                 )
             elif _expr["type"].category == "all-nullable":
+                name = _name['expr'].replace("__hascal__","")
                 HascalWarning(
-                    f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}",filename=self.filename
+                    f"Assign 'NULL' to nullable variable '{name}':{_line}",filename=self.filename
                 )
 
             expr = {
-                "expr": "%s[%s].%s = %s;"
+                "expr": "%s[%s].__hascal__%s = %s;"
                 % (_name["expr"], _index["expr"], _field, _expr["expr"]),
                 "type": _name["type"].type_obj.members[_field],
             }
@@ -712,8 +727,9 @@ class Generator(object):
             _type.ptr_str = ""
 
             if is_nullable_compatible_type(_type, _expr["type"]) == False:
+                name = _name['expr'].replace("__hascal__","")
                 HascalError(
-                    f"Assign 'NULL' to non-nullable variable '{_name['expr']}':{_line}",filename=self.filename
+                    f"Assign 'NULL' to non-nullable variable '{name}':{_line}",filename=self.filename
                 )
             elif (
                 _expr["type"].category == "all-nullable"
@@ -727,8 +743,9 @@ class Generator(object):
                     f"Mismatched type '{_type.get_name_for_error()}' and '{_expr['type'].get_name_for_error()}':{_line}",filename=self.filename
                 )
             elif _expr["type"].category == "all-nullable":
+                name = _name['expr'].replace("__hascal__","")
                 HascalWarning(
-                    f"Assign 'NULL' to nullable variable '{_name['expr']}':{_line}",filename=self.filename
+                    f"Assign 'NULL' to nullable variable '{name}':{_line}",filename=self.filename
                 )
 
             expr = {
@@ -743,7 +760,8 @@ class Generator(object):
             _line = node[2]
 
             if _expr["expr"] in self.types:
-                HascalError(f"Cannot return a type '{_expr['expr']}':{_line}",filename=self.filename)
+                name = _expr['expr'].replace("__hascal__","")
+                HascalError(f"Cannot return a type '{name}':{_line}",filename=self.filename)
 
             expr = {
                 "expr": "return %s;\n" % _expr["expr"],
@@ -898,27 +916,28 @@ class Generator(object):
             _expr = self.walk(node[4])
             _res = ""
 
-            if _return_type != "void" and len(_expr) < 1:
+            if _return_type != "__hascal__void" and len(_expr) < 1:
                 HascalError(
                     f"Function '{_name}' must return a value at end of function block:{_line}",filename=self.filename
                 )
             if (
-                _return_type != "void"
+                _return_type != "__hascal__void"
                 and len(_expr) != 0
                 and _expr[-1].get("return") != True
             ):
                 HascalError(
                     f"Function '{_name}' should return a value at end of function block:{_line}",filename=self.filename
                 )
-            if _return_type != "int" and _name == "main":
+            if _return_type != "__hascal__int" and _name == "main":
                 HascalError(f"Function 'main' must return 'int'",filename=self.filename)
 
             for e in _expr:
                 _res += e["expr"]
+
             res = "%s %s %s(%s) {\n%s\n}\n" % (
                 _decorator,
                 _return_type,
-                _name,
+                "main" if _name == "main" else "__hascal__%s" % (_name),
                 params["expr"],
                 _res,
             )
@@ -933,14 +952,13 @@ class Generator(object):
                 _name == "main"
                 and isinstance(_params[_params_keys[0]], Array)
                 and isinstance(_params[_params_keys[0]], Type)
-                and _params[_params_keys[0]].type_obj.type_name == "string"
+                and str(_params[_params_keys[0]].type_obj) == "__hascal__string"
             ):
                 res = (
-                    "%s %s %s(int argc,char** args) {\nstd::vector<std::string> %s;for(int i=0;i<argc;i++){%s.push_back(args[i]);}\n%s\n}\n"
+                    "%s %s main(int argc,char** args) {\nstd::vector<std::string> __hascal__%s;for(int i=0;i<argc;i++){__hascal__%s.push_back(args[i]);}\n%s\n}\n"
                     % (
                         _decorator,
                         _return_type,
-                        _name,
                         _params_keys[0],
                         _params_keys[0],
                         _res,
@@ -970,11 +988,12 @@ class Generator(object):
                 HascalError(
                     f"Function 'main' takes only zero or one arguments(with struct type):{_line}",filename=self.filename
                 )
+
             if (
                 len(params["name"]) == 1
                 and _name == "main"
                 and isinstance(_params[_params_keys[0]], Array)
-                and _params[_params_keys[0]].type_obj.type_name != "string"
+                and str(_params[_params_keys[0]].type_obj) != "__hascal__string"
             ):
                 HascalError(
                     f"Function 'main' takes only zero or one arguments(with string array type):{_line}",filename=self.filename
@@ -1043,16 +1062,16 @@ class Generator(object):
                     _members[member].members = self.types[_members[member].name].members
             self.types[_name] = Struct(_name, _members)
 
-            res = "struct %s{\n%s\n};\n" % (_name, res)
+            res = "struct __hascal__%s{\n%s\n};\n" % (_name, res)
             # overload std::cout operator for current struct
             res += (
-                "std::ostream& operator<<(std::ostream& out,const %s& obj){\n" % _name
+                "std::ostream& operator<<(std::ostream& out,const __hascal__%s& obj){\n" % _name
             )
             res += f'out << "{_name}(";\n'
 
             keys = list(_members.keys())
             for i in range(len(_members)):
-                res += 'out << "' + keys[i] + '" << ":" << obj.' + keys[i]
+                res += 'out << "' + keys[i] + '" << ":" << obj.__hascal__' + keys[i]
                 # check if last member
                 if i == len(keys) - 1:
                     res += ";\n"
@@ -1095,7 +1114,7 @@ class Generator(object):
 
             self.types[_name] = Struct(_name, _members)
             expr = {
-                "expr": "struct %s : %s{\n%s\n};\n" % (_name, _i_name, res),
+                "expr": "struct __hascal__%s : __hascal__%s{\n%s\n};\n" % (_name, _i_name, res),
                 "type": _name,
             }
             return expr
@@ -1105,8 +1124,14 @@ class Generator(object):
         # }
         if node[0] == "enum":
             _name = node[1]
-            _members = node[2].split(",")
-
+            _names = node[2].split(",")
+            _members = []
+            for name in _names :
+                _members.append("__hascal__" + name)
+            _members_expr = ""
+            for member in _members:
+                _members_expr += member + ","
+            
             if _name in self.types:
                 HascalError(f"Redefinition of type '{_name}'",filename=self.filename)
             if _name in self.vars:
@@ -1115,12 +1140,12 @@ class Generator(object):
                 HascalError(f"Redefinition of function '{_name}'",filename=self.filename)
 
             members = {}
-            for i in range(len(_members) - 1):
-                members[str(_members[i])] = copy.deepcopy(self.types["int"])
+            for i in range(len(_names) - 1):
+                members[str(_names[i])] = copy.deepcopy(self.types["int"])
 
             self.types[_name] = Enum(_name, members)
             expr = {
-                "expr": "enum %s{\n%s\n};\n" % (_name, node[2]),
+                "expr": "enum __hascal__%s{\n%s\n};\n" % (_name, _members_expr),
                 "type": copy.deepcopy(self.types[_name]),
             }
             return expr
@@ -1247,7 +1272,7 @@ class Generator(object):
             self.top_scope_not_deleted_vars = top_scope_not_deleted_vars
 
             expr = {
-                "expr": "for(auto %s : %s){\n%s\n}\n" % (_name, _name2, res),
+                "expr": "for(auto __hascal__%s : __hascal__%s){\n%s\n}\n" % (_name, _name2, res),
                 "type": "",
             }
             return expr
@@ -1319,7 +1344,7 @@ class Generator(object):
                 
                 self.scope_not_deleted_vars.pop(_name,None)
             expr = {
-                "expr": "delete %s;\n" % (_name),
+                "expr": "delete __hascal__%s;\n" % (_name),
                 "type": copy.deepcopy(self.vars[_name].type),
             }
             return expr
@@ -1348,7 +1373,7 @@ class Generator(object):
 
             if not _type.is_ptr:
                 HascalError(
-                    f"Invalid type argument of unary '^' (have '{_type}'):{_line}",filename=self.filename
+                    f"Invalid type argument of unary '^' (have '{_type.get_name_for_error()}'):{_line}",filename=self.filename
                 )
 
             _type.is_ptr = False
@@ -1458,7 +1483,7 @@ class Generator(object):
                                     )
 
                                 expr = {
-                                    "expr": "%s(%s)"
+                                    "expr": "__hascal__%s(%s)"
                                     % (
                                         f.name,
                                         ",".join(
@@ -1474,7 +1499,7 @@ class Generator(object):
                             HascalError(f"Cannot call type {_name}:{_line}",filename=self.filename)
 
                         expr = {
-                            "expr": "%s{%s}"
+                            "expr": "__hascal__%s{%s}"
                             % (
                                 _name,
                                 ", ".join(self.walk(arg)["expr"] for arg in node[2]),
@@ -1498,7 +1523,7 @@ class Generator(object):
                             )
 
                         expr = {
-                            "expr": "%s(%s)"
+                            "expr": "__hascal__%s(%s)"
                             % (
                                 _name,
                                 ", ".join(self.walk(arg)["expr"] for arg in node[2]),
@@ -1867,28 +1892,28 @@ class Generator(object):
             if len(node[1]) == 1:
                 if _name in self.vars:
                     expr = {
-                        "expr": "%s" % (_name),
+                        "expr": "__hascal__%s" % (_name),
                         "type": self.vars[_name].type,
                         "obj": self.vars[_name],
                     }
                     return expr
                 elif _name in self.consts:
                     expr = {
-                        "expr": "%s" % (_name),
+                        "expr": "__hascal__%s" % (_name),
                         "type": self.consts[_name].type,
                         "obj": self.consts[_name],
                     }
                     return expr
                 elif _name in self.types:
                     expr = {
-                        "expr": "%s" % (_name),
+                        "expr": "__hascal__%s" % (_name),
                         "type": copy.deepcopy(self.types[_name]),
                         "obj": copy.deepcopy(self.types[_name]),
                     }
                     return expr
                 elif _name in self.funcs:
                     expr = {
-                        "expr": "%s" % (_name),
+                        "expr": "__hascal__%s" % (_name),
                         "type": Function(_name,copy.deepcopy(self.funcs[_name].params),copy.deepcopy(self.funcs[_name].return_type)),
                         "obj": self.funcs[_name],
                     }
@@ -1900,9 +1925,9 @@ class Generator(object):
 
                 if _name in self.vars:
                     if self.vars[_name].type.is_ptr:
-                        _full_name += _name + "->"
+                        _full_name += "__hascal__" + _name + "->"
                     else:
-                        _full_name += _name + "."
+                        _full_name += "__hascal__" + _name + "."
 
                     if isinstance(self.vars[_name].type, Struct):
                         # if struct has no member show error else set current member to _current_member
@@ -1930,16 +1955,16 @@ class Generator(object):
 
                                     # check if current member is the last member of node[1]
                                     if i == len(node[1]) - 1:
-                                        _full_name += _current_member
+                                        _full_name += "__hascal__" + _current_member
                                         expr = {
-                                            "expr": "%s" % (_full_name),
+                                            "expr": "__hascal__%s" % (_full_name),
                                             "type": _members[_current_member],
                                         }
                                         return expr
                                     if _members[_current_member].is_ptr:
-                                        _full_name += _current_member + "->"
+                                        _full_name += "__hascal__" + _current_member + "->"
                                     else:
-                                        _full_name += _current_member + "."
+                                        _full_name += "__hascal__" + _current_member + "."
 
                                     _members = _members[_current_member].members
                                     continue
@@ -1950,7 +1975,7 @@ class Generator(object):
                                             f"Struct '{node[1][i-1]}' has no member named '{_current_member}':{_line}"
                                         )
 
-                                    _full_name += _current_member
+                                    _full_name += "__hascal__" + _current_member
                                     expr = {
                                         "expr": "%s" % (_full_name),
                                         "type": _members[_current_member],
@@ -1965,7 +1990,7 @@ class Generator(object):
 
                     elif str(self.vars[_name].type).startswith("std::vector"):
                         expr = {
-                            "expr": "%s" % (_full_name),
+                            "expr": "__hascal__%s" % (_full_name),
                             "type": copy.deepcopy(
                                 self.types[
                                     str(self.vars[_name].type)
@@ -1976,7 +2001,7 @@ class Generator(object):
                         }
                         return expr
                     expr = {
-                        "expr": "%s" % (_full_name),
+                        "expr": "__hascal__%s" % (_full_name),
                         "type": self.vars[_name].type,
                     }
                     return expr
@@ -2013,7 +2038,7 @@ class Generator(object):
                                             )
 
                                         expr = {
-                                            "expr": "%s" % (_full_name),
+                                            "expr": "__hascal__%s" % (_full_name),
                                             "type": _members[_current_member],
                                         }
                                         return expr
@@ -2032,7 +2057,7 @@ class Generator(object):
                                         )
 
                                     expr = {
-                                        "expr": "%s" % (_full_name),
+                                        "expr": "__hascal__%s" % (_full_name),
                                         "type": _members[_current_member],
                                     }
                                     return expr
@@ -2045,7 +2070,7 @@ class Generator(object):
 
                     if str(self.consts[_name].type).startswith("std::vector"):
                         expr = {
-                            "expr": "%s" % (_name),
+                            "expr": "__hascal__%s" % (_name),
                             "type": copy.deepcopy(
                                 self.types[
                                     str(self.consts[_name].type)
@@ -2057,7 +2082,7 @@ class Generator(object):
                         return expr
 
                     expr = {
-                        "expr": "%s" % (_full_name),
+                        "expr": "__hascal__%s" % (_full_name),
                         "type": self.consts[_name].type,
                     }
                     return expr
@@ -2074,7 +2099,7 @@ class Generator(object):
                         )
 
                     expr = {
-                        "expr": "%s" % (name[0]),
+                        "expr": "__hascal__%s" % (name[0]),
                         "type": copy.deepcopy(self.types[_name]),
                     }
                     return expr
@@ -2100,7 +2125,8 @@ class Generator(object):
                 }
                 return expr
             else:
-                HascalError(f"'{_name['expr']}' is not subscriptable:{_line}",filename=self.filename)
+                name = _name['expr'].replace("__hascal__","")
+                HascalError(f"'{name}' is not subscriptable:{_line}",filename=self.filename)
         # -------------------------------------------
         # <expr>, <expr>
         if node[0] == "exprs":
@@ -2127,7 +2153,7 @@ class Generator(object):
             _name = node[2]
 
             expr = {
-                "expr": "%s.%s" % (_expr["expr"], _name),
+                "expr": "%s.__hascal__%s" % (_expr["expr"], _name),
                 "type": _expr["type"],  # todo : return _name type
             }
             return expr
@@ -2139,7 +2165,7 @@ class Generator(object):
             _name = node[2]
 
             expr = {
-                "expr": "%s.%s[%s]" % (_expr0["expr"], _name, _expr1["expr"]),
+                "expr": "%s.__hascal__%s[%s]" % (_expr0["expr"], _name, _expr1["expr"]),
                 "type": _expr["type"],  # todo : return _name type
             }
             return expr
@@ -2153,7 +2179,7 @@ class Generator(object):
                 HascalError(f"{_type_name} is not defined:{_line}",filename=self.filename)
 
             expr = {
-                "expr": _type_name,
+                "expr": "__hascal__%s" % (_type_name),
                 "type": copy.deepcopy(self.types[_type_name]),
                 "name": _type_name,
             }
@@ -2266,7 +2292,7 @@ class Generator(object):
             _line = node[3]
 
             expr = {
-                "expr": "%s %s," % (_type, _name),
+                "expr": "%s __hascal__%s," % (_type, _name),
                 "type": _return_type["type"],
                 "name": _name,
                 "static" : _return_type.get("static", False),
@@ -2307,13 +2333,13 @@ class Generator(object):
         # --------------------------------------------
         if node[0] == "string":
             expr = {
-                "expr": 'string("%s")' % node[1],
+                "expr": '__hascal__string("%s")' % node[1],
                 "type": copy.deepcopy(self.types[node[0]]),
             }
             return expr
         if node[0] == "multiline_string":
             expr = {
-                "expr": 'string(R"(%s)")' % node[1],
+                "expr": '__hascal__string(R"(%s)")' % node[1],
                 "type": copy.deepcopy(self.types["string"]),
             }
             return expr

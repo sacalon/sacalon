@@ -1,4 +1,4 @@
-string os_name()
+string __hascal__os_name()
 {
     #ifdef _WIN32
     return "win32";
@@ -35,23 +35,23 @@ string os_name()
     #endif
 }
 
-int system(string cmd)
+int __hascal__system(string cmd)
 {
     return system(cmd.c_str());
 }
 
-bool is_x86(){
+bool __hascal__is_x86(){
     if(sizeof(void*) == 4)
         return true;
     else
         return false;
 }
 
-bool is_64(){
-    return !is_x86();
+bool __hascal__is_64(){
+    return !__hascal__is_x86();
 }
 
-string compiler_name(){
+string __hascal__compiler_name(){
     #ifdef __clang__
     return "clang";
     #elif __GNUC__
@@ -71,9 +71,9 @@ string compiler_name(){
 
 
 // refernce: https://sourceforge.net/p/predef/wiki/Architectures/
-string arch()
+string __hascal__arch()
 {
-    string comname = compiler_name();
+    string comname = __hascal__compiler_name();
 
     if(comname == "msvc"){
         #ifdef _M_AMD64

@@ -4,7 +4,7 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
     return size * nmemb;
 }
 
-string get(string url){
+string __hascal__get(string url){
     CURL *curl;
     CURLcode res;
     string readBuffer;
@@ -28,7 +28,7 @@ string get(string url){
     return "";
 }
 
-string post(string url,string post_data){
+string __hascal__post(string url,string post_data){
     CURL *curl;
     CURLcode res;
     string readBuffer;
@@ -55,12 +55,12 @@ string post(string url,string post_data){
     return readBuffer + "\n";
 }
 
-bool download(string url,string path){
-    auto res = get(url);
-    return write_file(path,res);
+bool __hascal__download(string url,string path){
+    auto res = __hascal__get(url);
+    return __hascal__write_file(path,res);
 }
 
-bool upload(string url,string path){
+bool __hascal__upload(string url,string path){
     CURL *curl;
     CURLcode res;
     struct stat file_info;
@@ -84,7 +84,7 @@ bool upload(string url,string path){
         /* tell it to "upload" to the URL */
         curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
 
-        string osname = os_name();
+        string osname = __hascal__os_name();
         if(osname == "win32" || osname == "win64")
             curl_easy_setopt(curl, CURLOPT_READFUNCTION, fd);
         curl_easy_setopt(curl, CURLOPT_READDATA, fd);

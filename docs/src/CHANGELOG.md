@@ -14,6 +14,7 @@
 - in `functional` library : change `lessThanOrEqual` to `lessThanEqual`, `greaterThanOrEqual` to `greaterThanEqual`
 - improve error handler for conditions
 - `pytest` based test runner(@mmdbalkhi)
+- fix conflicting with C\C++\Obj-C in FFI features
 
 #### Bug fixes
 - fix `math` library bug

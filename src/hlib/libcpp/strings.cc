@@ -1,20 +1,20 @@
-bool is_alpha(char c){
+bool __hascal__is_alpha(char c){
     return std::isalpha(c);
 }
 
-bool is_alphanum(char c){
+bool __hascal__is_alphanum(char c){
     return std::isalpha(c) || std::isdigit(c);
 }
 
-bool is_space(char c){
+bool __hascal__is_space(char c){
     return std::isspace(c);
 }
 
-bool is_number(char c){
+bool __hascal__is_number(char c){
     return std::isdigit(c);
 }
 
-string to_lower(string str){
+string __hascal__to_lower(string str){
     string temp;
     for (char c : str)
     {
@@ -23,7 +23,7 @@ string to_lower(string str){
     return temp;
 }
 
-string to_upper(string str){
+string __hascal__to_upper(string str){
     string temp;
     for (char c : str)
     {
