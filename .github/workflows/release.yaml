@@ -1,8 +1,10 @@
 name: release
 on:
+  workflow_dispatch:
   release:
     types:
       - created
+
 env:
   api_key: ${{ secrets.GITHUB_TOKEN }}
   release_name: ${{ github.event.release.name }}
@@ -12,8 +14,9 @@ jobs:
     name: publish ${{ matrix.os }} / ${{ matrix.architecture }} 🤖
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        architecture: [x64, x86]
+        architecture: [x64]
         os: [ubuntu-latest, macos-latest, windows-latest]
         python: [3.10]
 
@@ -25,10 +28,15 @@ jobs:
         with:
           architecture: ${{ matrix.architecture }}
       - name: Update PIP ✨
-        run: pip install -U wheel pip setuptools
+        if: ${{ matrix.os }} != windows-latest
+        run: pythom -m pip install -U wheel pip setuptools
       - name: Install requirements ⚙️
         run: |
-          pip install -r requirements.txt pyGithub
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            pip install -r requirements.txt pyGithub
+          else
+            pip3 install -r requirements.txt pyGithub
+          fi
       - name: Build 🏗️
         run: |
           if [ "${{ matrix.os }}" == "windows-latest" ]; then
@@ -43,5 +51,5 @@ jobs:
             python .github\workflows\publish.py
           else
             mv dist/hascal dist/hascal-${{ github.event.release.name }}-${{ matrix.architecture }}-${{ matrix.os }}
-            python .github/workflows/publish.py
+            python3 .github/workflows/publish.py
           fi

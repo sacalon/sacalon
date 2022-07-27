@@ -3,6 +3,7 @@ import os
 import sys
 from datetime import datetime
 from glob import glob
+from subprocess import getoutput
 
 from github import Github
 
@@ -10,9 +11,17 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
 api_key = os.getenv("api_key", None)
 current_date = datetime.today().strftime("%Y-%m-%d")
-path = glob(r"/__w/hascal/hascal/dist/hascal*")[
-    0
-]  # edit this if your not use in workflow
+try:  # linux
+    path = glob(r"/home/runner/work/hascal/hascal/dist/hascal*")[0]
+except IndexError:  # windows
+    try:
+        path = glob(r"C:\Users\runner\work\hascal\hascal\dist\hascal")[0]
+    except IndexError:  # macos
+        try:
+            path = glob(r"/Users/runner/work/hascal/hascal/dist/hascal*")[0]
+        except IndexError:
+            logging.exception("Could not find build file")
+
 repo_name = os.getenv("name", None)
 release_name = os.getenv("release_name", None)
 
