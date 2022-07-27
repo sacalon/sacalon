@@ -285,3 +285,5 @@ void __hascal__exit(int code){
 
 // builtin assert()
 #define __hascal__assert(cond) if(!(cond)){throw HascalException("Assertion failed: " #cond);}
+
+#define __hascal__sizeof(a) sizeof(a)
