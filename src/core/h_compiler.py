@@ -1957,7 +1957,7 @@ class Generator(object):
                                     if i == len(node[1]) - 1:
                                         _full_name += "__hascal__" + _current_member
                                         expr = {
-                                            "expr": "__hascal__%s" % (_full_name),
+                                            "expr": "%s" % (_full_name),
                                             "type": _members[_current_member],
                                         }
                                         return expr

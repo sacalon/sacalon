@@ -228,7 +228,7 @@ std::string __hascal__typeof(T val) {
 	
 	// replace `*` with `^`
 	std::ostringstream oss;
-    std::size_t pos = __hascal__len("__hascal__");
+    std::size_t pos = 0;
     std::size_t prevPos = pos;
 
     while (true) {
