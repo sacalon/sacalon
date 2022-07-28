@@ -1,4 +1,4 @@
-// import our tiny sdl2 wrapper
+// importing our tiny sdl2 wrapper
 use sdl2
 
 function main(): int {
