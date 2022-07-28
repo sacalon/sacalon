@@ -3,13 +3,15 @@
 ## Introduction
 [Hascal](https://hascal.github.io) is a general-purpose open source programming language that makes it easy to build simple,optimal, reliable, and efficient software. More features of Hascal :
 
-- Easy to use and easy to learn
-- Multi-paradigm
-- Null safety by default
-- Fast and powerful
-- Inspired by Swift, Pascal and a bit Haskell
-- C++ on backend
-- Compatible with any language that can interoperate with C++
+- [x] Easy to use and easy to learn
+- [x] Multi-paradigm
+- [x] Null safety by default
+- [x] Fast and powerful
+- [x] Inspired by Swift, Pascal
+- [x] Compiles to C++
+- [x] Compatible with C\C++\Obj-C
+- [x] [Builtin compile time FFI system](lang/14_interfacing_with_cpp.html)
+- [x] Built-in HTTP Library
 
 ## Contributing
 We welcome contributions of all kinds.
