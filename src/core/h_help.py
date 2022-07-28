@@ -1,7 +1,7 @@
 import platform
 from sys import exit
 
-HASCAL_COMPILER_VERSION = "1.3.10"
+HASCAL_COMPILER_VERSION = "1.3.11"
 HASCAL_GITHUB_REPO = "https://github.com/hascal/hascal"
 
 
