@@ -143,14 +143,14 @@ class Generator(object):
 
             if self.no_std :
                 if isfile(no_std):
-                    with open(no_std) as no_stdf :
+                    with open(no_std,"r",encoding="utf-8") as no_stdf :
                         return f"{no_stdf.read()}\n{self.src_includes}\n{self.src_pre_main}\n{result}\n"
                 else :
                     no_std = Path(no_std)
                     HascalError(f"Could not find `no_std` runtime file:`{no_std}`")
             elif isfile(std) and isfile(std_h) :
-                with open(std) as stdf:
-                    with open(std_h) as std_hf:
+                with open(std,"r",encoding="utf-8") as stdf:
+                    with open(std_h,"r",encoding="utf-8") as std_hf:
                         return f"{std_hf.read()}\n{stdf.read()}\n{self.src_includes}\n{self.src_pre_main}\n{result}\n"
             else :
                 HascalError(f"Could not find standard runtime file(s): `{std}`,`{std_h}`")

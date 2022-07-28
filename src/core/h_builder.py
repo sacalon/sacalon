@@ -103,7 +103,7 @@ class HascalCompiler(object):
 
             # create new project
             elif self.argv[1] == "init" :
-                with open("config.json","w") as f :
+                with open("config.json","w",encoding="utf-8") as f :
                     f.write(json.dumps({
                         "filename" : "src/app.has",
                         "outfile" : "build/app",
@@ -111,10 +111,10 @@ class HascalCompiler(object):
 
                 if not isdir("src") :
                     os.mkdir("src")
-                with open("src/app.has","w") as f :
+                with open("src/app.has","w",encoding="utf-8") as f :
                     f.write("function main():int{\n\tprint(\"Hello World!\")\n\treturn 0\n}")
 
-                with open(".gitignore","w") as f :
+                with open(".gitignore","w",encoding="utf-8") as f :
                     ignores = ["/build",
                         "**.exe", "**.out",
                         "**.dll","**.o", "**.a"
@@ -188,7 +188,7 @@ class HascalCompiler(object):
 
         # read config file
         if os.path.isfile("config.json"):
-            with open("config.json", "r") as f:
+            with open("config.json", "r",encoding="utf-8") as f:
                 config = json.loads(f.read())
 
                 if "filename" in config :
@@ -244,7 +244,7 @@ class HascalCompiler(object):
                 ARGS["flags"].append(flag)
         
         # write output c++ code in a file
-        with open(self.filename[:-4]+".cc", "w") as fout:
+        with open(self.filename[:-4]+".cc", "w",encoding="utf-8") as fout:
             fout.write(output)
 
         # check if c++ compiler installed

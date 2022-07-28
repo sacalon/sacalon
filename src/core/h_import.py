@@ -33,7 +33,7 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
     package_path_nested_local = Path(filename+".o").parent / package_path_local
 
     if isfile(final_path):
-        with open(final_path, "r") as f:
+        with open(final_path, "r",encoding="utf-8") as f:
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
             generator = gen_class(BASE_DIR,filename=filename+".has",imported=imported, imported_funcs=imported_funcs,
@@ -45,7 +45,7 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
             result["output_cpp"] = output_cpp
             return result
     elif isfile(final_path_local):
-        with open(final_path_local, "r") as f:
+        with open(final_path_local, "r",encoding="utf-8") as f:
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
@@ -58,7 +58,7 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
             result["output_cpp"] = output_cpp
             return result
     elif isfile(final_path2_local):
-        with open(final_path2_local, "r") as f:
+        with open(final_path2_local, "r",encoding="utf-8") as f:
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
@@ -72,7 +72,7 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
             return result
     
     elif isfile(package_path):
-        with open(package_path, "r") as f:
+        with open(package_path, "r",encoding="utf-8") as f:
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
@@ -85,7 +85,7 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
             result["output_cpp"] = output_cpp
             return result
     elif isfile(package_path_local):
-        with open(package_path_local, "r") as f:
+        with open(package_path_local, "r",encoding="utf-8") as f:
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
@@ -98,7 +98,7 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
             result["output_cpp"] = output_cpp
             return result
     elif isfile(package_path_nested_local):
-        with open(package_path_nested_local, "r") as f:
+        with open(package_path_nested_local, "r",encoding="utf-8") as f:
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
@@ -158,18 +158,18 @@ def cuse(path_, BASE_DIR, filename=None):
     package_path_nested_local_ld = Path(filename).parent / package_path_local / "_.ld"
 
     if isfile(final_path_cc):
-        with open(final_path_cc, "r") as fd:
+        with open(final_path_cc, "r",encoding="utf-8") as fd:
             result["cpp_code"] = fd.read()
 
             # read header file
             if isfile(final_path_h):
-                with open(final_path_h, "r") as fd:
+                with open(final_path_h, "r",encoding="utf-8") as fd:
                     result["header_code"] = fd.read()
             else:
                 result["header_code"] = ""
 
             if isfile(final_path_ld):
-                with open(final_path_ld, "r") as fd:
+                with open(final_path_ld, "r",encoding="utf-8") as fd:
                     result["LDFLAGS"] = list(fd.read().split(","))
             else:
                 result["LDFLAGS"] = []
@@ -177,70 +177,70 @@ def cuse(path_, BASE_DIR, filename=None):
         return result
 
     elif isfile(final_path_local_cc):
-        with open(final_path_local_cc, "r") as fd:
+        with open(final_path_local_cc, "r",encoding="utf-8") as fd:
             result["cpp_code"] = fd.read()
             # read header file
             if isfile(final_path_local_h):
-                with open(final_path_local_h, "r") as fd:
+                with open(final_path_local_h, "r",encoding="utf-8") as fd:
                     result["header_code"] = fd.read()
             else:
                 result["header_code"] = ""
 
             if isfile(final_path_local_ld):
-                with open(final_path_local_ld, "r") as fd:
+                with open(final_path_local_ld, "r",encoding="utf-8") as fd:
                     result["LDFLAGS"] = list(fd.read().split(","))
             else:
                 result["LDFLAGS"] = []
 
         return result
     elif isfile(package_path_cc):
-        with open(package_path_cc, "r") as fd:
+        with open(package_path_cc, "r",encoding="utf-8") as fd:
             result["cpp_code"] = fd.read()
 
             # read header file
             if isfile(package_path_hpp):
-                with open(package_path_hpp, "r") as fd:
+                with open(package_path_hpp, "r",encoding="utf-8") as fd:
                     result["header_code"] = fd.read()
             else:
                 result["header_code"] = ""
 
             if isfile(package_path_ld):
-                with open(package_path_ld, "r") as fd:
+                with open(package_path_ld, "r",encoding="utf-8") as fd:
                     result["LDFLAGS"] = list(fd.read().split(","))
             else:
                 result["LDFLAGS"] = []
         return result
     elif isfile(package_path_local_cc):
-        with open(package_path_local_cc, "r") as fd:
+        with open(package_path_local_cc, "r",encoding="utf-8") as fd:
             result["cpp_code"] = fd.read()
 
             # read header file
             if isfile(package_path_local_hpp):
-                with open(package_path_local_hpp, "r") as fd:
+                with open(package_path_local_hpp, "r",encoding="utf-8") as fd:
                     result["header_code"] = fd.read()
             else:
                 result["header_code"] = ""
 
             if isfile(package_path_local_ld):
-                with open(package_path_local_ld, "r") as fd:
+                with open(package_path_local_ld, "r",encoding="utf-8") as fd:
                     result["LDFLAGS"] = list(fd.read().split(","))
             else:
                 result["LDFLAGS"] = []
 
         return result
     elif isfile(package_path_nested_local_cc):
-        with open(package_path_nested_local_cc, "r") as fd:
+        with open(package_path_nested_local_cc, "r",encoding="utf-8") as fd:
             result["cpp_code"] = fd.read()
 
             # read header file
             if isfile(package_path_nested_local_hpp):
-                with open(package_path_nested_local_hpp, "r") as fd:
+                with open(package_path_nested_local_hpp, "r",encoding="utf-8") as fd:
                     result["header_code"] = fd.read()
             else:
                 result["header_code"] = ""
 
             if isfile(package_path_nested_local_ld):
-                with open(package_path_nested_local_ld, "r") as fd:
+                with open(package_path_nested_local_ld, "r",encoding="utf-8") as fd:
                     result["LDFLAGS"] = list(fd.read().split(","))
             else:
                 result["LDFLAGS"] = []
