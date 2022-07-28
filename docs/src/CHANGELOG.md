@@ -4,7 +4,7 @@
 <summary>v1.3.10x</summary>
 
 <details>
-<summary>v1.3.10-alpha</summary>
+<summary>v1.3.10</summary>
 
 #### New features
 - show error for undeleted variables from heap
