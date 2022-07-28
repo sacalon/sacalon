@@ -20,7 +20,6 @@ def help_all():
         "\trun : run project",
         "\tget <package url(git repository)> : install a package",
         "\tupdate <package url(git repository)> : update a package",
-        
     ]
     for line in output_message:
         print(line)
