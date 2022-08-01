@@ -15,6 +15,7 @@
 - improve error handler for conditions
 - `pytest` based test runner(@mmdbalkhi)
 - fix conflicting with C\C++\Obj-C in FFI features
+- change `static` decorator name to `static_function` name
 
 #### Bug fixes
 - fix `math` library bug

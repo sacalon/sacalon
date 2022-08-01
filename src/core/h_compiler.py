@@ -107,7 +107,7 @@ class Generator(object):
         self.no_std = no_std
         
         # list of decorators
-        self.decorators = {"extern": 'extern "C"', "static": "static"}
+        self.decorators = {"extern": 'extern "C"', "static_function": "static"}
 
         # this variable used to remove conflict between global variables and local variables
         self.scope = False
