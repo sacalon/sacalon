@@ -89,3 +89,12 @@ Output :
 Hello from bar function!
 3
 ```
+
+## Function decorators
+Decorator is a way to add some properties to a function and it is used with `@` character + decorator name before function declaration.
+
+List of available decorators in Hascal :
+| Decorator       | Description  |
+| :------------- | :----------: |
+|  `@static_function` | Makes function `static`  | 
+| `@extern`  | Externs function([like `extern` in C++](https://en.cppreference.com/w/cpp/keyword/extern)) |
