@@ -1,7 +1,18 @@
 # Hascal's Changelog
 
 <details>
-<summary>v1.3.10x</summary>
+<summary>v1.3.11</summary>
+
+#### New features
+
+#### Changes
+- change `static` decorator name to `static_function` name
+
+#### Bug fixes
+
+#### Removed
+
+</details>
 
 <details>
 <summary>v1.3.10</summary>
@@ -25,7 +36,6 @@
 #### Removed
 - remove `libtcc` from stdlib
 
-</details>
 </details>
 
 <details>
