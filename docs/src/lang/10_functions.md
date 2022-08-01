@@ -52,19 +52,40 @@ function main(): int {
 ```
 
 ## Passing function as argument
-You can pass a function as an argument to another function:
+To passing a function as parameter you should define a parameter in with `Function` type with following syntax :
+```
+Function[<function_parameter1_type>,<function_parameter2_type>,...]<return_type>
+```
+For example :
 ```typescript
-function runner(func: Function[int, int]int) : int{
-    return func(1,2)
-}
-
-function add(a:int, b:int) : int {
-    return a+b
-}
-
-function main():int {
-    print(runner(add))
-    return 0
+function foo(func: Function[float, int]int) : int{
+    
 }
 ```
-In the example above, `runner` is a function that takes a function as an argument and returns the return value of the given function.
+At above we defined a function with name `foo` that takes a function as its parameter and given function should has  two parameters with types `float` and `int`(respectively) and it should returns `int`.
+
+Also we can call given function like other functions, change the `foo` function code to following code :
+```typescript
+function foo(func: Function[float, int]int){
+    print(func(1.0,2))
+}
+```
+
+Now we define a function to pass to `foo` func and must have the properties specified in the foo function(two parameters with types `int` and `float` and `int` as return type):
+```typescript
+function bar(a:float, b:int) : int {
+    print("Hello from bar function!")
+    return a + b
+}
+```
+
+Now we can pass `bar` function to `foo` function as parameter :
+```typescript 
+foo(bar)
+```
+
+Output :
+```
+Hello from bar function!
+3
+```
