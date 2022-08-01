@@ -23,7 +23,7 @@ You can call a function by using the function name followed by parentheses:
 ```typescript
 foo()
 ```
-If you want to pass some parameters to your function, you can use them in the parentheses:
+If you want to pass some arguments to your function, you can use them in the parentheses:
 ```typescript
 foo(1,2,3)
 ```
