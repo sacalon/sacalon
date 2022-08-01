@@ -51,7 +51,7 @@ function main(): int {
 }
 ```
 
-## Passing function as argument
+## Passing function as parameter
 To passing a function as parameter you should define a parameter in with `Function` type with following syntax :
 ```
 Function[<function_parameter1_type>,<function_parameter2_type>,...]<return_type>
