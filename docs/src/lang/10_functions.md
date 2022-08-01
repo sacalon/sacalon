@@ -34,14 +34,14 @@ var foo : int = add(1,2)
 ```
 
 ## Function overloading
-You can overload functions by changing the number of parameters or the type of parameters :
+You can overload functions by defining a new function and changing the number of parameters or the type of parameters or return type of function :
 ```typescript
-// overloading function
 function add(x:int,y:int,z:int): int {
     return x + y + z
 }
 
-function add2(x:int,y:int){
+// overloading function `add`
+function add(x:int,y:int){
     print(x + y)
 }
 
