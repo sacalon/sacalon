@@ -14,7 +14,7 @@ function add(x:int,y:int): int {
     return x + y
 }
 ```
-In the example above, `x` and `y` are parameters and thire type(`int`) is your return type.
+In the example above, `x` and `y` are parameters and their type(`int`) is your return type.
 
 > Note: you can use `?` to make a parameter nullable.
 
