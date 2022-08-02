@@ -11,6 +11,7 @@ If you are fixing a bug, please add a test that covers it to `tests` directory.
 
 Applying labels to PRs is not needed.
 
+If your PR is about Hascal's standrad library, make share your PR follows Hascal Style : https://hascal.github.io/style.html
 Thanks a lot for your contribution!
 
 -->
