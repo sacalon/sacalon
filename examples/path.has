@@ -6,6 +6,7 @@ function main(): int {
 
     var normalized_path : string = path_normalize(b)
     var joined_path = path_join(a, b)
-
+    print(normalized_path)
+    print(joined_path)
     return 0
 }

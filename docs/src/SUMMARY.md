@@ -20,7 +20,9 @@
 - [Structures](./lang/12_structs.md)
 - [Memory management](./lang/13_memory_management.md)
 - [Interfacing with C++](./lang/14_interfacing_with_cpp.md)
-- [Standard Library Documentation](./stdlib.md)
+
+---
+
 - [Package Manager Documentation](./hpm.md)
 - [IDE Integration](./ide.md)
 - [Roadmap](./ROADMAP.md)

@@ -8,7 +8,7 @@ function minus(a:float, b:float):float {
     return a - b
 }
 
-function times(a:float, b:float):float {
+function multiplies(a:float, b:float):float {
     return a * b
 }
 
@@ -58,21 +58,21 @@ function notEqual(a:float, b:float): bool {
     return false
 }
 
-function if_and(a:bool, b:bool): bool {
+function _and(a:bool, b:bool): bool {
     if (a and b) {
         return true
     }
     return false
 }
 
-function if_or(a:bool, b:bool): bool {
+function _or(a:bool, b:bool): bool {
     if (a or b) {
         return true
     }
     return false
 }
 
-function if_not(a:bool): bool {
+function _not(a:bool): bool {
     if (not a) {
         return true
     }
@@ -90,4 +90,8 @@ function mod(a:float, b:float): float {
     var aa = (int) a
     var bb = (int) b
     return aa - (bb * (aa / bb))
+}
+
+function negate(a:float): float {
+    return -a
 }

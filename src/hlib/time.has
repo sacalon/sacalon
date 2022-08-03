@@ -1,8 +1,0 @@
-cuse libcpp.datetime
-
-function get_year():int
-function get_month():int
-function get_day():int
-function get_hour():int
-function get_minute():int
-function get_second():int

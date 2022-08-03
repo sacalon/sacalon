@@ -126,6 +126,7 @@ venv.bak/
 # mdbook documentation
 .book/
 docs/book
+docs/stdlib/book
 
 # mypy
 .mypy_cache/

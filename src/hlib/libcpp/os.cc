@@ -81,7 +81,7 @@ string __hascal__arch()
         #elif _M_IX86
         return "intel32";
         #elif _M_IA64
-        return "itanium";
+        return "ia64";
         #elif _M_PPC
         return "powerpc";
         #else

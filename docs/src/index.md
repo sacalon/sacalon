@@ -13,6 +13,9 @@
 - [x] [Builtin compile time FFI system](lang/14_interfacing_with_cpp.html)
 - [x] Built-in HTTP Library
 
+## Standard Library Documentation
+Standard Library Documentation available [here](./stdlib/index.html).
+
 ## Contributing
 We welcome contributions of all kinds.
 
