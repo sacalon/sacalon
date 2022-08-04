@@ -7,6 +7,8 @@
 
 #### Changes
 - change `static` decorator name to `static_function` name
+- rename `times` function to `multiplies` in `functional` library
+- rename `if_and`, `if_or`, `if_not` functions to `_and`, `_or`, `_not` in `functional` library
 
 #### Bug fixes
 
