@@ -11,6 +11,7 @@
 - rename `if_and`, `if_or`, `if_not` functions to `_and`, `_or`, `_not` in `functional` library
 
 #### Bug fixes
+- fix package manager bug
 
 #### Removed
 

@@ -34,19 +34,19 @@ class HascalCompiler(object):
             # START : Package Manager
 
             elif self.argv[1] == "get":
+                if len(argv) < 3:
+                    HascalError(
+                        "You must give one package name to install\nusage :\n\thascal get <package_name>"
+                    )
+                
                 mod_name = self.argv[2]
                 if len(self.argv) == 4 :
                     mod_name = self.argv[3]
                 mod_name = mod_name.replace(".","/")
 
-                if len(argv) < 3:
-                    HascalError(
-                        "You must give one package name to install\nusage :\n\thascal install <package_name>"
-                    )
-
                 print(f"Installing '{self.argv[2]}'...")
                 if isdir(f"{self.BASE_DIR}/hlib/{self.argv[2]}"):
-                    HascalError(f"Package '{self.argv[2]}' already installed, for update use 'hascal update'")
+                    HascalError(f"Package '{self.argv[2]}' already installed, for update use 'hascal update {mod_name}'")
                 
                 # check if git is installed
                 check_if_git_installed()
@@ -60,6 +60,11 @@ class HascalCompiler(object):
                 print(f"Module '{self.argv[2]}' installed successfully!")
             
             elif self.argv[1] == "update":
+                if len(argv) < 3:
+                    HascalError(
+                        "You must give one package name to update\nusage :\n\thascal update <package_name>"
+                    )
+                
                 mod_name = self.argv[2]
                 mod_name = mod_name.replace(".","/")
 
