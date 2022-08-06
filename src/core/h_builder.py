@@ -184,6 +184,7 @@ class HascalCompiler(object):
             "only_compile" : False, # only compile, not link
             "no_std" : False, # not link runtime library to code
             "outfile" : self.filename[:-4],
+            "null_safety" : True,
         }
 
         # read config file
@@ -227,6 +228,9 @@ class HascalCompiler(object):
                     ARGS["only_compile"] = config["only_compile"]
                 if "outfile" in config :
                     ARGS["outfile"] = config["outfile"]
+                if "null_safety" in config:
+                    ARGS["null_safety"] = config["null_safety"]
+
         # tokenize input code
         tokens = self.lexer.tokenize(self.code)
 
