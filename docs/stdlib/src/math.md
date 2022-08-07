@@ -1,4 +1,4 @@
-## `math`
+# `math`
 Math library has properties and methods for mathematical constants and functions
 
 ## `sin(x:float):float`

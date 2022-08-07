@@ -1,3 +1,5 @@
 cuse libcpp.random
 
-function random_int(min:int, max:int) : int
+function randint(min:int, max:int) : int
+function uniform(min:float, max:float) : float
+function uniform(min:double, max:double) : double

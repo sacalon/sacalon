@@ -1,4 +1,4 @@
-## `strings`
+# `strings`
 Utility library for working with `string` data types.
 
 ## `is_alpha(c:char): bool`

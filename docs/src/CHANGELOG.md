@@ -4,6 +4,7 @@
 <summary>v1.3.11</summary>
 
 #### New features
+- add uniform distribution based random number generator called `uniform` in `random` library
 
 #### Changes
 - change `static` decorator name to `static_function` name
