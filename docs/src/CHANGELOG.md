@@ -1,7 +1,9 @@
 # Hascal's Changelog
 
+---
+
 <details>
-<summary>v1.3.11</summary>
+<summary>v1.4.0</summary>
 
 #### New features
 - add uniform distribution based random number generator called `uniform` in `random` library
@@ -17,6 +19,8 @@
 #### Removed
 
 </details>
+
+---
 
 <details>
 <summary>v1.3.10</summary>
@@ -41,6 +45,8 @@
 - remove `libtcc` from stdlib
 
 </details>
+
+---
 
 <details>
 <summary>v1.3.9x</summary>
