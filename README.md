@@ -1,7 +1,5 @@
-
 <div align="center">
   <img style="text-align:center" src="hascal-logo.png" height="128px" width="128px">
-
 
   # The Hascal Programming Language
 
@@ -13,19 +11,20 @@
   
   <!-- [AUR Package](https://aur.archlinux.org/packages/hascal-git) -->
   [![](https://img.shields.io/github/v/tag/hascal/hascal)](https://github.com/hascal/hascal/releases)
-  [![Hascal Discord](https://img.shields.io/discord/932745959190978683?color=blue&label=Discord&logo=discord&logoColor=green)](https://discord.gg/yjv8QqPR)
+  [![Hascal Discord](https://img.shields.io/discord/932745959190978683?color=blue&label=Discord&logo=discord&logoColor=green)](https://discord.gg/rg4T2zBmyv)
   [![](https://img.shields.io/gitter/room/hascal/hascal?logo=gitter)](https://gitter.im/hascal/community)
   [![](https://img.shields.io/aur/version/hascal-git?label=AUR%20Package&logo=linux)](https://aur.archlinux.org/packages/hascal-git)
-
 
 </div>
 
 **Hascal** is a general purpose and open source programming language designed to build optimal, maintainable, reliable and efficient software.
-> **NOTES:** 
+
+> **NOTES:**
 > - Hascal is still in the very early stages of development.
 > - Hascal pronounces like "Pascal".
 
 ## Features
+
 - [x] Easy to use and easy to learn
 - [x] Multi-paradigm
 - [x] Null safety by default
@@ -37,7 +36,9 @@
 - [x] Built-in HTTP Library
 
 ## Examples
+
 Hello World :
+
 ```typescript
 function main() : int {
     print("Hello World!")
@@ -46,6 +47,7 @@ function main() : int {
 ```
 
 HTTP Request:
+
 ```typescript
 use http
 function main() : int {
@@ -56,6 +58,7 @@ function main() : int {
 ```
 
 Easy to use regex:
+
 ```typescript
 use regex
 
@@ -69,23 +72,26 @@ function main(): int {
 > You can see more Hascal examples in [examples folder](https://github.com/hascal/hascal/tree/main/examples).
 
 ## Documentation
+
 > You can find Hascal's documentation, [Here](https://hascal.github.io/docs/latest).
 
 ## Contributions
+
 You can contribute to Hascal by [opening an issue](https://github.com/hascal/hascal/issues/new/choose) or [forking](https://github.com/hascal/hascal/fork) the repository and [contributing to Hascal's documentation](https://github.com/hascal/hascal/tree/main/docs).
 
-You can also [join the Hascal community](https://gitter.im/hascal/community) and ask & answer questions.
+You can also join the Hascal community on [Gitter](https://gitter.im/hascal/community) or [Discord](https://discord.gg/rg4T2zBmyv) and ask & answer questions.
 
 [See our roadmap](docs/src/ROADMAP.md)
 
 <!-- [![graph](https://contrib.rocks/image?repo=hascal/hascal)](https://github.com/hascal/hascal/graphs/contributors) -->
 
-
 ## License
+
 The compiler and standard libraries licensed under the **"MIT License"**,
 Read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more information.
 
 ## About
+
 Copyright © 2019-2022 **Hascal Foundation**, \
 all rights reserved.
 
