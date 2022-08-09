@@ -1,16 +1,11 @@
 name: release
 on:
-  workflow_dispatch:
-    inputs:
-      release_name:
-        description: "The name of the release e.g. v1.0.0"
-        required: true
   release:
     types:
       - created
 env:
   api_key: ${{ secrets.GITHUB_TOKEN }}
-  release_name: ${{ github.event.inputs.release_name}} || ${{ github.event.release.name }}
+  release_name: ${{ github.event.release.name }}
 
 jobs:
   publish:
@@ -33,28 +28,8 @@ jobs:
       - name: Update PIP ✨
         if: ${{ matrix.os }} != windows-latest
         run: python3 -m pip install -U wheel pip setuptools
-      - name: Install requirements ⚙️
+      - name: Install requirements
+        run: pip install -r requirements.txt PyGithub
+      - name: Build and Publish 📦
         run: |
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            pip install -r requirements.txt pyGithub
-          else
-            pip3 install -r requirements.txt pyGithub
-          fi
-      - name: Build 🏗️
-        run: |
-          git checkout $release_name --quiet
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
-              make windows
-          else
-            make build
-          fi
-      - name: Publish 📦
-        run: |
-          # windows
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            mv dist\hascal dist\hascal-$Env:github.event.release.name-$Env:matrix.architecture-windows
-            python .github\workflows\publish.py
-          else
-            mv dist/hascal dist/hascal-${{ github.event.release.name }}-${{ matrix.architecture }}-${{ matrix.os }}
-            python3 .github/workflows/publish.py
-          fi
+          python3 .github/workflows/publish.py
