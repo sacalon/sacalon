@@ -2,7 +2,7 @@ import logging
 import os
 import sys
 from datetime import datetime
-from glob import glob
+from pathlib import Path
 from subprocess import getoutput
 
 from github import Github
@@ -11,16 +11,16 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
 api_key = os.getenv("api_key", None)
 current_date = datetime.today().strftime("%Y-%m-%d")
-try:  # linux
-    path = glob(r"/home/runner/work/hascal/hascal/dist/hascal*")[0]
-except IndexError:  # windows
-    try:
-        path = glob(r"C:\Users\runner\work\hascal\hascal\dist\hascal")[0]
-    except IndexError:  # macos
-        try:
-            path = glob(r"/Users/runner/work/hascal/hascal/dist/hascal*")[0]
-        except IndexError:
-            logging.exception("Could not find build file")
+
+try:
+    path = list(
+        (Path(os.path.dirname(os.path.abspath(__file__))) / "../../dist").glob(
+            "hascal*"
+        )
+    )[0]
+except IndexError:
+    logging.error("No built binary found")
+    sys.exit(1)
 
 repo_name = os.getenv("name", None)
 release_name = os.getenv("release_name", None)
