@@ -30,6 +30,7 @@
 - [x] Null safety by default
 - [x] Fast and powerful
 - [x] Inspired by Swift, Pascal
+- [x] Manual memory management
 - [x] Compiles to C++
 - [x] Compatible with C\C++\Obj-C
 - [x] [Builtin compile-time FFI system](https://hascal.github.io/docs/latest/lang/14_interfacing_with_cpp.html)
