@@ -3,7 +3,7 @@
 ---
 
 <details>
-<summary>v1.4.0</summary>
+<summary>v1.3.11</summary>
 
 #### New features
 - add uniform distribution based random number generator called `uniform` in `random` library
