@@ -1,5 +1,18 @@
 # Hascal's Changelog
 
+<details>
+<summary>v1.4.0</summary>
+
+#### New features
+
+#### Changes
+
+#### Bug fixes
+
+#### Removed
+
+</details>
+
 ---
 
 <details>
