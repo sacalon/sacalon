@@ -29,7 +29,7 @@
 - [x] Multi-paradigm
 - [x] Null safety by default
 - [x] Fast and powerful
-- [x] Inspired by Swift, Pascal
+- [x] Inspired by Swift and Hascal was originally based on the good ideas of the Pascal language.
 - [x] Manual memory management
 - [x] Compiles to C++
 - [x] Compatible with C\C++\Obj-C
