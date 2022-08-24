@@ -206,7 +206,7 @@ class Parser(Parser):
             p.lineno,
         )
 
-    # *<name> = <expr>
+    # ^<name> = <expr>
     @_("POW name ASSIGN expr")
     def in_statement(self, p):
         return ("assign_ptr", ("var", p.name[0], p.name[1]), p.expr, p.lineno)
@@ -441,7 +441,7 @@ class Parser(Parser):
             p.decorator,
         )
 
-    # function <name> : *<return_type> {
+    # function <name> : <return_type>^ {
     #      <in_block>
     # }
     @_("decorator FUNCTION NAME COLON return_type3 LBC in_block RBC")
@@ -456,7 +456,7 @@ class Parser(Parser):
             p.decorator,
         )
 
-    # function <name>() : *<return_type> {
+    # function <name>() : <return_type>^ {
     #      <in_block>
     # }
     @_("decorator FUNCTION NAME LPAREN RPAREN COLON return_type3  LBC in_block RBC")
@@ -471,7 +471,7 @@ class Parser(Parser):
             p.decorator,
         )
 
-    # function <name>(<params>) : *<return_type> {
+    # function <name>(<params>) : <return_type>^ {
     #      <in_block>
     # }
     @_(
@@ -512,7 +512,7 @@ class Parser(Parser):
             p.decorator,
         )
 
-    # function <name>(<params>) : <return_type>*
+    # function <name>(<params>) : <return_type>^
     @_("decorator FUNCTION NAME LPAREN params RPAREN COLON return_type3")
     def statement(self, p):
         return (
@@ -548,7 +548,7 @@ class Parser(Parser):
             p.decorator,
         )
 
-    # function <name>() : <return_type>*
+    # function <name>() : <return_type>^
     @_("decorator FUNCTION NAME LPAREN RPAREN COLON return_type3")
     def statement(self, p):
         return (
@@ -686,7 +686,7 @@ class Parser(Parser):
     def expr(self, p):
         return ("new", p.return_type2, p.expr, p.lineno)
 
-    # new <return_type>*(<expr>)
+    # new <return_type>^(<expr>)
     @_("NEW return_type3 LPAREN expr RPAREN")
     def expr(self, p):
         return ("new", p.return_type3, p.expr, p.lineno)
@@ -911,7 +911,7 @@ class Parser(Parser):
     def return_type2(self, p):
         return ("return_type_array", p.return_type, p.lineno)
 
-    # <return_type>*
+    # <return_type>^
     @_("return_type POW")
     def return_type3(self, p):
         return ("ptr_type", p.return_type, p.lineno)
@@ -974,7 +974,7 @@ class Parser(Parser):
     def expr(self, p):
         return ("cast", p.return_type, p.expr, p.lineno)
 
-    # (<return_type>*) <expr>
+    # (<return_type>^) <expr>
     @_("LPAREN return_type3 RPAREN expr")
     def expr(self, p):
         return ("cast", p.return_type3, p.expr, p.lineno)
@@ -985,10 +985,10 @@ class Parser(Parser):
     def expr(self, p):
         return ("pass_by_ref", ("var", p.name[0], p.name[1]), p.lineno)
 
-    # *<name>
+    # ^<name>
     @_("POW name")
     def expr(self, p):
         return ("pass_by_ptr", ("var", p.name[0], p.name[1]), p.lineno)
 
-    # todo : int**,...
+    # todo : int^^,...
     # ------------------------------------------
