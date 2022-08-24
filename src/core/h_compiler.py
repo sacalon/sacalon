@@ -491,7 +491,7 @@ class Generator(object):
                 }
                 return expr
 
-        # var <name> : <return_type>* = <expr>
+        # var <name> : <return_type>^ = <expr>
         if node[0] == "declare_ptr" and node[1] == "equal2":
             _name = node[3]
             _type = self.walk(node[2])
@@ -715,7 +715,7 @@ class Generator(object):
             }
             return expr
 
-        # *<name> = <expr>
+        # ^<name> = <expr>
         if node[0] == "assign_ptr":
             _name = self.walk(node[1])
             _type = _name["type"]
