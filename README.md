@@ -88,7 +88,7 @@ You can also join the Hascal community on [Gitter](https://gitter.im/hascal/comm
 
 ## License
 
-The compiler and standard libraries licensed under the **"MIT License"**,
+The compiler and standard libraries licensed under the **"GPL-V3.0 License"**,
 Read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more information.
 
 ## About
