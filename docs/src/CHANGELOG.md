@@ -9,6 +9,7 @@
 - Hascal relicensed from MIT license to GPL-v3.0
 
 #### Bug fixes
+- fix string subscripting bug
 
 #### Removed
 

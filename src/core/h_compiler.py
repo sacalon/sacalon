@@ -2121,7 +2121,7 @@ class Generator(object):
                     "type": _name["type"].type_obj,
                 }
                 return expr
-            elif str(_name["type"]) == "string":
+            elif str(_name["type"].type_name) == "string":
                 expr = {
                     "expr": "%s[%s]" % (_name["expr"], _expr["expr"]),
                     "type": copy.deepcopy(self.types["char"]),
