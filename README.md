@@ -58,7 +58,7 @@ function main() : int {
 }
 ```
 
-Easy to use regex:
+Regex match:
 
 ```typescript
 use regex
