@@ -3,31 +3,33 @@
 // Copyright (c) 2019-2022 Hascal Foundation
 // all rights reserved.
 
-struct node_t {
-    var node_type : string
-    var children : [node_t]
-    var token_start : token
-    // var symbol_table : symbol_table
+use conv
+use token
+
+struct Node {
+    var node_type : string?
+    var children : [Node]
+    var token_start : Token?
 }
 
-struct expr {
-    var left : node_t
-    var operator : token
-    var right : node_t
+struct Expr {
+    var left : Node?
+    var operator : Token?
+    var right : Node?
 }
 
 function parser_abort(filename:string,msg:string,type:string,line:int){
-    error("{}: Expected '{}'', got '{}' instead:{}\n",filename,msg,type,to_string(line))
+    error(format("{}: Expected '{}'', got '{}' instead:{}\n",filename,msg,type,to_string(line)))
     exit(1)
 }
 
 function parser_abort_msg(filename:string,msg:string,line:int){
-    error("{}: Expected '{}':{}\n",filename,msg,to_string(line))
+    error(format("{}: Expected '{}':{}\n",filename,msg,to_string(line)))
     exit(1)
 }
 
-function parser(filename:string,tokens:[token]): node_t {
-    var program : node_t = node_t("program",[],tokens[0])
+function parser(filename:string,tokens:[Token]): Node {
+    var program : Node = Node("program",[],tokens[0])
     // todo
     return program
 }

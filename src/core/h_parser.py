@@ -616,6 +616,11 @@ class Parser(Parser):
     @_("LBRCK exprs RBRCK")
     def expr(self, p):
         return ("list", p.exprs, p.lineno)
+    
+    # [<expr>, <expr>]
+    @_("LBRCK RBRCK")
+    def expr(self, p):
+        return ("empty_list", p.lineno)
 
     # <expr> + <expr>
     @_("expr PLUS expr")

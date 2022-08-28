@@ -10,6 +10,7 @@
 
 #### Bug fixes
 - fix string subscripting bug
+- fix empty list parsing bug
 
 #### Removed
 

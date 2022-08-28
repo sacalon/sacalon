@@ -1,6 +1,8 @@
 use os
 use file
+
 use lexer
+use parser
 use help
 
 function main(argv:[string]) : int {

@@ -276,6 +276,8 @@ class Generator(object):
                 HascalError(
                     f"'{_name}' defined as a type, cannot redefine it as a variable:{_line}",filename=self.filename
                 )
+            elif _expr.get("empty_list",False):
+                HascalError(f"Cannot declare auto-typed variable with empty list:{_line}",filename=self.filename)
             elif _expr["type"].category == "all-nullable":
                 HascalError(f"Assign 'NULL' to non-typed variable '{_name}':{_line}",filename=self.filename)
             else:
@@ -332,6 +334,11 @@ class Generator(object):
             _expr = self.walk(node[4])
             _line = node[5]
             
+            if _expr.get("empty_list",False):
+                HascalError(
+                    f"Mismatched type {_type['type'].get_name_for_error()} and '[]':{_line}",filename=self.filename
+                )
+            
             if (_name in self.vars or _name in self.consts) and self.scope == False:
                 HascalError(f"'{_name}' exists ,cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
@@ -347,7 +354,7 @@ class Generator(object):
                 HascalError(
                     f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL",filename=self.filename
                 )
-            elif is_compatible_type(_expr["type"], _type["type"]) == False:
+            elif not is_compatible_type(_expr["type"], _type["type"]):
                 HascalError(
                     f"Mismatched type {_type['type'].get_name_for_error()} and {_expr['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
@@ -392,6 +399,9 @@ class Generator(object):
             _expr = self.walk(node[4])
             _line = node[5]
 
+            if _expr.get("empty_list",False):
+                _expr["type"] = _type["type"]
+            
             if (_name in self.vars or _name in self.consts) and self.scope == False:
                 HascalError(f"'{_name}' exists, cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
@@ -433,6 +443,11 @@ class Generator(object):
             _type = self.walk(node[2])
             _expr = self.walk(node[4])
             _line = node[5]
+
+            if _expr.get("empty_list",False):
+                HascalError(
+                    f"Mismatched type {_type['type'].get_name_for_error()} and '[]':{_line}",filename=self.filename
+                )
 
             if (_name in self.vars or _name in self.consts) and self.scope == False:
                 HascalError(f"'{_name}' exists ,cannot redefine it:{_line}",filename=self.filename)
@@ -498,6 +513,11 @@ class Generator(object):
             _expr = self.walk(node[4])
             _line = node[5]
 
+            if _expr.get("empty_list",False):
+                HascalError(
+                    f"Mismatched type {_type['type'].get_name_for_error()} and '[]':{_line}",filename=self.filename
+                )
+            
             if (_name in self.vars or _name in self.consts) and self.scope == False:
                 HascalError(f"'{_name}' exists ,cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
@@ -561,6 +581,9 @@ class Generator(object):
             _name = self.walk(node[1])
             _expr = self.walk(node[2])
             _line = node[3]
+
+            if _expr.get("empty_list",False) and isinstance(_name["type"],Array):
+                _expr["type"] = _name["type"]
 
             if is_nullable_compatible_type(_name["type"], _expr["type"]) == False:
                 name = _name['expr'].replace("__hascal__","")
@@ -2147,6 +2170,14 @@ class Generator(object):
             expr = {
                 "expr": "{%s}" % (_expr["expr"]),
                 "type": Array(_expr["type"]),
+            }
+            return expr
+        # [<]
+        if node[0] == "empty_list":
+            expr = {
+                "expr": "{}",
+                "type": "",
+                "empty_list" : True,
             }
             return expr
         # -------------------------------------------
