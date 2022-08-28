@@ -70,7 +70,7 @@ function main(): int {
 }
 ```
 
-> You can see more Hascal examples in [examples folder](https://github.com/hascal/hascal/tree/main/examples).
+> You can see more Hascal examples in [examples directory](https://github.com/hascal/hascal/tree/main/examples).
 
 ## Documentation
 
