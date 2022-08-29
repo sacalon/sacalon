@@ -69,7 +69,9 @@ class Struct(object):
 
     def get_type_name(self):
         return "__hascal__" + self.name + self.ptr_str
-    # todo : get_type_name_for_error()
+    
+    def get_type_name_for_error(self):
+        return self.name + self.ptr_str.replace("*","^")
 
 class Enum(Struct):
     ...
