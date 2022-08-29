@@ -271,7 +271,8 @@ class HascalCompiler(object):
             )
             out, _ = compiler_process.communicate()
         else :
-            HascalError(f"'{ARGS["compiler"]}' is not supported yet, use g++ or clang++")
+            compier = ARGS["compiler"]
+            HascalError(f"'{compier}' is not supported yet, use g++ or clang++")
         
         # TODO : Support more compilers(msvc,icc,apple clang,...)
         out = out.decode("utf-8")
