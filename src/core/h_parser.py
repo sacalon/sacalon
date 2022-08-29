@@ -720,16 +720,6 @@ class Parser(Parser):
     def expr(self, p):
         return ("float", p.float[0], p.float[1])
 
-    # <expr>.<name>
-    @_("expr DOT NAME")
-    def expr(self, p):
-        return (".", p.expr, p.NAME, p.lineno)
-
-    # <expr>.<name>[<expr>]
-    @_("expr DOT name LBRCK expr RBRCK")
-    def expr(self, p):
-        return (".2", p.expr0, p.name[0], p.expr1, p.lineno)
-
     @_("NUMBER DOT NUMBER")
     def float(self, p):
         return ("{0}.{1}".format(p.NUMBER0, p.NUMBER1), p.lineno)

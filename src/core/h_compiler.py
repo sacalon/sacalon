@@ -2180,29 +2180,6 @@ class Generator(object):
                 "empty_list" : True,
             }
             return expr
-        # -------------------------------------------
-        # <expr>.<name>
-        if node[0] == ".":
-            _expr = self.walk(node[1])
-            _name = node[2]
-
-            expr = {
-                "expr": "%s.__hascal__%s" % (_expr["expr"], _name),
-                "type": _expr["type"],  # todo : return _name type
-            }
-            return expr
-        # <expr>.<name>
-        if node[0] == ".2":
-            # todo : name type and index type check
-            _expr0 = self.walk(node[1])
-            _expr1 = self.walk(node[3])
-            _name = node[2]
-
-            expr = {
-                "expr": "%s.__hascal__%s[%s]" % (_expr0["expr"], _name, _expr1["expr"]),
-                "type": _expr["type"],  # todo : return _name type
-            }
-            return expr
         # --------------------------------------------
         # <return_type>
         if node[0] == "return_type":
