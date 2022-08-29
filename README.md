@@ -78,7 +78,7 @@ function main() : int {
 
 ## Contributions
 
-You can contribute to Hascal by [opening an issue](https://github.com/hascal/hascal/issues/new/choose) or [forking](https://github.com/hascal/hascal/fork) the repository and [contributing to Hascal's documentation](https://github.com/hascal/hascal/tree/main/docs).
+You can contribute to Hascal by [opening an issue](https://github.com/hascal/hascal/issues/new/choose) and [forking](https://github.com/hascal/hascal/fork) the repository or [contributing to Hascal's documentation](https://github.com/hascal/hascal/tree/main/docs).
 
 You can also join the Hascal community on [Gitter](https://gitter.im/hascal/community) or [Discord](https://discord.gg/rg4T2zBmyv) and ask & answer questions.
 
