@@ -63,7 +63,7 @@ Regex match:
 ```typescript
 use regex
 
-function main(): int {
+function main() : int {
     var matched : bool = regex("subject","(sub)(.*)")
     print(matched) // Output : 1
     return 0
