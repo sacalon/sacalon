@@ -270,6 +270,9 @@ class HascalCompiler(object):
                 [ARGS["compiler"], "-dumpversion"], stdout=PIPE, stderr=STDOUT
             )
             out, _ = compiler_process.communicate()
+        else :
+            HascalError(f"'{ARGS["compiler"]}' is not supported yet, use g++ or clang++")
+        
         # TODO : Support more compilers(msvc,icc,apple clang,...)
         out = out.decode("utf-8")
 
