@@ -1,7 +1,7 @@
 # Hascal's Changelog
 
 <details>
-<summary>v1.4.0</summary>
+<summary>v1.3.12</summary>
 
 #### New features
 - add support for multiline C-style comment
