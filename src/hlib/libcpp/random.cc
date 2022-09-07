@@ -1,17 +1,19 @@
-int __hascal__randint(int max, int min)
+int __hascal__randint(int min, int max)
 {
     srand(time(NULL));
     return rand() % max + min;
 }
 
-float __hascal__uniform(float max, float min)
+float __hascal__uniform(float min, float max)
 {
     srand(time(NULL));
-    return (float)rand() / (float)RAND_MAX * (max - min) + min;
+    float scale = rand() / (float) RAND_MAX; /* [0, 1.0] */
+    return min + scale * ( max - min );      /* [min, max] */
 }
 
-double __hascal__uniform(double max, double min)
+double __hascal__uniform(double min, double max)
 {
     srand(time(NULL));
-    return (double)rand() / (double)RAND_MAX * (max - min) + min;
+    double scale = rand() / (double) RAND_MAX; /* [0, 1.0] */
+    return min + scale * ( max - min );      /* [min, max] */
 }
