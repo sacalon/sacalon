@@ -66,6 +66,7 @@ class Lexer(Lexer):
     }
     ignore = " \t"
     ignore_comment_slash = r"//.*"
+    ignore_multiline_comment_slash = r"\/\*((?!\*\/)[^\r\n])*[\r\n]((?!\*\/)[\s\S\r\n])*\*\/"
 
     NAME = r"[a-zA-Z_][a-zA-Z0-9_]*"
     NUMBER = r"\d+"

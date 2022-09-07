@@ -4,6 +4,7 @@
 <summary>v1.4.0</summary>
 
 #### New features
+- add support for multiline C-style comment
 
 #### Changes
 - Hascal relicensed from MIT license to GPL-v3.0
