@@ -7,7 +7,7 @@
 - add support for multiline C-style comment
 
 #### Changes
-- Hascal relicensed from MIT license to GPL-v3.0
+- Hascal relicensed from MIT license to BSD-3-Clause license
 
 #### Bug fixes
 - fix string subscripting bug
