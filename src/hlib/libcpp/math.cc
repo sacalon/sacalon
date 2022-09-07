@@ -19,3 +19,11 @@ float __hascal__mean(std::vector<float> const& v) {
 double __hascal__pow(double a,double b){
     return pow(a,b);
 }
+
+float __hascal__round(float arg){
+    return std::round(arg);
+}
+
+double __hascal__round(double arg){
+    return std::round(arg);
+}

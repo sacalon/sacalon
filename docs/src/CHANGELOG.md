@@ -5,6 +5,7 @@
 
 #### New features
 - add support for multiline C-style comment
+- add `round` function to `math` library
 
 #### Changes
 - Hascal relicensed from MIT license to BSD-3-Clause license

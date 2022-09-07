@@ -11,7 +11,8 @@ function abs(a:float): float
 function pow(a:float,b:float): float 
 function mean(v:[int]): float 
 function mean(v:[float]): float 
-
+function round(arg:float): float
+function round(arg:double): double
 // function sqrt(a:float): float
 // function round(a:float): int
 // function log(a:float): float
