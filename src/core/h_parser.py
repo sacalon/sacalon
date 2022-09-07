@@ -985,5 +985,5 @@ class Parser(Parser):
     def expr(self, p):
         return ("pass_by_ptr", ("var", p.name[0], p.name[1]), p.lineno)
 
-    # todo : int^^,...
+    # todo : support int^^,...
     # ------------------------------------------
