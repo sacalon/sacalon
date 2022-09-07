@@ -27,3 +27,6 @@ Returns the smaller of x and y.
 
 ## `abs(x:float):float`
 Calculates the absolute value of a number. 
+
+## `round(arg:float|double):float|dobule`
+Roundes input value(supports `float` and `double` types).
