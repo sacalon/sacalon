@@ -5,6 +5,7 @@
 
 #### New features
 - add `asin`, `acos`, `asinh`, `acosh`, `exp`, `frexpr`, `ldexp`, `log`, `log10`, `fdim`, `sqrt`, `ceil`, `floor`, `NaN`, `max`, `min` functions to `math` library, [see documentation].
+- Showing error for overloading function's return type.
 
 #### Changes
 - Speedup parsing and compiling

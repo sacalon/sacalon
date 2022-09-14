@@ -967,12 +967,18 @@ class Generator(object):
                 params["expr"] = params["expr"][:-1]
 
             if self.funcs.get(_name) != None:
+                if str(_type) != str(self.funcs[_name].return_type):
+                    _type_name = _type["type"].get_name_for_error()
+                    HascalError(f"Cannot overloaded '{_name}' function's return type, you can only overload function's parameters:{_line}",filename=self.filename)
                 if type(self.funcs[_name]) == Function:
                     self.funcs[_name] = [
                         self.funcs[_name],
                         Function(_name, _params, _type["type"]),
                     ]
                 else:
+                    if str(_type) != str(self.funcs[_name][0].return_type):
+                        _type_name = _type["type"].get_name_for_error()
+                        HascalError(f"Cannot overloaded '{_name}' function's return type, you can only overload function's parameters:{_line}",filename=self.filename)
                     self.funcs[_name].append(Function(_name, _params, _type["type"]))
             else:
                 self.funcs[_name] = Function(_name, _params, _type["type"])
