@@ -1,6 +1,23 @@
 # Hascal's Changelog
 
 <details>
+<summary>v1.4.0</summary>
+
+#### New features
+- add `asin`, `acos`, `asinh`, `acosh`, `exp`, `frexpr`, `ldexp`, `log`, `log10`, `fdim`, `sqrt`, `ceil`, `floor`, `NaN`, `max`, `min` functions to `math` library, [see documentation].
+
+#### Changes
+- Speedup parsing and compiling
+
+#### Bug fixes
+
+#### Removed
+
+</details>
+
+---
+
+<details>
 <summary>v1.3.12</summary>
 
 #### New features

@@ -9,9 +9,9 @@ function atan(x:float): float // Compute arc tangent
 function atan2(y:float,x:float): float // Compute arc tangent with two parameter
 
 
-function sinh(x:float): float // Compute hyperbolic  sine
-function cosh(x:float): float // Compute hyperbolic  cosine
-function tanh(x:float): float // Compute hyperbolic  tangent
+function sinh(x:float): float // Compute hyperbolic sine
+function cosh(x:float): float // Compute hyperbolic cosine
+function tanh(x:float): float // Compute hyperbolic tangent
 function asinh(x:float): float // Compute area hyperbolic sine
 function acosh(x:float): float // Compute area hyperbolic cosine
 function atanh(x:float): float // Compute area hyperbolic tangent
