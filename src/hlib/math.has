@@ -44,8 +44,8 @@ function floor(x:double): double // Round down value
 function fmax(x:float): double // Maximum value
 function fmax(x:double): double // Maximum value
 
-function fmin(x:float): double // Maximum value
-function fmin(x:double): double // Maximum value
+function fmin(x:float,y:float): double // Maximum value
+function fmin(x:double,y:double): double // Maximum value
 
 // Returns generic NaN(Not-A-Number) value
 function NaN(): double{
