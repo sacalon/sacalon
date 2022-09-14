@@ -10,7 +10,7 @@ Returns cosine of x.
 ## `tan(x:float):float`
 Returns tangent of x.
 
-## `const PI : float`
+## `const PI : double`
 PI number.
 
 ## `fmax(a:float,b:float):float`
