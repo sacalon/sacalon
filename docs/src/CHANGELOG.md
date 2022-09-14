@@ -4,7 +4,7 @@
 <summary>v1.4.0</summary>
 
 #### New features
-- add `asin`, `acos`, `asinh`, `acosh`, `exp`, `frexpr`, `ldexp`, `log`, `log10`, `fdim`, `sqrt`, `ceil`, `floor`, `NaN`, `max`, `min` functions to `math` library, [see documentation].
+- add `asin`, `acos`, `asinh`, `acosh`, `exp`, `frexpr`, `ldexp`, `log`, `log10`, `fdim`, `sqrt`, `ceil`, `floor`, `NaN`, `max`, `min` functions to `math` library, [see documentation](https://hascal.github.io/docs/latest/stdlib/math.html).
 - Showing error for overloading function's return type.
 
 #### Changes
