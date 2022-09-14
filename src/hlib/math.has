@@ -1,5 +1,7 @@
 cuse libcpp.math
 
+const PI : double = 3.14159265358979323
+
 function sin(x:float): float // Compute sine
 function cos(x:float): float // Compute cosine
 function tan(x:float): float // Compute tangent
@@ -7,8 +9,6 @@ function asin(x:float): float // Compute arc sine
 function acos(x:float): float // Compute arc cosine
 function atan(x:float): float // Compute arc tangent
 function atan2(y:float,x:float): float // Compute arc tangent with two parameter
-
-
 function sinh(x:float): float // Compute hyperbolic sine
 function cosh(x:float): float // Compute hyperbolic cosine
 function tanh(x:float): float // Compute hyperbolic tangent
@@ -18,6 +18,7 @@ function atanh(x:float): float // Compute area hyperbolic tangent
 
 
 function exp(x:float): float // Compute exponential function
+function exp2(x:float): float // Compute exponential function
 function frexp(x:float,exp:int^): float // Get significand and exponent
 function ldexp(x:float,exp:int): float // Generate value from significand and exponent
 
@@ -26,11 +27,12 @@ function log10(arg:float): float
 
 function fdim(x:float,y:float): float // Positive difference
 function fdim(x:double,y:double): double // Positive difference
-function fdim(x:int,y:int): double // Positive difference
 
 function abs(a:float): float
+
 function pow(base:double,exponent:double): double // Raise to power
 function sqrt(x:double): double // Compute square root 
+
 function mean(v:[int]): float // average of arrays
 function mean(v:[float]): float // average of arrays
 function mean(v:[double]): double // average of arrays
@@ -40,6 +42,7 @@ function round(x:double): double // Round to nearest
 
 function ceil(x:double): double // Round up value
 function floor(x:double): double // Round down value
+function fmod(numer:double,denom:double): double // Compute remainder of division
 
 function fmax(x:float): double // Maximum value
 function fmax(x:double): double // Maximum value
@@ -53,4 +56,18 @@ function NaN(): double{
     return nan("");
     """
     return 0.0
+}
+
+function max(x:int,y:int): int {
+    if x > y {
+        return x
+    }
+    return y
+}
+
+function min(x:int,y:int): int {
+    if x < y {
+        return x
+    }
+    return y
 }
