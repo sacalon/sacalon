@@ -1,20 +1,92 @@
 cuse libcpp.math
 
-function sin(x:float): float
-function cos(x:float): float
-function tan(x:float): float
-function fmax(a:float,b:float): float 
-function max(a:float,b:float): float
-function fmin(a:float,b:float): float 
-function min(a:float,b:float): float
+function sin(x:float): float // Compute sine
+function cos(x:float): float // Compute cosine
+function tan(x:float): float // Compute tangent
+function asin(x:float): float // Compute arc sine
+function acos(x:float): float // Compute arc cosine
+function atan(x:float): float // Compute arc tangent
+function atan2(y:float,x:float): float // Compute arc tangent with two parameter
+
+
+function sinh(x:float): float // Compute hyperbolic  sine
+function cosh(x:float): float // Compute hyperbolic  cosine
+function tanh(x:float): float // Compute hyperbolic  tangent
+function asinh(x:float): float // Compute area hyperbolic sine
+function acosh(x:float): float // Compute area hyperbolic cosine
+function atanh(x:float): float // Compute area hyperbolic tangent
+
+
+function exp(x:float): float // Compute exponential function
+function frexp(x:float,exp:int^): float // Get significand and exponent
+function ldexp(x:float,exp:int): float // Generate value from significand and exponent
+
+function log(arg:float): float // Compute natural logarithm
+function log10(arg:float): float
+
+function fdim(x:float,y:float): float // Positive difference
+function fdim(x:double,y:double): double // Positive difference
+function fdim(x:int,y:int): double // Positive difference
+
 function abs(a:float): float
-function pow(a:float,b:float): float 
-function mean(v:[int]): float 
-function mean(v:[float]): float 
-function round(arg:float): float
-function round(arg:double): double
-// function sqrt(a:float): float
-// function round(a:float): int
-// function log(a:float): float
-// function exp(a:float): float
-// function floor(a:float): float
+function pow(base:double,exponent:double): double // Raise to power
+function sqrt(x:double): double // Compute square root 
+function mean(v:[int]): float // average of arrays
+function mean(v:[float]): float // average of arrays
+function mean(v:[double]): double // average of arrays
+
+function round(x:float): float // Round to nearest
+function round(x:double): double // Round to nearest
+
+function ceil(x:double): double // Round up value
+function floor(x:double): double // Round down value
+
+// Returns generic NaN(Not-A-Number) value
+function NaN(): double{
+    cuse """
+    return nan("");
+    """
+    return 0.0
+}
+
+
+// Maximum value
+function max(x:int,y:int): int{
+    cuse """
+    return fmax(__hascal__x,__hascal__y);
+    """
+    return 0.0
+}
+function max(x:float,y:float): float{
+    cuse """
+    return fmax(__hascal__x,__hascal__y);
+    """
+    return 0.0
+}
+function max(x:double,y:double): double{
+    cuse """
+    return fmax(__hascal__x,__hascal__y);
+    """
+    return 0.0
+}
+
+
+// Minimus value
+function min(x:int,y:int): int{
+    cuse """
+    return fmin(__hascal__x,__hascal__y);
+    """
+    return 0.0
+}
+function min(x:float,y:float): float{
+    cuse """
+    return fmin(__hascal__x,__hascal__y);
+    """
+    return 0.0
+}
+function min(x:double,y:double): double{
+    cuse """
+    return fmin(__hascal__x,__hascal__y);
+    """
+    return 0.0
+}

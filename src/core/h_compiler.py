@@ -227,9 +227,7 @@ class Generator(object):
             dict : Contains the C++ code and the type of the expression
         """
 
-        # {
-        #     <statements>
-        # }
+        # parsing global statements(out of scope)
         if node[0] == "block":
             result = []  # list of exprs and statements
             for statement in node[1:]:
@@ -242,6 +240,8 @@ class Generator(object):
             self.scope_not_deleted_vars = copy.copy(self.top_scope_not_deleted_vars)
             self.top_scope_not_deleted_vars = {}
             return result
+        
+        # parsing in-scope statements
         if node[0] == "in_block":
             result = []  # list of exprs and statements
             for statement in node[1:]:
@@ -254,6 +254,8 @@ class Generator(object):
             self.scope_not_deleted_vars = copy.copy(self.top_scope_not_deleted_vars)
             self.top_scope_not_deleted_vars = {}
             return result
+        
+        # parsing struct defination scope
         if node[0] == "block_struct":
             current_vars = self.vars
             self.vars = {}
@@ -264,31 +266,45 @@ class Generator(object):
             return result
         # -------------------------------------
         # var <name> = <expr>
-        if node[0] == "declare" and node[1] == "no_type":
-            _name = node[2]
-            _expr = self.walk(node[3])
+        if node[0] == "var_auto_type":
+            _name = node[1]
+            _expr = self.walk(node[2])
             _type = copy.deepcopy(_expr["type"])
-            _line = node[4]
+            _line = node[3]
 
+            # check if name exists
             if (_name in self.vars or _name in self.consts) and self.scope == False:
                 HascalError(f"'{_name}' exists, cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
                 HascalError(
                     f"'{_name}' defined as a type, cannot redefine it as a variable:{_line}",filename=self.filename
                 )
+            elif _name in self.funcs:
+                HascalError(
+                    f"'{_name}' defined as a function, cannot redefine it as a variable:{_line}",filename=self.filename
+                )
+            
+            # check if expression is an empty list(empty list is a non-typed list)
             elif _expr.get("empty_list",False):
                 HascalError(f"Cannot declare auto-typed variable with empty list:{_line}",filename=self.filename)
+            
+            # check assign null to non-typed variable
             elif _expr["type"].category == "all-nullable":
                 HascalError(f"Assign 'NULL' to non-typed variable '{_name}':{_line}",filename=self.filename)
             else:
+                # check if type of variable is a struct, then set its members
                 members = {}
-
                 if isinstance(_type, Struct):
                     members = _type.members
+                
                 # check if variable allocated with `new` keyword, append it to undeleted vars
                 if _expr.get("new",False):
                     self.scope_not_deleted_vars[_name] = _line
+                
+                # add variable to symbol-table
                 self.vars[_name] = Var(_name, _type, members=members)
+
+                # generate c++ code
                 res = "auto __hascal__%s = %s;\n" % (_name, _expr["expr"])
                 expr = {
                     "expr": res,
@@ -298,22 +314,30 @@ class Generator(object):
                 return expr
 
         # var <name> : <return_type>
-        if node[0] == "declare" and node[1] == "no_equal":
-            _name = node[3]
-            _type = self.walk(node[2])
-            _line = node[4]
+        if node[0] == "var_without_assignment":
+            _name = node[2]
+            _type = self.walk(node[1])
+            _line = node[3]
 
+            # check if name exists
             if (_name in self.vars or _name in self.consts) and self.scope == False:
-                HascalError(f"'{_name}' exists ,cannot redefine it:{_line}",filename=self.filename)
+                HascalError(f"'{_name}' exists, cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
                 HascalError(
-                    f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}",filename=self.filename
+                    f"'{_name}' defined as a type, cannot redefine it as a variable:{_line}",filename=self.filename
                 )
+            elif _name in self.funcs:
+                HascalError(
+                    f"'{_name}' defined as a function, cannot redefine it as a variable:{_line}",filename=self.filename
+                )
+            
+            # check for null safety
             elif is_nullable(_type["type"]) == False:
                 HascalError(
                     f"The non-nullable variable '{_name}' must be initialized.\nTry adding an initializer expression:{_line}",filename=self.filename
                 )
             else:
+                # check if type of variable is a struct, then set its members
                 members = {}
                 if isinstance(_type["type"], Struct):
                     members = _type["type"].members
@@ -328,25 +352,35 @@ class Generator(object):
                 return expr
 
         # var <name> : <return_type> = <expr>
-        if node[0] == "declare" and node[1] == "equal2":
-            _name = node[3]
-            _type = self.walk(node[2])
-            _expr = self.walk(node[4])
-            _line = node[5]
+        if node[0] == "var_with_assignment":
+            _name = node[2]
+            _type = self.walk(node[1])
+            _expr = self.walk(node[3])
+            _line = node[4]
             
-            if _expr.get("empty_list",False):
+            # check for assign empty list to non-array variable
+            if not isinstance(_type["type"],Array) and _expr.get("empty_list",False):
                 HascalError(
                     f"Mismatched type {_type['type'].get_name_for_error()} and '[]':{_line}",filename=self.filename
                 )
             
+            # check if name exists
             if (_name in self.vars or _name in self.consts) and self.scope == False:
-                HascalError(f"'{_name}' exists ,cannot redefine it:{_line}",filename=self.filename)
+                HascalError(f"'{_name}' exists, cannot redefine it:{_line}",filename=self.filename)
             elif _name in self.types:
                 HascalError(
-                    f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}",filename=self.filename
+                    f"'{_name}' defined as a type, cannot redefine it as a variable:{_line}",filename=self.filename
                 )
+            elif _name in self.funcs:
+                HascalError(
+                    f"'{_name}' defined as a function, cannot redefine it as a variable:{_line}",filename=self.filename
+                )
+            
+            # check if expression's type is nullable comptaible to variable
             elif is_nullable_compatible_type(_expr["type"], _type["type"]) == False:
                 HascalError(f"Assign 'NULL' to non-nullable variable '{_name}':{_line}",filename=self.filename)
+            
+            # check if expression is null and variable is not a pointer, then show error(cannot assign null to non-pointer types)
             elif (
                 _expr["type"].category == "all-nullable"
                 and _name["type"].is_ptr == False
@@ -354,14 +388,21 @@ class Generator(object):
                 HascalError(
                     f"Converting to non-pointer type '{_type['type'].get_name_for_error()}' from NULL",filename=self.filename
                 )
+            
+            # check type compatibility between variable and expression
             elif not is_compatible_type(_expr["type"], _type["type"]):
                 HascalError(
                     f"Mismatched type {_type['type'].get_name_for_error()} and {_expr['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
+            
             else:
+                # check if type of variable is a struct, then set its members
                 members = {}
                 if isinstance(_type["type"], Struct):
                     members = _type["type"].members
+                
+                # with_new uses when we delete a variable to check if it variable allocated with new keyword
+                _type["type"].with_new = _expr["type"].with_new
                 self.vars[_name] = Var(_name, _type["type"], members=members)
 
                 expr = {
@@ -541,9 +582,7 @@ class Generator(object):
                 members = {}
                 if isinstance(_type["type"], Struct):
                     members = _type["type"].members
-                # check if variable allocated with `new` keyword, append it to undeleted vars
-                if _type.get("new",False):
-                    self.scope_not_deleted_vars[_name] = _line
+
                 _type["type"].with_new = _expr["type"].with_new
                 self.vars[_name] = Var(_name, _type["type"], members=members)
 
@@ -2182,6 +2221,20 @@ class Generator(object):
             return expr
         # --------------------------------------------
         # <return_type>
+        if node[0] == "standard_type" :
+            _type_name = node[1]
+            _line = node[2]
+
+            if not _type_name in self.types:
+                HascalError(f"{_type_name} is not defined:{_line}",filename=self.filename)
+
+            expr = {
+                "expr": "__hascal__%s" % (_type_name),
+                "type": copy.deepcopy(self.types[_type_name]),
+                "name": _type_name,
+            }
+            return expr
+        
         if node[0] == "return_type":
             _type_name = node[1]
             _line = node[2]

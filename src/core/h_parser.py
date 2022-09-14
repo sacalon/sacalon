@@ -97,86 +97,43 @@ class Parser(Parser):
         return ("enum", p.NAME, p.names, p.lineno)
 
     # ----------------------------------
-    # statement :
-    @_("var_declare")
-    def statement(self, p):
-        return p.var_declare
-
+    # Variable and const decalration
     # var <name> = <expr>
     @_("VAR NAME ASSIGN expr")
     def var_declare(self, p):
-        return ("declare", "no_type", p.NAME, p.expr, p.lineno)
+        return ("var_auto_type", p.NAME, p.expr, p.lineno)
 
     # var <name> : <return_type>
     @_("VAR NAME COLON return_type")
     def var_declare(self, p):
-        return ("declare", "no_equal", p.return_type, p.NAME, p.lineno)
-
-    # var <name> : [<return_type>]
-    @_("VAR NAME COLON LBRCK return_type RBRCK")
-    def var_declare(self, p):
-        return ("declare_array", "no_equal", p.return_type, p.NAME, p.lineno)
+        return ("var_without_assignment", p.return_type, p.NAME, p.lineno)
 
     # var <name> : <return_type> = <expr>
     @_("VAR NAME COLON return_type ASSIGN expr")
     def var_declare(self, p):
-        return ("declare", "equal2", p.return_type, p.NAME, p.expr, p.lineno)
-
-    # var <name> : [<return_type>] = <expr>
-    @_("VAR NAME COLON LBRCK return_type RBRCK ASSIGN expr")
-    def var_declare(self, p):
-        return ("declare_array", "equal2", p.return_type, p.NAME, p.expr, p.lineno)
-
-    # var <name> : <return_type>
-    @_("VAR NAME COLON return_type3")
-    def var_declare(self, p):
-        return ("declare_ptr", "no_equal", p.return_type3, p.NAME, p.lineno)
-
-    # var <name> : <return_type> = <expr>
-    @_("VAR NAME COLON return_type3 ASSIGN expr")
-    def var_declare(self, p):
-        return ("declare_ptr", "equal2", p.return_type3, p.NAME, p.expr, p.lineno)
-    
-    # var <name> : <return_type>
-    @_("VAR NAME COLON return_type4")
-    def var_declare(self, p):
-        return ("declare", "no_equal", p.return_type4, p.NAME, p.lineno)
-
-    # var <name> : <return_type> = <expr>
-    @_("VAR NAME COLON return_type4 ASSIGN expr")
-    def var_declare(self, p):
-        return ("declare", "equal2", p.return_type4, p.NAME, p.expr, p.lineno)
+        return ("var_with_assignment", p.return_type, p.NAME, p.expr, p.lineno)
 
     # const <name> = <expr>
     @_("CONST NAME ASSIGN expr")
     def var_declare(self, p):
-        return ("declare", "const_no_type", p.NAME, p.expr, p.lineno)
+        return ("const_auto_type", p.NAME, p.expr, p.lineno)
 
     # const <name> : <return_type>
     @_("CONST NAME COLON return_type")
     def var_declare(self, p):
         return ("declare", "const_no_expr", p.NAME, p.return_type, p.lineno)
 
-    # const <name> : <return_type>
-    @_("CONST NAME COLON return_type2")
-    def var_declare(self, p):
-        return ("declare", "const_no_expr", p.NAME, p.return_type2, p.lineno)
-
-    # const <name> : <return_type>
-    @_("CONST NAME COLON return_type3")
-    def var_declare(self, p):
-        return ("declare", "const_no_expr", p.NAME, p.return_type3, p.lineno)
-
     # const <name> : <return_type> = <expr>
     @_("CONST NAME COLON return_type ASSIGN expr")
     def var_declare(self, p):
         return ("declare", "const", p.return_type, p.NAME, p.expr, p.lineno)
 
-    # in_statement :
+    @_("var_declare")
+    def statement(self, p):
+        return p.var_declare
     @_("var_declare")
     def in_statement(self, p):
         return p.var_declare
-
     # -----------------------------------
     # <name> = <expr>
     @_("name ASSIGN expr")
@@ -302,288 +259,33 @@ class Parser(Parser):
         return ("continue", p.lineno)
 
     # -----------------------------------
-    # function <name> {
+    # function <name>(<optional_params>) : <optional_return_type> {
     #      <in_block>
     # }
-    @_("decorator FUNCTION NAME LBC in_block RBC")
+    @_("decorator FUNCTION NAME LPAREN optional_params RPAREN optional_return_type LBC in_block RBC")
     def statement(self, p):
         return (
             "function",
-            ("return_type", "void", p.lineno),
+            p.optional_return_type,
             p.NAME,
-            ("param_no",),
+            p.optional_params,
             p.in_block,
             p.lineno,
             p.decorator,
         )
 
-    # function <name>() {
-    #      <in_block>
-    # }
-    @_("decorator FUNCTION NAME LPAREN RPAREN LBC in_block RBC")
-    def statement(self, p):
-        return (
-            "function",
-            ("return_type", "void", p.lineno),
-            p.NAME,
-            ("param_no",),
-            p.in_block,
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name>(<params>) {
-    #      <in_block>
-    # }
-    @_("decorator FUNCTION NAME LPAREN params RPAREN LBC in_block RBC")
-    def statement(self, p):
-        return (
-            "function",
-            ("return_type", "void", p.lineno),
-            p.NAME,
-            p.params,
-            p.in_block,
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name> : <return_type> {
-    #      <in_block>
-    # }
-    @_("decorator FUNCTION NAME COLON return_type LBC in_block RBC")
-    def statement(self, p):
-        return (
-            "function",
-            p.return_type,
-            p.NAME,
-            ("param_no",),
-            p.in_block,
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name>() : <return_type> {
-    #      <in_block>
-    # }
-    @_("decorator FUNCTION NAME LPAREN RPAREN COLON return_type LBC in_block RBC")
-    def statement(self, p):
-        return (
-            "function",
-            p.return_type,
-            p.NAME,
-            ("param_no",),
-            p.in_block,
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name>(<params>) : <return_type> {
-    #      <in_block>
-    # }
-    @_(
-        "decorator FUNCTION NAME LPAREN params RPAREN COLON return_type LBC in_block RBC"
-    )
-    def statement(self, p):
-        return (
-            "function",
-            p.return_type,
-            p.NAME,
-            p.params,
-            p.in_block,
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name> : [<return_type>] {
-    #      <in_block>
-    # }
-    @_("decorator FUNCTION NAME COLON return_type2 LBC in_block RBC")
-    def statement(self, p):
-        return (
-            "function",
-            p.return_type2,
-            p.NAME,
-            ("param_no",),
-            p.in_block,
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name>() : [<return_type>] {
-    #      <in_block>
-    # }
-    @_("decorator FUNCTION NAME LPAREN RPAREN COLON return_type2  LBC in_block RBC")
-    def statement(self, p):
-        return (
-            "function",
-            p.return_type2,
-            p.NAME,
-            ("param_no",),
-            p.in_block,
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name>(<params>) : [<return_type>] {
-    #      <in_block>
-    # }
-    @_(
-        "decorator FUNCTION NAME LPAREN params RPAREN COLON return_type2 LBC in_block RBC"
-    )
-    def statement(self, p):
-        return (
-            "function",
-            p.return_type2,
-            p.NAME,
-            p.params,
-            p.in_block,
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name> : <return_type>^ {
-    #      <in_block>
-    # }
-    @_("decorator FUNCTION NAME COLON return_type3 LBC in_block RBC")
-    def statement(self, p):
-        return (
-            "function",
-            p.return_type3,
-            p.NAME,
-            ("param_no",),
-            p.in_block,
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name>() : <return_type>^ {
-    #      <in_block>
-    # }
-    @_("decorator FUNCTION NAME LPAREN RPAREN COLON return_type3  LBC in_block RBC")
-    def statement(self, p):
-        return (
-            "function",
-            p.return_type3,
-            p.NAME,
-            ("param_no",),
-            p.in_block,
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name>(<params>) : <return_type>^ {
-    #      <in_block>
-    # }
-    @_(
-        "decorator FUNCTION NAME LPAREN params RPAREN COLON return_type3 LBC in_block RBC"
-    )
-    def statement(self, p):
-        return (
-            "function",
-            p.return_type3,
-            p.NAME,
-            p.params,
-            p.in_block,
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name>(<params>) : <return_type>
-    @_("decorator FUNCTION NAME LPAREN params RPAREN COLON return_type")
+    
+    # function <name>(<optional_params>) : <optional_return_type>
+    @_("decorator FUNCTION NAME LPAREN optional_params RPAREN optional_return_type")
     def statement(self, p):
         return (
             "inline_function",
-            p.return_type,
+            p.optional_return_type,
             p.NAME,
-            p.params,
+            p.optional_params,
             p.lineno,
             p.decorator,
         )
-
-    # function <name>(<params>) : [<return_type>]
-    @_("decorator FUNCTION NAME LPAREN params RPAREN COLON return_type2")
-    def statement(self, p):
-        return (
-            "inline_function",
-            p.return_type2,
-            p.NAME,
-            p.params,
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name>(<params>) : <return_type>^
-    @_("decorator FUNCTION NAME LPAREN params RPAREN COLON return_type3")
-    def statement(self, p):
-        return (
-            "inline_function",
-            p.return_type3,
-            p.NAME,
-            p.params,
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name>() : <return_type>
-    @_("decorator FUNCTION NAME LPAREN RPAREN COLON return_type")
-    def statement(self, p):
-        return (
-            "inline_function",
-            p.return_type,
-            p.NAME,
-            ("param_no",),
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name>() : [<return_type>]
-    @_("decorator FUNCTION NAME LPAREN RPAREN COLON return_type2")
-    def statement(self, p):
-        return (
-            "inline_function",
-            p.return_type2,
-            p.NAME,
-            ("param_no",),
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name>() : <return_type>^
-    @_("decorator FUNCTION NAME LPAREN RPAREN COLON return_type3")
-    def statement(self, p):
-        return (
-            "inline_function",
-            p.return_type3,
-            p.NAME,
-            ("param_no",),
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name>(<params>)
-    @_("decorator FUNCTION NAME LPAREN params RPAREN")
-    def statement(self, p):
-        return (
-            "inline_function",
-            ("return_type", "void", p.lineno),
-            p.NAME,
-            p.params,
-            p.lineno,
-            p.decorator,
-        )
-
-    # function <name>()
-    @_("decorator FUNCTION NAME LPAREN RPAREN")
-    def statement(self, p):
-        return (
-            "inline_function",
-            ("return_type", "void", p.lineno),
-            p.NAME,
-            ("param_no",),
-            p.lineno,
-            p.decorator,
-        )
-
     # ------------------------------------
     # delete <name>
     @_("DELETE NAME")
@@ -685,16 +387,6 @@ class Parser(Parser):
     @_("NEW return_type LPAREN expr RPAREN")
     def expr(self, p):
         return ("new", p.return_type, p.expr, p.lineno)
-
-    # new [<return_type>](<expr>)
-    @_("NEW return_type2 LPAREN expr RPAREN")
-    def expr(self, p):
-        return ("new", p.return_type2, p.expr, p.lineno)
-
-    # new <return_type>^(<expr>)
-    @_("NEW return_type3 LPAREN expr RPAREN")
-    def expr(self, p):
-        return ("new", p.return_type3, p.expr, p.lineno)
 
     @_("NUMBER")
     def expr(self, p):
@@ -811,7 +503,7 @@ class Parser(Parser):
     @_("param_t")
     def params(self, p):
         return ("params", ("param_no",), p.param_t)
-
+    
     @_("params COMMA param_t")
     def params(self, p):
         return ("params", p.params, p.param_t, p.lineno)
@@ -821,14 +513,12 @@ class Parser(Parser):
     def param_t(self, p):
         return ("param", p.NAME, p.return_type, p.lineno)
 
-    @_("NAME COLON return_type2")
-    def param_t(self, p):
-        return ("param", p.NAME, p.return_type2, p.lineno)
-
-    @_("NAME COLON return_type3")
-    def param_t(self, p):
-        return ("param", p.NAME, p.return_type3, p.lineno)
-
+    @_("")
+    def optional_params(self, p):
+        return ("param_no",)
+    @_("params")
+    def optional_params(self, p):
+        return p.params
     # ------------------------------------------
     # <arg>, <arg>
     @_("arg")
@@ -842,14 +532,6 @@ class Parser(Parser):
     @_("return_type")
     def arg(self, p):
         return p.return_type
-
-    @_("return_type2")
-    def arg(self, p):
-        return p.return_type2
-
-    @_("return_type3")
-    def arg(self, p):
-        return p.return_type3
 
     @_("expr")
     def arg(self, p):
@@ -869,46 +551,46 @@ class Parser(Parser):
     # int
     @_("INTVAR")
     def return_type(self, p):
-        return ("return_type", "int", p.lineno)
+        return ("standard_type", "int", p.lineno)
 
     # string
     @_("STRINGVAR")
     def return_type(self, p):
-        return ("return_type", "string", p.lineno)
+        return ("standard_type", "string", p.lineno)
 
     # char
     @_("CHARVAR")
     def return_type(self, p):
-        return ("return_type", "char", p.lineno)
+        return ("standard_type", "char", p.lineno)
 
     # bool
     @_("BOOLVAR")
     def return_type(self, p):
-        return ("return_type", "bool", p.lineno)
+        return ("standard_type", "bool", p.lineno)
 
     # float
     @_("FLOATVAR")
     def return_type(self, p):
-        return ("return_type", "float", p.lineno)
+        return ("standard_type", "float", p.lineno)
 
     # void
     @_("VOIDVAR")
     def return_type(self, p):
-        return ("return_type", "void", p.lineno)
+        return ("standard_type", "void", p.lineno)
 
     # <name>
     @_("NAME")
     def return_type(self, p):
-        return ("return_type", p.NAME, p.lineno)
+        return ("standard_type", p.NAME, p.lineno)
 
     # [<return_type>]
     @_("LBRCK return_type RBRCK")
-    def return_type2(self, p):
+    def return_type(self, p):
         return ("return_type_array", p.return_type, p.lineno)
 
     # <return_type>^
     @_("return_type POW")
-    def return_type3(self, p):
+    def return_type(self, p):
         return ("ptr_type", p.return_type, p.lineno)
 
     # <return_type>?
@@ -916,63 +598,35 @@ class Parser(Parser):
     def return_type(self, p):
         return ("nullable_type", p.return_type, p.lineno)
 
-    # <return_type>?
-    @_("return_type2 QS")
-    def return_type(self, p):
-        return ("nullable_type", p.return_type2, p.lineno)
-
-    # <return_type>?
-    @_("return_type3 QS")
-    def return_type(self, p):
-        return ("nullable_type", p.return_type3, p.lineno)
-
     # Function[<type>,...]<return_type>
     @_('FUNCTION_TYPE LBRCK return_types RBRCK return_type')
-    def return_type3(self,p):
+    def return_type(self,p):
         return ('funtion_type',p.return_types,p.return_type,p.lineno)
 
     # static <return_type>
     @_('STATIC return_type')
-    def return_type4(self,p):
+    def return_type(self,p):
         return ('static_type',p.return_type,p.lineno)
-    # static <return_type>
-    @_('STATIC return_type2')
-    def return_type4(self,p):
-        return ('static_type',p.return_type2,p.lineno)
-    # static <return_type>
-    @_('STATIC return_type3')
-    def return_type4(self,p):
-        return ('static_type',p.return_type3,p.lineno)
 
     @_("return_type")
-    def return_types_(self, p):
-        return p.return_type
-
-    @_("return_type2")
-    def return_types_(self, p):
-        return p.return_type2
-
-    @_("return_type3")
-    def return_types_(self, p):
-        return p.return_type3
-
-    @_("return_types_")
     def return_types(self, p):
-        return [p.return_types_]
+        return [p.return_type]
     
-    @_("return_types COMMA return_types_")
+    @_("return_types COMMA return_type")
     def return_types(self, p):
-        return p.return_types + [p.return_types_]
+        return p.return_types + [p.return_type]
+
+    @_("COLON return_type")
+    def optional_return_type(self, p):
+        return p.return_type
+    @_("")
+    def optional_return_type(self, p):
+        return ("standard_type","void",None) # TODO : should check for p.lineno
     # ------------------------------------------
     # (<return_type>) <expr>
     @_("LPAREN return_type RPAREN expr")
     def expr(self, p):
         return ("cast", p.return_type, p.expr, p.lineno)
-
-    # (<return_type>^) <expr>
-    @_("LPAREN return_type3 RPAREN expr")
-    def expr(self, p):
-        return ("cast", p.return_type3, p.expr, p.lineno)
 
     # ------------------------------------------
     # &<name>

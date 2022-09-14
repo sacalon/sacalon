@@ -192,8 +192,8 @@ def return_null_according_to_type(type_, expr,name,decl=True,array_decl=False):
     ):
         return "%s = nullptr;" % (name)
     else :
-        if decl :
-            return "%s __hascal__%s = %s;" % ("std::vector<"+str(type_["type"])+">" if array_decl else type_["type"], name, expr["expr"]) 
+        if decl:
+            return "%s __hascal__%s = %s;" % (type_["expr"], name, expr["expr"])             
         return "%s = %s;\n" % (name, expr["expr"])
     return ""
 

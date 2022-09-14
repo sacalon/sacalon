@@ -78,7 +78,7 @@ function main(): int {
     var m = avg_y - (b * avg_x)
 
     // calculate the predicted y values
-    var y_pred : [float]
+    var y_pred : [float]?
     for i in x {
         append(y_pred,predict(i, m, b))
     }
