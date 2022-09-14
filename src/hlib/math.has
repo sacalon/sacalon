@@ -41,52 +41,16 @@ function round(x:double): double // Round to nearest
 function ceil(x:double): double // Round up value
 function floor(x:double): double // Round down value
 
+function fmax(x:float): double // Maximum value
+function fmax(x:double): double // Maximum value
+
+function fmin(x:float): double // Maximum value
+function fmin(x:double): double // Maximum value
+
 // Returns generic NaN(Not-A-Number) value
 function NaN(): double{
     cuse """
     return nan("");
-    """
-    return 0.0
-}
-
-
-// Maximum value
-function max(x:int,y:int): int{
-    cuse """
-    return fmax(__hascal__x,__hascal__y);
-    """
-    return 0.0
-}
-function max(x:float,y:float): float{
-    cuse """
-    return fmax(__hascal__x,__hascal__y);
-    """
-    return 0.0
-}
-function max(x:double,y:double): double{
-    cuse """
-    return fmax(__hascal__x,__hascal__y);
-    """
-    return 0.0
-}
-
-
-// Minimus value
-function min(x:int,y:int): int{
-    cuse """
-    return fmin(__hascal__x,__hascal__y);
-    """
-    return 0.0
-}
-function min(x:float,y:float): float{
-    cuse """
-    return fmin(__hascal__x,__hascal__y);
-    """
-    return 0.0
-}
-function min(x:double,y:double): double{
-    cuse """
-    return fmin(__hascal__x,__hascal__y);
     """
     return 0.0
 }
