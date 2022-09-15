@@ -17,7 +17,6 @@ if not hascal_path.exists():
         "for_in.has",
         "format.has",
         "func.has",
-        "func_overload.has",
         "funcp.has",
         # "get.has",
         "hello.has",
