@@ -25,4 +25,6 @@ Windows :
 > make windows
 ```
 
+**NOTE**: **Always use latest release, older versions have bugs in running binary version of Hascal.**
+
 ***Now your Hascal compiler is ready to use in `src/dist` folder, you can add it to `$PATH`.***
