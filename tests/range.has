@@ -1,0 +1,7 @@
+function main(): int {
+    // prints 1 to 10
+    for i in range(1,11){
+        print(i)
+    }
+    return 0
+}
