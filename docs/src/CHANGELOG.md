@@ -4,6 +4,16 @@
 <summary>v1.4.0</summary>
 
 #### New features
+- add builtin range function
+```typescript
+function main(): int {
+    // prints 1 to 10
+    for i in range(1,11){
+        print(i)
+    }
+    return 0
+}
+```
 - add `asin`, `acos`, `asinh`, `acosh`, `exp`, `frexpr`, `ldexp`, `log`, `log10`, `fdim`, `sqrt`, `ceil`, `floor`, `NaN`, `max`, `min` functions to `math` library, [see documentation](https://hascal.github.io/docs/latest/stdlib/math.html).
 - Showing error for overloading function's return type.
 
@@ -11,6 +21,7 @@
 - Speedup parsing and compiling
 
 #### Bug fixes
+- fix passing list to `for in` statement
 
 #### Removed
 

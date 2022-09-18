@@ -216,6 +216,12 @@ class Parser(Parser):
     def for_stmt(self, p):
         return ("for", p.NAME, p.name[0], p.in_block, p.lineno)
 
+    # for <name> in <expr>{
+    #   <in_block>
+    # }
+    @_("FOR NAME IN expr LBC in_block RBC")
+    def for_stmt(self, p):
+        return ("for_expr", p.NAME, p.expr, p.in_block, p.lineno)
     # -----------------------------------
     @_("while_stmt")
     def in_statement(self, p):

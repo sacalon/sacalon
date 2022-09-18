@@ -283,6 +283,33 @@ void __hascal__exit(int code){
 	exit(code);
 }
 
+std::vector<int> __hascal__range(int start, int stop, int step)
+{
+  	if (step == 0){
+		__hascal__panic("HascalError: step for range must be non-zero");
+	}
+
+	std::vector<int> result;
+	int i = start;
+	while ((step > 0) ? (i < stop) : (i > stop))
+	{
+		result.push_back(i);
+		i += step;
+	}
+
+	return result;
+}
+
+std::vector<int> __hascal__range(int start, int stop)
+{
+ 	return __hascal__range(start, stop, 1);
+}
+
+std::vector<int> __hascal__range(int stop)
+{
+	return __hascal__range(0, stop, 1);
+}
+
 // builtin assert()
 #define __hascal__assert(cond) if(!(cond)){throw HascalException("Assertion failed: " #cond);}
 

@@ -89,6 +89,18 @@ class Generator(object):
                     Function("assert", {"cond": "bool", "err_msg": "string"}, self.types["void"]),
                     Function("assert", {"cond": "bool",}, self.types["void"]),
                 ],
+                "range" : [
+                    Function("range",{"stop":self.types["int"]},Array(copy.deepcopy(self.types["int"]))),
+                    Function("range",{
+                        "start":self.types["int"],
+                        "stop":self.types["int"]
+                    },Array(copy.deepcopy(self.types["int"]))),
+                    Function("range",{
+                        "start":self.types["int"],
+                        "stop":self.types["int"],
+                        "step":self.types["int"]
+                    },Array(copy.deepcopy(self.types["int"]))),
+                ]
             }
         else :
             self.funcs = { }
@@ -1344,6 +1356,39 @@ class Generator(object):
 
             expr = {
                 "expr": "for(auto __hascal__%s : __hascal__%s){\n%s\n}\n" % (_name, _name2, res),
+                "type": "",
+            }
+            return expr
+        
+        if node[0] == "for_expr":
+            _name = node[1]
+            _expr = self.walk(node[2])
+            _line = node[4]
+            res = ""
+            current_vars = self.vars.copy()
+            scope_not_deleted_vars = copy.deepcopy(self.scope_not_deleted_vars)
+            top_scope_not_deleted_vars = copy.deepcopy(self.top_scope_not_deleted_vars)
+            
+            self.top_scope_not_deleted_vars = copy.deepcopy(self.scope_not_deleted_vars)
+
+            if not isinstance(_expr["type"], Array):
+                type_name = _expr["type"].get_name_for_error()
+                HascalError(f"'{type_name}' is not iterable:{_line}",filename=self.filename)
+            elif _expr.get("empty_list",False):
+                HascalError(f"Cannot iterate empty list:{_line}",filename=self.filename)
+            
+            self.vars[_name] = Var(_name, _expr["type"].type_obj)
+            body = self.walk(node[3])
+
+            for e in body:
+                res += e["expr"]
+            
+            self.vars = current_vars
+            self.scope_not_deleted_vars = scope_not_deleted_vars
+            self.top_scope_not_deleted_vars = top_scope_not_deleted_vars
+
+            expr = {
+                "expr": "for(auto __hascal__%s : %s){\n%s\n}\n" % (_name, _expr["expr"], res),
                 "type": "",
             }
             return expr
