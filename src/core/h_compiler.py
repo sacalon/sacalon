@@ -1007,6 +1007,7 @@ class Generator(object):
                 _return_type != "__hascal__void"
                 and len(_expr) != 0
                 and _expr[-1].get("return") != True
+                and _name != 'main'
             ):
                 HascalError(
                     f"Function '{_name}' should return a value at end of function block:{_line}",filename=self.filename
