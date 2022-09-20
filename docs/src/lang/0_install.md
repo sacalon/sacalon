@@ -5,6 +5,12 @@ Requirments :
 - `libcurl`,`libssl`,`libcrypt`
 
 *Nix :
+You can use the `hascal.sh` script to automate the process of installing and adding hascal to path:
+```bash
+chmod +x ./hascal.sh
+bash ./hascal.sh
+```
+Alternatively:
 ```bash
 $ git clone https://github.com/hascal/hascal.git
 $ cd hascal
@@ -27,4 +33,4 @@ Windows :
 
 **NOTE**: **Always use latest release, older versions have bugs in running binary version of Hascal.**
 
-***Now your Hascal compiler is ready to use in `src/dist` folder, you can add it to `$PATH`.***
+***Now your Hascal compiler is ready to use in `./dist` folder, you can add it to `$PATH`.***
