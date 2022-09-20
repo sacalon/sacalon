@@ -7,6 +7,8 @@ Requirments :
 *Nix :
 You can use the `hascal.sh` script to automate the process of installing and adding hascal to path:
 ```bash
+git clone https://github.com/hascal/hascal.git
+cd hascal/
 chmod +x ./hascal.sh
 bash ./hascal.sh
 ```
