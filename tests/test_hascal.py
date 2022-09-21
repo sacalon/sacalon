@@ -38,6 +38,7 @@ if not hascal_path.exists():
         "struct_inheritance.has",
         "test.has",
         "typeof.has",
+        "utf8.has"
         # "fail/incomplete_type.has",
         # "fail/op_error_on_string.has",
         # "fail/return_at_end.has",

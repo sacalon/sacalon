@@ -68,7 +68,7 @@ class Lexer(Lexer):
     ignore_comment_slash = r"//.*"
     ignore_multiline_comment_slash = r"\/\*((?!\*\/)[^\r\n])*[\r\n]((?!\*\/)[\s\S\r\n])*\*\/"
 
-    NAME = r"[a-zA-Z_][a-zA-Z0-9_]*"
+    NAME = r"\w+"
     NUMBER = r"\d+"
 
     PLUS = r"\+"
@@ -156,5 +156,5 @@ class Lexer(Lexer):
         self.lineno += t.value.count("\n")
 
     def error(self, t):
-        HascalError("Illegal character '%s':%s" % (t.value[0], t.lineno))
+        HascalError("Illegal character '%s':%s" % (t.value, t.lineno))
         exit(1)

@@ -1,0 +1,12 @@
+
+function main() : int {
+    var العربية = "Arabic"
+    var 日本語 = "China"
+    var فارسی = "Persian"
+    var Русский = "Russia"
+
+    print(العربية)
+    print(日本語)
+    print(فارسی)
+    print(Русский)
+}
