@@ -4,7 +4,7 @@
 - js backend
 - lambdas :
 ```typescript
-var mythread = thread(@(x:int,y:int){
+var mythread = thread(function(x:int,y:int){
     print(x*y)
 })
 ```
