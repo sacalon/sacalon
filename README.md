@@ -89,7 +89,7 @@ You can also join the Hascal community on [Gitter](https://gitter.im/hascal/comm
 ## License
 
 The compiler and standard libraries licensed under the **"3-Clause BSD License"**,
-Read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more information.
+read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more information.
 
 ## About
 
