@@ -1,14 +1,14 @@
 import platform
 from sys import exit
 
-HASCAL_COMPILER_VERSION = "1.4.0"
+HASCAL_COMPILER_VERSION = "1.4.1"
 HASCAL_GITHUB_REPO = "https://github.com/hascal/hascal"
 
 
 def help_all():
     output_message = [
         f"Hascal Compiler {HASCAL_COMPILER_VERSION} {str(platform.system()).lower()}/{str(platform.machine()).lower()}",
-        "Copyright (c) 2019-2022 Hascal Foundation,",
+        "Copyright (c) 2019-2023 Hascal Foundation,",
         "All rights reserved.",
         "\nEnter following command to compile a Hascal program :",
         "\thascal <inputfile.has> [output file name]",
@@ -29,7 +29,7 @@ def help_all():
 def help_short():
     output_message = [
         f"Hascal Compiler {HASCAL_COMPILER_VERSION} {str(platform.system()).lower()}/{str(platform.machine()).lower()}",
-        "Copyright (c) 2019-2022 Hascal Foundation,",
+        "Copyright (c) 2019-2023 Hascal Foundation,",
         "All rights reserved.",
         "\nEnter following command to compile a Hascal program :",
         "\thascal <inputfile.has> [output file name]",
