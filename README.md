@@ -29,7 +29,7 @@
 - [x] Multi-paradigm
 - [x] Null safety by default
 - [x] Fast and powerful
-- [x] Inspired by Swift and Hascal was originally based on the good ideas of the Pascal language.
+- [x] Inspired by Swift and Pascal(Hascal is based on the good ideas of the Pascal language).
 - [x] Manual memory management
 - [x] Compiles to C++
 - [x] Compatible with C\C++\Obj-C
@@ -89,11 +89,11 @@ You can also join the Hascal community on [Gitter](https://gitter.im/hascal/comm
 ## License
 
 The compiler and standard libraries licensed under the **"3-Clause BSD License"**,
-Read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more information.
+read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more information.
 
 ## About
 
-Copyright © 2019-2022 **Hascal Foundation**, \
+Copyright © 2019-2023 **Hascal Foundation**, \
 all rights reserved.
 
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
