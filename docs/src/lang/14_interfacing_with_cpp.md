@@ -9,7 +9,7 @@ cuse 'int main(){printf("%d",1);return 0;}'
 // output : 1
 ```
 
-Or you can use multiline c++ code, like following:
+Or you can use multiline c++ code, like following example:
 ```typescript
 cuse """
 #include <cstdio>
