@@ -39,10 +39,11 @@ See the example below:
 
 `add.cc` :
 ```cpp
-void cpp_print(int x){
+void __hascal__cpp_print(int x){
     printf("%d",x);
 }
 ```
+> add `__hascal__` to your C++ functions, structs name. Hascal transpiles to C++ and it adds `__hascal__` prefix to your C++ names.
 
 `add.hpp` :
 ```cpp
@@ -63,4 +64,25 @@ function main() : int {
 
 Also you can put the C++ files in a folder and rename they to `_.cc` and `_.hpp`.
 
-**Note that do'nt include local headers in `*.hpp` file.**
+**Note that don't include local headers in `*.hpp` file.**
+
+## Accessing to values and types in inline C++ code
+You can access to Hascal's variable and types in inline C++ codes in Hascal by adding `__hascal__` prefix to a name, for example:
+`main.has`:
+```typescript
+function add(a:int,b:int){
+    cuse """
+        std::cout << a + b;
+    """
+}
+```
+
+you can return a value in inline C++ codes by returning a meaningless value with same type as return type of the function(it may be ridiculous, we are currently working to improve it):
+```typescript
+function add(a:int,b:int){
+    cuse """
+        return a + b;
+    """
+    return 0 // return a value with same type as return type of the function
+}
+```
