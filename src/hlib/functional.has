@@ -58,21 +58,21 @@ function notEqual(a:float, b:float): bool {
     return false
 }
 
-function _and(a:bool, b:bool): bool {
+function and_(a:bool, b:bool): bool {
     if (a and b) {
         return true
     }
     return false
 }
 
-function _or(a:bool, b:bool): bool {
+function or_(a:bool, b:bool): bool {
     if (a or b) {
         return true
     }
     return false
 }
 
-function _not(a:bool): bool {
+function not_(a:bool): bool {
     if (not a) {
         return true
     }
