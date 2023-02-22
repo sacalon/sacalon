@@ -1,6 +1,28 @@
 # Hascal's Changelog
 
 <details>
+<summary>v1.4.2</summary>
+
+#### New features
+
+#### Changes
+- observe [Hasca's coding style](https://hascal.github.io/style.html) in libraries
+
+#### Bug fixes
+
+#### Removed
+
+</details>
+
+<details>
+<summary>v1.4.1</summary>
+
+#### Bug fixes
+- No errors when main doesn't return anything #67 (by @mehanalavimajd )
+
+</details>
+
+<details>
 <summary>v1.4.0</summary>
 
 #### New features
