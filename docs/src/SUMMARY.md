@@ -23,6 +23,7 @@
 
 ---
 
+- [Standard Library Documentation](https://hascal.github.io/docs/latest/stdlib/index.html)
 - [Package Manager Documentation](./hpm.md)
 - [IDE Integration](./ide.md)
 - [Roadmap](./ROADMAP.md)
