@@ -34,7 +34,7 @@ greater-than-or-equal-to comparison.
 ## `notEqual(a:float, b:float): bool`
 non-equality comparison.
 
-## `_and(a:bool, b:bool): bool`
+## `and_(a:bool, b:bool): bool`
 Implements `and` operator.
 
 Example(without `functional`) :
@@ -46,12 +46,12 @@ if a == b and a == c {
 
 Example(with `functional`) :
 ```typescript
-if(_and(a == b,a == c)) {
+if(and_(a == b,a == c)) {
     // ...
 }
 ```
 
-## `_or(a:bool, b:bool): bool`
+## `or_(a:bool, b:bool): bool`
 Implements `or` operator.
 
 Example(without `functional`) :
@@ -63,12 +63,12 @@ if a == b or a == c {
 
 Example(with `functional`) :
 ```typescript
-if(if_or(a == b,a == c)) {
+if(or_(a == b,a == c)) {
     // ...
 }
 ```
 
-## `_not(a:bool): bool`
+## `not_(a:bool): bool`
 Return negation of `a`.
 
 ## `ifThenElse(a:bool, b:float, c:float): float`
