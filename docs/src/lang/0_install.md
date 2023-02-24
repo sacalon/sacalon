@@ -23,4 +23,4 @@ bash ./hascal.sh
 ```
 ***Now your Hascal compiler is ready to use in `dist` folder, you can add it to `$PATH`.***
 
-**NOTE**: **The latest version of Hascal should always be used, older versions have bugs when running binary versions of Hascal.**
+**NOTE**: **The latest version of Hascal should always be used. Old versions have bugs when running binary versions of Hascal.**
