@@ -1,7 +1,8 @@
 # Overview
 
 ## Introduction
-[Hascal](https://hascal.github.io) is a general-purpose open source programming language that makes it easy to build simple,optimal, reliable, and efficient software. More features of Hascal :
+
+**[Hascal](https://hascal.github.io)** is a general purpose and open source programming language designed to build optimal, maintainable, reliable, and efficient software. More features of Hascal :
 
 - [x] Easy to use and easy to learn
 - [x] Multi-paradigm

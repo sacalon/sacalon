@@ -1,5 +1,5 @@
 # Hello World!
-Now that you have successfully installed Haskall, let's write our first program with it. You will write a program that prints `Hello World!` on the terminal.
+Now that you have successfully installed Hascal, let's write our first program with it. You will write a program that prints `Hello World!` on the terminal.
 
 ## Creating a project directory
 You can wite your hascal programs every where but We suggest that you create a directory for your project.
