@@ -23,7 +23,7 @@
 
 > **NOTES:**
 > - Hascal is still in the very early stages of development.
-> - Hascal pronounces like "Pascal".
+> - Hascal is pronounced like "Pascal".
 
 ## Features
 
