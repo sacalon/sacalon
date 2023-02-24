@@ -9,11 +9,13 @@
   [Changelog](docs/src/CHANGELOG.md) |
   [Roadmap](docs/src/ROADMAP.md)
   
-  <!-- [AUR Package](https://aur.archlinux.org/packages/hascal-git) -->
+  <!-- [AUR Package](https://aur.archlinux.org/packages/hascal-git)
+  [![](https://img.shields.io/aur/version/hascal-git?label=AUR%20Package&logo=linux)](https://aur.archlinux.org/packages/hascal-git)
+  -->
   [![](https://img.shields.io/github/v/tag/hascal/hascal)](https://github.com/hascal/hascal/releases)
   [![Hascal Discord](https://img.shields.io/discord/932745959190978683?color=blue&label=Discord&logo=discord&logoColor=green)](https://discord.gg/rg4T2zBmyv)
   [![](https://img.shields.io/gitter/room/hascal/hascal?logo=gitter)](https://gitter.im/hascal/community)
-  [![](https://img.shields.io/aur/version/hascal-git?label=AUR%20Package&logo=linux)](https://aur.archlinux.org/packages/hascal-git)
+  
 
 </div>
 
