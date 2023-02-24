@@ -89,9 +89,7 @@ You can also join the Hascal community on [Gitter](https://gitter.im/hascal/comm
 <!-- [![graph](https://contrib.rocks/image?repo=hascal/hascal)](https://github.com/hascal/hascal/graphs/contributors) -->
 
 ## License
-
-The compiler and standard libraries licensed under the **"3-Clause BSD License"**,
-read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more information.
+The compiler and standard libraries are licensed under the **"3-Clause BSD License"**. Read the [License](https://github.com/hascal/hascal/blob/main/LICENSE) for more information.
 
 ## About
 
