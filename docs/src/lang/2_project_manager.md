@@ -1,5 +1,5 @@
 # Project Manager
-Hascal has a builtin build system and project manager. This tool builds and runs your project, installs dependencies.
+Hascal has a builtin build system and project manager. This tool builds and runs your project, and installs dependencies.
 
 ## Creating a new project
 Let's create a new project and compare it with the Hello World example in previous chapter.
