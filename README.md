@@ -1,5 +1,5 @@
 <div align="center">
-  <img style="text-align:center;border-radius:40%;" src="logo.jpeg" height="128px" width="128px">
+  <img style="text-align:center;border-radius:50%;" src="logo.jpeg" height="128px" width="128px">
 
   # The Hascal Programming Language
 
