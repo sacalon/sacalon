@@ -1,11 +1,11 @@
 <div align="center">
-  <img style="text-align:center" src="hascal-logo.png" height="128px" width="128px">
+  <img style="text-align:center;border-radius:40%;" src="logo.jpeg" height="128px" width="128px">
 
   # The Hascal Programming Language
 
-  [Website](https://hascal.github.io) |
-  [Docs](https://hascal.github.io/docs/latest) |
-  [Coding Style](https://hascal.github.io/style.html) |
+  [Website](https://sacalon-lang.github.io) |
+  [Docs](https://sacalon-lang.github.io/docs/latest) |
+  [Coding Style](https://sacalon-lang.github.io/style.html) |
   [Changelog](docs/src/CHANGELOG.md) |
   [Roadmap](docs/src/ROADMAP.md)
   
@@ -13,17 +13,16 @@
   [![](https://img.shields.io/aur/version/hascal-git?label=AUR%20Package&logo=linux)](https://aur.archlinux.org/packages/hascal-git)
   -->
   [![](https://img.shields.io/github/v/tag/hascal/hascal)](https://github.com/hascal/hascal/releases)
-  [![Hascal Discord](https://img.shields.io/discord/932745959190978683?color=blue&label=Discord&logo=discord&logoColor=green)](https://discord.gg/rg4T2zBmyv)
+  [![Sacalon Discord](https://img.shields.io/discord/932745959190978683?color=blue&label=Discord&logo=discord&logoColor=green)](https://discord.gg/rg4T2zBmyv)
   [![](https://img.shields.io/gitter/room/hascal/hascal?logo=gitter)](https://gitter.im/hascal/community)
   
 
 </div>
 
-**Hascal** is a general purpose and open source programming language designed to build optimal, maintainable, reliable, and efficient software.
+**Sacalon** is a general purpose and open source programming language designed to build optimal, maintainable, reliable, and efficient software.
 
 > **NOTES:**
-> - Hascal is still in the very early stages of development.
-> - Hascal is pronounced like "Pascal".
+> - Sacalon is still in the very early stages of development.
 
 ## Features
 
@@ -35,7 +34,7 @@
 - [x] Manual memory management
 - [x] Compiles to C++
 - [x] Compatible with C\C++\Obj-C
-- [x] [Builtin compile-time FFI system](https://hascal.github.io/docs/latest/lang/14_interfacing_with_cpp.html)
+- [x] [Builtin compile-time FFI system](https://sacalon-lang.github.io/docs/latest/lang/14_interfacing_with_cpp.html)
 - [x] Built-in HTTP Library
 
 ## Examples
@@ -76,7 +75,7 @@ function main() : int {
 
 ## Documentation
 
-> You can find Hascal's documentation, [Here](https://hascal.github.io/docs/latest).
+> You can find Hascal's documentation, [Here](https://sacalon-lang.github.io/docs/latest).
 
 ## Contributions
 

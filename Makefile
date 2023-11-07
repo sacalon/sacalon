@@ -1,4 +1,4 @@
-# Makefile for Hascal
+# Makefile for Sacalon
 clean:
 	rm -rf dist build
 clean-windows:
@@ -13,15 +13,15 @@ deps-windows:
 	pip --version
 	pip install -r requirements.txt
 build: deps
-	pyinstaller --add-data src/hlib:hlib "src/hascal.py" --name "hascal" --noconfirm --onefile --console
+	pyinstaller --add-data src/hlib:hlib "src/sacalon.py" --name "sacalon" --noconfirm --onefile --console
 	cp -r src/hlib dist/
 	cp -r examples/ dist/
 windows: deps-windows clean-windows
-	pyinstaller --add-data src\hlib;hlib "src\hascal.py" --name "hascal" --noconfirm --onefile --console
+	pyinstaller --add-data src\hlib;hlib "src\sacalon.py" --name "sacalon" --noconfirm --onefile --console
 	xcopy src\hlib dist\hlib /E /H /C /I
 	xcopy examples dist\examples /E /H /C /I
 path:
-	cp src/dist/hascal usr/local/bin/hascal
+	cp dist/sacalon usr/local/bin/sacalon
 tests:
 	cd tests && $(MAKE) tests && cd ..
 
