@@ -5,7 +5,7 @@ a = Analysis(
     ['src/sacalon.py'],
     pathex=[],
     binaries=[],
-    datas=[('src/hlib', 'hlib')],
+    datas=[('src/salivan', 'salivan')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

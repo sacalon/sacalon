@@ -1,4 +1,4 @@
-# Hascal Standard Library
+# Sacalon Standard Library
 
 - [Built-in Functions](#built-in-functions)
 - [`file`](#file)
@@ -13,21 +13,21 @@
 - [`crypto.sha256`](#crypto-sha256)
 
 ## Built-in functions 
-- `print(...)` : Standard Hascal's print function
-- `ReadStr()` : Standard Hascal's read string function
-- `ReadInt()` : Standard Hascal's read integer function
-- `ReadFloat()` : Standard Hascal's read float function
-- `ReadBool()` : Standard Hascal's read boolean function
-- `ReadChar()` : Standard Hascal's read character function
-- `to_int(val:T)` : Standard Hascal's convert to integer function
-- `to_float(val:T)` : Standard Hascal's convert to float function
-- `to_bool(val:T)` : Standard Hascal's convert to boolean function
-- `to_char(val:T)` : Standard Hascal's convert to character function
-- `to_string(val:T)` : Standard Hascal's convert to string function
-- `exit(exit_code:int)` : Standard Hascal's exit function
-- `sizeof(T)` : Standard Hascal's sizeof function
-- `typeof(T)` : Standard Hascal's typeof function
-- `assert(cond:bool)` : Standard Hascal's assert function
+- `print(...)` : Standard Sacalon's print function
+- `ReadStr()` : Standard Sacalon's read string function
+- `ReadInt()` : Standard Sacalon's read integer function
+- `ReadFloat()` : Standard Sacalon's read float function
+- `ReadBool()` : Standard Sacalon's read boolean function
+- `ReadChar()` : Standard Sacalon's read character function
+- `to_int(val:T)` : Standard Sacalon's convert to integer function
+- `to_float(val:T)` : Standard Sacalon's convert to float function
+- `to_bool(val:T)` : Standard Sacalon's convert to boolean function
+- `to_char(val:T)` : Standard Sacalon's convert to character function
+- `to_string(val:T)` : Standard Sacalon's convert to string function
+- `exit(exit_code:int)` : Standard Sacalon's exit function
+- `sizeof(T)` : Standard Sacalon's sizeof function
+- `typeof(T)` : Standard Sacalon's typeof function
+- `assert(cond:bool)` : Standard Sacalon's assert function
 
 ## `file`
 - `read_file(file_name:string) : string` : Read a file and return its content
@@ -92,7 +92,7 @@ HTTP client-server library
 - `post(url:string,post_data:string):string` : post content to given url
 - `download(url:string,path:string):bool` : download and save a url to storage
 - `upload(url:string,path:string):bool` : upload a file to a url
-[See Example for http library](https://github.com/hascal/hascal/blob/main/examples/net.has)
+[See Example for http library](https://github.com/sacalon-lang/sacalon/blob/main/examples/net.has)
 
 ## `random`
 Random number generator

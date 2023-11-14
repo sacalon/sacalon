@@ -31,7 +31,7 @@ system("gcc main.c")
 ```
 
 ## `compiler_name() : string`
-Returns Hascal C\C++ compiler name.
+Returns Sacalon C\C++ compiler name.
 
 | Compiler      | `compiler_name()` output  | 
 | :------------- | :----------: | 

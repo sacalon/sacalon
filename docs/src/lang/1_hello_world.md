@@ -1,8 +1,8 @@
 # Hello World!
-Now that you have successfully installed Hascal, let's write our first program with it. You will write a program that prints `Hello World!` on the terminal.
+Now that you have successfully installed Sacalon, let's write our first program with it. You will write a program that prints `Hello World!` on the terminal.
 
 ## Creating a project directory
-You can write your Hascal programs every where but, we suggest that you create a directory for your project.
+You can write your Sacalon programs every where but, we suggest that you create a directory for your project.
 
 
 At first, create a directory in your home directory(or anywhere else):
@@ -12,9 +12,9 @@ cd hello_wrold
 ```
 
 ## Writing the code
-Next make a new file and name it `main.has`. Hascal files should end with `.has` extension.
+Next make a new file and name it `main.has`. Sacalon files should end with `.has` extension.
 
-Now open your code editor (If you are using `vscode` install hascal extension for better coding from [this link](https://github.com/hascal/vscode)) and write the following code in `main.has` :
+Now open your code editor (If you are using `vscode` install sacalon extension for better coding from [this link](https://github.com/sacalon-lang/vscode)) and write the following code in `main.has` :
 ```typescript
 function main() : int {
     print("Hello World!")
@@ -23,7 +23,7 @@ function main() : int {
 ```
 Save the file, and return to the terminal and enter the following command to build your program :
 ```
-hascal main.has
+sacalon main.has
 ```
 
 Now run the generated excutable file :
@@ -37,7 +37,7 @@ $ .\main.exe
 Hello World!
 ```
 
-Congratulations - you just wrote and executed your first Hascal program!
+Congratulations - you just wrote and executed your first Sacalon program!
 
 ## Reviewing the code
 Let's review our simple program. Here's the first piece of the program:

@@ -10,9 +10,9 @@ var foo = 1
 ```
 
 ### Non nullable and nullable
-Null safety is a feature that allows you to declare that a variable can be null or not null, and Hascal uses this feature to make sure that your code is safe.
+Null safety is a feature that allows you to declare that a variable can be null or not null, and Sacalon uses this feature to make sure that your code is safe.
 
-Hascal's variables and constants are non-nullable by default that means that they cannot be null(`NULL`) and you can't assign `NULL` to them and **you should assign a value to them when you declare them**.
+Sacalon's variables and constants are non-nullable by default that means that they cannot be null(`NULL`) and you can't assign `NULL` to them and **you should assign a value to them when you declare them**.
 
 ```typescript
 var foo : int = 1 // non-nullable

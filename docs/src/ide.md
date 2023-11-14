@@ -1,2 +1,2 @@
 # IDE Integration
-- [Vscode Extension](https://github.com/hascal/vscode)
+- [Vscode Extension](https://github.com/sacalon-lang/vscode)

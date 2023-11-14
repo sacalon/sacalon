@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-**Hascal version:**
+**Sacalon version:**
 
 **OS:**
 

@@ -1,0 +1,11 @@
+cuse """
+#include <regex>
+"""
+
+function regex(regex_string:string ,str:string):bool{
+    cuse """
+    if(std::regex_match(__sacalon__regex_string, std::regex(__sacalon__str) ))
+        return true;
+    """
+    return false
+}

@@ -334,7 +334,7 @@ class Lexer(metaclass=LexerMeta):
 
     def error(self, t):
         raise LexError(
-            f"Hascal : Illegal character {t.value[0]!r} at index {self.index}",
+            f"Sacalon : Illegal character {t.value[0]!r} at index {self.index}",
             t.value,
             self.index,
         )

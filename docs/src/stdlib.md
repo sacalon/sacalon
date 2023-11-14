@@ -1,2 +1,2 @@
 # Standard Library Documentation
-To read Hascal's stdlib go to [this link](https://hascal.github.io/docs/latest/stdlib/index.html).
+To read Sacalon's stdlib go to [this link](https://sacalon-lang.github.io/docs/latest/stdlib/index.html).

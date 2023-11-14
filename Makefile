@@ -13,12 +13,12 @@ deps-windows:
 	pip --version
 	pip install -r requirements.txt
 build: deps
-	pyinstaller --add-data src/hlib:hlib "src/sacalon.py" --name "sacalon" --noconfirm --onefile --console
-	cp -r src/hlib dist/
+	pyinstaller --add-data src/salivan:salivan "src/sacalon.py" --name "sacalon" --noconfirm --onefile --console
+	cp -r src/salivan dist/
 	cp -r examples/ dist/
 windows: deps-windows clean-windows
-	pyinstaller --add-data src\hlib;hlib "src\sacalon.py" --name "sacalon" --noconfirm --onefile --console
-	xcopy src\hlib dist\hlib /E /H /C /I
+	pyinstaller --add-data src\salivan;salivan "src\sacalon.py" --name "sacalon" --noconfirm --onefile --console
+	xcopy src\salivan dist\salivan /E /H /C /I
 	xcopy examples dist\examples /E /H /C /I
 path:
 	cp dist/sacalon usr/local/bin/sacalon

@@ -32,7 +32,7 @@ logging.info(msg="Build complete")
 try:
     path = list(
         (Path(os.path.dirname(os.path.abspath(__file__))) / "../../dist").glob(
-            "hascal*"
+            "sacalon*"
         )
     )[0]
 except IndexError:
@@ -51,11 +51,11 @@ else:
 path = (
     Path(os.path.dirname(os.path.abspath(__file__)))
     / "../../"
-    / path.rename(f"hascal-{name}-{release_name}")
+    / path.rename(f"sacalon-{name}-{release_name}")
 )
 
 gh = Github(api_key)
-repo = gh.get_repo("hascal/hascal")
+repo = gh.get_repo("sacalon-lang/sacalon")
 
 release = repo.get_release(release_name)
 logging.info("statrting Upload build file to release")

@@ -1,0 +1,7 @@
+cuse libcpp.sha256
+
+function generate_sha256(data:string):string {
+    var hash_hex : string?
+    cuse "picosha2::hash256_hex_string(__sacalon__data, __sacalon__hash_hex);"
+    return hash_hex
+}

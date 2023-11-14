@@ -2,7 +2,7 @@
 
 ## Introduction
 
-**[Hascal](https://hascal.github.io)** is a general purpose and open source programming language designed to build optimal, maintainable, reliable, and efficient software. More features of Hascal :
+**[Sacalon](https://sacalon-lang.github.io)** is a general purpose and open source programming language designed to build optimal, maintainable, reliable, and efficient software. More features of Sacalon :
 
 - [x] Easy to use and easy to learn
 - [x] Multi-paradigm
@@ -20,5 +20,5 @@ Standard Library Documentation available [here](./stdlib/index.html).
 ## Contributing
 We welcome contributions of all kinds.
 
-You can contribute to this book by [opening an issue](https://github.com/hascal/hascal/issues/new/choose) or [forking](https://github.com/hascal/hascal/fork) and [sending a pull request](https://github.com/hascal/hascal/compare) to the main Hascal repository.
+You can contribute to this book by [opening an issue](https://github.com/sacalon-lang/sacalon/issues/new/choose) or [forking](https://github.com/sacalon-lang/sacalon/fork) and [sending a pull request](https://github.com/sacalon-lang/sacalon/compare) to the main Sacalon repository.
 Knowing what people use this book for the most helps direct our attention to making those sections the best that they can be. We also want the reference to be as normative as possible, so if you see anything that is wrong, please also file an issue.

@@ -1,7 +1,7 @@
 # Memory management
-Memory management is a way to manage the memory of your program. Hascal use manual memory management because it is used in most performance-critical applications like games,OSes, embedded systems, etc.
+Memory management is a way to manage the memory of your program. Sacalon use manual memory management because it is used in most performance-critical applications like games,OSes, embedded systems, etc.
 
-Hascal uses `new` and `delete` keywords to manage memory manually.
+Sacalon uses `new` and `delete` keywords to manage memory manually.
 
 ## Allocation
 For allocating memory, you should use the `new` keyword. Note that type of the allocated memory should be pointer or reference type and passed type to `new` keyword should be a 

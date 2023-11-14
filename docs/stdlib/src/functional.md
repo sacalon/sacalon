@@ -1,5 +1,5 @@
 # `functional`
-Functional programming library for Hascal.
+Functional programming library for Sacalon.
 
 ## `plus(a:float, b:float):float`
 Additiona function.

@@ -140,9 +140,9 @@ dmypy.json
 # Files and directories made after install installing in src/
 src/build/
 src/dist/
-src/hascal.spec
+src/sacalon.spec
 
-hascal.spec
+sacalon.spec
 
 examples/
 !examples/**/*.has

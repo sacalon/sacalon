@@ -1,4 +1,4 @@
-# Hascal's Changelog
+# Sacalon's Changelog
 
 <details>
 <summary>v1.4.2</summary>
@@ -6,7 +6,7 @@
 #### New features
 
 #### Changes
-- observe [Hasca's coding style](https://hascal.github.io/style.html) in libraries
+- observe [Hasca's coding style](https://sacalon-lang.github.io/style.html) in libraries
 
 #### Bug fixes
 
@@ -36,7 +36,7 @@ function main(): int {
     return 0
 }
 ```
-- add `asin`, `acos`, `asinh`, `acosh`, `exp`, `frexpr`, `ldexp`, `log`, `log10`, `fdim`, `sqrt`, `ceil`, `floor`, `NaN`, `max`, `min` functions to `math` library, [see documentation](https://hascal.github.io/docs/latest/stdlib/math.html).
+- add `asin`, `acos`, `asinh`, `acosh`, `exp`, `frexpr`, `ldexp`, `log`, `log10`, `fdim`, `sqrt`, `ceil`, `floor`, `NaN`, `max`, `min` functions to `math` library, [see documentation](https://sacalon-lang.github.io/docs/latest/stdlib/math.html).
 - Showing error for overloading function's return type.
 
 #### Changes
@@ -59,7 +59,7 @@ function main(): int {
 - add `round` function to `math` library
 
 #### Changes
-- Hascal relicensed from MIT license to BSD-3-Clause license
+- Sacalon relicensed from MIT license to BSD-3-Clause license
 
 #### Bug fixes
 - fix string subscripting bug
@@ -125,10 +125,10 @@ function main(): int {
 <summary>v1.3.9</summary>
 
 #### New features
-- add `hascal list` command to list all available packages
-- add `hascal init` command to create a new project, that generates `config.json`, `.gitignore` and `src/app.has` files
-- add `hascal build` command to build project
-- add `hascal run` command to run project
+- add `sacalon list` command to list all available packages
+- add `sacalon init` command to create a new project, that generates `config.json`, `.gitignore` and `src/app.has` files
+- add `sacalon build` command to build project
+- add `sacalon run` command to run project
 - add `string_reverse(str:string)` function to `strings` module
 - add `assert` function to runtime library
 - add `no_std` compiler option
@@ -200,7 +200,7 @@ function g(func:Function[int]int): int {
     return func(1)
 }
 ```
-- add static variables, [See this example](https://github.com/hascal/hascal/blob/main/tests/static.has)
+- add static variables, [See this example](https://github.com/sacalon-lang/sacalon/blob/main/tests/static.has)
 - add `only_compile` config option
 
 #### Changes
@@ -348,7 +348,7 @@ struct bar {
 <summary>v1.3.4</summary>
   
 #### New features
-- compiler option : now can generate c++ code from hascal code with `c++_code : 1` in `config.json` file
+- compiler option : now can generate c++ code from sacalon code with `c++_code : 1` in `config.json` file
 - use `cuse` keyword to include c++ files.
 
 #### Bug fixes

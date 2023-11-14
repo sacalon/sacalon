@@ -1,6 +1,0 @@
-use testpkg
-
-function main(): int {
-    foo()
-    return 0
-}

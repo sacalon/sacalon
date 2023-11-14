@@ -1,5 +1,5 @@
 # Configure the compiler
-You can use `config.json` file to configure your Hascal compiler.
+You can use `config.json` file to configure your Sacalon compiler.
 
 The following configuration options are available:
 - `filename` : your main file name, if you set it, you will no longer need to pass the file name to the compiler.

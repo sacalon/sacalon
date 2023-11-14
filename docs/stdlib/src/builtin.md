@@ -1,8 +1,8 @@
 # Builtin Functions
-Hascal builtin functions is a part of Hascal's runtime library that link to any Hascal program.
+Sacalon builtin functions is a part of Sacalon's runtime library that link to any Sacalon program.
 
 ## `print(...)`
-Standard Hascal's print function.
+Standard Sacalon's print function.
 
 Example :
 ```typescript
@@ -10,34 +10,34 @@ print("Hello",1,1.0,'a',[1,2,3,4])
 ```
 
 ## `ReadStr() : string`
-Standard Hascal's read string function
+Standard Sacalon's read string function
 
 ## `ReadInt() : int`
-Standard Hascal's read integer function
+Standard Sacalon's read integer function
 
 ## `ReadFloat() : float`
-Standard Hascal's read float function
+Standard Sacalon's read float function
 
 ## `ReadBool() : bool`
-Standard Hascal's read boolean function
+Standard Sacalon's read boolean function
 
 ## `ReadChar() : char`
-Standard Hascal's read character function
+Standard Sacalon's read character function
 
 ## `ReadStr(text:string) : string`
-Standard Hascal's read string function with printing a prompt.
+Standard Sacalon's read string function with printing a prompt.
 
 ## `ReadInt(text:string) : int`
-Standard Hascal's read integer function with printing a prompt.
+Standard Sacalon's read integer function with printing a prompt.
 
 ## `ReadFloat(text:string) : float`
-Standard Hascal's read float function with printing a prompt.
+Standard Sacalon's read float function with printing a prompt.
 
 ## `ReadBool(text:string) : bool`
-Standard Hascal's read boolean function with printing a prompt.
+Standard Sacalon's read boolean function with printing a prompt.
 
 ## `ReadChar(text:string) : char`
-Standard Hascal's read character function with printing a prompt.
+Standard Sacalon's read character function with printing a prompt.
 
 ## `exit(exit_code:int)`
 Exit program with an `exit_code`.

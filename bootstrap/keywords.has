@@ -1,6 +1,6 @@
 // check if an identifier is a reserved word
 function check_keyword(str:string):bool{
-    var hascal_keyword = [
+    var sacalon_keyword = [
         "var","const",
         "use","local","cuse",
         "int","float","string","bool","char","void","Function","static",
@@ -12,7 +12,7 @@ function check_keyword(str:string):bool{
         "new","delete"
     ]
 
-    for keyword in hascal_keyword {
+    for keyword in sacalon_keyword {
         if keyword == str {
             return true
         }

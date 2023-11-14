@@ -3,22 +3,22 @@ use os
 var VERSION = "1.4.0"
 
 function show_short_help(){
-    print(format("Hascal Compiler v{} {}/{}",VERSION,os_name(),arch()))
-    print("Copyright (c) 2019-2022 Hascal Foundation,")
+    print(format("Sacalon Compiler v{} {}/{}",VERSION,os_name(),arch()))
+    print("Copyright (c) 2019-2022 Sacalon Foundation,")
     print("All rights reserved.")
-    print("\nEnter following command to compile a Hascal program :")
-    print("hascal <inputfile.has> [output file name]")
+    print("\nEnter following command to compile a Sacalon program :")
+    print("sacalon <inputfile.has> [output file name]")
     print("to show other commands enter following command :")
-    print("\thascal help")
+    print("\tsacalon help")
     exit(0)
 }
 
 function show_long_help(){
-    print(format("Hascal Compiler v{} {}/{}",VERSION,os_name(),arch()))
-    print("Copyright (c) 2019-2022 Hascal Foundation,")
+    print(format("Sacalon Compiler v{} {}/{}",VERSION,os_name(),arch()))
+    print("Copyright (c) 2019-2022 Sacalon Foundation,")
     print("All rights reserved.")
-    print("\nEnter following command to compile a Hascal program :")
-    print("hascal <inputfile.has> [output file name]")
+    print("\nEnter following command to compile a Sacalon program :")
+    print("sacalon <inputfile.has> [output file name]")
     print("other commands :")
     print("\thelp: show help")
     print("\tversion: show version")
@@ -28,6 +28,6 @@ function show_long_help(){
 }
 
 function show_version(){
-    print(format("Hascal Compiler v{} {}/{}",VERSION,os_name(),arch()))
+    print(format("Sacalon Compiler v{} {}/{}",VERSION,os_name(),arch()))
     exit(0)
 }

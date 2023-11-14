@@ -1,5 +1,5 @@
 # Project Manager
-Hascal has a builtin build system and project manager. This tool builds and runs your project, and installs dependencies.
+Sacalon has a builtin build system and project manager. This tool builds and runs your project, and installs dependencies.
 
 ## Creating a new project
 Let's create a new project and compare it with the Hello World example in previous chapter.
@@ -12,10 +12,10 @@ $ cd hello_world_2
 
 Now we create a new project with following command :
 ```
-$ hascal init
+$ sacalon init
 ```
 
-After running above command, you’ll see Hascal has generated two files and one directory for us: a `config.json` file, a `.gitignore` file and a `src` directory with a `app.has` file inside.
+After running above command, you’ll see Sacalon has generated two files and one directory for us: a `config.json` file, a `.gitignore` file and a `src` directory with a `app.has` file inside.
 
 `config.json` :
 ```json
@@ -35,12 +35,12 @@ function main():int{
 }
 ```
 
-The generated Hascal file contains *Hello World!* program, you can edit it.
+The generated Sacalon file contains *Hello World!* program, you can edit it.
 
 ## Building a project
 You can build the project with following command :
 ```
-$ hascal build
+$ sacalon build
 ```
 
 Excutable file will generate in `build` directory and you can run it with following command :
@@ -51,7 +51,7 @@ $ ./build/app
 ## Running a project
 To run the project, you can use `run` command :
 ```
-$ hascal run
+$ sacalon run
 Hello World!
 ```
 

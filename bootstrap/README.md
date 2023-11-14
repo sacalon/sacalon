@@ -1,1 +1,1 @@
-This directory contains bootstrapped Hascal compiler written in Hascal
+This directory contains bootstrapped Sacalon compiler written in Sacalon

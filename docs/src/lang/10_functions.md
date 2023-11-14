@@ -93,7 +93,7 @@ Hello from bar function!
 ## Function decorators
 Decorator is a way to add some properties to a function and it is used with `@` character + decorator name before function declaration.
 
-List of available decorators in Hascal :
+List of available decorators in Sacalon :
 | Decorator       | Description  |
 | :------------- | :----------: |
 |  `@static_function` | Makes function `static`  | 

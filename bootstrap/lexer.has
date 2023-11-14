@@ -1,6 +1,6 @@
-// The Hascal Lexer
+// The Sacalon Lexer
 //
-// Copyright (c) 2019-2022 Hascal Foundation
+// Copyright (c) 2019-2022 Sacalon Foundation
 // all rights reserved.
 
 use strings

@@ -1,4 +1,4 @@
-# Hascal's Roadmap 
+# Sacalon's Roadmap 
 
 ### Language
 - js backend
@@ -40,8 +40,8 @@ class C : T {
     }
 }
 ```
-- generics [#26](https://github.com/hascal/hascal/issues/26)s
-- rewrite compiler in hascal 
+- generics [#26](https://github.com/sacalon-lang/sacalon/issues/26)s
+- rewrite compiler in sacalon 
 - const correctness
 
 ### Standard Library
