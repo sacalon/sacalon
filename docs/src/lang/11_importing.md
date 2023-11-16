@@ -24,9 +24,9 @@ use crypto.sha256
 ```
 
 ## Creating a module
-For creating a module, you can create a file with the same name as the module and with the extension `.has` and put the module code inside it:
+For creating a module, you can create a file with the same name as the module and with the extension `.sa` and put the module code inside it:
 
-`add.has`:
+`add.sa`:
 
 ```typescript
 function add(x:int, y:int) : int {
@@ -34,7 +34,7 @@ function add(x:int, y:int) : int {
 }
 ```
 
-`main.has`:
+`main.sa`:
 ```typescript
 use add
 
@@ -45,10 +45,10 @@ function main() : int {
 ```
 
 #### Creating foldered modules
-Module files can be placed in a folder, for creating a foldered module you should first create the folder and then create the `_.has` file inside it.
+Module files can be placed in a folder, for creating a foldered module you should first create the folder and then create the `_.sa` file inside it.
 
-The `_.has` file is the main file of the module and compiler will look for it.
-You can also import submodules in `_.has` file.
+The `_.sa` file is the main file of the module and compiler will look for it.
+You can also import submodules in `_.sa` file.
 
-> Note: Any submodule that is not imported in `_.has` file will be ignored.
+> Note: Any submodule that is not imported in `_.sa` file will be ignored.
 > Note: Any submodule can have other submodules.

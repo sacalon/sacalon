@@ -12,9 +12,9 @@ cd hello_wrold
 ```
 
 ## Writing the code
-Next make a new file and name it `main.has`. Sacalon files should end with `.has` extension.
+Next make a new file and name it `main.sa`. Sacalon files should end with `.sa` extension.
 
-Now open your code editor (If you are using `vscode` install sacalon extension for better coding from [this link](https://github.com/sacalon-lang/vscode)) and write the following code in `main.has` :
+Now open your code editor (If you are using `vscode` install sacalon extension for better coding from [this link](https://github.com/sacalon-lang/vscode)) and write the following code in `main.sa` :
 ```typescript
 function main() : int {
     print("Hello World!")
@@ -23,7 +23,7 @@ function main() : int {
 ```
 Save the file, and return to the terminal and enter the following command to build your program :
 ```
-sacalon main.has
+sacalon main.sa
 ```
 
 Now run the generated excutable file :

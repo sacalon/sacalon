@@ -11,7 +11,7 @@ def help_all():
         "Copyright (c) 2019-2023 Sacalon Foundation,",
         "All rights reserved.",
         "\nEnter following command to compile a sacalon program :",
-        "\tsacalon <inputfile.has> [output file name]",
+        "\tsacalon <inputfile.sa> [output file name]",
         "other commands:",
         "\thelp: show help",
         "\tversion : show version",
@@ -32,7 +32,7 @@ def help_short():
         "Copyright (c) 2019-2023 Sacalon Foundation,",
         "All rights reserved.",
         "\nEnter following command to compile a sacalon program :",
-        "\tsacalon <inputfile.has> [output file name]",
+        "\tsacalon <inputfile.sa> [output file name]",
         "to show other commands enter following command :",
         "\tsacalon help",
     ]

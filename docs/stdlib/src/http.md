@@ -27,4 +27,4 @@ upload a file to a url.
 - `path` : path to your file to upload
 
 
-[See example for http library](https://github.com/sacalon-lang/sacalon/blob/main/examples/net.has)
+[See example for http library](https://github.com/sacalon-lang/sacalon/blob/main/examples/net.sa)

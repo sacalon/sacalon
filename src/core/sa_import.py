@@ -23,11 +23,11 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
         final_path = final_path / x
         final_path_local = final_path_local / x
 
-    package_path = final_path / "_.has"
-    package_path_local = final_path_local / "_.has"
+    package_path = final_path / "_.sa"
+    package_path_local = final_path_local / "_.sa"
 
-    final_path = str(final_path) + ".has"
-    final_path_local = str(final_path_local) + ".has"
+    final_path = str(final_path) + ".sa"
+    final_path_local = str(final_path_local) + ".sa"
     final_path2_local = str(Path(filename+".o").parent / Path(final_path_local))
 
     package_path_nested_local = Path(filename+".o").parent / package_path_local
@@ -36,7 +36,7 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
         with open(final_path, "r",encoding="utf-8") as f:
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
-            generator = gen_class(BASE_DIR,filename=filename+".has",imported=imported, imported_funcs=imported_funcs,
+            generator = gen_class(BASE_DIR,filename=filename+".sa",imported=imported, imported_funcs=imported_funcs,
                                     imported_types=imported_types, imported_vars=imported_vars,
                                     imported_consts=imported_consts)
             output_cpp = generator.generate(tree, True)
@@ -49,7 +49,7 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
-            generator = gen_class(BASE_DIR,filename=filename+".has",imported=imported, imported_funcs=imported_funcs,
+            generator = gen_class(BASE_DIR,filename=filename+".sa",imported=imported, imported_funcs=imported_funcs,
                                     imported_types=imported_types, imported_vars=imported_vars,
                                     imported_consts=imported_consts)
             output_cpp = generator.generate(tree, True)
@@ -62,7 +62,7 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
-            generator = gen_class(BASE_DIR,filename=filename+".has",imported=imported, imported_funcs=imported_funcs,
+            generator = gen_class(BASE_DIR,filename=filename+".sa",imported=imported, imported_funcs=imported_funcs,
                                     imported_types=imported_types, imported_vars=imported_vars,
                                     imported_consts=imported_consts)
             output_cpp = generator.generate(tree, True)
@@ -76,7 +76,7 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
-            generator = gen_class(BASE_DIR,filename=filename+"/_.has",imported=imported, imported_funcs=imported_funcs,
+            generator = gen_class(BASE_DIR,filename=filename+"/_.sa",imported=imported, imported_funcs=imported_funcs,
                                     imported_types=imported_types, imported_vars=imported_vars,
                                     imported_consts=imported_consts)
             output_cpp = generator.generate(tree, True)
@@ -89,7 +89,7 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
-            generator = gen_class(BASE_DIR,filename=filename+"/_.has",imported=imported, imported_funcs=imported_funcs,
+            generator = gen_class(BASE_DIR,filename=filename+"/_.sa",imported=imported, imported_funcs=imported_funcs,
                                     imported_types=imported_types, imported_vars=imported_vars,
                                     imported_consts=imported_consts)
             output_cpp = generator.generate(tree, True)
@@ -102,7 +102,7 @@ def use(gen_class, path_, BASE_DIR, filename="",imported=[],
             parser = Parser()
             tree = parser.parse(Lexer().tokenize(f.read()))
 
-            generator = gen_class(BASE_DIR,filename=filename+".has",imported=imported, imported_funcs=imported_funcs,
+            generator = gen_class(BASE_DIR,filename=filename+".sa",imported=imported, imported_funcs=imported_funcs,
                                     imported_types=imported_types, imported_vars=imported_vars,
                                     imported_consts=imported_consts)
             output_cpp = generator.generate(tree, True)

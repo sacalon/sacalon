@@ -15,19 +15,19 @@ Now we create a new project with following command :
 $ sacalon init
 ```
 
-After running above command, you’ll see Sacalon has generated two files and one directory for us: a `config.json` file, a `.gitignore` file and a `src` directory with a `app.has` file inside.
+After running above command, you’ll see Sacalon has generated two files and one directory for us: a `config.json` file, a `.gitignore` file and a `src` directory with a `app.sa` file inside.
 
 `config.json` :
 ```json
 {
-	"filename": "src/app.has", 
+	"filename": "src/app.sa", 
 	"outfile": "build/app", 
 }
 ```
 
 The `filename` field contains your main file that contains your entry function(`main`) and `outfile` field is output path of excutable file.
 
-`src/app.has` :
+`src/app.sa` :
 ```typescript
 function main():int{
 	print("Hello World!")

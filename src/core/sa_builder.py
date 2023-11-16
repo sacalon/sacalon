@@ -90,7 +90,7 @@ class SacalonCompiler(object):
                     for dir in dirs:
                         print(f" - {dir}")
                     for file in files:
-                        if file.endswith(".has"):
+                        if file.endswith(".sa"):
                             print(f" - {file[:-4]}")
             
             elif len(self.argv) == 3 and self.argv[1] == "list" :
@@ -99,7 +99,7 @@ class SacalonCompiler(object):
                     for dir in dirs:
                         print(f" - {dir}")
                     for file in files:
-                        if file.endswith(".has"):
+                        if file.endswith(".sa"):
                             print(f" - {file[:-4]}")
             
             # END : Package Manager
@@ -110,13 +110,13 @@ class SacalonCompiler(object):
             elif self.argv[1] == "init" :
                 with open("config.json","w",encoding="utf-8") as f :
                     f.write(json.dumps({
-                        "filename" : "src/app.has",
+                        "filename" : "src/app.sa",
                         "outfile" : "build/app",
                     }))
 
                 if not isdir("src") :
                     os.mkdir("src")
-                with open("src/app.has","w",encoding="utf-8") as f :
+                with open("src/app.sa","w",encoding="utf-8") as f :
                     f.write("function main():int{\n\tprint(\"Hello World!\")\n\treturn 0\n}")
 
                 with open(".gitignore","w",encoding="utf-8") as f :
@@ -156,9 +156,9 @@ class SacalonCompiler(object):
             
             else:
                 # check file extension
-                if not self.argv[1].endswith(".has"):
+                if not self.argv[1].endswith(".sa"):
                     # show file extension error
-                    SacalonError(f"The specified file is not a sacalon(.has) file")
+                    SacalonError(f"The specified file is not a sacalon(.sa) file")
                 else:
                     self.filename = self.argv[1]
                     self.read_file(self.argv[1])
@@ -200,7 +200,7 @@ class SacalonCompiler(object):
                 if "filename" in config :
                     # check if the filename field points to a Sacalon file
                     if "filename" != self.filename :
-                        if not config["filename"].endswith(".has"):
+                        if not config["filename"].endswith(".sa"):
                             SacalonError(f"The specified file is not a sacalon(.sa) file")
                         self.filename = config["filename"]
                         self.read_file(self.filename)

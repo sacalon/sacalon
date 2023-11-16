@@ -6,7 +6,7 @@
 #### New features
 
 #### Changes
-- observe [Hasca's coding style](https://sacalon-lang.github.io/style.html) in libraries
+- observe [Sacalon's coding style](https://sacalon-lang.github.io/style.html) in libraries
 
 #### Bug fixes
 
@@ -126,7 +126,7 @@ function main(): int {
 
 #### New features
 - add `sacalon list` command to list all available packages
-- add `sacalon init` command to create a new project, that generates `config.json`, `.gitignore` and `src/app.has` files
+- add `sacalon init` command to create a new project, that generates `config.json`, `.gitignore` and `src/app.sa` files
 - add `sacalon build` command to build project
 - add `sacalon run` command to run project
 - add `string_reverse(str:string)` function to `strings` module
@@ -139,7 +139,7 @@ function main(): int {
 - use `sys.exit` instead of `exit` in `src/core/h_help.py`(@mmdbalkhi)
 - fix importing system bugs
 - improve `typeof` builtin function
-<!-- - remove file extension (`.has`) checking #42 -->
+<!-- - remove file extension (`.sa`) checking #42 -->
 
 #### Bug fixes
 - fix assigning `NULL` to arrays and pointers bug, #36.
@@ -200,7 +200,7 @@ function g(func:Function[int]int): int {
     return func(1)
 }
 ```
-- add static variables, [See this example](https://github.com/sacalon-lang/sacalon/blob/main/tests/static.has)
+- add static variables, [See this example](https://github.com/sacalon-lang/sacalon/blob/main/tests/static.sa)
 - add `only_compile` config option
 
 #### Changes

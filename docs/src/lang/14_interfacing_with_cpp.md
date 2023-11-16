@@ -50,7 +50,7 @@ void __sacalon__cpp_print(int x){
 #include <cstdio>
 ```
 
-`main.has` :
+`main.sa` :
 ```typescript
 cuse add 
 
@@ -68,7 +68,7 @@ Also you can put the C++ files in a folder and rename they to `_.cc` and `_.hpp`
 
 ## Accessing to values and types in inline C++ code
 You can access to Sacalon's variable and types in inline C++ codes in Sacalon by adding `__sacalon__` prefix to a name, for example:
-`main.has`:
+`main.sa`:
 ```typescript
 function add(a:int,b:int){
     cuse """
