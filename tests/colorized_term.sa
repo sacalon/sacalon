@@ -1,0 +1,11 @@
+use termcolor
+
+function main(): int {
+    cprint("Hello, world!", "green")
+    cprint("Hello, world!", "blue")
+    cprint("Hello, world!", "red")
+    cprint("Hello, world!", "yellow")
+    cprint("Hello, world!", "magenta")
+    cprint("Hello, world!", "cyan")
+    return 0
+}

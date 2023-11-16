@@ -1,0 +1,6 @@
+function main():int{
+    print("Enter your name :")
+    var x = ReadStr()
+    print("Hi,",x)
+    return 0
+}

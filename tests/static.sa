@@ -1,0 +1,13 @@
+function count(){
+    var x : static int = 0
+    print(x)
+    x = x + 1
+
+}
+
+function main():int{
+    count()
+    count()
+    count()
+    return 0
+}

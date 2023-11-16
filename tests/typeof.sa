@@ -1,0 +1,16 @@
+function main() : int {
+    var a : int?
+    var b : float?
+    var c : bool?
+    var d : string?
+    var e : char?
+    
+    print(typeof(a))
+    print(typeof(b))
+    print(typeof(c))
+    print(typeof(d))
+    print(typeof(e))
+
+
+    return 0
+}

@@ -1,0 +1,28 @@
+struct ptr_struct {
+    var num : int = 0
+    var self : ptr_struct^?
+}
+
+function add(a:int^,b:int^):int{
+    return ^a + ^b
+}
+
+function main():int{
+    var a : int^ = new int(0)
+    ^a = 1
+
+    var b : int^ = new int(0)
+    ^b = 1
+
+    var sum = add(a,b)
+    print(sum)
+    
+    var obj : ptr_struct^?
+    obj.self.self.self.self.num = sum
+    print(obj.self.self.self.self.num)
+
+    var foo : int = 1
+    var bar : int^ = &foo
+    print(^bar)
+    return 0
+}

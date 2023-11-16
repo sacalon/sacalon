@@ -1,0 +1,82 @@
+use os
+
+function main():int {
+    print("cuse.has :")
+    system("python ../src/hascal.py cuse.has")
+
+    print("for_in.has :")
+    system("python ../src/hascal.py for_in.has")
+
+    print("func_overload.has :")
+    system("python ../src/hascal.py func_overload.has")
+
+    print("test.has :")
+    system("python ../src/hascal.py test.has")
+
+    print("format.has :")
+    system("python ../src/hascal.py format.has")
+
+    print("get.has :")
+    system("python ../src/hascal.py get.has")
+
+    print("hello.has :")
+    system("python ../src/hascal.py hello.has")
+
+    print("read_from_stdin.has :")
+    system("python ../src/hascal.py read_from_stdin.has")
+
+    print("regex.has :")
+    system("python ../src/hascal.py regex.has")
+
+    print("linear_regression.has :")
+    system("python ../src/hascal.py linear_regression.has")
+
+    print("cinclude.has :")
+    system("python ../src/hascal.py cinclude.has")
+    
+    print("ptr.has :")
+    system("python ../src/hascal.py ptr.has")
+
+    print("compatible_type.has :")
+    system("python ../src/hascal.py compatible_type.has")
+
+    print("scope.has:")
+    system("python ../src/hascal.py scope.has")
+    
+    print("mem.has:")
+    system("python ../src/hascal.py mem.has")
+    
+    print("path.has:")
+    system("python ../src/hascal.py path.has")
+
+    print("multiline.has:")
+    system("python ../src/hascal.py multiline.has")
+
+    print("func.has:")
+    system("python ../src/hascal.py func.has")
+
+    print("fibonacci.has:")
+    system("python ../src/hascal.py fibonacci.has")
+
+    print("enum.has:")
+    system("python ../src/hascal.py enum.has")
+
+    print("dec.has:")
+    system("python ../src/hascal.py dec.has")
+
+    print("colorized_term.has:")
+    system("python ../src/hascal.py colorized_term.has")
+
+    print("null_in_arth.has:")
+    system("python ../src/hascal.py null_in_arth.has")
+
+    print("funcp.has:")
+    system("python ../src/hascal.py funcp.has")
+
+    print("static.has:")
+    system("python ../src/hascal.py static.has")
+
+    print("typeof.has:")
+    system("python ../src/hascal.py typeof.has")
+    return 0
+}

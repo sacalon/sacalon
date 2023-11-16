@@ -1,0 +1,7 @@
+function foo():int{
+    return 1
+}
+
+function main():int{
+    return 0
+}

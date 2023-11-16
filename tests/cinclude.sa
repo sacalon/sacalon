@@ -1,0 +1,8 @@
+cuse add
+
+function add(a:int,b:int):int // function definition
+
+function main() : int {
+    print(add(1,2))
+    return 0
+}

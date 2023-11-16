@@ -1,0 +1,10 @@
+function main() : int{
+    var x = new int?(1) // nullable variable
+    x = NULL // assign null to nullable variable, OK
+
+    if x == NULL { // use null in arithmetic expression, OK
+        return 1
+    }
+    delete x
+    return 0
+}

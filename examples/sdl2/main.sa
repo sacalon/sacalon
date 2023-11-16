@@ -1,0 +1,28 @@
+// importing our tiny sdl2 wrapper
+use sdl2
+
+function main(): int {
+    // create a window with title "Hello World!" and size 800x600
+    var window = sdl2_new_window("Hello World",800,600)
+
+    // create a event
+    var event : sdl2_event?
+
+    var quit : bool = false
+    while(not quit){
+        // check if user wants to quit
+        while(sdl2_poll_event(event)){
+            // SDL_QUIT = 256
+            if(event.type == 256){
+                quit = true
+            }
+        }
+    }
+
+    // destroy the window
+    sdl2_destroy_window(window)
+
+    // quit sdl2
+    sdl2_quit()
+    return sdl2_exit()
+}
