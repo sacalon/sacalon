@@ -80,7 +80,11 @@ You can contribute to Sacalon by [opening an issue](https://github.com/sacalon-l
 
 You can also join the Sacalon community on [Gitter](https://gitter.im/sacalon/community) or [Discord](https://discord.gg/rg4T2zBmyv) and ask & answer questions.
 
-[See our roadmap](docs/src/ROADMAP.md)
+![Alt](https://repobeats.axiom.co/api/embed/f35044c25fa7a09ff17ef5abd0ffda29de68e142.svg "Repobeats analytics image")
+
+<a href="https://github.com/sacalon-lang/sacalon/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=sacalon-lang/sacalon" />
+</a>
 
 <!-- [![graph](https://contrib.rocks/image?repo=sacalon-lang/sacalon)](https://github.com/sacalon-lang/sacalon/graphs/contributors) -->
 
