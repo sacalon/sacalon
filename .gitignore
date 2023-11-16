@@ -145,18 +145,19 @@ src/sacalon.spec
 sacalon.spec
 
 examples/
-!examples/**/*.has
+!examples/**/*.sa
 !examples/**/*.cc
 !examples/**/*.json
 !examples/**/*.bf
 
 tests/
-!tests/README.md
-!tests/Makefile
-!tests/**/*.has
-!tests/**/*.cc
-!tests/**/*.json
-!tests/**/*.bf
-!tests/**/*.py
+!/tests/README.md
+!/tests/Makefile
+!/tests/**/**.sa
+!/tests/**/*.cc
+!/tests/**/*.hpp
+!/tests/**/*.json
+!/tests/**/*.bf
+!/tests/**/*.py
 
 *.o

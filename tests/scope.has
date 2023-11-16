@@ -1,7 +1,0 @@
-var a : int = 1
-
-function main() : int {
-    var a : int = 2
-    print(a)
-    return a
-}

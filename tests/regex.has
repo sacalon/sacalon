@@ -1,6 +1,0 @@
-use regex
-
-function main(): int {
-    print(regex("subject","(sub)(.*)"))
-    return 0
-}

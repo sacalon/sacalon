@@ -1,8 +1,0 @@
-function main():int {
-    var x : int = 1.1
-    var y : float = x
-    var z : double = y
-    var ch : char = true
-
-    return 0
-}

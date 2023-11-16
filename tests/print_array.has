@@ -1,9 +1,0 @@
-function main() : int {
-    var a : [int] = [1, 2, 3]
-    var b : [string] = ["a", "b", "c"]
-
-    print(a)
-    print(b)
-
-    return 0
-}

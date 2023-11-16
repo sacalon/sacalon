@@ -1,4 +1,0 @@
-cuse "#include <cstdio>"
-cuse """
-int main(){printf("%d",1);return 0;}
-"""
