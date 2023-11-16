@@ -149,15 +149,15 @@ examples/
 !examples/**/*.cc
 !examples/**/*.json
 !examples/**/*.bf
-
+!**/*.sa
 tests/
-!/tests/README.md
-!/tests/Makefile
-!/tests/**/**.sa
-!/tests/**/*.cc
-!/tests/**/*.hpp
-!/tests/**/*.json
-!/tests/**/*.bf
-!/tests/**/*.py
+!tests/README.md
+!tests/Makefile
+!tests/**/**.sa
+!tests/**/*.cc
+!tests/**/*.hpp
+!tests/**/*.json
+!tests/**/*.bf
+!tests/**/*.py
 
 *.o
