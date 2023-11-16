@@ -3,8 +3,8 @@ import shutil
 from os.path import isdir
 
 os.system("mdbook build")
-os.system("cd stdlib & mdbook build & cd ..")
-os.system("cd book & mkdir stdlib & cd ..")
+os.system("cd stdlib && mdbook build & cd ..")
+os.system("cd book && mkdir stdlib & cd ..")
     
 source_dir = './stdlib/book'
 target_dir = './book/stdlib'
