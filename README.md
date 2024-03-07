@@ -3,9 +3,9 @@
 
   # The Sacalon Programming Language
 
-  [Website](https://sacalon-lang.github.io) |
-  [Docs](https://sacalon-lang.github.io/docs/latest) |
-  [Coding Style](https://sacalon-lang.github.io/style.html) |
+  [Website](https://sacalon.github.io) |
+  [Docs](https://sacalon.github.io/docs/latest) |
+  [Coding Style](https://sacalon.github.io/style.html) |
   [Changelog](docs/src/CHANGELOG.md) |
   [Roadmap](docs/src/ROADMAP.md)
   
