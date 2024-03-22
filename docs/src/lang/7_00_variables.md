@@ -16,7 +16,7 @@ Sacalon's variables and constants are non-nullable by default that means that th
 
 ```typescript
 var foo : int = 1 // non-nullable
-var foo_error : int // error : nullable variable must be assigned a value
+var foo_error : int // error : non-nullable variable must be assigned a value
 ```
 
 But you can make variables and constants nullable by adding `?` to their type:
