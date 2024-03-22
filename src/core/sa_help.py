@@ -8,7 +8,7 @@ SACALON_GITHUB_REPO = "https://github.com/sacalon-lang/sacalon"
 def help_all():
     output_message = [
         f"Sacalon Compiler {SACALON_COMPILER_VERSION} {str(platform.system()).lower()}/{str(platform.machine()).lower()}",
-        "Copyright (c) 2019-2023 Sacalon Foundation,",
+        "Copyright (c) 2019-2024 Sacalon Foundation,",
         "All rights reserved.",
         "\nEnter following command to compile a sacalon program :",
         "\tsacalon <inputfile.sa> [output file name]",
@@ -29,7 +29,7 @@ def help_all():
 def help_short():
     output_message = [
         f"Sacalon Compiler {SACALON_COMPILER_VERSION} {str(platform.system()).lower()}/{str(platform.machine()).lower()}",
-        "Copyright (c) 2019-2023 Sacalon Foundation,",
+        "Copyright (c) 2019-2024 Sacalon Foundation,",
         "All rights reserved.",
         "\nEnter following command to compile a sacalon program :",
         "\tsacalon <inputfile.sa> [output file name]",
