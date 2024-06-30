@@ -33,7 +33,7 @@
 - [x] Manual memory management
 - [x] Compiles to C++
 - [x] Compatible with C\C++\Obj-C
-- [x] [Builtin compile-time FFI system](https://sacalon-lang.github.io/docs/latest/lang/14_interfacing_with_cpp.html)
+- [x] [Builtin compile-time FFI system](https://sacalon.github.io/docs/latest/lang/14_interfacing_with_cpp.html)
 - [x] Built-in HTTP Library
 
 ## Examples
@@ -74,7 +74,7 @@ function main() : int {
 
 ## Documentation
 
-> You can find Sacalon's documentation, [Here](https://sacalon-lang.github.io/docs/latest).
+> You can find Sacalon's documentation, [Here](https://sacalon.github.io/docs/latest).
 
 ## Contributions
 
