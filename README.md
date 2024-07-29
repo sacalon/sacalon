@@ -16,12 +16,13 @@
 
 </div>
 
-[![ReadMeSupportPalestine](https://raw.githubusercontent.com/Safouene1/support-palestine-banner/master/banner-project.svg)](https://github.com/Safouene1/support-palestine-banner)
-
 **Sacalon** is a general purpose and open source programming language designed to build optimal, maintainable, reliable, and efficient software.
 
 > [!IMPORTANT]  
 > - Sacalon is still in the very early stages of development.
+
+
+[![ReadMeSupportPalestine](https://raw.githubusercontent.com/Safouene1/support-palestine-banner/master/banner-project.svg)](https://github.com/Safouene1/support-palestine-banner)
 
 ## Features
 
