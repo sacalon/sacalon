@@ -96,7 +96,7 @@ The compiler and standard libraries are licensed under the **"3-Clause BSD Licen
 
 ## About
 
-Copyright © 2019-2024 **Sacalon Foundation**, \
+Copyright © 2019-2025 **Sacalon Foundation**, \
 all rights reserved.
 
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
