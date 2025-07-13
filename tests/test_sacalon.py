@@ -38,6 +38,7 @@ if not sacalon_path.exists():
         "struct_inheritance.sa",
         "test.sa",
         "typeof.sa",
+        "memory.sa",
         "unicode/unicode_identifiers.sa",
         # "fail/incomplete_type.sa",
         # "fail/op_error_on_string.sa",

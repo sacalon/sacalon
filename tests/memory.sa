@@ -1,0 +1,8 @@
+function main(): int {
+    var a = new int(1)
+    var b : int^ = new int(2)
+
+    delete a
+    delete b
+    return 0
+}
