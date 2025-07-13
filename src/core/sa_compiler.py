@@ -13,7 +13,7 @@ class Generator(object):
     LDFLAGS = []
 
     def __init__(self, BASE_DIR, filename="",
-                    imported=[],no_std=False,null_safety=True,
+                    imported=[],no_std=False,
                     imported_funcs={}, imported_types={}, imported_vars={}, imported_consts={}):
         """
         Initialize the compiler
@@ -123,9 +123,6 @@ class Generator(object):
 
         # this variable used to remove conflict between global variables and local variables
         self.scope = False
-
-        # Enable\Disable null safety system(it's enable by default)
-        self.null_safety = null_safety
         
         self.scope_not_deleted_vars = {}
         self.top_scope_not_deleted_vars = {}
