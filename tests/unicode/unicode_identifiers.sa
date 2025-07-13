@@ -1,0 +1,9 @@
+function اصلی(): int {
+	var سلام : int = 1
+	print(سلام)
+	return 0
+}
+
+function main():int{
+	return اصلی()
+}

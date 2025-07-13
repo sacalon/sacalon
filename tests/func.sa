@@ -28,11 +28,11 @@ function main() : int {
     c = ifThenElse(a < b, a, b)
     print("a < b ? a : b:", c)
 
-    if _and(a < b, b < c) {
+    if and_(a < b, b < c) {
         print("a < b && b < c")
     }
 
-    if _or(a < b, b < c) {
+    if or_(a < b, b < c) {
         print("a < b || b < c")
     }
     

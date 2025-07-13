@@ -150,7 +150,6 @@ examples/
 !examples/**/*.json
 !examples/**/*.bf
 !**/*.sa
-tests/
 !tests/README.md
 !tests/Makefile
 !tests/**/*.sa

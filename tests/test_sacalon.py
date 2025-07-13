@@ -3,8 +3,8 @@ import subprocess
 import os
 from pathlib import Path
 
-base_path = Path(os.path.dirname(os.path.abspath(__file__))) / ".."
-sacalon_path = base_path / "dist" / "sacalon"
+base_path = Path(os.path.dirname(os.path.abspath(__file__))).parent
+sacalon_path = base_path / "dist" / "sacalon.exe"
 
 if not sacalon_path.exists():
     pytest.xfail("first build sacalon, then run tests: `make build`")
@@ -38,6 +38,7 @@ if not sacalon_path.exists():
         "struct_inheritance.sa",
         "test.sa",
         "typeof.sa",
+        "unicode/unicode_identifiers.sa",
         # "fail/incomplete_type.sa",
         # "fail/op_error_on_string.sa",
         # "fail/return_at_end.sa",
@@ -51,5 +52,5 @@ if not sacalon_path.exists():
     ],
 )
 def test_sacalon(case):
-    assert subprocess.Popen(f"{sacalon_path} {base_path}/tests/{case}", shell=True).wait() == 0
+    assert subprocess.Popen(f"{sacalon_path} run {base_path}/tests/{case}", shell=True).wait() == 0
 

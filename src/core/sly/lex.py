@@ -1,5 +1,5 @@
 __all__ = ["Lexer", "LexerStateChange"]
-import re
+import regex
 import copy
 
 
@@ -132,7 +132,7 @@ class Lexer(metaclass=LexerMeta):
     literals = set()
     ignore = ""
     reflags = 0
-    regex_module = re
+    regex_module = regex
     _token_names = set()
     _token_funcs = {}
     _ignored_tokens = set()

@@ -1,7 +1,7 @@
 from .sly import Lexer
 from .sa_error import SacalonError
 from sys import exit
-
+import regex
 
 class Lexer(Lexer):
     tokens = {
@@ -68,7 +68,7 @@ class Lexer(Lexer):
     ignore_comment_slash = r"//.*"
     ignore_multiline_comment_slash = r"\/\*((?!\*\/)[^\r\n])*[\r\n]((?!\*\/)[\s\S\r\n])*\*\/"
 
-    NAME = r"[a-zA-Z_][a-zA-Z0-9_]*"
+    NAME = r'[\p{XID_Start}_][\p{XID_Continue}]*'
     NUMBER = r"\d+"
 
     PLUS = r"\+"
