@@ -51,6 +51,7 @@ class Generator(object):
             "char": Type("char", True, category="number"),
             "string": Type("string", True),
             "void": Type("void", True),
+            "FILE": Type("FILE", True),
         }
 
         # this dict contains all variables
@@ -77,6 +78,7 @@ class Generator(object):
                 ),
                 "exit": Function("exit", {"exit_code": "int"}, self.types["void"]),
                 "panic": Function("panic", {"err_msg": "string"}, self.types["string"]),
+                "cstring": Function("cstring", {"a": "char^"}, self.types["string"]),
                 "error": Function("error", {"errmsg": "string"}, self.types["void"]),
                 "len": [
                     Function("len", {"s": "string"}, self.types["int"]),
@@ -548,7 +550,6 @@ class Generator(object):
                     members = _type["type"].members
                 self.vars[_name] = Var(_name, _type["type"], members=members)
                 res = "%s __sacalon__%s ;\n" % (_type["expr"], _name)
-
                 expr = {
                     "expr": res,
                     "type": _type["type"],

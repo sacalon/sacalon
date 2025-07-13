@@ -91,7 +91,7 @@ class SacalonCompiler(object):
                         print(f" - {dir}")
                     for file in files:
                         if file.endswith(".sa"):
-                            print(f" - {file[:-4]}")
+                            print(f" - {file[:-3]}")
             
             elif len(self.argv) == 3 and self.argv[1] == "list" :
                 print(f"list of all subpackages in '{self.argv[2]}' :")
@@ -100,7 +100,7 @@ class SacalonCompiler(object):
                         print(f" - {dir}")
                     for file in files:
                         if file.endswith(".sa"):
-                            print(f" - {file[:-4]}")
+                            print(f" - {file[:-3]}")
             
             # END : Package Manager
 
@@ -177,18 +177,19 @@ class SacalonCompiler(object):
         """
 
         # Sacalon always builds code from a builtin config
+        
         ARGS = {
             "filename" : self.filename, # main filename that contains entry function(main)
             "compiler": "g++", # compiler name
             "optimize": "", # optimize level
             "flags": [], # flags to pass to c++ compiler
-            "ccfile": self.filename[:-4]+".cc", # output c++ code
+            "ccfile": self.filename[:-3]+".cc", # output c++ code
             "c++_version": "c++17", # c++ standard version>=c++17
             "compiler_output": False, # compiler output
             "c++_code": False, # generate c++ code, if it is false, generated c++ code will delete after compiling
             "only_compile" : False, # only compile, not link
             "no_std" : False, # not link runtime library to code
-            "outfile" : self.filename[:-4],
+            "outfile" : self.filename[:-3],
             "null_safety" : True,
         }
 
@@ -204,7 +205,7 @@ class SacalonCompiler(object):
                             SacalonError(f"The specified file is not a sacalon(.sa) file")
                         self.filename = config["filename"]
                         self.read_file(self.filename)
-                    ARGS["ccfile"] = self.filename[:-4]+".cc"
+                    ARGS["ccfile"] = self.filename[:-3]+".cc"
                 elif from_config :
                     SacalonError("When you use `build` command, your config file should have `filename` field.")
                 
@@ -217,7 +218,7 @@ class SacalonCompiler(object):
                 if "flags" in config:
                     if from_config :
                         filename = Path(self.filename)
-                        ARGS["flags"] = ["-o","build/"+filename.name[:-4]] + config["flags"]
+                        ARGS["flags"] = ["-o","build/"+filename.name[:-3]] + config["flags"]
                     else :
                         ARGS["flags"] += config["flags"]
                 if "compiler_output" in config:
@@ -253,7 +254,7 @@ class SacalonCompiler(object):
                 ARGS["flags"].append(flag)
         
         # write output c++ code in a file
-        with open(self.filename[:-4]+".cc", "w",encoding="utf-8") as fout:
+        with open(self.filename[:-3]+".cc", "w",encoding="utf-8") as fout:
             fout.write(output)
 
         # check if c++ compiler installed
@@ -313,12 +314,12 @@ class SacalonCompiler(object):
         if ARGS["c++_code"] == True:
             ...
         else:
-            try: os.remove(self.filename[:-4]+".cc")
+            try: os.remove(self.filename[:-3]+".cc")
             except:...
         
         # run generated excutable
         if run :
-            filename = ARGS["outfile"] if from_config else self.filename[:-4]
+            filename = ARGS["outfile"] if from_config else self.filename[:-3]
 
             if sys.platform.startswith("win"):
                 if isfile(filename+".exe"):

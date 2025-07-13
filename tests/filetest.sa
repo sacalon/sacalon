@@ -1,0 +1,31 @@
+use file
+
+function main(): int {
+    // تست توابع سطح بالا
+    var test_content = "Line 1\nLine 2\nLine 3"
+    var test_file = "test.txt"
+    
+    // تست نوشتن فایل
+    print("Writing to file...")
+    if write_file(test_file, test_content) {
+        print("Write successful!")
+    } else {
+        print("Write failed!")
+        return 1
+    }
+    
+    // تست خواندن فایل
+    print("\nReading file content:")
+    var content = read_file(test_file)
+    print(content)
+    
+    print("\nTesting File struct:")
+    var file: File = fopen("./app.sa","r")
+    print("File opened successfully")
+    print("First line: " + File_readline(file))
+    print("Second line: " + File_readline(file))
+    File_close(file)
+    print("File closed")
+    
+    return 0
+}

@@ -314,3 +314,7 @@ std::vector<int> __sacalon__range(int stop)
 #define __sacalon__assert(cond) if(!(cond)){throw SacalonException("Assertion failed: " #cond);}
 
 #define __sacalon__sizeof(a) sizeof(a)
+
+char* __sacalon__cstring(__sacalon__string a){
+	return a.data();
+}

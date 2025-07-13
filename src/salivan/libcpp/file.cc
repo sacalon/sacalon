@@ -25,3 +25,13 @@ bool __sacalon__write_file(std::string path,std::string text){
 	}
 	return false;
 }
+
+std::string __sacalon__fread_line(FILE* file) {
+    char buffer[1024];
+    if (fgets(buffer, sizeof(buffer), file)) {
+        // حذف کاراکتر خط جدید (اختیاری)
+        buffer[strcspn(buffer, "\n")] = '\0';
+        return std::string(buffer);
+    }
+    return ""; // یا throw exception
+}

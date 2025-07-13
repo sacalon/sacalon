@@ -1,4 +1,39 @@
 cuse libcpp.file
+cuse """#define __sacalon__FILE FILE
+#define __sacalon___cfopen fopen
+#define __sacalon__fclose fclose
+"""
 
+struct File {
+    var handle: FILE^?
+    var path: string?
+}
 function read_file(path:string) : string
 function write_file(path:string,text:string) : string
+function _cfopen(path:char^,mode:string):FILE^
+
+function fopen(path:string,mode:string):File{
+    return File(_cfopen(cstring(path), cstring(mode)),path)
+}
+
+function fclose(f:File^):bool
+function fread_line(f:File^):string
+
+
+
+function File_open(this: File, path: string): bool {
+    this.handle = _cfopen(cstring(path), cstring("r"))
+    this.path = path
+    return this.handle != NULL
+}
+
+function File_readline(this: File): string {
+    return fread_line(this.handle)
+}
+
+function File_close(this: File) {
+    if this.handle != NULL {
+        fclose(this.handle)
+        this.handle = NULL
+    }
+}
