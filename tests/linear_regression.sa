@@ -66,32 +66,32 @@ function RMSE(y:[float], predicted_y:[float], len_x:int) : float {
 
 function main(): int {
     // our data
-    var x : [float] = [1.0,2.0,4.0,3.0,5.0]
-    var y : [float] = [1.0,3.0,3.0,2.0,5.0]
+    var x_list : [float] = [1.0,2.0,4.0,3.0,5.0]
+    var y_list : [float] = [1.0,3.0,3.0,2.0,5.0]
 
     // calculate the mean of x and y
-    var avg_x = mean(x)
-    var avg_y = mean(y)
+    var avg_x = mean(x_list)
+    var avg_y = mean(y_list)
 
     // calculate the slope and y-intercept
-    var b = calc_y_intercept(x, y, avg_x, avg_y)
+    var b = calc_y_intercept(x_list, y_list, avg_x, avg_y)
     var m = avg_y - (b * avg_x)
 
     // calculate the predicted y values
     var y_pred : [float]?
-    for i in x {
+    for i in x_list {
         append(y_pred,predict(i, m, b))
     }
 
     // calculate the root mean squared error
-    var rmse : float = RMSE(y, y_pred, len(x))
+    var rmse : float = RMSE(y_list, y_pred, len(x_list))
 
     // print the rmse and the predicted y values
     print("RMSE: ", rmse)
 
     // print the predicted y values
     print("Predicted y values: ")
-    for i in x {
+    for i in x_list {
         print(i, ": ", y_pred[i])
     }
     

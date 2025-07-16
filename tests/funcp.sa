@@ -1,4 +1,4 @@
-function runner(func: Function[int, int]int) : int{
+function runner(function func(int,int):int) : int{
     return func(1,2)
 }
 

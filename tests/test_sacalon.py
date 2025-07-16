@@ -40,6 +40,7 @@ if not sacalon_path.exists():
         "typeof.sa",
         "memory.sa",
         "filetest.sa",
+        "lambda.sa",
         "unicode/unicode_identifiers.sa",
         # "fail/incomplete_type.sa",
         # "fail/op_error_on_string.sa",

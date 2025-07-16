@@ -16,8 +16,8 @@ function fopen(path:string,mode:string):File{
     return File(_cfopen(cstring(path), cstring(mode)),path)
 }
 
-function fclose(f:File^):bool
-function fread_line(f:File^):string
+function fclose(f:FILE^):bool
+function fread_line(f:FILE^):string
 
 
 

@@ -67,11 +67,11 @@ class Generator(object):
         if not no_std :
             self.funcs = {
                 "print": Function("print", {"...": "..."}, "void"),
-                "ReadStr": Function("ReadStr", {}, self.types["string"]),
-                "ReadInt": Function("ReadInt", {}, self.types["int"]),
-                "ReadFloat": Function("ReadFloat", {}, self.types["float"]),
-                "ReadChar": Function("ReadChar", {}, self.types["char"]),
-                "ReadBool": Function("ReadBool", {}, self.types["bool"]),
+                "ReadStr": Function("ReadStr", {"a":"string"}, self.types["string"]),
+                "ReadInt": Function("ReadInt", {"a":"string"}, self.types["int"]),
+                "ReadFloat": Function("ReadFloat",{"a":"string"}, self.types["float"]),
+                "ReadChar": Function("ReadChar",{"a":"string"}, self.types["char"]),
+                "ReadBool": Function("ReadBool",{"a":"string"}, self.types["bool"]),
                 "format": Function("format", {"...": "..."}, self.types["string"]),
                 "split": Function(
                     "split", {"str": "string", "sep": "string"}, self.types["string"]
@@ -92,16 +92,16 @@ class Generator(object):
                     Function("assert", {"cond": "bool",}, self.types["void"]),
                 ],
                 "range" : [
-                    Function("range",{"stop":self.types["int"]},Array(copy.deepcopy(self.types["int"]))),
+                    Function("range",{"stop":self.types["int"]},Array(copy.deepcopy(self.types["int"]),category=f"[{self.types["int"].category}]")),
                     Function("range",{
                         "start":self.types["int"],
                         "stop":self.types["int"]
-                    },Array(copy.deepcopy(self.types["int"]))),
+                    },Array(copy.deepcopy(self.types["int"]),category=f"[{self.types["int"].category}]")),
                     Function("range",{
                         "start":self.types["int"],
                         "stop":self.types["int"],
                         "step":self.types["int"]
-                    },Array(copy.deepcopy(self.types["int"]))),
+                    },Array(copy.deepcopy(self.types["int"]),category=f"[{self.types["int"].category}]")),
                 ]
             }
         else :
@@ -415,7 +415,6 @@ class Generator(object):
                 # with_new uses when we delete a variable to check if it variable allocated with new keyword
                 _type["type"].with_new = _expr["type"].with_new
                 self.vars[_name] = Var(_name, _type["type"], members=members)
-
                 expr = {
                     "expr": return_null_according_to_type(_type,_expr,_name),
                     "type": _type["type"],
@@ -436,10 +435,10 @@ class Generator(object):
                     f"'{_name}' defined as a type ,cannot redefine it as a variable:{_line}",filename=self.filename
                 )
             else:
-                self.vars[_name] = Var(_name, Array(_type["type"]), is_array=True)
+                self.vars[_name] = Var(_name, Array(_type["type"],category=f"[{_type["type"].category}]", is_array=True))
                 expr = {
                     "expr": "std::vector<%s> __sacalon__%s;\n" % (_type["expr"], _name),
-                    "type": Array(_type["type"]),
+                    "type": Array(_type["type"],category=f"[{_type["type"].category}]"),
                     "name": _name,
                 }
                 return expr
@@ -474,11 +473,11 @@ class Generator(object):
                     f"Mismatched type {Array(_type['type']).get_name_for_error()} and {_expr['type'].get_name_for_error()}:{_line}",filename=self.filename
                 )
             else:
-                self.vars[_name] = Var(_name, Array(_type["type"]), is_array=True)
+                self.vars[_name] = Var(_name, Array(_type["type"],category=f"[{_type["type"].category}]", is_array=True))
 
                 expr = {
-                    "expr": return_null_according_to_type(_type, _expr, _name,array_decl=True),
-                    "type": Array(_type["type"]),
+                    "expr": return_null_according_to_type(_type, _expr, _name,category=f"[{_type["type"].category}]",array_decl=True),
+                    "type": Array(_type["type"],category=f"[{_type["type"].category}]"),
                     "name": _name,
                 }
                 return expr
@@ -563,7 +562,6 @@ class Generator(object):
             _type = self.walk(node[2])
             _expr = self.walk(node[4])
             _line = node[5]
-
             if _expr.get("empty_list",False):
                 SacalonError(
                     f"Mismatched type {_type['type'].get_name_for_error()} and '[]':{_line}",filename=self.filename
@@ -595,7 +593,7 @@ class Generator(object):
 
                 _type["type"].with_new = _expr["type"].with_new
                 self.vars[_name] = Var(_name, _type["type"], members=members)
-
+                
                 expr = {
                     "expr": return_null_according_to_type(_type, _expr, _name),
                     "type": _type["type"],
@@ -1553,7 +1551,7 @@ class Generator(object):
                 if _name == "print":
                     expr = {
                         "expr": "std::cout << %s << std::endl"
-                        % ("<< ".join(self.walk(arg)["expr"] for arg in node[2])),
+                        % "<< ".join(_arg["expr"] for _arg in _args),
                         "type": self.funcs["print"].return_type,
                     }
                     return expr
@@ -1601,9 +1599,7 @@ class Generator(object):
                                     "expr": "__sacalon__%s(%s)"
                                     % (
                                         f.name,
-                                        ",".join(
-                                            self.walk(arg)["expr"] for arg in node[2]
-                                        ),
+                                        ",".join(_arg["expr"] for _arg in _args),
                                     ),
                                     "type": _return_type,
                                 }
@@ -1617,7 +1613,7 @@ class Generator(object):
                             "expr": "__sacalon__%s{%s}"
                             % (
                                 _name,
-                                ", ".join(self.walk(arg)["expr"] for arg in node[2]),
+                                ", ".join(_arg["expr"] for _arg in _args),
                             ),
                             "type": copy.deepcopy(
                                 self.types[_name],
@@ -1637,6 +1633,29 @@ class Generator(object):
                                 category=_return_type.category,
                             )
 
+                        # check to match given parameteres' type and function paramameters type
+                        i = 0
+                        param_list = list(self.funcs[_name].params.keys())
+                        while i < len(_args):
+                            # print(self.funcs[_name].params[param_list[i]])
+                            if self.funcs[_name].params[param_list[i]] == "...":
+                                break
+                            elif isinstance(_args[i]["type"],Function) and isinstance(self.funcs[_name].params[param_list[i]],Function):
+                                if str(_args[i]["type"]) != (str(self.funcs[_name].params[param_list[i]])) and _args[i]["type"].category != self.types.get(self.funcs[_name].params[param_list[i]].name.replace("__sacalon__",""),Type()).category:
+                                    SacalonError(f"Could not convert '{_args[i]["expr"].replace("__sacalon__","")}' from '{str(_args[i]["type"]).replace("__sacalon__","")}' to '{str(self.funcs[_name])}' (with name '{str(param_list[i])}')':{_line}",filename=self.filename)
+                                
+                            elif type(self.funcs[_name].params[param_list[i]]) != str and self.funcs[_name].params[param_list[i]] != "T" and _args[i]["type"].category != self.funcs[_name].params[param_list[i]].category:
+                                # print(_name,param_list[i],self.funcs[_name].params[param_list[i]])
+                                # print(_name,str(_args[i]["type"]),str(self.funcs[_name].params[param_list[i]]))
+                                # print(_args[i]["expr"],":",_args[i]["type"].category,":",self.funcs[_name].params[param_list[i]].category)
+                                SacalonError(f"Could not convert '{_args[i]["expr"].replace("__sacalon__","")}' from '{str(_args[i]["type"]).replace("__sacalon__","")}' to '{str(self.funcs[_name].params[param_list[i]])}' (with name '{str(param_list[i])}')':{_line}",filename=self.filename)
+                            elif type(self.funcs[_name].params[param_list[i]]) == str and self.funcs[_name].params[param_list[i]] != "T" and _args[i]["type"].category != self.types.get(self.funcs[_name].params[param_list[i]],Type()).category:
+                                # print(_name,i,param_list[i],self.funcs[_name].params[param_list[i]])
+                                # print(_name,str(_args[i]["type"]),str(self.funcs[_name].params[param_list[i]]))
+                                # print(_args[i]["expr"],":",_args[i]["type"].category,":",self.funcs[_name].params[param_list[i]].category)
+                                SacalonError(f"Could not convert '{_args[i]["expr"].replace("__sacalon__","")}' from '{str(_args[i]["type"]).replace("__sacalon__","")}' to '{str(self.funcs[_name].params[param_list[i]])}' (with name '{str(param_list[i])}')':{_line}",filename=self.filename)
+                            
+                            i+=1
                         expr = {
                             "expr": "__sacalon__%s(%s)"
                             % (
@@ -2006,6 +2025,7 @@ class Generator(object):
             _line = node[2]
             if len(node[1]) == 1:
                 if _name in self.vars:
+                    # print(_name,self.vars[_name].type.category,":",_line)
                     expr = {
                         "expr": "__sacalon__%s" % (_name),
                         "type": self.vars[_name].type,
@@ -2258,7 +2278,7 @@ class Generator(object):
             _expr = self.walk(node[1])
             expr = {
                 "expr": "{%s}" % (_expr["expr"]),
-                "type": Array(_expr["type"]),
+                "type": Array(_expr["type"],category=f"[{_expr["type"].category}]"),
             }
             return expr
         # [<]
@@ -2303,10 +2323,9 @@ class Generator(object):
         if node[0] == "return_type_array":
             _type = self.walk(node[1])
             _line = node[2]
-
             expr = {
                 "expr": "std::vector<%s>" % (_type["expr"]),
-                "type": Array(_type["type"]),
+                "type": Array(_type["type"],category=f"[{_type["type"].category}]"),
                 "name": _type["name"],
             }
             return expr
@@ -2315,7 +2334,6 @@ class Generator(object):
         if node[0] == "ptr_type":
             _type = self.walk(node[1])
             _line = node[2]
-
             if isinstance(_type["type"], Struct):
                 expr = {
                     "expr": "%s*" % (_type["expr"]),
@@ -2324,7 +2342,7 @@ class Generator(object):
                         _type["type"].members,
                         is_ptr=True,
                         ptr_str="*",
-                        category=_type["type"].category,
+                        category=_type["type"].category + "*",
                     ),
                     "name": _type["name"],
                 }
@@ -2336,7 +2354,7 @@ class Generator(object):
                     _type["type"].stdtype,
                     is_ptr=True,
                     ptr_str="*",
-                    category=_type["type"].category,
+                    category=_type["type"].category + "*",
                 ),
                 "name": _type["name"],
             }
@@ -2352,28 +2370,6 @@ class Generator(object):
                 "expr": "%s" % (_type["expr"]),
                 "type": _type["type"],
                 "name": _type["name"],
-            }
-            return expr
-
-        # Function[<type>,...]<return_type>
-        if node[0] == "funtion_type":
-            params = node[1]
-            i = 0 # parameter index
-            function_params = {}
-            _type = ""
-            for param in params :
-                function_param = self.walk(param)
-
-                i += 1
-                function_params["p" + str(i)] = function_param['type']
-                _type += str(function_param['type']) + ","
-            if _type.endswith(","):
-                _type = _type[:-1]
-            _return_type = self.walk(node[2])
-
-            expr = {
-                'expr' : 'std::function<%s(%s)>' % (_return_type['type'],_type),
-                'type' : Function("", function_params, _return_type['type']),
             }
             return expr
         
@@ -2404,7 +2400,6 @@ class Generator(object):
             _return_type = self.walk(node[2])
             _type = _return_type["expr"]
             _line = node[3]
-
             expr = {
                 "expr": "%s __sacalon__%s," % (_type, _name),
                 "type": _return_type["type"],
@@ -2422,6 +2417,37 @@ class Generator(object):
                 "type": _params["type"] + [_param["type"]],
                 "name": _params["name"] + [_param["name"]],
                 "static": _params["static"] + [_param["static"]],
+            }
+            return expr
+        if node[0] == "function_param":
+            _name = node[1]
+            _type = self.walk(node[2])
+            _return_type = _type["expr"]
+            _line = node[4]
+            _return_types:list = node[3]
+            _return_types_res = ""
+            _params = {}
+            i = 0
+            while i < len(_return_types):
+                _params[f"p{i}"] = _return_types[i][1]
+                _t = _return_types[i][1]
+                if i == len(_return_types) -1:
+                    _return_types_res += f"__sacalon__{_t}"
+                else:
+                    _return_types_res += f"__sacalon__{_t},"
+                i += 1
+            self.funcs[_name] = Function(_name, _params, _type["type"])
+            
+            res = f"std::function<%s(%s)> __sacalon__%s" % (
+                _return_type,
+                _return_types_res,
+                _name,
+            )
+            expr = {
+                "name": _name,
+                "expr": res,
+                "static": False,
+                "type": Function(_name,_params,_type["type"]),
             }
             return expr
         # --------------------------------------------

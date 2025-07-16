@@ -303,6 +303,7 @@ class SacalonCompiler(object):
                 if compargs[i] == "":
                     compargs.pop(i)
 
+            # if 1:
             if ARGS["compiler_output"] == 1:
                 check_call(compargs)
             else:

@@ -23,21 +23,6 @@ class Const(Var):
     ...
 
 
-class Function(object):
-    """
-    Function object to store function information
-
-    Args:
-        name (str): Name of the function
-        params (dict): Dictionary of parameters of the function
-        return_type (str): Return type of the function
-    """
-    def __init__(self, name, params, return_type):
-        self.name = name
-        self.params = params  # type : dict
-        self.return_type = return_type
-
-
 class Struct(object):
     """
     Struct object to store struct information
@@ -53,7 +38,7 @@ class Struct(object):
     """
 
     def __init__(
-        self, name, members, category="", is_ptr=False, ptr_str="", nullable=False,with_new=False
+        self, name, members, is_ptr=False, ptr_str="", nullable=False,with_new=False,category=""
     ):
         self.name = name
         self.members = members
@@ -91,7 +76,7 @@ class Type(object):
         with_new(bool): variable allocated with `new` keyword
     """
     def __init__(
-        self, type_name, stdtype, category="", is_ptr=False, ptr_str="", nullable=False,with_new=False
+        self, type_name="", stdtype=False, category="", is_ptr=False, ptr_str="", nullable=False,with_new=False
     ):
         self.type_name = type_name
         self.stdtype = stdtype
@@ -141,14 +126,15 @@ class Array(Type):
         is_ptr (bool): Whether the array is a pointer
         ptr_str (str): Pointer string of the array
     """
-    def __init__(self, type_obj, is_ptr=False, ptr_str=""):
+    def __init__(self, type_obj, is_ptr=False, ptr_str="",category=""):
         self.type_obj = type_obj
         self.is_ptr = is_ptr
         self.ptr_str = ptr_str
+        self.category = category
         if isinstance(type_obj, Type):
-            super().__init__(type_obj.type_name, type_obj.stdtype)
+            super().__init__(type_obj.type_name, type_obj.stdtype,category=category)
         elif isinstance(type_obj, Struct):
-            super().__init__(type_obj.name, type_obj.members)
+            super().__init__(type_obj.name, type_obj.members,category=category)
 
     def __str__(self):
         if isinstance(self.type_obj, Type):
@@ -169,6 +155,35 @@ class Array(Type):
             return "[%s]%s" % (self.ptr_str, self.get_type_name())
         elif isinstance(self.type_obj, Struct):
             return "[%s]%s" % (str(self.type_obj), self.ptr_str)
+
+
+class Function(object):
+    """
+    Function object to store function information
+
+    Args:
+        name (str): Name of the function
+        params (dict): Dictionary of parameters of the function
+        return_type (str): Return type of the function
+    """
+    def __init__(self, name="", params={}, return_type=Type()):
+        self.name = name
+        self.params = params  # type : dict
+        self.return_type = return_type
+        self.category = "function"
+
+    def __str__(self):
+        res = "Function("# + 
+        i = 0
+        params = list(self.params.values())
+        while i < len(self.params.keys()):
+            if i == len(self.params.keys()) -1:
+                res += str(params[i]).replace("__sacalon__","") + "):" + str(self.return_type).replace("__sacalon__","")
+            else:
+                res += str(params[i]).replace("__sacalon__","") + ","
+            i+=1
+        return res
+
 
 def return_null_according_to_type(type_, expr,name,decl=True,array_decl=False):
     """

@@ -519,6 +519,16 @@ class Parser(Parser):
     def param_t(self, p):
         return ("param", p.NAME, p.return_type, p.lineno)
 
+    # <name> : <return_type>
+    @_("FUNCTION NAME LPAREN return_types RPAREN COLON return_type")
+    def param_t(self, p):
+        return ("function_param", p.NAME, p.return_type, p.return_types, p.lineno)
+
+        # <name> : <return_type>
+    @_("FUNCTION NAME LPAREN return_types RPAREN")
+    def param_t(self, p):
+        return ("function_param", p.NAME,("standard_type", "void", p.lineno), p.return_types, p.lineno)
+
     @_("")
     def optional_params(self, p):
         return ("param_no",)
@@ -605,9 +615,9 @@ class Parser(Parser):
         return ("nullable_type", p.return_type, p.lineno)
 
     # Function[<type>,...]<return_type>
-    @_('FUNCTION_TYPE LBRCK return_types RBRCK return_type')
-    def return_type(self,p):
-        return ('funtion_type',p.return_types,p.return_type,p.lineno)
+    # @_('FUNCTION_TYPE LBRCK return_types RBRCK return_type')
+    # def return_type(self,p):
+    #     return ('funtion_type',p.return_types,p.return_type,p.lineno)
 
     # static <return_type>
     @_('STATIC return_type')

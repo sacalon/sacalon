@@ -1,0 +1,13 @@
+function my_lamda_funwc(a:int,b:float){
+    print(a)
+    print(b)
+}
+
+function my_lamda_func(function a(int,float)){
+    a(1,2)
+}
+
+function main(): int {
+    my_lamda_func(my_lamda_funwc)
+    return 0
+}
