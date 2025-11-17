@@ -99,5 +99,4 @@ For large proposed features, open an Issue with the `enhancement` label.
 ---
 
 ## ❤️ Thank You
-
 We greatly appreciate your interest in improving Sacalon. Every contribution — even a small one — matters.
