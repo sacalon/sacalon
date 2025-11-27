@@ -2,16 +2,17 @@
 
 
 a = Analysis(
-    ['src/sacalon.py'],
+    ['src\\sacalon.py'],
     pathex=[],
     binaries=[],
-    datas=[('src/salivan', 'salivan')],
+    datas=[('src\\salivan', 'salivan')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],
     noarchive=False,
+    optimize=0,
 )
 pyz = PYZ(a.pure)
 

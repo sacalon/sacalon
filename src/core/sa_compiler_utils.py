@@ -327,3 +327,20 @@ def is_nullable_compatible_type(type_a, type_b):
         return False
 
     return True
+
+def find_scope_changes(old_list, new_list):
+    changes = []
+    
+    # بررسی تغییرات در ابتدای لیست
+    for i in range(min(len(old_list), len(new_list))):
+        if old_list[i] != new_list[i]:
+            changes.append(('start', i, old_list[i], new_list[i]))
+            break
+    
+    # بررسی تغییرات در انتهای لیست
+    for i in range(1, min(len(old_list), len(new_list)) + 1):
+        if old_list[-i] != new_list[-i]:
+            changes.append(('end', -i, old_list[-i], new_list[-i]))
+            break
+    
+    return changes

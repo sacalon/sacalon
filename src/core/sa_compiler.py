@@ -949,6 +949,8 @@ class Generator(object):
         if node[0] == "function":
             current_vars = self.vars.copy()
             current_types = self.types.copy()
+            current_funcs = self.funcs.copy()
+            func = None
             self.scope = True
 
             _name = node[2]
@@ -979,21 +981,20 @@ class Generator(object):
                     _type_name = _type["type"].get_name_for_error()
                     SacalonError(f"Cannot overloaded '{_name}' function's return type, you can only overload function's parameters:{_line}",filename=self.filename)
                 if type(self.funcs[_name]) == Function:
-                    self.funcs[_name] = [
-                        self.funcs[_name],
-                        Function(_name, _params, _type["type"]),
-                    ]
+                    func = Function(_name, _params, _type["type"])
                 else:
                     if str(_type) != str(self.funcs[_name][0].return_type):
                         _type_name = _type["type"].get_name_for_error()
                         SacalonError(f"Cannot overloaded '{_name}' function's return type, you can only overload function's parameters:{_line}",filename=self.filename)
-                    self.funcs[_name].append(Function(_name, _params, _type["type"]))
+                    func = Function(_name, _params, _type["type"])
             else:
-                self.funcs[_name] = Function(_name, _params, _type["type"])
+                func = Function(_name, _params, _type["type"])
 
+            self.funcs[_name] = func
             _name = node[2]
             _expr = self.walk(node[4])
             _res = ""
+            
 
             if _return_type != "__sacalon__void" and len(_expr) < 1:
                 SacalonError(
@@ -1021,7 +1022,8 @@ class Generator(object):
                 params["expr"],
                 _res,
             )
-
+            self.funcs = current_funcs
+            self.funcs[_name] = func
             self.vars = current_vars
             self.types = current_types
             self.scope = False
@@ -1078,6 +1080,105 @@ class Generator(object):
                 SacalonError(
                     f"Function 'main' takes only zero or one arguments(with string array type):{_line}",filename=self.filename
                 )
+
+            expr = {
+                "expr": res,
+                "type": _type["type"],
+            }
+            return expr
+        # -------------------------------------
+        if node[0] == "function_lambda":
+            current_vars = self.vars.copy()
+            current_types = self.types.copy()
+            current_funcs = self.funcs.copy()
+
+            self.scope = True
+            func = None
+            _name = node[2]
+            _type = self.walk(node[1])
+            _return_type = _type["expr"]
+            # only types without name
+            
+            _line = node[5]
+            _decorator = self.walk(node[6])["expr"]
+            _params = {}
+
+            params = self.walk(node[3])
+            params_type = params["type"]
+            params_name = params["name"]
+
+            if len(params) != 1:
+                for i in range(len(params_name)):
+                    if params["static"][i] :
+                        SacalonError(f"Static variable '{params_name[i]}' cannot be used as parameter:{_line}",filename=self.filename)
+                    
+                    _params[params_name[i]] = params_type[i]
+                    if isinstance(params_type[i],Function):
+                        self.funcs[params_name[i]] = params_type[i]
+                    self.vars[params_name[i]] = Var(params_name[i], params_type[i])
+
+            if params["expr"].endswith(","):
+                params["expr"] = params["expr"][:-1]
+
+            if self.funcs.get(_name) != None:
+                if str(_type) != str(self.funcs[_name].return_type):
+                    _type_name = _type["type"].get_name_for_error()
+                    SacalonError(f"Cannot overloaded '{_name}' function's return type, you can only overload function's parameters:{_line}",filename=self.filename)
+                if type(self.funcs[_name]) == Function:
+                    func = Function(_name, _params, _type["type"]),
+                    
+                else:
+                    if str(_type) != str(self.funcs[_name][0].return_type):
+                        _type_name = _type["type"].get_name_for_error()
+                        SacalonError(f"Cannot overloaded '{_name}' function's return type, you can only overload function's parameters:{_line}",filename=self.filename)
+                    func = Function(_name, _params, _type["type"])
+            else:
+                func = Function(_name, _params, _type["type"])
+            _params_types = ""
+            for i in range(len(params_type)):
+                if i == len(params_type) -1:
+                    _params_types += str(params_type[i]).replace("__sacalon__","")
+                else:
+                    _params_types += str(params_type[i]).replace("__sacalon__","") + ","
+            self.funcs[_name] = copy.deepcopy(func)
+            self.funcs["self"] = copy.deepcopy(func)
+
+            _name = node[2]
+            _expr = self.walk(node[4])
+            _res = ""
+
+            if _return_type != "__sacalon__void" and len(_expr) < 1:
+                SacalonError(
+                    f"Function '{_name}' must return a value at end of function block:{_line}",filename=self.filename
+                )
+            if (
+                _return_type != "__sacalon__void"
+                and len(_expr) != 0
+                and _expr[-1].get("return") != True
+                and _name != 'main'
+            ):
+                SacalonError(
+                    f"Function '{_name}' should return a value at end of function block:{_line}",filename=self.filename
+                )
+
+            for e in _expr:
+                _res += e["expr"]
+
+            res = "std::function<%s(%s)> __sacalon__%s = [](%s) -> %s {\n%s\n};\n" % (
+                _return_type,
+                _params_types,
+                _name,
+                # _decorator,
+                params["expr"],
+                _return_type,
+                _res,
+            )
+
+            self.vars = current_vars
+            self.types = current_types
+            self.funcs = current_funcs
+            self.funcs[_name] = func
+            self.scope = False
 
             expr = {
                 "expr": res,

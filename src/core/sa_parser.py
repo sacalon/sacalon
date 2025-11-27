@@ -128,6 +128,19 @@ class Parser(Parser):
     def var_declare(self, p):
         return ("declare", "const", p.return_type, p.NAME, p.expr, p.lineno)
 
+    # var <name> = function (<optional_params>): <optional_return_types> { <in_block> }
+    @_("VAR NAME ASSIGN decorator FUNCTION LPAREN optional_params RPAREN optional_return_type LBC in_block RBC")
+    def var_declare(self, p):
+        return (
+            "function_lambda",
+            p.optional_return_type,
+            p.NAME,
+            p.optional_params,
+            p.in_block,
+            p.lineno,
+            p.decorator,
+        )
+    
     @_("var_declare")
     def statement(self, p):
         return p.var_declare

@@ -7,7 +7,40 @@ function my_lamda_func(function a(int,float)){
     a(1,2)
 }
 
+// Define a function that prints two values
+function print_values(a: int, b: float) {
+    print("Integer:", a)
+    print("Float:", b)
+}
+
+// Define a higher-order function that accepts another function
+function higher_order(function func(int,float)) {
+    func(42, 3.14)  // Call the passed function
+}
+
+function math_operation(a: int, b: int, function op(int,int):int) : int {
+    return op(a, b)
+}
+
 function main(): int {
     my_lamda_func(my_lamda_funwc)
+    var oh_my_lambda = function(a:int,b:int):int{
+        return a + b
+    }
+    print(oh_my_lambda(1,2))
+    higher_order(print_values)
+
+    var add = function(x: int, y: int): int { 
+        return x + y 
+    }
+    
+    var result = math_operation(5, 3, add)
+    print("5 + 3 =", result)  // Output: 5 + 3 = 8
+    
+    // Use lambda directly without naming
+    var aa = function(a:int, b:int):int { 
+        return a * b 
+    }
+    print("5 * 3 =", math_operation(5, 3, aa))
     return 0
 }
